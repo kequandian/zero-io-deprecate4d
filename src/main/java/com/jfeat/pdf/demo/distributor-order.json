@@ -1,0 +1,282 @@
+{
+  "flows": [
+    {
+      "name": "title",
+      "element": {
+        "formatName": "title",
+        "alignment": "ALIGN_CENTER",
+        "content": "分销订单详情"
+      }
+    },
+    {
+      "name": "linear",
+      "element": {
+        "layout": {
+          "columnWidths": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "numColumns": 0
+        },
+        "elements": [
+          {
+            "name": "content",
+            "element": {
+              "layout": {
+                "columnWidths": [
+                  1.0,
+                  2.0
+                ],
+                "numColumns": 0
+              },
+              "data": [
+                "${code}",
+                "${traderName}",
+                "${deliveredAddress}",
+                "${salesNote}"
+              ],
+              "format": {
+                "formatName": "default",
+                "height": 20.0
+              },
+              "title": [
+                "订单编号:",
+                "分销商名称:",
+                "收货地址:",
+                "备注:"
+              ]
+            }
+          },
+          {
+            "name": "content",
+            "element": {
+              "layout": {
+                "columnWidths": [
+                  1.0,
+                  2.0
+                ],
+                "numColumns": 0
+              },
+              "data": [
+                "${originatorName}",
+                "${traderContactPhone}"
+              ],
+              "format": {
+                "formatName": "default",
+                "height": 20.0
+              },
+              "title": [
+                "订单创建人",
+                "联系电话",
+                "",
+                ""
+              ]
+            }
+          },
+          {
+            "name": "content",
+            "element": {
+              "layout": {
+                "columnWidths": [
+                  1.0,
+                  2.0
+                ],
+                "numColumns": 0
+              },
+              "data": [
+                "${transactionTime}",
+                "${transactionBy}"
+              ],
+              "format": {
+                "formatName": "default",
+                "height": 20.0
+              },
+              "title": [
+                "创建日期",
+                "经办人",
+                "",
+                ""
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "table",
+      "itemName" : "${item}",
+      "element": {
+        "layout": {
+          "columnWidths": [
+            1.0,
+            2.0,
+            3.0,
+            3.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "numColumns": 0
+        },
+        "rows": ["${rowSeq}","${code}","${barcode}", "${name}", "${unit}", "${quantity}", "${price}", "${totalPrice}"],
+        "header": [
+          "",
+          "商品编号",
+          "商品条码",
+          "商品名称",
+          "单位",
+          "销售数量",
+          "销售单价",
+          "销售总价"
+        ],
+        "format": {
+          "rowFormat": {
+            "formatName": "default",
+            "height": 30.0
+          }
+        }
+      }
+    },
+    {
+      "name": "table",
+      "itemName": "${sum}",
+      "element": {
+        "layout": {
+          "columnWidths": [
+            1.0,
+            2.0,
+            3.0,
+            3.0,
+            2.0,
+            2.0,
+            2.0,
+            2.0
+          ],
+          "numColumns": 0
+        },
+        "header": [
+          "总计"
+        ],
+        "rows": ["${empty}","${empty}","${empty}","${empty}","${quantity}", "${empty}", "${price}"],
+        "format": {
+          "rowFormat": {
+            "formatName": "default",
+            "height": 30.0
+          }
+        }
+      }
+    }
+  ],
+  "page": {
+    "marginRight": 20.0,
+    "pageSize": {
+      "border": -1,
+      "borderWidthBottom": -1.0,
+      "bottom": 0.0,
+      "chunks": [],
+      "rotation": 0,
+      "right": 595.0,
+      "content": true,
+      "borderWidthLeft": -1.0,
+      "borderWidthRight": -1.0,
+      "top": 842.0,
+      "left": 0.0,
+      "useVariableBorders": false,
+      "borderWidth": -1.0,
+      "grayFill": 0.0,
+      "nestable": false,
+      "width": 595.0,
+      "borderWidthTop": -1.0,
+      "height": 842.0
+    },
+    "marginBottom": 20.0,
+    "pageHeight": 842.0,
+    "pageName": "A4",
+    "marginTop": 20.0,
+    "pageWidth": 595.0,
+    "marginLeft": 20.0
+  },
+  "definitions": {
+    "borders": {
+      "table-border": {
+        "color": {
+          "red": 0,
+          "green": 0,
+          "blue": 0
+        },
+        "width": 2.0,
+        "colorname": "BLACK"
+      },
+      "line": {
+        "color": {
+          "red": 0,
+          "green": 0,
+          "blue": 0
+        },
+        "width": 2.0,
+        "style": "TOP",
+        "colorname": "BLACK"
+      },
+      "right": {
+        "width": 10.0,
+        "style": "RIGHT",
+        "colorname": "BLACK"
+      }
+    },
+    "fonts": {
+      "default": {
+        "size": 9.0,
+        "familyname": "",
+        "style": "NORMAL",
+        "baseColor": {
+          "red": 0,
+          "green": 0,
+          "blue": 0
+        }
+      },
+      "table-firstrow": {
+        "size": 12.0,
+        "familyname": "宋体",
+        "style": "BOLD",
+        "baseColor": {
+          "red": 0,
+          "green": 0,
+          "blue": 0
+        }
+      },
+      "table-header": {
+        "size": 14.0,
+        "familyname": "宋体",
+        "style": "BOLD",
+        "baseColor": {
+          "red": 0,
+          "green": 0,
+          "blue": 0
+        }
+      },
+      "title": {
+        "size": 16.0,
+        "familyname": "宋体",
+        "style": "NORMAL",
+        "baseColor": {
+          "red": 0,
+          "green": 0,
+          "blue": 0
+        }
+      },
+      "table-row": {
+        "size": 10.0,
+        "familyname": "宋体",
+        "style": "NORMAL",
+        "baseColor": {
+          "red": 0,
+          "green": 0,
+          "blue": 0
+        }
+      }
+    },
+    "background": "${background}"
+  }
+}
