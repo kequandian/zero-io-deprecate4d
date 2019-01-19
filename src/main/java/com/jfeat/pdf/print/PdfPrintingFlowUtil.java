@@ -49,8 +49,8 @@ public class PdfPrintingFlowUtil {
         fontDefs.put("title", new FontDefinition("宋体", 16, FontDefinition.NORMAL, ColorDefinition.BLACK));
         fontDefs.put("table-header", new FontDefinition("宋体", 14, FontDefinition.BOLD, ColorDefinition.BLACK));
         fontDefs.put("table-firstrow", new FontDefinition("宋体", 12, FontDefinition.BOLD, ColorDefinition.BLACK));
-        fontDefs.put("table-row", new FontDefinition("宋体", 10, FontDefinition.NORMAL, ColorDefinition.BLACK));
-        fontDefs.put("default", new FontDefinition("宋体", 9, FontDefinition.NORMAL, ColorDefinition.BLACK));
+        fontDefs.put("table-row", new FontDefinition("常规", 10, FontDefinition.NORMAL, ColorDefinition.BLACK));
+        fontDefs.put("default", new FontDefinition("常规", 9, FontDefinition.NORMAL, ColorDefinition.BLACK));
         // border
         borderDefs.put("table-border", new BorderDefinition(null, 2, ColorDefinition.BLACK));
         borderDefs.put("line", new BorderDefinition(BorderDefinition.TOP, 2, ColorDefinition.BLACK));
@@ -66,7 +66,6 @@ public class PdfPrintingFlowUtil {
         flows.add(new Flow(Flow.TITLE_FLOW, new TitleFlowData(
                 "采购订单", "title", FlowElement.ALIGN_CENTER
         )));
-
 
 
         RowFormat rowFormat = new RowFormat();
@@ -120,10 +119,17 @@ public class PdfPrintingFlowUtil {
         rowFormat2.setFormatName("default");
         rowFormat2.setHeight(60);
 
+        RowFormat headerFormat = new RowFormat();
+        headerFormat.setFormatName("table-header");
+        headerFormat.setHeight(60);
+
+
         TableFlowData.TableRowFormat tableRowFormat = new TableFlowData.TableRowFormat();
         tableRowFormat.setRowFormat(rowFormat2);
+        tableRowFormat.setHeader(headerFormat);
 
         TableFlowData tableFlowData = new TableFlowData();
+        tableFlowData.setHeader("header");
         tableFlowData.setLayout(layout);
         tableFlowData.setData(datas2);
         tableFlowData.setFormat(tableRowFormat);
@@ -153,7 +159,7 @@ public class PdfPrintingFlowUtil {
         util.export("out.pdf");
 
         //  写入模板
-//        TextFile.write("src/test/origin.json", JSONObject.toJSONString(data, SerializerFeature.DisableCircularReferenceDetect));
+        TextFile.write("src/test/origin.json", JSONObject.toJSONString(data, SerializerFeature.DisableCircularReferenceDetect));
 
     }
 
@@ -247,6 +253,7 @@ public class PdfPrintingFlowUtil {
                     // header
                     builder.header().headerTitle(flowData.getHeader());
                 }
+
                 // set first row
                 if(flowData.getFormat().getFirstRowFormat()!=null) {
                     RowFormat firstRowFormat =flowData.getFormat().getFirstRowFormat();
