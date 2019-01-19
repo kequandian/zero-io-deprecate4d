@@ -4,11 +4,9 @@ import com.jfeat.poi.agent.POIAgent;
 import com.jfeat.poi.agent.PoiAgentExporter;
 import com.jfeat.poi.agent.im.PoiAgentImporterUtil;
 import com.jfeat.poi.agent.im.request.PoiAgentImporterRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.jfeat.poi.agent.util.ExcelWriter;
+import org.apache.poi.ss.usermodel.Workbook;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.*;
 import java.sql.SQLException;
@@ -19,13 +17,43 @@ import java.util.*;
  */
 public class PoiAgentExporterApiUtil implements POIAgent {
 
-    private static final Logger logger = LoggerFactory.getLogger(PoiAgentExporterApiUtil.class);
-
     public static void main(String[] args) throws IOException, SQLException {
+        /**
+         * 或者 (HttpServletResponse)
+         *  response.setContentType("application/octet-stream");
+         *  response.addHeader("Content-Disposition", "attachment; fileName=export.xlsx");
+         *  OutputStream output = response.getOutputStream();
+         **/
+        FileOutputStream output = new FileOutputStream(new File("excel-test.xlsx"));
 
+        /**
+         * set DateSource
+         **/
+        DataSource dataSource = null;
+
+        /**
+         * excel 矩阵导出
+         *
+         * A    |   B   |   C
+         * name |       |   sex
+         * zy   |       |   man
+         **/
+        List<List<String>> data = new ArrayList<>();
+        data.add(Arrays.asList(new String[] {"name", "", "sex"}));
+        data.add(Arrays.asList(new String[] {"zy", "", "man"}));
+        new PoiAgentExporterApiUtil().export(data, output);
+
+
+        /**
+         * excel 列表导出
+         * A    |   B
+         * id   |   name
+         * 1    |   row1
+         * 2    |   row2
+         **/
         List<String> headers = Arrays.asList(new String[] {"id", "name"});
         List<String> columns = Arrays.asList(new String[] {"id", "name"});
-        FileOutputStream os = new FileOutputStream(new File("excel-test.xlsx"));
+
         List<Map<String, String>> rows = new ArrayList<>();
         Map row1 = new HashMap();
         row1.put("id", 1);
@@ -37,23 +65,16 @@ public class PoiAgentExporterApiUtil implements POIAgent {
 
         rows.add(row1);
         rows.add(row2);
-        PoiAgentExporter.exportExcel(rows,  headers, columns, os);
+        PoiAgentExporter.exportExcel(rows,  headers, columns, output);
 
-
-        /**
-         * Demo
-         **/
-        DataSource dataSource = null;
-        HttpServletRequest request = null;
-        HttpServletResponse response = null;
 
         /**
          * excel导出  query可以为单个表， 或查询sql
-         * Example:
-         * GET endpoint?query=vip_account&columns=account&headers=账号&headers=姓名&columns=vip_name
          *
          **/
-        new PoiAgentExporterApiUtil().export(dataSource, request, response);
+        new PoiAgentExporterApiUtil().export(dataSource, "your_table_name", output);
+
+        new PoiAgentExporterApiUtil().export(dataSource, "your_query_sql", output);
 
         /**
          * 多表导入
@@ -80,18 +101,20 @@ public class PoiAgentExporterApiUtil implements POIAgent {
                 .data(poiAgentImporterRequest)
                 .performImport();
 
-
         /**
          * 导出模板
          * GET endpoint?table=table1&field1=字段1&field2=字段2
+         *
+         *     A    |   B
+         * row1_1   | row1_2
          **/
-        new PoiAgentExporterApiUtil().template(dataSource, request, response);
-
+        Map<String, String[]> parameterMap = new HashMap<>();
+        parameterMap.put("column1", new String[]{"row1_1"});
+        parameterMap.put("column2", new String[]{"row1_2"});
+        new PoiAgentExporterApiUtil().template(parameterMap, output);
     }
 
-    public int template(DataSource dataSource, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Map<String, String[]> parameterMap = request.getParameterMap();
-
+    public int template(Map<String, String[]> parameterMap, OutputStream os) throws IOException {
         Map<String, String> parameters = new LinkedHashMap<>();
         if (parameterMap != null) {
             for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
@@ -108,12 +131,7 @@ public class PoiAgentExporterApiUtil implements POIAgent {
 
         //输出文件
         int success = 0;
-        OutputStream os = null;
         try {
-            response.setContentType("application/octet-stream");
-            response.addHeader("Content-Disposition", "attachment; fileName=export.xlsx");
-            os = response.getOutputStream();
-
             success = PoiAgentExporter
                     .exportExcel(rows, null, null, os);
 
@@ -127,21 +145,17 @@ public class PoiAgentExporterApiUtil implements POIAgent {
         return success;
     }
 
+    public int export(List<List<String>> matrix, OutputStream response) throws IOException {
+        ExcelWriter excelWriter = new ExcelWriter();
+        Workbook book = excelWriter.writeMatrix(matrix);
+        book.write(response);
+        return 1;
+    }
 
-    public int export(DataSource dataSource, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        final String QUERY_PARAM = "query";
-        final String HEADERS_PARAM = "headers";
-        final String COLUMNS_PARAM = "columns";
+    public int export(DataSource dataSource, String query, String[] headersParam, String[] columnsParam, OutputStream os) throws IOException {
 
-        Map<String, String[]> parameterMap = request.getParameterMap();
-        String[] query_param = parameterMap.get(QUERY_PARAM);
-        String[] headers_param = parameterMap.get(HEADERS_PARAM);
-        String[] columns_param = parameterMap.get(COLUMNS_PARAM);
-
-        if (query_param != null && query_param.length == 1) {
-            String[] queries = query_param;
-            String query = queries[0];
+        if (query != null && !"".equals(query)) {
 
             String tableName = null;
             if (query.matches("\\w+")) {
@@ -167,18 +181,17 @@ public class PoiAgentExporterApiUtil implements POIAgent {
                 }
             }
 
-
             // headers
             List<String> headers = new ArrayList<>();
-            if(headers_param != null) {
-                for (String header : headers_param) {
+            if(headersParam != null) {
+                for (String header : headersParam) {
                     headers.add(header);
                 }
             }
 
             // columns
             List<String> columns = new ArrayList<>();
-            for (String column : columns_param) {
+            for (String column : columnsParam) {
                 columns.add(column);
             }
 
@@ -186,16 +199,11 @@ public class PoiAgentExporterApiUtil implements POIAgent {
             ///
             int success = 0;
 
-            //输出文件
-            OutputStream os = null;
             try {
                 String fileName = tableName;
                 if (fileName == null || fileName.length() == 0) {
                     fileName = ExporterParameters.findTablesFromSql(query)[0];
                 }
-                response.setContentType("application/octet-stream");
-                response.addHeader("Content-Disposition", "attachment; fileName=" + fileName + ".xlsx");
-                os = response.getOutputStream();
 
                 if (tableName != null) {
                     // export table
@@ -230,8 +238,7 @@ public class PoiAgentExporterApiUtil implements POIAgent {
         return 0;
     }
 
-
-    public int export(DataSource dataSource, String querySql, HttpServletResponse response) throws IOException {
+    public int export(DataSource dataSource, String querySql, OutputStream os) throws IOException {
 
         /// check table permission
         {
@@ -248,16 +255,7 @@ public class PoiAgentExporterApiUtil implements POIAgent {
         ///
         int success = 0;
 
-        //输出文件
-        OutputStream os = null;
         try {
-            String fileName = ExporterParameters.findTablesFromSql(querySql)[0];
-            response.setContentType("application/octet-stream");
-            response.addHeader("Content-Disposition", "attachment; fileName=" + fileName + ".xlsx");
-            os = response.getOutputStream();
-
-            /// export query
-
             success = new PoiAgentExporter()
                     .setDataSource(dataSource)
                     .exportWitSql(querySql, os);

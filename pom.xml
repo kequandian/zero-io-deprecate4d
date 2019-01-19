@@ -19,16 +19,11 @@
         <slf4j.version>1.7.25</slf4j.version>
         <poi-ooxml.version>3.9</poi-ooxml.version>
         <itext-asian.version>5.2.0</itext-asian.version>
-        <servlet-api.version>3.1.0</servlet-api.version>
         <aliyun-sdk-oss.version>3.4.0</aliyun-sdk-oss.version>
+        <slf4j-log4j12.version>1.7.25</slf4j-log4j12.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>${servlet-api.version}</version>
-        </dependency>
         <!-- pdf依赖 https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
         <dependency>
             <groupId>com.itextpdf</groupId>
@@ -68,6 +63,11 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j-log4j12.version}</version>
         </dependency>
         <dependency>
             <groupId>com.aliyun.oss</groupId>
