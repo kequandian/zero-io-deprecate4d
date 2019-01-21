@@ -5,8 +5,11 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Rectangle;
 import com.jfeat.pdf.print.base.BorderDefinition;
 import com.jfeat.pdf.print.base.FontDefinition;
+import com.jfeat.pdf.print.flow.TableFlow;
+import javafx.scene.control.Tab;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -319,7 +322,30 @@ public class PdfFlowRequest {
      * 二维码流实体定义（未实现）
      */
     public static class QRCodeFlowData implements FlowElement{
+        private String code;
+        private String formatName;
 
+        public QRCodeFlowData() {}
+
+        public QRCodeFlowData(String code, String formatName) {
+            this.code = code;
+            this.formatName = formatName;
+        }
+        public String getFormatName() {
+            return formatName;
+        }
+
+        public void setFormatName(String formatName) {
+            this.formatName = formatName;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
     }
 
     /**
@@ -339,28 +365,43 @@ public class PdfFlowRequest {
             this.layout = layout;
         }
 
+        public static ContentFlowData build() {
+            return new ContentFlowData();
+        }
+        public ContentFlowData setLayout(float[] columnsWith) {
+            layout = new Layout(columnsWith);
+            return this;
+        }
+        public ContentFlowData rowFormat(String formatName, float height) {
+            format = new RowFormat(formatName, height);
+            return this;
+        }
+
         public RowFormat getFormat() {
             return format;
         }
 
-        public void setFormat(RowFormat format) {
+        public ContentFlowData setFormat(RowFormat format) {
             this.format = format;
+            return this;
         }
 
         public String[] getTitle() {
             return title;
         }
 
-        public void setTitle(String[] title) {
+        public ContentFlowData setTitle(String[] title) {
             this.title = title;
+            return this;
         }
 
         public String[] getData() {
             return data;
         }
 
-        public void setData(String[] data) {
+        public ContentFlowData setData(String[] data) {
             this.data = data;
+            return this;
         }
     }
     /**
@@ -372,6 +413,46 @@ public class PdfFlowRequest {
         private String header;
         private TableBorderFormat borderFormat;
         private String[] data;
+
+        public static TableFlowData build() {
+            return new TableFlowData();
+        }
+        public TableFlowData layout(float[] columnsWith) {
+            layout = new Layout(columnsWith);
+            return this;
+        }
+        public TableFlowData borderFormat(Integer style, Integer width) {
+            this.setBorderFormat(new TableBorderFormat(style, width));
+            return this;
+        }
+        public TableFlowData data(String[] data) {
+            this.data = data;
+            return this;
+        }
+        public TableFlowData headerFormat(String formatName, float height) {
+            if(format == null) {
+                format = new TableRowFormat();
+            }
+            RowFormat header = new RowFormat();
+            format.setHeader(new RowFormat(formatName, height));
+            return this;
+        }
+        public TableFlowData firstRowFormat(String formatName, float height) {
+            if(format == null) {
+                format = new TableRowFormat();
+            }
+            format.setFirstRowFormat(new RowFormat(formatName, height));
+            return this;
+        }
+
+        public TableFlowData rowFormat(String formatName, float height) {
+            if(format == null) {
+                format = new TableRowFormat();
+            }
+            format.setRowFormat(new RowFormat(formatName, height));
+            return this;
+        }
+
 
         public TableBorderFormat getBorderFormat() {
             return borderFormat;
@@ -401,21 +482,29 @@ public class PdfFlowRequest {
             return data;
         }
 
-        public void setData(String[] data) {
+        public TableFlowData setData(String[] data) {
             this.data = data;
+            return this;
         }
 
         public String getHeader() {
             return header;
         }
 
-        public void setHeader(String header) {
+        public TableFlowData setHeader(String header) {
             this.header = header;
+            return this;
         }
 
         public static class TableBorderFormat {
             private Integer style;
             private Integer width;
+
+            public TableBorderFormat() {}
+            public TableBorderFormat(Integer style, Integer width) {
+                this.style = style;
+                this.width = width;
+            }
 
             public Integer getStyle() {
                 return style;
@@ -470,17 +559,26 @@ public class PdfFlowRequest {
 
 
     /**
-     * 默认布局为流布局，至下而下
-     * 横向布局 使布局横向分配，由table pdf元素实现
-     * (暂未实现)
+     * 流布局，至上而下(定义列数为1时)
+     * 横向布局 使布局横向分配
+     *
      */
     public static class LinearFlowData implements FlowElement{
         private List<Flow> elements = new ArrayList<>();
         private Layout layout;
+        public LinearFlowData() {}
+        public LinearFlowData(float[] columnsWith) {
+            layout = new Layout();
+            layout.setColumnWidths(columnsWith);
+        }
 
+        public static LinearFlowData build() {
+            return new LinearFlowData();
+        }
 
-        public void add(Flow element) {
+        public LinearFlowData add(Flow element) {
             elements.add(element);
+            return this;
         }
         public List<Flow> getElements() {
             return elements;
@@ -493,7 +591,10 @@ public class PdfFlowRequest {
         public Layout getLayout() {
             return layout;
         }
-
+        public LinearFlowData setLayout(float[] columnsWiths) {
+            this.layout = new Layout(columnsWiths);
+            return this;
+        }
         public void setLayout(Layout layout) {
             this.layout = layout;
         }
@@ -506,15 +607,18 @@ public class PdfFlowRequest {
     public static class Layout{
         private int numColumns;
         private float[] columnWidths;
-
+        @Deprecated
         public int getNumColumns() {
             return numColumns;
         }
-
+        @Deprecated
         public void setNumColumns(int numColumns) {
             this.numColumns = numColumns;
         }
-
+        public Layout() {}
+        public Layout(float[] columnWidths) {
+            this.columnWidths = columnWidths;
+        }
         public float[] getColumnWidths() {
             return columnWidths;
         }
@@ -531,7 +635,11 @@ public class PdfFlowRequest {
     public static class RowFormat {
         private float height;
         private String formatName;
-
+        public RowFormat() {}
+        public RowFormat(String formatName, float height) {
+            this.height = height;
+            this.formatName = formatName;
+        }
         public float getHeight() {
             return height;
         }

@@ -1,7 +1,5 @@
 package com.jfeat.pdf.print;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.itextpdf.text.*;
@@ -12,9 +10,11 @@ import com.jfeat.pdf.print.base.BorderDefinition;
 import com.jfeat.pdf.print.base.ColorDefinition;
 import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.element.FlowLayout;
+import com.jfeat.pdf.print.flow.BarCodes;
 import com.jfeat.pdf.print.flow.ContentFlowBuilder;
 import com.jfeat.pdf.print.flow.TableFlow;
 import com.jfeat.pdf.print.flow.TableFlowBuilder;
+import com.jfeat.pdf.print.util.Fonts;
 import com.jfeat.pdf.print.util.TextFile;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -51,11 +51,11 @@ public class PdfPrintingFlowUtil {
         fontDefs.put("table-firstrow", new FontDefinition("宋体", 12, FontDefinition.BOLD, ColorDefinition.BLACK));
         fontDefs.put("table-row", new FontDefinition("常规", 10, FontDefinition.NORMAL, ColorDefinition.BLACK));
         fontDefs.put("default", new FontDefinition("常规", 9, FontDefinition.NORMAL, ColorDefinition.BLACK));
+        fontDefs.put("qrcode", new FontDefinition("Helvetica", 9, FontDefinition.NORMAL, ColorDefinition.BLACK));
         // border
         borderDefs.put("table-border", new BorderDefinition(null, 2, ColorDefinition.BLACK));
         borderDefs.put("line", new BorderDefinition(BorderDefinition.TOP, 2, ColorDefinition.BLACK));
         borderDefs.put("right", new BorderDefinition(BorderDefinition.RIGHT, 10, ColorDefinition.BLACK));
-
 
         /**
          * 主要设置内容
@@ -67,91 +67,54 @@ public class PdfPrintingFlowUtil {
                 "采购订单", "title", FlowElement.ALIGN_CENTER
         )));
 
-
-        RowFormat rowFormat = new RowFormat();
-        rowFormat.setFormatName("default");
-        rowFormat.setHeight(20);
         /**
          * content
          * */
         String[] title = {"甲方:", "乙方", "交货"};
         String[] lines = {"择阿迪达斯官方网店", "择阿迪达斯官方网店", "择阿迪达斯官方网店"};
-        ContentFlowData contentFlowData = new ContentFlowData();
-        contentFlowData.setFormat(rowFormat);
-        Layout contentLayout = new Layout();
-        contentLayout.setColumnWidths(new float[]{1, 4});
-        contentFlowData.setLayout(contentLayout);
-        contentFlowData.setTitle(title);
-        contentFlowData.setData(lines);
+        ContentFlowData contentFlowData = ContentFlowData.build()
+                                            .setLayout(new float[]{1, 4})
+                                            .setTitle(title)
+                                            .setData(lines)
+                                            .rowFormat("default", 20);
 
-        // content2
-        String[] title2 = {"订单编号", "订单日期", "申购单号"};
-        String[] lines2 = {"P12848-85", "2018-11-10", "P12848-85"};
-        ContentFlowData contentFlowData2 = new ContentFlowData();
-        contentFlowData2.setFormat(rowFormat);
-        Layout contentLayout2 = new Layout();
-        contentLayout2.setColumnWidths(new float[]{1, 3});
-        contentFlowData2.setLayout(contentLayout2);
-        contentFlowData2.setTitle(title2);
-        contentFlowData2.setData(lines2);
+        /**
+         * QRCode AND LinearFlowData
+         **/
+        LinearFlowData qrcodeStack = LinearFlowData.build()
+                .setLayout(new float[]{1.0f})
+                .add(new Flow(Flow.QRCODE_FLOW, new QRCodeFlowData("P13224242", "qrcode")))
+                .add(new Flow(Flow.QRCODE_FLOW, new QRCodeFlowData("P13224242", "qrcode")));
 
-        LinearFlowData wrapper = new LinearFlowData();
-        Layout wrapperLayout = new Layout();
-        wrapperLayout.setColumnWidths(new float[]{3, 2});
-        wrapper.setLayout(wrapperLayout);
+        LinearFlowData wrapper = new LinearFlowData(new float[]{3, 2});
         wrapper.add(new Flow(Flow.CONTENT_FLOW, contentFlowData));
-        wrapper.add(new Flow(Flow.CONTENT_FLOW, contentFlowData2));
+        wrapper.add(new Flow(Flow.LINEAR_FLOW, qrcodeStack));
         flows.add(new Flow(Flow.LINEAR_FLOW, wrapper));
 
-        // table
-        String[] titles2 = {"行号", "物料编号", "物料名称", "材料及规格备注:", "单位", "单价", "数量", "金额", "交货日期", "备注"};
-        String[] datas2 = {"行号", "物料编号", "物料名称", "材料及规格备注:", "单位", "单价", "数量", "金额", "交货日期", "备注",
+        /**
+         * Table
+         **/
+        String[] datas = {"行号", "物料编号", "物料名称", "材料及规格备注:", "单位", "单价", "数量", "金额", "交货日期", "备注",
                 "10", "A456456456412", "【狂疯价】adidas 阿迪达斯 三叶草", "材质:", "件", "10", "10", "100.00", "2018-11-9", "",
                 "10", "A456456456412", "【狂疯价】adidas 阿迪达斯 三叶草", "材质:", "件", "10", "10", "100.00", "2018-11-9", "",
                 "10", "A456456456412", "【狂疯价】adidas 阿迪达斯 三叶草", "材质:", "件", "10", "10", "100.00", "2018-11-9", "",
                 "10", "A456456456412", "【狂疯价】adidas 阿迪达斯 三叶草", "材质:", "件", "10", "10", "100.00", "2018-11-9", "",
                 "10", "A456456456412", "【狂疯价】adidas 阿迪达斯 三叶草", "材质:", "件", "10", "10", "100.00", "2018-11-9", "",
         };
-        Layout layout = new Layout();
-        layout.setColumnWidths(new float[]{2, 4, 5,  4, 2, 2, 2, 3, 3, 3 });
-
-        RowFormat rowFormat2 = new RowFormat();
-        rowFormat2.setFormatName("default");
-        rowFormat2.setHeight(60);
-
-        RowFormat headerFormat = new RowFormat();
-        headerFormat.setFormatName("table-header");
-        headerFormat.setHeight(60);
-
-
-        TableFlowData.TableRowFormat tableRowFormat = new TableFlowData.TableRowFormat();
-        tableRowFormat.setRowFormat(rowFormat2);
-        tableRowFormat.setHeader(headerFormat);
-
-        TableFlowData tableFlowData = new TableFlowData();
-        tableFlowData.setHeader("header");
-        tableFlowData.setLayout(layout);
-        tableFlowData.setData(datas2);
-        tableFlowData.setFormat(tableRowFormat);
+        TableFlowData tableFlowData = TableFlowData.build()
+                                .headerFormat("table-header", 60)
+                                .rowFormat("default", 60)
+                                .data(datas)
+                                .setHeader("Header Test")
+                                .layout(new float[]{2, 4, 5,  4, 2, 2, 2, 3, 3, 3 });
         flows.add(new Flow(Flow.TABLE_FLOW, tableFlowData));
 
-        Layout layout3 = new Layout();
-        layout3.setColumnWidths(new float[]{19, 2, 3, 3, 3 });
 
-        RowFormat rowFormat3 = new RowFormat();
-        rowFormat3.setFormatName("default");
-        rowFormat3.setHeight(30);
-
-        TableFlowData.TableRowFormat tableRowFormat3 = new TableFlowData.TableRowFormat();
-        tableRowFormat3.setRowFormat(rowFormat3);
-
-        TableFlowData tableFlowData3 = new TableFlowData();
-        tableFlowData3.setLayout(layout3);
-        tableFlowData3.setFormat(tableRowFormat3);
-        tableFlowData3.setData(new String[]{"合计", "1125.00", "22.00"});
-        flows.add(new Flow(Flow.TABLE_FLOW, tableFlowData3));
-
-        flows.add(new Flow(Flow.LINEAR_FLOW, wrapper));
+        TableFlowData sumTableFlowData = TableFlowData.build()
+                .rowFormat("default", 30)
+                .data(new String[]{"合计", "1125.00", "22.00"})
+                .layout(new float[]{19, 2, 3, 3, 3 });
+        flows.add(new Flow(Flow.TABLE_FLOW, sumTableFlowData));
 
         // 打印
         PdfPrintingFlowUtil util = new PdfPrintingFlowUtil();
@@ -184,11 +147,40 @@ public class PdfPrintingFlowUtil {
         for(Flow flow : flows){
            if (flow.getName().equals(Flow.LINEAR_FLOW)) {
                LinearFlowData flowData = (LinearFlowData)flow.getElement();
-                FlowLayout qrCodeStack = new FlowLayout(1);
                 FlowLayout wrapLayout = new FlowLayout(flowData.getLayout().getColumnWidths());
                 for(Flow element : flowData.getElements()) {
+
+                    /**
+                     * 流式布局中允许嵌套一层单列的流式布局, 且只允许嵌套一列的
+                     **/
+                    if (Flow.LINEAR_FLOW.equals(element.getName())) {
+                        LinearFlowData columnDatas = (LinearFlowData) element.getElement();
+                        if (columnDatas.getLayout().getColumnWidths().length == 1) {
+                            FlowLayout columnWrapper = new FlowLayout(1);
+                            for (Flow columnData : columnDatas.getElements()) {
+                                columnWrapper.add((PdfPTable) getFlowElement(columnData, canvas));
+                            }
+                            wrapLayout.add(columnWrapper);
+                            continue;
+                        }
+                        throw new UnsupportedOperationException();
+                    }
+
                     wrapLayout.add((PdfPTable) getFlowElement(element, canvas));
                 }
+
+/*               FlowLayout qrcodeStack = new FlowLayout(new float[]{1});
+               for(int i = 0; i < flowData.getElements().size(); i++) {
+                   if(i == 0) {
+                       wrapLayout.add((PdfPTable) getFlowElement(flowData.getElements().get(i), canvas));
+                       continue;
+                   } else if(i == 2) {
+                       qrcodeStack.add((PdfPTable) getFlowElement(flowData.getElements().get(i), canvas));
+                       wrapLayout.add(qrcodeStack);
+                   }
+                   qrcodeStack.add((PdfPTable) getFlowElement(flowData.getElements().get(i), canvas));
+
+               }*/
                 exporter.addElement(wrapLayout);
             }  else {
                exporter.addElement(getFlowElement(flow, canvas));
@@ -228,9 +220,12 @@ public class PdfPrintingFlowUtil {
             element = dottedLineSeparator;
 
         }else if(flow.getName().equals(Flow.QRCODE_FLOW)){
-            //TODO,
-            throw new NotImplementedException();
+            QRCodeFlowData flowData = (QRCodeFlowData) flow.getElement();
 
+            FlowLayout qrCodeLayout = new FlowLayout(1);
+            qrCodeLayout.add(BarCodes.createBarCode39(canvas, flowData.getCode(), true));
+            qrCodeLayout.add(new Phrase(flowData.getCode(), this.fonts.get(flowData.getFormatName())));
+            element = qrCodeLayout;
         }else if(flow.getName().equals(Flow.TABLE_FLOW)){
 
             TableFlowData flowData = (TableFlowData)flow.getElement();
@@ -246,7 +241,7 @@ public class PdfPrintingFlowUtil {
             if(flowData.getFormat() != null) {
                 if(flowData.getFormat().getHeader()!=null) {
                     RowFormat header =flowData.getFormat().getHeader();
-                    if(header.getHeight()>0) {
+                        if(header.getHeight()>0) {
                         builder.header().headerHeight(header.getHeight());
                     }
                     builder.header().headerFormat(this.fonts.get(header.getFormatName()));

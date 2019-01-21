@@ -16,7 +16,7 @@ public class ChineseFont extends Font{
 
     public ChineseFont(Font font) {
         //BaseFont baseFont = BaseFont.createFont("STSongStd-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
-        super(Fonts.HELVETICA, font.getSize());
+        super(Fonts.BASE, font.getSize());
 
         setFamily(font.getFamilyname());
         setStyle(font.getStyle());
