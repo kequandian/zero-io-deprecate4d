@@ -46,12 +46,12 @@ public class PdfPrintingFlowUtil {
         /// 设置定义
         Map<String,FontDefinition> fontDefs = data.getDefinitions().getFonts();
         Map<String,BorderDefinition> borderDefs = data.getDefinitions().getBorders();
-        fontDefs.put("title", new FontDefinition("宋体", 16, FontDefinition.NORMAL, ColorDefinition.BLACK));
-        fontDefs.put("table-header", new FontDefinition("宋体", 14, FontDefinition.BOLD, ColorDefinition.BLACK));
-        fontDefs.put("table-firstrow", new FontDefinition("宋体", 12, FontDefinition.BOLD, ColorDefinition.BLACK));
-        fontDefs.put("table-row", new FontDefinition("常规", 10, FontDefinition.NORMAL, ColorDefinition.BLACK));
-        fontDefs.put("default", new FontDefinition("常规", 9, FontDefinition.NORMAL, ColorDefinition.BLACK));
-        fontDefs.put("qrcode", new FontDefinition("Helvetica", 9, FontDefinition.NORMAL, ColorDefinition.BLACK));
+        fontDefs.put("title", new FontDefinition(Fonts.Definition.BASE.toString(), 16, FontDefinition.NORMAL, ColorDefinition.BLACK));
+        fontDefs.put("table-header", new FontDefinition(Fonts.Definition.SONG.toString(), 14, FontDefinition.BOLD, ColorDefinition.BLACK));
+        fontDefs.put("table-firstrow", new FontDefinition(Fonts.Definition.SONG.toString(), 12, FontDefinition.BOLD, ColorDefinition.BLACK));
+        fontDefs.put("table-row", new FontDefinition(Fonts.Definition.BASE.toString(), 10, FontDefinition.NORMAL, ColorDefinition.BLACK));
+        fontDefs.put("default", new FontDefinition(Fonts.Definition.BASE.toString(), 9, FontDefinition.NORMAL, ColorDefinition.BLACK));
+        fontDefs.put("qrcode", new FontDefinition(Fonts.Definition.HELVETICA.toString(), 9, FontDefinition.NORMAL, ColorDefinition.BLACK));
         // border
         borderDefs.put("table-border", new BorderDefinition(null, 2, ColorDefinition.BLACK));
         borderDefs.put("line", new BorderDefinition(BorderDefinition.TOP, 2, ColorDefinition.BLACK));
@@ -63,12 +63,20 @@ public class PdfPrintingFlowUtil {
         data.setFlows(new ArrayList<>());
         List<Flow> flows = data.getFlows();
 
+        /**
+         * Title
+         **/
         flows.add(new Flow(Flow.TITLE_FLOW, new TitleFlowData(
                 "采购订单", "title", FlowElement.ALIGN_CENTER
         )));
 
         /**
-         * content
+         * New Line
+         **/
+        flows.add(new Flow(Flow.NEW_LINE, null));
+
+        /**
+         * Content
          * */
         String[] title = {"甲方:", "乙方", "交货"};
         String[] lines = {"择阿迪达斯官方网店", "择阿迪达斯官方网店", "择阿迪达斯官方网店"};
@@ -76,7 +84,7 @@ public class PdfPrintingFlowUtil {
                                             .setLayout(new float[]{1, 4})
                                             .setTitle(title)
                                             .setData(lines)
-                                            .rowFormat("default", 20);
+                                            .rowFormat("default", 25);
 
         /**
          * QRCode AND LinearFlowData
@@ -97,18 +105,18 @@ public class PdfPrintingFlowUtil {
         String[] datas = {"行号", "物料编号", "物料名称", "材料及规格备注:", "单位", "单价", "数量", "金额", "交货日期", "备注",
                 "10", "A456456456412", "【狂疯价】adidas 阿迪达斯 三叶草", "材质:", "件", "10", "10", "100.00", "2018-11-9", "",
                 "10", "A456456456412", "【狂疯价】adidas 阿迪达斯 三叶草", "材质:", "件", "10", "10", "100.00", "2018-11-9", "",
-                "10", "A456456456412", "【狂疯价】adidas 阿迪达斯 三叶草", "材质:", "件", "10", "10", "100.00", "2018-11-9", "",
+                "10", "A456456456412", "【狂疯价】adidas 阿迪达斯 三叶草", "材质:", "件", "10", "10", "100.00", "2018-11-9", "ss",
                 "10", "A456456456412", "【狂疯价】adidas 阿迪达斯 三叶草", "材质:", "件", "10", "10", "100.00", "2018-11-9", "",
                 "10", "A456456456412", "【狂疯价】adidas 阿迪达斯 三叶草", "材质:", "件", "10", "10", "100.00", "2018-11-9", "",
         };
         TableFlowData tableFlowData = TableFlowData.build()
-                                .headerFormat("table-header", 60)
+                                .headerFormat("table-header", 30, new BaseColor(219, 219, 219))
                                 .rowFormat("default", 60)
+                                .firstRowFormat("table-firstrow", 60, BaseColor.GRAY)
                                 .data(datas)
                                 .setHeader("Header Test")
-                                .layout(new float[]{2, 4, 5,  4, 2, 2, 2, 3, 3, 3 });
+                                .layout(new float[]{2, 4, 5, 4, 2, 2, 2, 3, 3, 3 });
         flows.add(new Flow(Flow.TABLE_FLOW, tableFlowData));
-
 
         TableFlowData sumTableFlowData = TableFlowData.build()
                 .rowFormat("default", 30)
@@ -123,9 +131,7 @@ public class PdfPrintingFlowUtil {
 
         //  写入模板
         TextFile.write("src/test/origin.json", JSONObject.toJSONString(data, SerializerFeature.DisableCircularReferenceDetect));
-
     }
-
 
     private Page page;
     private List<Flow> flows;
@@ -168,19 +174,6 @@ public class PdfPrintingFlowUtil {
 
                     wrapLayout.add((PdfPTable) getFlowElement(element, canvas));
                 }
-
-/*               FlowLayout qrcodeStack = new FlowLayout(new float[]{1});
-               for(int i = 0; i < flowData.getElements().size(); i++) {
-                   if(i == 0) {
-                       wrapLayout.add((PdfPTable) getFlowElement(flowData.getElements().get(i), canvas));
-                       continue;
-                   } else if(i == 2) {
-                       qrcodeStack.add((PdfPTable) getFlowElement(flowData.getElements().get(i), canvas));
-                       wrapLayout.add(qrcodeStack);
-                   }
-                   qrcodeStack.add((PdfPTable) getFlowElement(flowData.getElements().get(i), canvas));
-
-               }*/
                 exporter.addElement(wrapLayout);
             }  else {
                exporter.addElement(getFlowElement(flow, canvas));
@@ -241,7 +234,10 @@ public class PdfPrintingFlowUtil {
             if(flowData.getFormat() != null) {
                 if(flowData.getFormat().getHeader()!=null) {
                     RowFormat header =flowData.getFormat().getHeader();
-                        if(header.getHeight()>0) {
+                    if(header.getColor() != null) {
+                        builder.header().headerColor(header.getColor());
+                    }
+                    if(header.getHeight()> 0) {
                         builder.header().headerHeight(header.getHeight());
                     }
                     builder.header().headerFormat(this.fonts.get(header.getFormatName()));
@@ -255,6 +251,9 @@ public class PdfPrintingFlowUtil {
                     if(firstRowFormat.getHeight()>0) {
                         builder.firstRow().firstRowHeight(firstRowFormat.getHeight());
                     }
+                    if(firstRowFormat.getColor() != null) {
+                        builder.firstRow().firstRowColor(firstRowFormat.getColor());
+                    }
                     builder.firstRow().firstRowFormat(this.fonts.get(firstRowFormat.getFormatName()));
                 }
                 // set row
@@ -263,6 +262,9 @@ public class PdfPrintingFlowUtil {
                     builder.row().rowFormat(this.fonts.get(rowFormat.getFormatName()));
                     if(rowFormat.getHeight()>0) {
                         builder.row().rowHeight(rowFormat.getHeight());
+                    }
+                    if(rowFormat.getColor() != null) {
+                        builder.row().rowColor(rowFormat.getColor());
                     }
                     // rows()
                     builder.rows(flowData.getData());
@@ -318,7 +320,7 @@ public class PdfPrintingFlowUtil {
             element = tableFlow.getElement();
         } else if (flow.getName().equals(Flow.LINEAR_FLOW)) {
 
-        } else if(flow.getName().equals("newLine")) {
+        } else if(flow.getName().equals(Flow.NEW_LINE)) {
             element = Chunk.NEWLINE;
         }
         return element;

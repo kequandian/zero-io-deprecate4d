@@ -1,5 +1,6 @@
 package com.jfeat.pdf.print;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Rectangle;
@@ -7,6 +8,7 @@ import com.jfeat.pdf.print.base.BorderDefinition;
 import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.flow.TableFlow;
 import javafx.scene.control.Tab;
+import org.apache.xmlbeans.impl.piccolo.xml.Piccolo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -430,26 +432,34 @@ public class PdfFlowRequest {
             return this;
         }
         public TableFlowData headerFormat(String formatName, float height) {
+            return headerFormat(formatName, height, null);
+        }
+        public TableFlowData headerFormat(String formatName, float height, BaseColor color) {
             if(format == null) {
                 format = new TableRowFormat();
             }
-            RowFormat header = new RowFormat();
-            format.setHeader(new RowFormat(formatName, height));
+            format.setHeader(new RowFormat(formatName, height, color));
             return this;
         }
         public TableFlowData firstRowFormat(String formatName, float height) {
+            return firstRowFormat(formatName, height, null);
+        }
+        public TableFlowData firstRowFormat(String formatName, float height, BaseColor color) {
             if(format == null) {
                 format = new TableRowFormat();
             }
-            format.setFirstRowFormat(new RowFormat(formatName, height));
+            format.setFirstRowFormat(new RowFormat(formatName, height, color));
             return this;
         }
 
         public TableFlowData rowFormat(String formatName, float height) {
+            return rowFormat(formatName, height, null);
+        }
+        public TableFlowData rowFormat(String formatName, float height, BaseColor color) {
             if(format == null) {
                 format = new TableRowFormat();
             }
-            format.setRowFormat(new RowFormat(formatName, height));
+            format.setRowFormat(new RowFormat(formatName, height, color));
             return this;
         }
 
@@ -562,6 +572,7 @@ public class PdfFlowRequest {
      * 流布局，至上而下(定义列数为1时)
      * 横向布局 使布局横向分配
      *
+     * 支持嵌套一层列数不为1 的流式布局
      */
     public static class LinearFlowData implements FlowElement{
         private List<Flow> elements = new ArrayList<>();
@@ -600,7 +611,6 @@ public class PdfFlowRequest {
         }
     }
 
-
     /**
      * 布局,可台定义列数（宽度平分），也可以定义不同的列宽
      */
@@ -635,10 +645,18 @@ public class PdfFlowRequest {
     public static class RowFormat {
         private float height;
         private String formatName;
+        private BaseColor color;
+
         public RowFormat() {}
         public RowFormat(String formatName, float height) {
             this.height = height;
             this.formatName = formatName;
+        }
+
+        public RowFormat(String formatName, float height, BaseColor color) {
+            this.height = height;
+            this.formatName = formatName;
+            this.color = color;
         }
         public float getHeight() {
             return height;
@@ -654,6 +672,14 @@ public class PdfFlowRequest {
 
         public void setFormatName(String formatName) {
             this.formatName = formatName;
+        }
+
+        public BaseColor getColor() {
+            return color;
+        }
+
+        public void setColor(BaseColor color) {
+            this.color = color;
         }
     }
 

@@ -43,7 +43,7 @@ public class Fonts {
         }
     }
 
-    enum Definition {
+    public enum Definition {
         BASE("常规", Fonts.BASE),SONG("宋体", Fonts.SONG), HELVETICA("Helvetica", Fonts.HELVETICA);
         private static final Map<String, BaseFont> cache = new HashMap<>();
         Definition(String name, BaseFont font) {

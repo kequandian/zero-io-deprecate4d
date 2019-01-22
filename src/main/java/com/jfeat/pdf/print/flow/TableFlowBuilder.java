@@ -36,14 +36,17 @@ public class TableFlowBuilder {
     private float headerHeight;
     private String headerTitle;
     private Font headerFormat;
+    private BaseColor headerColor;
 
     // table row
     private boolean firstRow = false;
     private float firstRowHeight = 0;     /// 相当于表头 headers
     private Font firstRowFormat;
+    private BaseColor firstRowColor;
     private float rowHeight;
     private Font rowFormat;
     private String[] rows;
+    private BaseColor rowColor;
 
     public TableFlowBuilder(){
     }
@@ -142,12 +145,26 @@ public class TableFlowBuilder {
         return this;
     }
 
+    public TableFlowBuilder headerColor(BaseColor headerColor) {
+        this.headerColor = headerColor;
+        return this;
+    }
+    public TableFlowBuilder firstRowColor(BaseColor firstRowColor) {
+        this.firstRowColor = firstRowColor;
+        return this;
+    }
+    public TableFlowBuilder rowColor(BaseColor rowColor) {
+        this.rowColor = rowColor;
+        return this;
+    }
+
     public TableFlowBuilder rows(String[] rows){
         //补全列内容，单元格数据与列数目一致
         int len = columnWidths!=null ? columnWidths.length : numColumns;
         this.rows = Strings.alignUpStringArray(rows, len);
         return this;
     }
+
 
     public TableFlow build(){
         if(numColumns==0 && (columnWidths==null || columnWidths.length==0)){
@@ -166,6 +183,7 @@ public class TableFlowBuilder {
         report.setBorderColor(borderColor);
         report.setBorderStyle(borderStyle);
         report.setRowHeight(rowHeight);
+        report.setRowColor(rowColor);
 
         if(header){
             report.setHeaderHeight(headerHeight);
@@ -173,10 +191,12 @@ public class TableFlowBuilder {
             TextBox header = new TextBox();
             header.setContent(headerTitle, headerFormat);
             report.setHeader(header);
+            report.setHeaderColor(headerColor);
         }
 
         if(firstRow){
             report.setFirstRowHeight(firstRowHeight);
+            report.setFirstRowColor(firstRowColor);
         }
 
         List<ListRow> listRows = new ArrayList<>();
@@ -201,7 +221,6 @@ public class TableFlowBuilder {
             // rows
             TextBox firstRow = new TextBox();
             firstRow.setContent(rowTitle, rowFormat);
-
             listRows.add(firstRow);
         }
 

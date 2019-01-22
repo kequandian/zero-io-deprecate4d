@@ -42,6 +42,10 @@ public class TableFlow extends PositionFlowElement {
     protected float firstRowHeight;     /// 相当于表头 headers
     protected float rowHeight;
 
+    protected BaseColor headerColor;
+    protected BaseColor firstRowColor;
+    protected BaseColor rowColor;
+
     public TableFlow(){}
 
     public TableFlow(int numColumns){
@@ -82,6 +86,11 @@ public class TableFlow extends PositionFlowElement {
         if(header!=null) {
 
             PdfPCell headerCell = new PdfPCell();
+
+            if(headerColor != null) {
+                headerCell.setBackgroundColor(headerColor);
+            }
+
             headerCell.setColspan(columnWidths!=null?columnWidths.length:numColumns);
             if(borderWidth>0) {
                 headerCell.setBorderWidth(borderWidth);
@@ -127,10 +136,11 @@ public class TableFlow extends PositionFlowElement {
             AccessibleElementId cellId = cell.getId();
             row.setCellId(cell.getId());
 
+            int len = columnWidths!=null? columnWidths.length : numColumns;
             if(firstRowHeight>0) {
-                int len = columnWidths!=null? columnWidths.length : numColumns;
                 if(rowIndex < len ){
                     cell.setFixedHeight(firstRowHeight);
+                    cell.setBackgroundColor(firstRowColor);
                 }
             }
 
@@ -150,7 +160,8 @@ public class TableFlow extends PositionFlowElement {
                     }
                 }
             });
-
+            BaseColor cellColor = rowIndex < len ? firstRowColor : rowColor;
+            cell.setBackgroundColor(cellColor);
             table.addCell(cell);
 
             rowIndex ++;
@@ -256,6 +267,17 @@ public class TableFlow extends PositionFlowElement {
         this.borderStyle = borderStyle;
     }
 
+    public void setHeaderColor(BaseColor headerColor) {
+        this.headerColor = headerColor;
+    }
+
+    public void setRowColor(BaseColor rowColor) {
+        this.rowColor = rowColor;
+    }
+
+    public void setFirstRowColor(BaseColor firstRowColor) {
+        this.firstRowColor = firstRowColor;
+    }
 
     /**
      * 移到单元测试中测试, 本地测试无效
