@@ -12,6 +12,7 @@
     <description>IO Library for Business</description>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <skipStandalone>true</skipStandalone>
         <crud-base.version>0.0.1</crud-base.version>
         <fastjson.version>1.2.49</fastjson.version>
