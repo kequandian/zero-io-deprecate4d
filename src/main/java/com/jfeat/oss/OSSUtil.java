@@ -45,8 +45,13 @@ public class OSSUtil {
         String bucketName = "your bucketName";
 
         OSSUtil util = OSSUtil.build(endpoint, accessKeyId, accessKeySecret);
-        String fileName = "upload-test.txt";
+        String fileName = "tmp/upload-test.txt";
         String testFileName = "本地测试文件";
+        /**
+         * 文件上传后访问url为
+         * http://${bucketName}.oss-cn-shenzhen.aliyuncs.com/${fileName}
+         **/
+
 
         /**
          * 上传文件
@@ -163,14 +168,25 @@ public class OSSUtil {
         private int taskNum = 1;
         private int partSize = 1 * 1024 * 1024;
         private boolean enableCheckPoint = true;
+        /**
+         * 并行处理任务数
+         * @param  taskNum
+         * @return this
+         **/
         public UploadRequestBuilder taskNum(int taskNum) {
             this.taskNum = taskNum;
             return this;
         }
+        /**
+         * 分片大小
+         * @param partSize
+         * @return this
+         **/
         public UploadRequestBuilder partSize(int partSize) {
             this.partSize = partSize;
             return this;
         }
+
         public UploadRequestBuilder enableCheckPoint(boolean enableCheckPoint) {
             this.enableCheckPoint = enableCheckPoint;
             return this;
