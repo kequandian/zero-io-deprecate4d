@@ -2,9 +2,7 @@ package com.jfeat.oss;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
-import com.aliyun.oss.model.OSSObjectSummary;
-import com.aliyun.oss.model.ObjectListing;
-import com.aliyun.oss.model.PutObjectRequest;
+import com.aliyun.oss.model.*;
 
 import java.io.*;
 import java.net.URL;
@@ -48,6 +46,7 @@ public class OSSUtil {
 
         OSSUtil util = OSSUtil.build(endpoint, accessKeyId, accessKeySecret);
         String fileName = "upload-test.txt";
+        String testFileName = "本地测试文件";
 
         /**
          * 上传文件
@@ -68,6 +67,15 @@ public class OSSUtil {
         Date expiration = new Date();
         expiration.setTime(new Date().getTime() + 60 * 60 * 1000l);
         System.out.println(util.generatePresignedUrl(bucketName, fileName, expiration));
+
+        /**
+         * 分配上传本地文件
+         **/
+        try {
+            util.multipartUpload(new OSSUtil.UploadRequestBuilder().build(bucketName, fileName, testFileName));
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 
     private OSS buildOSSClient() {
@@ -136,6 +144,48 @@ public class OSSUtil {
     }
 
     /**
+     * 分片上传本地文件
+     * @param uploadFileRequest
+     * @return
+     **/
+    public void multipartUpload(UploadFileRequest uploadFileRequest) throws Throwable {
+        OSS ossClient = buildOSSClient();
+        try {
+            UploadFileResult uploadResult = ossClient.uploadFile(uploadFileRequest);
+            CompleteMultipartUploadResult multipartUploadResult =
+                    uploadResult.getMultipartUploadResult();
+            System.out.println(multipartUploadResult.getETag());
+        } finally {
+            ossClient.shutdown();
+        }
+    }
+    public static class UploadRequestBuilder {
+        private int taskNum = 1;
+        private int partSize = 1 * 1024 * 1024;
+        private boolean enableCheckPoint = true;
+        public UploadRequestBuilder taskNum(int taskNum) {
+            this.taskNum = taskNum;
+            return this;
+        }
+        public UploadRequestBuilder partSize(int partSize) {
+            this.partSize = partSize;
+            return this;
+        }
+        public UploadRequestBuilder enableCheckPoint(boolean enableCheckPoint) {
+            this.enableCheckPoint = enableCheckPoint;
+            return this;
+        }
+        public UploadFileRequest build(String bucketName, String uploadName, String localFileName) {
+            UploadFileRequest uploadFileRequest = new UploadFileRequest(bucketName, uploadName);
+            uploadFileRequest.setUploadFile(localFileName);
+            uploadFileRequest.setTaskNum(taskNum);
+            uploadFileRequest.setPartSize(partSize);
+            uploadFileRequest.setEnableCheckpoint(enableCheckPoint);
+            return uploadFileRequest;
+        }
+    }
+
+    /**
      * 生成签名URL提供给访客进行临时访问
      * @param bucketName
      * @param targetName
@@ -147,6 +197,16 @@ public class OSSUtil {
         URL url = ossClient.generatePresignedUrl(bucketName, targetName, expiration);
         ossClient.shutdown();
         return url;
+    }
+
+    public static String getExtensionName(String filename) {
+        if ((filename != null) && (filename.length() > 0)) {
+            int dot = filename.lastIndexOf('.');
+            if ((dot > -1) && (dot < (filename.length() - 1))) {
+                return filename.substring(dot + 1);
+            }
+        }
+        return filename;
     }
 
     /**
