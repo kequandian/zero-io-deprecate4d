@@ -17,11 +17,11 @@
         <crud-base.version>0.0.1</crud-base.version>
         <fastjson.version>1.2.49</fastjson.version>
         <junit.version>4.11</junit.version>
-        <!--<slf4j.version>1.7.25</slf4j.version>-->
+        <slf4j.version>1.7.25</slf4j.version>
         <poi-ooxml.version>3.9</poi-ooxml.version>
         <itext-asian.version>5.2.0</itext-asian.version>
         <aliyun-sdk-oss.version>3.4.0</aliyun-sdk-oss.version>
-        <!--<slf4j-log4j12.version>1.7.25</slf4j-log4j12.version>-->
+        <slf4j-log4j12.version>1.7.25</slf4j-log4j12.version>
     </properties>
 
     <dependencies>
@@ -59,17 +59,29 @@
             <artifactId>poi-ooxml</artifactId>
             <version>${poi-ooxml.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
-        <!--<dependency>
+         <!--https://mvnrepository.com/artifact/org.slf4j/slf4j-api-->
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>${slf4j-log4j12.version}</version>
-        </dependency>-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>com.aliyun.oss</groupId>
             <artifactId>aliyun-sdk-oss</artifactId>
