@@ -35,7 +35,6 @@ public class Fonts {
             SONG = createFont("STSong-Light", "UniGB-UCS2-H", NOT_EMBEDDED);
             HELVETICA = BaseFont.createFont("Helvetica", "Cp1252", NOT_EMBEDDED);
             BASE = BaseFont.createFont("fonts/msyh_常规.ttf", BaseFont.IDENTITY_H, NOT_EMBEDDED);
-
         } catch (DocumentException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -43,6 +42,9 @@ public class Fonts {
         }
     }
 
+    /**
+     * 预定义字体
+     **/
     public enum Definition {
         BASE("常规", Fonts.BASE),SONG("宋体", Fonts.SONG), HELVETICA("Helvetica", Fonts.HELVETICA);
         private static final Map<String, BaseFont> cache = new HashMap<>();
@@ -58,7 +60,9 @@ public class Fonts {
         private String name;
         private BaseFont font;
 
-
+        /**
+         * 默认字体为常规
+         **/
         public static BaseFont getFont(String name){
             return cache.containsKey(name) ? cache.get(name) : BASE.font;
         }
