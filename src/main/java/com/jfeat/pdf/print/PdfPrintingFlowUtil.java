@@ -73,7 +73,7 @@ public class PdfPrintingFlowUtil {
         /**
          * New Line
          **/
-        flows.add(new Flow(Flow.NEW_LINE, null));
+        flows.add(new Flow(Flow.NEW_LINE));
 
         /**
          * Content
@@ -123,6 +123,16 @@ public class PdfPrintingFlowUtil {
                 .data(new String[]{"合计", "1125.00", "22.00"})
                 .layout(new float[]{19, 2, 3, 3, 3 });
         flows.add(new Flow(Flow.TABLE_FLOW, sumTableFlowData));
+
+        /**
+         * new page
+         **/
+        flows.add(new Flow(Flow.NEW_PAGE));
+
+        flows.add(new Flow(Flow.SEPARATOR_FLOW));
+        flows.add(new Flow(Flow.TITLE_FLOW, new TitleFlowData(
+                "分页测试", "title", FlowElement.ALIGN_CENTER
+        )));
 
         // 打印
         PdfPrintingFlowUtil util = new PdfPrintingFlowUtil();
@@ -198,21 +208,7 @@ public class PdfPrintingFlowUtil {
             pageHint.setAlignment(alignment);
 
             element = pageHint;
-        }else if(flow.getName().equals(Flow.SEPARATOR_FLOW)){
-            SeparatorFlowData separatorFlowData = (SeparatorFlowData) flow.getElement();
-
-            BorderDefinition borderDefinition = borders.get(separatorFlowData.getFormatName());
-            DottedLineSeparator dottedLineSeparator = new DottedLineSeparator();
-            if(borderDefinition.getWidth()>0) {
-                dottedLineSeparator.setLineWidth(borderDefinition.getWidth());
-            }
-            if(borderDefinition.getColor()!=null){
-                dottedLineSeparator.setLineColor(BorderDefinition.getColor(borderDefinition.getColor()));
-            }
-
-            element = dottedLineSeparator;
-
-        }else if(flow.getName().equals(Flow.QRCODE_FLOW)){
+        } else if(flow.getName().equals(Flow.QRCODE_FLOW)){
             QRCodeFlowData flowData = (QRCodeFlowData) flow.getElement();
 
             FlowLayout qrCodeLayout = new FlowLayout(1);
@@ -322,6 +318,11 @@ public class PdfPrintingFlowUtil {
 
         } else if(flow.getName().equals(Flow.NEW_LINE)) {
             element = Chunk.NEWLINE;
+        } else if(flow.getName().equals(Flow.NEW_PAGE)) {
+            element = Chunk.NEXTPAGE;
+        } else if(flow.getName().equals(Flow.SEPARATOR_FLOW)){
+            DottedLineSeparator dottedLineSeparator = new DottedLineSeparator();
+            element = dottedLineSeparator;
         }
         return element;
     }

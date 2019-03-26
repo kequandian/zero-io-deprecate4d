@@ -183,8 +183,15 @@ public class PdfFlowRequest {
         public static final String CONTENT_FLOW = "content";
         public static final String LINEAR_FLOW = "linear";
         public static final String NEW_LINE = "newLine";
+        public static final String NEW_PAGE = "newPage";
 
         public Flow() {}
+        /**
+         * 用于分页、分割线的流定义
+         **/
+        public Flow(String name) {
+            this.name = name;
+        }
         public Flow(String name, FlowElement element){
             this.name = name;
             this.element = element;
