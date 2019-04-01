@@ -184,6 +184,7 @@ public class PdfFlowRequest {
         public static final String LINEAR_FLOW = "linear";
         public static final String NEW_LINE = "newLine";
         public static final String NEW_PAGE = "newPage";
+        public static final String IMAGE_FLOW = "image";
 
         public Flow() {}
         /**
@@ -617,7 +618,23 @@ public class PdfFlowRequest {
             this.layout = layout;
         }
     }
+    /**
+     * 图片
+     **/
+    public static class ImageFlowData implements FlowElement {
+        private byte[] data;
+        public ImageFlowData(byte[] data) {
+            this.data = data;
+        }
 
+        public byte[] getData() {
+            return data;
+        }
+
+        public void setData(byte[] data) {
+            this.data = data;
+        }
+    }
     /**
      * 布局,可台定义列数（宽度平分），也可以定义不同的列宽
      */

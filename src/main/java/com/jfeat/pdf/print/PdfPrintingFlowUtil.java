@@ -15,12 +15,11 @@ import com.jfeat.pdf.print.flow.ContentFlowBuilder;
 import com.jfeat.pdf.print.flow.TableFlow;
 import com.jfeat.pdf.print.flow.TableFlowBuilder;
 import com.jfeat.pdf.print.util.Fonts;
+import com.jfeat.pdf.print.util.ImageUtil;
 import com.jfeat.pdf.print.util.TextFile;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +36,7 @@ public class PdfPrintingFlowUtil {
      * 测试
      * @param args
      */
-    public static void main(String[] args) throws FileNotFoundException, DocumentException {
+    public static void main(String[] args) throws IOException, DocumentException {
         PdfFlowRequest data = new PdfFlowRequest();
         /// 设置页面
         data.setDefinitions(new Definitions(new HashMap<>(), new HashMap<>()));
@@ -133,6 +132,8 @@ public class PdfPrintingFlowUtil {
         flows.add(new Flow(Flow.TITLE_FLOW, new TitleFlowData(
                 "分页测试", "title", FlowElement.ALIGN_CENTER
         )));
+        // 插入图片
+        flows.add(new Flow(Flow.IMAGE_FLOW, new ImageFlowData(ImageUtil.getBytes("test.png"))));
 
         // 打印
         PdfPrintingFlowUtil util = new PdfPrintingFlowUtil();
@@ -323,6 +324,17 @@ public class PdfPrintingFlowUtil {
         } else if(flow.getName().equals(Flow.SEPARATOR_FLOW)){
             DottedLineSeparator dottedLineSeparator = new DottedLineSeparator();
             element = dottedLineSeparator;
+        } else if(flow.getName().equals(Flow.IMAGE_FLOW)) {
+            ImageFlowData imageFlowData = (ImageFlowData) flow.getElement();
+            Image image = null;
+            try {
+                image = Image.getInstance(imageFlowData.getData());
+            } catch (BadElementException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            element = image;
         }
         return element;
     }

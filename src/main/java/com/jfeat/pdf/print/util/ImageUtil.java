@@ -2,8 +2,7 @@ package com.jfeat.pdf.print.util;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -51,6 +50,33 @@ public class ImageUtil {
 //            InputStream inputStream = urlConnection.getInputStream();
         Image image = ImageIO.read(url);
         return image;
+    }
+
+
+    /**
+     *  获取文件字节流
+     * @param filePath
+     * @return
+     **/
+    public static byte[] getBytes(String filePath){
+        byte[] buffer = null;
+        try (FileInputStream fis = new FileInputStream(filePath);
+             ByteArrayOutputStream bos = new ByteArrayOutputStream(1000)) {
+
+            byte[] b = new byte[1000];
+            int n;
+            while ((n = fis.read(b)) != -1) {
+                bos.write(b, 0, n);
+            }
+            fis.close();
+            bos.close();
+            buffer = bos.toByteArray();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return buffer;
     }
 
 }
