@@ -65,9 +65,7 @@ public class PdfPrintingFlowUtil {
         /**
          * Title
          **/
-        flows.add(new Flow(Flow.TITLE_FLOW, new TitleFlowData(
-                "采购订单", "title", FlowElement.ALIGN_CENTER
-        )));
+        flows.add(new TitleFlowData("采购订单", "title", FlowElement.ALIGN_CENTER).flow());
 
         /**
          * New Line
@@ -90,13 +88,13 @@ public class PdfPrintingFlowUtil {
          **/
         LinearFlowData qrcodeStack = LinearFlowData.build()
                 .setLayout(new float[]{1.0f})
-                .add(new Flow(Flow.QRCODE_FLOW, new QRCodeFlowData("P13224242", "qrcode")))
-                .add(new Flow(Flow.QRCODE_FLOW, new QRCodeFlowData("P13224242", "qrcode")));
+                .add(new QRCodeFlowData("P13224242", "qrcode").flow())
+                .add(new QRCodeFlowData("P13224242", "qrcode").flow());
 
         LinearFlowData wrapper = new LinearFlowData(new float[]{3, 2});
-        wrapper.add(new Flow(Flow.CONTENT_FLOW, contentFlowData));
-        wrapper.add(new Flow(Flow.LINEAR_FLOW, qrcodeStack));
-        flows.add(new Flow(Flow.LINEAR_FLOW, wrapper));
+        wrapper.add(contentFlowData.flow());
+        wrapper.add(qrcodeStack.flow());
+        flows.add(wrapper.flow());
 
         /**
          * Table
@@ -115,13 +113,13 @@ public class PdfPrintingFlowUtil {
                                 .data(datas)
                                 .setHeader("Header Test")
                                 .layout(new float[]{2, 4, 5, 4, 2, 2, 2, 3, 3, 3 });
-        flows.add(new Flow(Flow.TABLE_FLOW, tableFlowData));
+        flows.add(tableFlowData.flow());
 
         TableFlowData sumTableFlowData = TableFlowData.build()
                 .rowFormat("default", 30)
                 .data(new String[]{"合计", "1125.00", "22.00"})
                 .layout(new float[]{19, 2, 3, 3, 3 });
-        flows.add(new Flow(Flow.TABLE_FLOW, sumTableFlowData));
+        flows.add(sumTableFlowData.flow());
 
         /**
          * new page
@@ -129,11 +127,9 @@ public class PdfPrintingFlowUtil {
         flows.add(new Flow(Flow.NEW_PAGE));
 
         flows.add(new Flow(Flow.SEPARATOR_FLOW));
-        flows.add(new Flow(Flow.TITLE_FLOW, new TitleFlowData(
-                "分页测试", "title", FlowElement.ALIGN_CENTER
-        )));
+        flows.add(new TitleFlowData("分页测试", "title", FlowElement.ALIGN_CENTER).flow());
         // 插入图片
-        flows.add(new Flow(Flow.IMAGE_FLOW, new ImageFlowData(ImageUtil.getBytes("test.png"))));
+        flows.add(new ImageFlowData(ImageUtil.getBytes("test.png")).flow());
 
         // 打印
         PdfPrintingFlowUtil util = new PdfPrintingFlowUtil();

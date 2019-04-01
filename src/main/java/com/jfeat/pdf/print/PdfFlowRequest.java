@@ -270,6 +270,8 @@ public class PdfFlowRequest {
 
             return Element.ALIGN_UNDEFINED;
         }
+
+        Flow flow();
     }
 
 
@@ -285,6 +287,11 @@ public class PdfFlowRequest {
 
         public void setFormatName(String formatName) {
             this.formatName = formatName;
+        }
+
+        @Override
+        public Flow flow() {
+            return new Flow(Flow.SEPARATOR_FLOW);
         }
     }
 
@@ -325,6 +332,11 @@ public class PdfFlowRequest {
         public void setAlignment(String alignment) {
             this.alignment = alignment;
         }
+
+        @Override
+        public Flow flow() {
+            return new Flow(Flow.TITLE_FLOW, this);
+        }
     }
 
 
@@ -356,6 +368,11 @@ public class PdfFlowRequest {
         public void setCode(String code) {
             this.code = code;
         }
+
+        @Override
+        public Flow flow() {
+            return new Flow(Flow.QRCODE_FLOW, this);
+        }
     }
 
     /**
@@ -366,6 +383,11 @@ public class PdfFlowRequest {
         private RowFormat format;
         private String[] title;
         private String[] data;
+
+        @Override
+        public Flow flow() {
+            return new Flow(Flow.CONTENT_FLOW, this);
+        }
 
         public Layout getLayout() {
             return layout;
@@ -424,6 +446,10 @@ public class PdfFlowRequest {
         private TableBorderFormat borderFormat;
         private String[] data;
 
+        @Override
+        public Flow flow() {
+            return new Flow(Flow.TABLE_FLOW, this);
+        }
         public static TableFlowData build() {
             return new TableFlowData();
         }
@@ -591,6 +617,10 @@ public class PdfFlowRequest {
             layout.setColumnWidths(columnsWith);
         }
 
+        @Override
+        public Flow flow() {
+            return new Flow(Flow.LINEAR_FLOW, this);
+        }
         public static LinearFlowData build() {
             return new LinearFlowData();
         }
@@ -627,6 +657,10 @@ public class PdfFlowRequest {
             this.data = data;
         }
 
+        @Override
+        public Flow flow() {
+            return new Flow(Flow.IMAGE_FLOW, this);
+        }
         public byte[] getData() {
             return data;
         }
