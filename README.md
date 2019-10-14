@@ -1,4 +1,6 @@
-# 导入 Excel
+# 用法说明
+
+### 导入 Excel
 source为文件地址, target中有一个list类型的colums, 单表服务时， list中只有一个数据；多表时有多个;
 
 ```java
