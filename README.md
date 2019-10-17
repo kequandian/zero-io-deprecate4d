@@ -27,3 +27,60 @@ source为文件地址, target中有一个list类型的colums, 单表服务时，
 }
 
 ```
+
+### 如何输出打印PDF/Excel
+```java
+@GetMapping("/io/excel/out")
+    @ResponseBody
+    public void exportExcelFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        /*static {
+            // permit table to be exported
+            ExporterParameters.me().permitTable("user");
+        }*/
+        new IOExportApiUtil().export(request, response);
+}
+
+
+Interface IOExportApiUtil {
+     int export(HttpServletRequest request, HttpServletResponse response) throws IOException;
+}
+
+
+public int export(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        /// get parameters
+        /*Map<String, String[]> parameterMap = request.getParameterMap();
+        Map<String, String> queries = new LinkedHashMap<>();
+        if (parameterMap != null) {
+            for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
+                if (entry.getValue() != null && entry.getValue().length > 0) {
+                    queries.put(entry.getKey(), entry.getValue()[0]);
+                }
+            }
+       }*/
+
+       int success = 0;
+
+       OutputStream os = null;
+       try {
+           String  fileName = getExportFileName();
+            response.setContentType("application/octet-stream");
+            response.addHeader("Content-Disposition", "attachment; fileName=" + fileName + ".pdf");
+            os = response.getOutputStream();
+
+       } catch (Exception e) {
+            e.printStackTrace();
+       } finally {
+            if (os != null) {
+                os.close();
+            }
+      }
+
+        success = Math.max(1, success);
+        return success;
+}
+
+public String getExportFileName(){
+    // get file name via timestamp or specific name
+}
+```
