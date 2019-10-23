@@ -17,9 +17,6 @@ source为文件地址, target中有一个list类型的colums, 单表服务时，
                 "string"
             ],
             "table": "string",//表名
-            "values": [ //字段对应的值
-                "string"
-            ]
         }
     ],
     "unique": [ //是否为相应的表添加唯一索引，空值为不添加
@@ -28,9 +25,6 @@ source为文件地址, target中有一个list类型的colums, 单表服务时，
                 "string"
             ],
             "table": "string",//表名
-            "values": [
-                "string"
-            ]
         }
     ],
     "notnull": [//对于Excel表没有的字段，但数据库又是必填字段，即需要定义notnull字段对其进行实始化
