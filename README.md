@@ -5,25 +5,77 @@ source为文件地址, target中有一个list类型的colums, 单表服务时，
 
 ```java
 {
-    "level": 1,    // 1 为单表导入， 2 为多表导入  （需前端指定）
-    "duplicate": 1, //是否允许添加与数据库中完全相同的数据，1允许存在完全相同数据，0为不允许
-    "unique":  //是否为相应的表添加唯一索引，空值为不添加
-     [  
-       {
-          "table": "table_name" //添加唯一索引的表
-          "fields":["name"], //添加唯一索引的字段
-       }
-    ], 
-    "source": "/pathto/商家信息.xlsx", 
-    "target": {
-        "columns": 
-          [   //文件中所涉及的表，一张表为一个对象
-            {
-                "fields": ["field1","field2"], //表中的字段
-                "table": "table_name"   //表名
-            }
-         ]
-    }
+    "level": 0,//1 为单表导入， 2 为多表导入  （需前端指定）
+    "duplicate": 0,//是否允许添加与数据库中完全相同的数据，1允许存在完全相同数据，0为不允许
+    "header": 0,//excel是否有表头0是没有，1是有
+    "overwrite": 0,//对导入复复项，是否重写, 默认重复导入可更新
+    "relationOnly": 0,//是否仅建立多表关系，仅用于多表关联，跳过查入检查时间
+    "source": "string",
+    "target": [ //导入到数据库的表目的字段,支持多数据库导入
+        {
+            "fields": [  //表中的字段名
+                "string"
+            ],
+            "table": "string",//表名
+            "valueConverterMap": {},
+            "values": [ //字段对应的值
+                "string"
+            ]
+        }
+    ],
+    "unique": [ //是否为相应的表添加唯一索引，空值为不添加
+        {
+            "fields": [ //组成唯一索引的字段
+                "string"
+            ],
+            "table": "string",//表名
+            "valueConverterMap": {},
+            "values": [
+                "string"
+            ]
+        }
+    ],
+    "notnull": [//对于Excel表没有的字段，但数据库又是必填字段，即需要定义notnull字段对其进行实始化
+        {
+            "fields": [//不能为空的字段名
+                "string"
+            ],
+            "table": "string",//表名
+            "valueConverterMap": {},
+            "values": [//不能为空的值需要的默认值
+                "string"
+            ]
+        }
+    ],
+    "convert": [ //需要根据值转换为另一个值，如excel中的性别男要转变为0，女变为1
+        {
+            "field": "string",//需要转换的字段名
+            "newValue": "string",//转换后的值
+            "oldValue": "string",//转换前的值
+            "table": "string"//表名
+        }
+    ],
+    "relation": [
+        {
+            "groupKeyField": "string",
+            "keyField": "string",
+            "multiLevel": {
+                "columns": [
+                    0
+                ],
+                "field": "string",
+                "relativeField": "string",
+                "table": "string"
+            },
+            "peerKeyField": "string",
+            "peerTable": "string",
+            "relation": "string",
+            "relativeKeyField": "string",
+            "relativePeerKeyField": "string",
+            "relativeTable": "string",
+            "table": "string"
+        }
+    ]
 }
 
 ```
