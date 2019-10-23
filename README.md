@@ -17,7 +17,6 @@ source为文件地址, target中有一个list类型的colums, 单表服务时，
                 "string"
             ],
             "table": "string",//表名
-            "valueConverterMap": {},
             "values": [ //字段对应的值
                 "string"
             ]
@@ -29,7 +28,6 @@ source为文件地址, target中有一个list类型的colums, 单表服务时，
                 "string"
             ],
             "table": "string",//表名
-            "valueConverterMap": {},
             "values": [
                 "string"
             ]
@@ -41,7 +39,6 @@ source为文件地址, target中有一个list类型的colums, 单表服务时，
                 "string"
             ],
             "table": "string",//表名
-            "valueConverterMap": {},
             "values": [//不能为空的值需要的默认值
                 "string"
             ]
