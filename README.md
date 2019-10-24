@@ -13,37 +13,43 @@ source为文件地址, target中有一个list类型的colums, 单表服务时，
     "source": "string",
     "target": [ //导入到数据库的表目的字段,支持多数据库导入
         {
-            "fields": [  //表中的字段名
-                "string"
+            "fields": [  //数据导入对应的字段
+                "username",
+                "name",
+                "sex"
             ],
-            "table": "string",//表名
+            "table": "user",//表名
         }
     ],
     "unique": [ //是否为相应的表添加唯一索引，空值为不添加
         {
             "fields": [ //组成唯一索引的字段
-                "string"
+                "username"//以用户名作为唯一索引
             ],
-            "table": "string",//表名
+            "table": "user",//表名
         }
     ],
     "notnull": [//对于Excel表没有的字段，但数据库又是必填字段，即需要定义notnull字段对其进行实始化
         {
             "fields": [//不能为空的字段名
-                "string"
+                "username"，
+                "name",
+                "sex"
             ],
-            "table": "string",//表名
+            "table": "user",//表名
             "values": [//不能为空的值需要的默认值
-                "string"
+                "1001"，
+                "蔡徐坤"，
+                "男"
             ]
         }
     ],
     "convert": [ //需要根据值转换为另一个值，如excel中的性别男要转变为0，女变为1
         {
-            "field": "string",//需要转换的字段名
-            "newValue": "string",//转换后的值
-            "oldValue": "string",//转换前的值
-            "table": "string"//表名
+            "field": "sex",//需要转换的字段名
+            "newValue": "0",//转换后的值
+            "oldValue": "男",//转换前的值
+            "table": "user"//表名
         }
     ],
     "relation": [
