@@ -14,17 +14,45 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <skipStandalone>true</skipStandalone>
+        <crud-dev.version>0.0.1</crud-dev.version>
+        <crud-core.version>0.0.2</crud-core.version>
         <crud-base.version>0.0.1</crud-base.version>
         <fastjson.version>1.2.49</fastjson.version>
         <junit.version>4.11</junit.version>
-        <slf4j.version>1.7.25</slf4j.version>
         <poi-ooxml.version>3.9</poi-ooxml.version>
         <itext-asian.version>5.2.0</itext-asian.version>
         <aliyun-sdk-oss.version>3.4.0</aliyun-sdk-oss.version>
-        <slf4j-log4j12.version>1.7.25</slf4j-log4j12.version>
+        <lombok.version>1.18.4</lombok.version>
+        <hutool-core.version>5.1.0</hutool-core.version>
     </properties>
 
     <dependencies>
+        <!-- dev only -->
+        <dependency>
+            <groupId>com.jfeat</groupId>
+            <artifactId>crud-dev</artifactId>
+            <version>${crud-dev.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jfeat</groupId>
+            <artifactId>crud-core</artifactId>
+            <version>${crud-core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-core -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-core</artifactId>
+            <version>${hutool-core.version}</version>
+        </dependency>
+
         <!-- pdf依赖 https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
         <dependency>
             <groupId>com.itextpdf</groupId>
@@ -45,11 +73,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.jfeat</groupId>
-            <artifactId>crud-base</artifactId>
-            <version>${crud-base.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
@@ -58,17 +81,6 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>${poi-ooxml.version}</version>
-        </dependency>
-         <!--https://mvnrepository.com/artifact/org.slf4j/slf4j-api-->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j-log4j12.version}</version>
         </dependency>
         <dependency>
             <groupId>com.aliyun.oss</groupId>
@@ -82,9 +94,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
         </plugins>
