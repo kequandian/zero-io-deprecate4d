@@ -103,7 +103,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>1.5.6.RELEASE</version>
                 <configuration>
                     <skip>${skipStandalone}</skip>
                 </configuration>
@@ -124,6 +123,37 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.1.2</version>
             </plugin>
+
+            <plugin>
+                <groupId>com.github.kongchen</groupId>
+                <artifactId>swagger-maven-plugin</artifactId>
+                <version>3.1.5</version>
+                <configuration>
+                    <apiSources>
+                        <apiSource>
+                            <springmvc>true</springmvc>
+                            <locations>
+                                <location>com.jfeat</location>
+                            </locations>
+                            <info>
+                                <title>${project.name}</title>
+                                <version>${project.version}</version>
+                                <description>${project.description}</description>
+                            </info>
+                            <swaggerDirectory>${project.build.directory}/swagger/</swaggerDirectory>
+                        </apiSource>
+                    </apiSources>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
 
         <resources>
@@ -139,20 +169,4 @@
         </resources>
     </build>
 
-
-    <distributionManagement>
-        <repository>
-            <id>archiva-internal</id>
-            <name>Internal Repository</name>
-            <url>http://120.79.49.72:8081/repository/internal</url>
-        </repository>
-    </distributionManagement>
-
-    <repositories>
-        <repository>
-            <id>archiva-internal</id>
-            <name>Internal Repository</name>
-            <url>http://120.79.49.72:8081/repository/internal</url>
-        </repository>
-    </repositories>
 </project>
