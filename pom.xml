@@ -13,7 +13,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <skipStandalone>true</skipStandalone>
+        <skipStandalone>false</skipStandalone>
         <crud-dev.version>0.0.1</crud-dev.version>
         <crud-core.version>0.0.2</crud-core.version>
         <crud-base.version>0.0.1</crud-base.version>
@@ -100,6 +100,58 @@
                     <target>11</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <skip>${skipStandalone}</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>standalone</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.2</version>
+            </plugin>
         </plugins>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
+
+
+    <distributionManagement>
+        <repository>
+            <id>archiva-internal</id>
+            <name>Internal Repository</name>
+            <url>http://120.79.49.72:8081/repository/internal</url>
+        </repository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>archiva-internal</id>
+            <name>Internal Repository</name>
+            <url>http://120.79.49.72:8081/repository/internal</url>
+        </repository>
+    </repositories>
 </project>

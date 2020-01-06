@@ -45,32 +45,19 @@ public class ExcelApi {
         Map<String, String[]> parameterMap = request.getParameterMap();
         logger.info("parameterMap --> {}", toPrintMap(parameterMap));
 
-        ByteArrayInputStream byteStream = excelService.exportExcelFile(field, parameterMap);
-        InputStreamResource resource = new InputStreamResource(byteStream);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s.xlsx", field))
+                .header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION)
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .body(resource);
-    }
-
-    @GetMapping("/sql/{field}")
-    public Tip getSql(@PathVariable String field, HttpServletRequest request) {
-        Map<String, String[]> parameterMap = request.getParameterMap();
-        logger.info("parameterMap --> {}", toPrintMap(parameterMap));
-        return SuccessTip.create(statisticsMetaService.getSqlByField(field, parameterMap));
+                .body(new InputStreamResource(excelService.exportExcelFile(field, parameterMap)));
     }
 
     private Map<String, List<String>> toPrintMap(Map<String, String[]> parameterMap) {
-
-        Map<String, List<String>> printMap = new HashMap<>();
+        Map<String, List<String>> printMap = new HashMap<>(parameterMap.size());
 
         for (String key : parameterMap.keySet()) {
             printMap.put(key, Arrays.asList(parameterMap.get(key)));
         }
         return printMap;
     }
-
-
-
-
 }

@@ -17,7 +17,7 @@ public enum MetaColumnEnum {
     //字符串
     STRING("S");
 
-    private String value;
+    private final String value;
 
     MetaColumnEnum(String val) {
         this.value = val;

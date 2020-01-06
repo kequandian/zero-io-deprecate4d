@@ -36,32 +36,26 @@ public class StatisticsMetaServiceImpl implements StatisticsMetaService {
     public String getSqlByField(String field, Map<String, String[]> requestParameter) {
         StringBuilder sql = new StringBuilder();
 
+        // 获取元数据
         StatisticsMeta statisticsMeta = getStatisticsMetaByField(field);
         String baseQuery = statisticsMeta.getQuerySql();
         String type = statisticsMeta.getType();
         logger.info("types: {}", type);
 
-        // 替换Sql 中 select  --> select count(*) as total
-        String countSql = replaceToCount(baseQuery);
         // 去除所有的‘;’防止拼接出错
         String rawSql = removeSemicolon(baseQuery);
         sql.append(rawSql);
 
-        // 获取执行 count 之后的字段, 并去除 total 字段
-        String[] columns = getColumnNames(countSql);
+        // 获取 column 字段名
+        String[] columns = getColumnNames(baseQuery);
         String[] types = type.split(",");
 
-        if (types.length != columns.length) {
-            throw new BusinessException(BusinessCode.CRUD_QUERY_FAILURE, "得到的字段数量和类型数量不匹配 请检查sql和type");
-        }
-
-        // 字段名和类型 映射
-        Map<String, String> columnTypeMap = mapColumnAndType(columns, types);
+        // 字段名和类型 映射表
+        Map<String, String> columnTypeMap = zipColumnAndType(columns, types);
         logger.info("columnNameTypeMap --> {}", columnTypeMap);
 
-        // 处理search Sql
+        // 处理search sql
         processSearchSql(sql, requestParameter, columnTypeMap);
-
         // 处理order sql
         processOrderSql(sql, columnTypeMap);
 
@@ -74,7 +68,7 @@ public class StatisticsMetaServiceImpl implements StatisticsMetaService {
         String sql = String.format("select * from %s where %s = '%s'",
                 STATICS_META_TABLE_NAME, StatisticsMeta.FIELD, field);
 
-        logger.info("query sql --> {}", sql);
+        logger.info("query meta sql --> {}", sql);
 
         List<StatisticsMeta> statisticsMetas = jdbcTemplate.query(sql,
                 new BeanPropertyRowMapper<StatisticsMeta>(StatisticsMeta.class));
@@ -86,6 +80,12 @@ public class StatisticsMetaServiceImpl implements StatisticsMetaService {
         return statisticsMetas.get(0);
     }
 
+    /**
+     *  处理搜索部分的sql
+     * @param sql sql
+     * @param requestParameter 搜索参数
+     * @param columnTypeMap column type 表
+     */
     private void processSearchSql(StringBuilder sql, Map<String, String[]> requestParameter, Map<String, String> columnTypeMap) {
         if (isEmpty(columnTypeMap)) {
             throw new BusinessException(BusinessCode.CRUD_QUERY_FAILURE, "名字类型映射为空");
@@ -98,11 +98,17 @@ public class StatisticsMetaServiceImpl implements StatisticsMetaService {
             if (columnTypeMap.containsKey(column)) {
                 String type = columnTypeMap.get(column);
                 String searchSql = sqlSearchByTypeAndColumn(type, column, requestParameter.get(column));
+                logger.info("search sql --> {}", searchSql);
                 sql.append(searchSql);
             }
         }
     }
 
+    /**
+     * 处理排序部分的 sql
+     * @param sql sql
+     * @param columnTypeMap column type 表
+     */
     private void processOrderSql(StringBuilder sql, Map<String, String> columnTypeMap) {
         StringBuilder orderSql = new StringBuilder();
 
@@ -125,38 +131,26 @@ public class StatisticsMetaServiceImpl implements StatisticsMetaService {
         boolean isTimeType = type.equals(MetaColumnEnum.TIME.getValue());
         String regex = isTimeType ? " AND TO_DAYS(%s) >= TO_DAYS('%s')" : " AND %s >= '%s'";
 
-        if (!isEmpty(requestValue[0])) {
-            searchSql.append(String.format(regex, column, requestValue[0]));
-        }
-        if (!isEmpty(requestValue[1])) {
-            searchSql.append(String.format(regex, column, requestValue[1]));
+        if (requestValue.length > 1) {
+            if (!isEmpty(requestValue[0])) {
+                searchSql.append(String.format(regex, column, requestValue[0]));
+            }
+            if (!isEmpty(requestValue[1])) {
+                searchSql.append(String.format(regex, column, requestValue[1]));
+            }
         }
         return searchSql.toString();
     }
 
-
-    private String replaceToCount(String sql) {
-        return sql.replaceFirst("(select|SELECT)", "SELECT COUNT(*) AS total,");
-    }
-
-    private Boolean isEmpty(List<StatisticsMeta> list) {
-        return list == null || list.isEmpty();
-    }
-
-    private Boolean isEmpty(Map<String, String> map) {
-        return map == null || map.isEmpty();
-    }
-
-    private Boolean isEmpty(String string) {
-        return StrUtil.isEmpty(string);
-    }
-
-    private String removeSemicolon(String string) {
-        return StrUtil.removeAll(string, ";");
-    }
-
+    /**
+     *  获取 column 数组
+     * @param sql sql
+     * @return column 数组
+     */
     private String[] getColumnNames(String sql) {
-        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql);
+        // 替换Sql 中 select  --> select count(*) as total
+        String countSql = replaceToCount(sql);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(countSql);
         String[] columnNames = rowSet.getMetaData().getColumnNames();
         logger.info("columnNames --> {}", Arrays.toString(columnNames));
         return removeTotalColumn(columnNames);
@@ -173,11 +167,40 @@ public class StatisticsMetaServiceImpl implements StatisticsMetaService {
 
     /**
      * 将字段名和类型做一个映射
-     * @param columnNames 字段名
-     * @param types 类型
-     * @return 映射Map
+     * @param columnNames 字段名数组
+     * @param types 类型数组
+     * @return 映射表
      */
-    private Map<String, String> mapColumnAndType(String[] columnNames, String[] types) {
+    private Map<String, String> zipColumnAndType(String[] columnNames, String[] types) {
+        if (types.length != columnNames.length) {
+            throw new BusinessException(BusinessCode.CRUD_QUERY_FAILURE, "得到的字段数量和类型数量不匹配 请检查sql和type");
+        }
         return ArrayUtil.zip(columnNames, types);
+    }
+
+    /**
+     *  替换sql 为 select count(*),
+     *  快速获取一条数据，用于获取 columns 信息
+     * @param sql sql
+     * @return count(*) sql
+     */
+    private String replaceToCount(String sql) {
+        return sql.replaceFirst("(select|SELECT)", "SELECT COUNT(*) AS total,");
+    }
+
+    private String removeSemicolon(String string) {
+        return StrUtil.removeAll(string, ";");
+    }
+
+    private Boolean isEmpty(List<StatisticsMeta> list) {
+        return list == null || list.isEmpty();
+    }
+
+    private Boolean isEmpty(Map<String, String> map) {
+        return map == null || map.isEmpty();
+    }
+
+    private Boolean isEmpty(String string) {
+        return StrUtil.isEmpty(string);
     }
 }

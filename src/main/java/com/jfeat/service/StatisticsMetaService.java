@@ -2,7 +2,6 @@ package com.jfeat.service;
 
 import com.jfeat.model.StatisticsMeta;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -15,7 +14,7 @@ public interface StatisticsMetaService {
     /**
      * 通过 field 获取 sql
      * @param field field
-     * @param requestParameter requestParameter
+     * @param requestParameter 查询参数
      * @return sql
      */
     String getSqlByField(String field, Map<String, String[]> requestParameter);

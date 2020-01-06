@@ -33,12 +33,13 @@ public class ExcelServiceImpl implements ExcelService {
 
     @Override
     public ByteArrayInputStream exportExcelFile(String field, Map<String, String[]> requestParameter) {
-
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         try {
+            // 获取sql 语句
             String sql = statisticsMetaService.getSqlByField(field, requestParameter);
-            logger.info("excel sql --> {}", sql);
+            logger.debug("excel sql --> {}", sql);
+            // 写入字节流
             new PoiAgentExporter().setDataSource(dataSource)
                     .exportWitSql(sql, baos);
         } catch (SQLException e) {

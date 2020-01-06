@@ -1,6 +1,5 @@
 package com.jfeat.service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayInputStream;
 import java.util.Map;
 
@@ -14,8 +13,8 @@ public interface ExcelService {
     /**
      * 生成Excel文件
      * @param field field
-     * @param requestParameter requestParameter
-     * @return 字节输入流，便于下载
+     * @param requestParameter 查询参数
+     * @return 字节输入流，用于下载
      */
     ByteArrayInputStream exportExcelFile(String field, Map<String, String[]> requestParameter);
 }
