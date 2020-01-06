@@ -6,12 +6,8 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Rectangle;
 import com.jfeat.pdf.print.base.BorderDefinition;
 import com.jfeat.pdf.print.base.FontDefinition;
-import com.jfeat.pdf.print.flow.TableFlow;
-import javafx.scene.control.Tab;
-import org.apache.xmlbeans.impl.piccolo.xml.Piccolo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
