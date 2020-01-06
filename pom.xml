@@ -169,4 +169,22 @@
         </resources>
     </build>
 
+
+
+    <distributionManagement>
+        <repository>
+            <id>archiva-internal</id>
+            <name>Internal Repository</name>
+            <url>http://120.79.49.72:8081/repository/internal</url>
+        </repository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>archiva-internal</id>
+            <name>Internal Repository</name>
+            <url>http://120.79.49.72:8081/repository/internal</url>
+        </repository>
+    </repositories>
+
 </project>
