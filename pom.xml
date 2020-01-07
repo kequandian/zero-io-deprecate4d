@@ -24,7 +24,7 @@
         <aliyun-sdk-oss.version>3.4.0</aliyun-sdk-oss.version>
         <lombok.version>1.18.4</lombok.version>
         <hutool-core.version>5.1.0</hutool-core.version>
-        <slf4j-log4j12.version>1.7.25</slf4j-log4j12.version>
+
         <slf4j.version>1.7.25</slf4j.version>
     </properties>
 
@@ -35,23 +35,15 @@
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j-log4j12.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.jfeat</groupId>
-            <artifactId>crud-base</artifactId>
-            <version>${crud-base.version}</version>
-        </dependency>
+
+
 
         <!-- dev only -->
-       <!-- <dependency>
+        <dependency>
             <groupId>com.jfeat</groupId>
             <artifactId>crud-dev</artifactId>
             <version>${crud-dev.version}</version>
-        </dependency>-->
+        </dependency>
 
         <dependency>
             <groupId>com.jfeat</groupId>
