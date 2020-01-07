@@ -1,6 +1,6 @@
 package com.jfeat.service;
 
-import com.jfeat.model.StatisticsMeta;
+import com.jfeat.model.IOStatisticsMeta;
 
 import java.util.Map;
 
@@ -9,7 +9,7 @@ import java.util.Map;
  *
  * @author Wen Hao
  */
-public interface StatisticsMetaService {
+public interface IOStatisticsMetaService {
 
     /**
      * 通过 field 获取 sql
@@ -24,5 +24,5 @@ public interface StatisticsMetaService {
      * @param field field
      * @return meta数据
      */
-    StatisticsMeta getStatisticsMetaByField(String field);
+    IOStatisticsMeta getStatisticsMetaByField(String field);
 }

@@ -3,7 +3,7 @@ package com.jfeat.api;
 import com.jfeat.crud.base.tips.SuccessTip;
 import com.jfeat.crud.base.tips.Tip;
 import com.jfeat.service.ExcelService;
-import com.jfeat.service.StatisticsMetaService;
+import com.jfeat.service.IOStatisticsMetaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.InputStreamResource;
@@ -38,7 +38,7 @@ public class ExcelApi {
     ExcelService excelService;
 
     @javax.annotation.Resource
-    StatisticsMetaService statisticsMetaService;
+    IOStatisticsMetaService statisticsMetaService;
 
     @GetMapping("/{field}")
     public ResponseEntity<Resource> exportExcelFile(@PathVariable String field, HttpServletRequest request) throws IOException {

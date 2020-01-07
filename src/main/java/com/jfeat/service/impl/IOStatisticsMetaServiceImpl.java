@@ -6,8 +6,8 @@ import cn.hutool.core.util.StrUtil;
 import com.jfeat.crud.base.exception.BusinessCode;
 import com.jfeat.crud.base.exception.BusinessException;
 import com.jfeat.enums.MetaColumnEnum;
-import com.jfeat.model.StatisticsMeta;
-import com.jfeat.service.StatisticsMetaService;
+import com.jfeat.model.IOStatisticsMeta;
+import com.jfeat.service.IOStatisticsMetaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -24,8 +24,8 @@ import java.util.*;
  * @author Wen Hao
  */
 @Service
-public class StatisticsMetaServiceImpl implements StatisticsMetaService {
-    protected final static Logger logger = LoggerFactory.getLogger(StatisticsMetaServiceImpl.class);
+public class IOStatisticsMetaServiceImpl implements IOStatisticsMetaService {
+    protected final static Logger logger = LoggerFactory.getLogger(IOStatisticsMetaServiceImpl.class);
 
     @Resource
     JdbcTemplate jdbcTemplate;
@@ -37,9 +37,9 @@ public class StatisticsMetaServiceImpl implements StatisticsMetaService {
         StringBuilder sql = new StringBuilder();
 
         // 获取元数据
-        StatisticsMeta statisticsMeta = getStatisticsMetaByField(field);
-        String baseQuery = statisticsMeta.getQuerySql();
-        String type = statisticsMeta.getType();
+        IOStatisticsMeta IOStatisticsMeta = getStatisticsMetaByField(field);
+        String baseQuery = IOStatisticsMeta.getQuerySql();
+        String type = IOStatisticsMeta.getType();
         logger.info("types: {}", type);
 
         // 去除所有的‘;’防止拼接出错
@@ -64,20 +64,20 @@ public class StatisticsMetaServiceImpl implements StatisticsMetaService {
     }
 
     @Override
-    public StatisticsMeta getStatisticsMetaByField(String field) {
+    public IOStatisticsMeta getStatisticsMetaByField(String field) {
         String sql = String.format("select * from %s where %s = '%s'",
-                STATICS_META_TABLE_NAME, StatisticsMeta.FIELD, field);
+                STATICS_META_TABLE_NAME, IOStatisticsMeta.FIELD, field);
 
         logger.info("query meta sql --> {}", sql);
 
-        List<StatisticsMeta> statisticsMetas = jdbcTemplate.query(sql,
-                new BeanPropertyRowMapper<StatisticsMeta>(StatisticsMeta.class));
-        logger.debug("get Metas --> {}", statisticsMetas);
+        List<IOStatisticsMeta> IOStatisticsMetas = jdbcTemplate.query(sql,
+                new BeanPropertyRowMapper<IOStatisticsMeta>(IOStatisticsMeta.class));
+        logger.debug("get Metas --> {}", IOStatisticsMetas);
 
-        if (isEmpty(statisticsMetas)) {
+        if (isEmpty(IOStatisticsMetas)) {
             throw new BusinessException(BusinessCode.CRUD_QUERY_FAILURE,"查找不到field对应的Meta");
         }
-        return statisticsMetas.get(0);
+        return IOStatisticsMetas.get(0);
     }
 
     /**
@@ -192,7 +192,7 @@ public class StatisticsMetaServiceImpl implements StatisticsMetaService {
         return StrUtil.removeAll(string, ";");
     }
 
-    private Boolean isEmpty(List<StatisticsMeta> list) {
+    private Boolean isEmpty(List<IOStatisticsMeta> list) {
         return list == null || list.isEmpty();
     }
 
