@@ -2,7 +2,7 @@ package com.jfeat.service.impl;
 
 import com.jfeat.poi.agent.PoiAgentExporter;
 import com.jfeat.service.ExcelService;
-import com.jfeat.service.StatisticsMetaService;
+import com.jfeat.service.IOStatisticsMetaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class ExcelServiceImpl implements ExcelService {
     DataSource dataSource;
 
     @Resource
-    StatisticsMetaService statisticsMetaService;
+    IOStatisticsMetaService statisticsMetaService;
 
     @Override
     public ByteArrayInputStream exportExcelFile(String field, Map<String, String[]> requestParameter) {
