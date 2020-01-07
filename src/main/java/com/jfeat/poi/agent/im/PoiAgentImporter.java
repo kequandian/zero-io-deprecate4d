@@ -9,7 +9,7 @@ import com.jfeat.poi.agent.util.ExcelReaderUtils;
 import com.jfeat.poi.agent.util.TableConvert;
 import com.jfeat.poi.agent.util.converter.ValueConverter;
 import com.jfeat.poi.agent.util.converter.impl.ValueConverterImpl;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+// import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.File;
 import java.sql.Connection;
@@ -344,7 +344,7 @@ public class PoiAgentImporter implements POIAgent {
                 } else if (relation.getRelation().equals(TableRelation.R_PEER)) {
                     if(true){
                         //TODO, not yet verify
-                        throw new NotImplementedException();
+                        // throw new NotImplementedException();
                     }
 
                     String relationTable = relation.getRelativeTable();
@@ -373,7 +373,7 @@ public class PoiAgentImporter implements POIAgent {
                 } else if (relation.getRelation().equalsIgnoreCase(TableRelation.R_GROUP)) {
                     if(true){
                         //TODO, not yet pass
-                        throw new NotImplementedException();
+                        // throw new NotImplementedException();
                     }
 
                     MultiLevel multiLevel = relation.getMultiLevel();
