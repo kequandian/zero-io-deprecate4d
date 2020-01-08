@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -40,16 +41,15 @@ public class ExcelApi {
     @javax.annotation.Resource
     IOStatisticsMetaService statisticsMetaService;
 
-    @GetMapping("/{field}")
-    public ResponseEntity<Resource> exportExcelFile(@PathVariable String field, HttpServletRequest request) throws IOException {
+    @GetMapping(value = "/{field}")
+    public void exportExcelFile(@PathVariable String field, HttpServletRequest request,HttpServletResponse response) throws IOException {
         Map<String, String[]> parameterMap = request.getParameterMap();
         logger.info("parameterMap --> {}", toPrintMap(parameterMap));
+        response.setContentType("application/octet-stream");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s.xlsx", field));
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
+        response.getOutputStream().write(excelService.exportExcelFile(field, parameterMap).readAllBytes());
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s.xlsx", field))
-                .header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION)
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .body(new InputStreamResource(excelService.exportExcelFile(field, parameterMap)));
     }
 
     private Map<String, List<String>> toPrintMap(Map<String, String[]> parameterMap) {
