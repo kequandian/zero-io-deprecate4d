@@ -56,8 +56,6 @@ public class IOStatisticsMetaServiceImpl implements IOStatisticsMetaService {
 
         // 处理search sql
         processSearchSql(sql, requestParameter, columnTypeMap);
-        // 处理order sql
-        processOrderSql(sql, columnTypeMap);
 
         logger.debug("final sql --> {}", sql.toString());
         return sql.toString();
