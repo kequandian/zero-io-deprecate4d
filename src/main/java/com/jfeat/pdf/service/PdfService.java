@@ -1,7 +1,7 @@
-package com.jfeat.service;
+package com.jfeat.pdf.service;
 
 import com.itextpdf.text.DocumentException;
-import com.jfeat.model.PdfData;
+import com.jfeat.pdf.model.PdfData;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;

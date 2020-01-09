@@ -1,22 +1,14 @@
-package com.jfeat.api;
+package com.jfeat.poi.api;
 
-import com.jfeat.crud.base.tips.SuccessTip;
-import com.jfeat.crud.base.tips.Tip;
-import com.jfeat.service.ExcelService;
-import com.jfeat.service.IOStatisticsMetaService;
+import com.jfeat.poi.service.ExcelService;
+import com.jfeat.poi.service.IOStatisticsMetaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;

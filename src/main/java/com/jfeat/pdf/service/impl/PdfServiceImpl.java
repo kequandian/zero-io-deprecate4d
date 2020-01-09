@@ -1,15 +1,15 @@
-package com.jfeat.service.impl;
+package com.jfeat.pdf.service.impl;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
-import com.jfeat.model.PdfData;
+import com.jfeat.pdf.model.PdfData;
 import com.jfeat.pdf.print.PdfFlowRequest;
 import com.jfeat.pdf.print.PdfPrintingFlowUtil;
 import com.jfeat.pdf.print.base.BorderDefinition;
 import com.jfeat.pdf.print.base.ColorDefinition;
 import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.util.Fonts;
-import com.jfeat.service.PdfService;
+import com.jfeat.pdf.service.PdfService;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;

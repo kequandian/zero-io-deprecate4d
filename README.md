@@ -22,14 +22,14 @@
 ### docker-compose
 ```yaml
   mall-io:
-    container_name: mall-io
+    container_name: zero-io
     image: 'app-openjre11:dev'
     volumes:
        - /etc/localtime:/etc/localtime:ro
-       - ./mall-io:/webapps
+       - ./zero-io:/webapps
     environment:
       TZ: "Asia/Shanghai"
-      URL_SHORT: mall-mysql:3306/alliance
+      URL_SHORT: mysql-server:3306/database
       USERNAME: root
       PASSWORD: root
 ```

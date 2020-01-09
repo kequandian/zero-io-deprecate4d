@@ -1,4 +1,4 @@
-package com.jfeat.model;
+package com.jfeat.poi.model;
 
 
 /**

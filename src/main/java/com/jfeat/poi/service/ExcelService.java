@@ -1,4 +1,4 @@
-package com.jfeat.service;
+package com.jfeat.poi.service;
 
 import java.io.ByteArrayInputStream;
 import java.util.Map;

@@ -1,6 +1,6 @@
-package com.jfeat.service;
+package com.jfeat.poi.service;
 
-import com.jfeat.model.IOStatisticsMeta;
+import com.jfeat.poi.model.IOStatisticsMeta;
 
 import java.util.Map;
 

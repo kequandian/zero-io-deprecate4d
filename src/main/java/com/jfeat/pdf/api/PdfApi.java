@@ -1,8 +1,7 @@
-package com.jfeat.api;
+package com.jfeat.pdf.api;
 
 import com.itextpdf.text.DocumentException;
-import com.jfeat.model.PdfData;
-import com.jfeat.service.PdfService;
+import com.jfeat.pdf.service.PdfService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
