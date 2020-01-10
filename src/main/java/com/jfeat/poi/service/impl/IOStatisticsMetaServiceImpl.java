@@ -16,6 +16,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -93,6 +94,7 @@ public class IOStatisticsMetaServiceImpl implements IOStatisticsMetaService {
         sql.append(")t where 1=1 ");
 
         for (String column : requestParameter.keySet()) {
+            logger.info("for each param --> {}", column);
             if (columnTypeMap.containsKey(column)) {
                 String type = columnTypeMap.get(column);
                 String searchSql = sqlSearchByTypeAndColumn(type, column, requestParameter.get(column));
@@ -122,6 +124,7 @@ public class IOStatisticsMetaServiceImpl implements IOStatisticsMetaService {
     }
 
     private String sqlSearchByTypeAndColumn(String type, String column, String[] requestValue) {
+
         if (type.equals(MetaColumnEnum.STRING.getValue()) && requestValue.length == 1) {
             return String.format(" AND %s LIKE '%%%s%%'", column, requestValue[0]);
         }
@@ -149,9 +152,16 @@ public class IOStatisticsMetaServiceImpl implements IOStatisticsMetaService {
         // 替换Sql 中 select  --> select count(*) as total
         String countSql = replaceToCount(sql);
         SqlRowSet rowSet = jdbcTemplate.queryForRowSet(countSql);
-        String[] columnNames = rowSet.getMetaData().getColumnNames();
-        logger.info("columnNames --> {}", Arrays.toString(columnNames));
-        return removeTotalColumn(columnNames);
+
+        List<String> columnLabels = new ArrayList<>();
+        // String[] columnNames = rowSet.getMetaData().getColumnNames();
+        int columnCount = rowSet.getMetaData().getColumnCount();
+        for (int i = 1; i <= columnCount; i++) {
+            columnLabels.add(rowSet.getMetaData().getColumnLabel(i));
+        }
+        logger.info("columnNames --> {}", Arrays.toString(rowSet.getMetaData().getColumnNames()));
+        logger.info("columnLabels --> {}", columnLabels);
+        return removeTotalColumn(columnLabels.toArray(String[]::new));
     }
 
     /**
