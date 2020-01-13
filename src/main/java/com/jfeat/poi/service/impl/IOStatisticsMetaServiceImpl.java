@@ -58,7 +58,7 @@ public class IOStatisticsMetaServiceImpl implements IOStatisticsMetaService {
         // 处理search sql
         processSearchSql(sql, requestParameter, columnTypeMap);
 
-        logger.debug("final sql --> {}", sql.toString());
+        logger.info("final sql --> {}", sql.toString());
         return sql.toString();
     }
 
@@ -102,6 +102,7 @@ public class IOStatisticsMetaServiceImpl implements IOStatisticsMetaService {
                 sql.append(searchSql);
             }
         }
+        logger.info("end search sql --> {}", sql.toString());
     }
 
     /**
@@ -125,19 +126,22 @@ public class IOStatisticsMetaServiceImpl implements IOStatisticsMetaService {
 
     private String sqlSearchByTypeAndColumn(String type, String column, String[] requestValue) {
 
+        logger.info("requestValue -> {}", Arrays.toString(requestValue));
         if (type.equals(MetaColumnEnum.STRING.getValue()) && requestValue.length == 1) {
             return String.format(" AND %s LIKE '%%%s%%'", column, requestValue[0]);
         }
         StringBuilder searchSql = new StringBuilder();
         boolean isTimeType = type.equals(MetaColumnEnum.TIME.getValue());
-        String regex = isTimeType ? " AND TO_DAYS(%s) >= TO_DAYS('%s')" : " AND %s >= '%s'";
+        String regex = isTimeType ? " AND TO_DAYS(%s) %s TO_DAYS('%s') " : " AND %s %s '%s'";
 
         if (requestValue.length > 1) {
             if (!isEmpty(requestValue[0])) {
-                searchSql.append(String.format(regex, column, requestValue[0]));
+                // and TO_DAYS(field) >= TO_DAYS('xx')
+                searchSql.append(String.format(regex, column, ">=", requestValue[0]));
             }
             if (!isEmpty(requestValue[1])) {
-                searchSql.append(String.format(regex, column, requestValue[1]));
+                // and TO_DAYS(field) <= TO_DAYS('xx')
+                searchSql.append(String.format(regex, column, "<=", requestValue[1]));
             }
         }
         return searchSql.toString();
