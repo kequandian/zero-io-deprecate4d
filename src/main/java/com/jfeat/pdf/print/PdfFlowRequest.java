@@ -453,6 +453,10 @@ public class PdfFlowRequest {
             layout = new Layout(columnsWith);
             return this;
         }
+        public TableFlowData layout(Layout layout) {
+            this.layout = layout;
+            return this;
+        }
         public TableFlowData borderFormat(Integer style, Integer width) {
             this.setBorderFormat(new TableBorderFormat(style, width));
             return this;

@@ -10,6 +10,9 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.jfeat.pdf.print.base.ListRow;
 import com.jfeat.pdf.print.util.PdfFontMetrics;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by vincent on 2018/3/16.
  * 文本框: 纯色框内居中显示字符
@@ -156,14 +159,17 @@ public class TextBox extends Rectangle implements ListRow {
         }
 
         float totalWidth = position.getWidth();
-        int stringWidth = metrics.getStringWidth(content);
-        int contentLen = (int)(stringWidth / position.getWidth()) + (stringWidth%position.getWidth()>0?1:0);
+        // int stringWidth = metrics.getStringWidth(content);
+        // int contentLen = (int)(stringWidth / position.getWidth()) + (stringWidth%totalWidth>0 ? 1 : 0);
 
-        String[] lines = new String[contentLen];
+        // int contentLen = (int) Math.ceil(stringWidth / totalWidth);
+
+        // String[] lines = new String[contentLen];
+
+        List<String> lines = new ArrayList<>();
 
         StringBuilder contentBuilder = new StringBuilder(content);
 
-        int numLine = 0;
         StringBuilder builder = new StringBuilder();
         while (contentBuilder.length()>0) {
             char c = contentBuilder.charAt(0);
@@ -176,18 +182,17 @@ public class TextBox extends Rectangle implements ListRow {
 
                 if(contentBuilder.length()==0){
                     // 最后一行
-                    lines[numLine] = builder.toString();
+                    lines.add(builder.toString());
                 }
             }else{
                 // 需要换行
-                lines[numLine] = builder.deleteCharAt(builder.length()-1).toString();
+                lines.add(builder.deleteCharAt(builder.length()-1).toString());
                 builder = new StringBuilder();
 
-                numLine ++;
             }
         }
 
-        return lines;
+        return lines.toArray(String[]::new);
     }
 
 

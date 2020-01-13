@@ -94,7 +94,10 @@ public class PdfPrintingFlowUtil {
         LinearFlowData wrapper = new LinearFlowData(new float[]{3, 2});
         wrapper.add(contentFlowData.flow());
         wrapper.add(qrcodeStack.flow());
-        flows.add(wrapper.flow());
+        // flows.add(wrapper.flow());
+
+        flows.add(contentFlowData.flow());
+        flows.add(qrcodeStack.flow());
 
         /**
          * Table
@@ -134,10 +137,10 @@ public class PdfPrintingFlowUtil {
         // 打印
         PdfPrintingFlowUtil util = new PdfPrintingFlowUtil();
         util.data(data);
-        util.export("out.pdf");
+        util.export("out2.pdf");
 
         //  写入模板
-        TextFile.write("src/test/origin.json", JSONObject.toJSONString(data, SerializerFeature.DisableCircularReferenceDetect));
+        // TextFile.write("src/test/origin.json", JSONObject.toJSONString(data, SerializerFeature.DisableCircularReferenceDetect));
     }
 
     private Page page;

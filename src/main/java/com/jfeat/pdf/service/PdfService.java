@@ -1,10 +1,8 @@
 package com.jfeat.pdf.service;
 
-import com.itextpdf.text.DocumentException;
-import com.jfeat.pdf.model.PdfData;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
+import java.util.Map;
 
 /**
  * Created on 2020/1/3.
@@ -15,8 +13,10 @@ public interface PdfService {
 
     /**
      * 生成Pdf文件
-     * @param pdfData pdf数据
-     * @return 字节输入流，便于下载
+     * @param field field
+     * @param requestParameter request 参数
+     * @return 字节输入流，用于下载
      */
-    ByteArrayInputStream exportPdfFile(PdfData pdfData) throws FileNotFoundException, DocumentException;
+    ByteArrayInputStream exportPdfFile(String field, Map<String, String[]> requestParameter);
+
 }

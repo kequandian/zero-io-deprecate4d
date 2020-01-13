@@ -1,15 +1,20 @@
 package com.jfeat.pdf.api;
 
-import com.itextpdf.text.DocumentException;
 import com.jfeat.pdf.service.PdfService;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * Created on 2020/1/3.
@@ -20,19 +25,28 @@ import java.io.IOException;
 @RequestMapping("/api/io/pdf")
 public class PdfApi {
 
-    @javax.annotation.Resource
+    protected final static Logger logger = LoggerFactory.getLogger(PdfApi.class);
+
+    @Resource
     PdfService pdfService;
 
-    @GetMapping
-    public ResponseEntity<Resource> exportPdfFile(/*@RequestBody PdfData pdfData*/) throws IOException, DocumentException {
+    @GetMapping(value = "/{field}")
+    public void exportPdfFile(@PathVariable String field, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        logger.info("parameterMap --> {}", toPrintMap(parameterMap));
 
-        HttpHeaders headers = new HttpHeaders();
-
-        InputStreamResource resource = new InputStreamResource(pdfService.exportPdfFile(null));
-        return ResponseEntity.ok().headers(headers)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=out.pdf")
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .body(resource);
+        response.setContentType("application/octet-stream");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s.pdf", field));
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
+        response.getOutputStream().write(pdfService.exportPdfFile(field, parameterMap).readAllBytes());
     }
 
+    private Map<String, List<String>> toPrintMap(Map<String, String[]> parameterMap) {
+        Map<String, List<String>> printMap = new HashMap<>(parameterMap.size());
+
+        for (String key : parameterMap.keySet()) {
+            printMap.put(key, Arrays.asList(parameterMap.get(key)));
+        }
+        return printMap;
+    }
 }

@@ -2,7 +2,6 @@ package com.jfeat.pdf.service.impl;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
-import com.jfeat.pdf.model.PdfData;
 import com.jfeat.pdf.print.PdfFlowRequest;
 import com.jfeat.pdf.print.PdfPrintingFlowUtil;
 import com.jfeat.pdf.print.base.BorderDefinition;
@@ -10,8 +9,12 @@ import com.jfeat.pdf.print.base.ColorDefinition;
 import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.util.Fonts;
 import com.jfeat.pdf.service.PdfService;
+import com.jfeat.pdf.service.PdfStatisticsMetaService;
+import com.jfeat.pdf.util.PdfUtil;
+import com.jfeat.poi.service.IOStatisticsMetaService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -28,9 +31,14 @@ import java.util.Map;
 @Service
 public class PdfServiceImpl implements PdfService {
 
+    @Resource
+    PdfStatisticsMetaService pdfStatisticsMetaService;
+
+    @Resource
+    IOStatisticsMetaService ioStatisticsMetaService;
 
     @Override
-    public ByteArrayInputStream exportPdfFile(PdfData pdfData) throws FileNotFoundException, DocumentException {
+    public ByteArrayInputStream exportPdfFile(String field, Map<String, String[]> requestParameter) {
 
         PdfFlowRequest data = new PdfFlowRequest();
         /// 设置页面
@@ -52,77 +60,37 @@ public class PdfServiceImpl implements PdfService {
         borderDefs.put("right", new BorderDefinition(BorderDefinition.RIGHT, 10, ColorDefinition.BLACK));
 
         /**
-         * 主要设置内容
-         */
-        data.setFlows(new ArrayList<>());
-        List<PdfFlowRequest.Flow> flows = data.getFlows();
-
-        /**
-         * Title
-         **/
-        flows.add(new PdfFlowRequest.TitleFlowData("采购订单", "title", PdfFlowRequest.FlowElement.ALIGN_CENTER).flow());
-
-        /**
-         * New Line
-         **/
-        flows.add(new PdfFlowRequest.Flow(PdfFlowRequest.Flow.NEW_LINE));
-
-        /**
-         * Content
-         * */
-        String[] title = {"甲方:", "乙方", "交货"};
-        String[] lines = {"择阿迪达斯官方网店", "择阿迪达斯官方网店", "择阿迪达斯官方网店"};
-        PdfFlowRequest.ContentFlowData contentFlowData = PdfFlowRequest.ContentFlowData.build()
-                .setLayout(new float[]{1, 4})
-                .setTitle(title)
-                .setData(lines)
-                .rowFormat("default", 25);
-
-        /**
-         * QRCode AND LinearFlowData
-         **/
-        PdfFlowRequest.LinearFlowData qrcodeStack = PdfFlowRequest.LinearFlowData.build()
-                .setLayout(new float[]{1.0f})
-                .add(new PdfFlowRequest.QRCodeFlowData("P13224242", "qrcode").flow())
-                .add(new PdfFlowRequest.QRCodeFlowData("P13224242", "qrcode").flow());
-
-        PdfFlowRequest.LinearFlowData wrapper = new PdfFlowRequest.LinearFlowData(new float[]{3, 2});
-        wrapper.add(contentFlowData.flow());
-        wrapper.add(qrcodeStack.flow());
-        flows.add(wrapper.flow());
-
-        /**
          * Table
          **/
-        String[] datas = {"行号", "物料编号", "物料名称", "材料及规格备注:", "单位", "单价", "数量", "金额", "交货日期", "备注",
-                "10", "A456456456412", "【狂疯价】adidas 阿迪达斯 三叶草", "材质:", "件", "10", "10", "100.00", "2018-11-9", "",
-                "10", "A456456456412", "【狂疯价】adidas 阿迪达斯 三叶草", "材质:", "件", "10", "10", "100.00", "2018-11-9", "",
-                "10", "A456456456412", "【狂疯价】adidas 阿迪达斯 三叶草", "材质:", "件", "10", "10", "100.00", "2018-11-9", "ss",
-                "10", "A456456456412", "【狂疯价】adidas 阿迪达斯 三叶草", "材质:", "件", "10", "10", "100.00", "2018-11-9", "",
-                "10", "A456456456412", "【狂疯价】adidas 阿迪达斯 三叶草", "材质:", "件", "10", "10", "100.00", "2018-11-9", "",
-        };
-        PdfFlowRequest.TableFlowData tableFlowData = PdfFlowRequest.TableFlowData.build()
-                .headerFormat("table-header", 30, new BaseColor(219, 219, 219))
-                .rowFormat("default", 60)
-                .firstRowFormat("table-firstrow", 60, BaseColor.GRAY)
-                .data(datas)
-                .setHeader("Header Test")
-                .layout(new float[]{2, 4, 5, 4, 2, 2, 2, 3, 3, 3 });
-        flows.add(tableFlowData.flow());
+        String sql = ioStatisticsMetaService.getSqlByField(field, requestParameter);
 
-        PdfFlowRequest.TableFlowData sumTableFlowData = PdfFlowRequest.TableFlowData.build()
-                .rowFormat("default", 30)
-                .data(new String[]{"合计", "1125.00", "22.00"})
-                .layout(new float[]{19, 2, 3, 3, 3 });
-        flows.add(sumTableFlowData.flow());
+        List<String> tableColumns = pdfStatisticsMetaService.getTableColumns(sql);
+        List<String> tableData = pdfStatisticsMetaService.getTableData(sql);
+
+        List<String> dataList = new ArrayList<>();
+        dataList.addAll(tableColumns);
+        dataList.addAll(tableData);
+
+        PdfFlowRequest.Layout layout = new PdfFlowRequest.Layout();
+        layout.setNumColumns(tableColumns.size());
+
+        PdfFlowRequest.TableFlowData tableFlowData = PdfFlowRequest.TableFlowData.build()
+                .rowFormat("default", 60)
+                .firstRowFormat("table-firstrow", 40/*, BaseColor.GRAY*/)
+                .data(dataList.toArray(String[]::new))
+                .layout(layout);
 
         // 打印
-        PdfPrintingFlowUtil util = new PdfPrintingFlowUtil();
-        util.data(data);
-
+        PdfUtil util = new PdfUtil();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        util.export(baos);
+        try {
+            util.request(data);
+            util.flow(tableFlowData.flow());
+            util.export(baos);
+        } catch (FileNotFoundException | DocumentException e) {
+            e.printStackTrace();
+        }
 
         return new ByteArrayInputStream(baos.toByteArray());
     }
