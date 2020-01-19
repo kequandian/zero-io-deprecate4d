@@ -4,12 +4,17 @@ import com.itextpdf.awt.AsianFontMapper;
 import com.itextpdf.awt.FontMapper;
 import com.itextpdf.awt.PdfGraphics2D;
 import com.itextpdf.text.*;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.jfeat.pdf.print.base.ListRow;
 import com.jfeat.pdf.print.util.PdfFontMetrics;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,6 +151,8 @@ public class TextBox extends Rectangle implements ListRow {
         canvas.restoreState();
     }
 
+    protected final static Logger logger = LoggerFactory.getLogger(TextBox.class);
+
     /**
      * 单行在限定框内转换为多行
      * @param content
@@ -159,38 +166,27 @@ public class TextBox extends Rectangle implements ListRow {
         }
 
         float totalWidth = position.getWidth();
-        // int stringWidth = metrics.getStringWidth(content);
-        // int contentLen = (int)(stringWidth / position.getWidth()) + (stringWidth%totalWidth>0 ? 1 : 0);
-
-        // int contentLen = (int) Math.ceil(stringWidth / totalWidth);
-
-        // String[] lines = new String[contentLen];
-
         List<String> lines = new ArrayList<>();
+        int len = content.length();
 
-        StringBuilder contentBuilder = new StringBuilder(content);
-
-        StringBuilder builder = new StringBuilder();
-        while (contentBuilder.length()>0) {
-            char c = contentBuilder.charAt(0);
-            builder.append(c);
-
-            int currWidth = metrics.getStringWidth(builder.toString());
-            if(currWidth<totalWidth){
-                // 在框内，有效, 从源字符串中移除
-                contentBuilder.deleteCharAt(0);
-
-                if(contentBuilder.length()==0){
-                    // 最后一行
-                    lines.add(builder.toString());
-                }
-            }else{
-                // 需要换行
-                lines.add(builder.deleteCharAt(builder.length()-1).toString());
-                builder = new StringBuilder();
-
+        int i = 0, j = 0, currWidth = 0;
+        while (i < len) {
+            int charWidth = metrics.getStringWidth(String.valueOf(content.charAt(i))) ;
+            if (charWidth > totalWidth) {
+                throw new RuntimeException("字符宽度不能大于限定框宽度");
             }
+            currWidth += charWidth;
+            logger.info("curWidth total --> {}, {}", currWidth, totalWidth);
+            if (currWidth > totalWidth) {
+                lines.add(content.substring(j, i));
+                j = i;
+                currWidth = 0;
+                continue;
+            }
+            i++;
         }
+        // 最后一行
+        lines.add(content.substring(j));
 
         return lines.toArray(String[]::new);
     }
