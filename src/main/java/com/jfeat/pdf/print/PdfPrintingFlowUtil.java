@@ -72,13 +72,16 @@ public class PdfPrintingFlowUtil {
          **/
         flows.add(new Flow(Flow.NEW_LINE));
 
+        flows.add(new Flow(Flow.SEPARATOR_FLOW));
+
         /**
          * Content
          * */
         String[] title = {"甲方:", "乙方", "交货"};
-        String[] lines = {"择阿迪达斯官方网店", "择阿迪达斯官方网店", "择阿迪达斯官方网店"};
+        // String[] lines = {"择阿迪达斯官方网店", "择阿迪达斯官方网店", "择阿迪达斯官方网店"};
+        String[] lines = {"择阿迪达斯官方网店", "择阿迪达斯官方网店", null};
         ContentFlowData contentFlowData = ContentFlowData.build()
-                                            .setLayout(new float[]{1, 4})
+                                            .setLayout(new float[]{1, 3})
                                             .setTitle(title)
                                             .setData(lines)
                                             .rowFormat("default", 25);
@@ -94,10 +97,10 @@ public class PdfPrintingFlowUtil {
         LinearFlowData wrapper = new LinearFlowData(new float[]{3, 2});
         wrapper.add(contentFlowData.flow());
         wrapper.add(qrcodeStack.flow());
-        // flows.add(wrapper.flow());
+        flows.add(wrapper.flow());
 
-        flows.add(contentFlowData.flow());
-        flows.add(qrcodeStack.flow());
+        // flows.add(contentFlowData.flow());
+        // flows.add(qrcodeStack.flow());
 
         /**
          * Table

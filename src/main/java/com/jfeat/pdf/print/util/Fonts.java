@@ -34,7 +34,7 @@ public class Fonts {
         try {
             SONG = createFont("STSong-Light", "UniGB-UCS2-H", NOT_EMBEDDED);
             HELVETICA = BaseFont.createFont("Helvetica", "Cp1252", NOT_EMBEDDED);
-            BASE = BaseFont.createFont("fonts/msyh_常规.ttf", BaseFont.IDENTITY_H, NOT_EMBEDDED);
+            BASE = SONG;
         } catch (DocumentException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -46,7 +46,12 @@ public class Fonts {
      * 预定义字体
      **/
     public enum Definition {
-        BASE("常规", Fonts.BASE),SONG("宋体", Fonts.SONG), HELVETICA("Helvetica", Fonts.HELVETICA);
+        // 常规
+        BASE("常规", Fonts.BASE),
+        // 宋体
+        SONG("宋体", Fonts.SONG),
+        // Helvetica
+        HELVETICA("Helvetica", Fonts.HELVETICA);
         private static final Map<String, BaseFont> cache = new HashMap<>();
         Definition(String name, BaseFont font) {
             this.name = name;

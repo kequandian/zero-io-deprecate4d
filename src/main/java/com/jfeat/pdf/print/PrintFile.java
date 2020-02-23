@@ -1,4 +1,4 @@
-package com.jfeat.pdf;
+package com.jfeat.pdf.print;
 
 /**
  * Created by vincent on 2018/9/20.

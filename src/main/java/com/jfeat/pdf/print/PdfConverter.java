@@ -25,7 +25,8 @@ public class PdfConverter {
             case PdfFlowRequest.Flow.TABLE_FLOW:
                 flowData = flow.getJSONObject("element").toJavaObject(PdfFlowRequest.TableFlowData.class);
                 break;
-
+            default:
+                ;
         }
         return flowData;
     }

@@ -7,6 +7,8 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 
@@ -16,6 +18,7 @@ import java.awt.*;
  */
 public class PdfFontMetrics {
 
+
     public static float getFontHeight(BaseFont baseFont, float fontSize){
         float descent = baseFont.getFontDescriptor(BaseFont.DESCENT, fontSize);
         float ascent = baseFont.getFontDescriptor(BaseFont.ASCENT, fontSize);
@@ -24,11 +27,24 @@ public class PdfFontMetrics {
 
     private FontMetrics fontMetrics;
 
+    private Font ifont;
+
+    protected final static Logger logger = LoggerFactory.getLogger(PdfFontMetrics.class);
+
+
     public PdfFontMetrics(PdfContentByte canvas, Font ifont){
-        java.awt.Font font = new java.awt.Font(ifont.getFamilyname(), ifont.getStyle(), (int) ifont.getSize());
+
+        String temp_font = "wqy-microhei";
+        this.ifont = ifont;
+        logger.info("name: {} style: {} size: {}", ifont.getFamilyname(), ifont.getStyle(), ifont.getSize());
+        //java.awt.Font font = new java.awt.Font(ifont.getFamilyname(), ifont.getStyle(), (int) ifont.getSize());
+        // 临时设置字体
+        java.awt.Font font = new java.awt.Font(temp_font, ifont.getStyle(), (int) ifont.getSize());
+
         PdfGraphics2D graphics2D = createGraphics2D(canvas);
         graphics2D.setFont(font);
         fontMetrics = graphics2D.getFontMetrics(font);
+        logger.info("chinese width --> {}, letter width --> {}", fontMetrics.stringWidth("测"), fontMetrics.stringWidth("A"));
 
         graphics2D.dispose();
     }
@@ -50,7 +66,6 @@ public class PdfFontMetrics {
         FontMapper fm = new AsianFontMapper(AsianFontMapper.ChineseSimplifiedFont, AsianFontMapper.ChineseSimplifiedEncoding_H);
 
         PdfGraphics2D graphics2D = new PdfGraphics2D(canvas, pageSize.getWidth(), pageSize.getHeight(), fm);
-
 
         return graphics2D;
     }

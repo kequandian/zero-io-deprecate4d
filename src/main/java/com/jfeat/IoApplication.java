@@ -20,8 +20,5 @@ public class IoApplication {
     public static void main(String[] args) {
         SpringApplication.run(IoApplication.class, args);
         logger.info("Test IoApplication is success!");
-
     }
-
-
 }

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -23,15 +24,12 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/io/excel")
-public class ExcelApi {
+public class ExcelEndpoint {
+    protected final static Logger logger = LoggerFactory.getLogger(ExcelEndpoint.class);
 
-    protected final static Logger logger = LoggerFactory.getLogger(ExcelApi.class);
-
-    @javax.annotation.Resource
+    @Resource
     ExcelService excelService;
 
-    @javax.annotation.Resource
-    IOStatisticsMetaService statisticsMetaService;
 
     @GetMapping(value = "/{field}")
     public void exportExcelFile(@PathVariable String field, HttpServletRequest request,HttpServletResponse response) throws IOException {
