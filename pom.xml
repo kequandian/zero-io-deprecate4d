@@ -21,29 +21,27 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <skipStandalone>false</skipStandalone>
-        <crud-dev.version>0.0.1</crud-dev.version>
-        <crud-core.version>0.0.2</crud-core.version>
-        <crud-base.version>0.0.1</crud-base.version>
         <fastjson.version>1.2.49</fastjson.version>
+        <slf4j.version>1.7.25</slf4j.version>
         <junit.version>4.11</junit.version>
         <poi-ooxml.version>3.9</poi-ooxml.version>
         <itext-asian.version>5.2.0</itext-asian.version>
         <aliyun-sdk-oss.version>3.4.0</aliyun-sdk-oss.version>
         <hutool-core.version>5.1.0</hutool-core.version>
+        <crud-base.version>0.0.2</crud-base.version>
     </properties>
 
     <dependencies>
-        <!-- dev only -->
+
         <dependency>
-            <groupId>com.jfeat</groupId>
-            <artifactId>crud-dev</artifactId>
-            <version>${crud-dev.version}</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.jfeat</groupId>
-            <artifactId>crud-core</artifactId>
-            <version>${crud-core.version}</version>
+            <artifactId>crud-base</artifactId>
+            <version>${crud-base.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-core -->
@@ -76,6 +74,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>

@@ -3,6 +3,7 @@ package com.jfeat.util;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,5 +20,11 @@ public class JsonUtil {
 
     public static <T> List<T> toList(JSONArray jsonArray, Class<T> clazz) {
         return jsonArray == null ? null : jsonArray.toJavaList(clazz);
+    }
+
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.addAll(null);
+        System.out.println(list);
     }
 }

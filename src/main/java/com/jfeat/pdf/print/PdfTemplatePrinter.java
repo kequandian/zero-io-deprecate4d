@@ -22,6 +22,9 @@ public class PdfTemplatePrinter {
     /** 用于匹配自定义字符数据的正则 */
     private static final String CONVERT_REGEX = "\\$\\{.*\\}";
 
+    /** 用于表示在表格中使用格式化转换的标志*/
+    private static final String TABLE_FORMAT_CONVERT = "{}";
+
     public static ByteArrayOutputStream print(JSONObject template, JSONObject request) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         JSONObject pdfJsonRequest = processTemplate(template, request);
@@ -155,11 +158,15 @@ public class PdfTemplatePrinter {
     public static void processTableFlow(JSONObject tableFlow, JSONObject request) {
         JSONObject element = tableFlow.getJSONObject("element");
         JSONObject layout = element.getJSONObject("layout");
+        JSONObject convert = tableFlow.getJSONObject("convert");
+
+        // headerFields
+        List<String> headerFields = JsonUtil.toList(convert.getJSONArray("headerFields"));
+        // converts
+        JSONObject converts = convert.getJSONObject("converts");
 
         // header
-        JSONArray header = element.getJSONArray("header");
-        List<String> headerList = JsonUtil.toList(header);
-
+        List<String> header = JsonUtil.toList(element.getJSONArray("header"));
         // columnWidths
         JSONArray columnWidths = layout.getJSONArray("columnWidths");
         // 设置等宽
@@ -168,19 +175,58 @@ public class PdfTemplatePrinter {
         }
 
         // rows
-        String rows = element.getString("rows");
-        List<String> rowList = new ArrayList<>();
-        if (rows != null && rows.matches(CONVERT_REGEX)) {
-            JSONArray rowsValue = request.getJSONArray(rows);
-            if (rowsValue != null) {
-                rowList.addAll(JsonUtil.toList(rowsValue));
-            }
+        String rowsKey = element.getString("rows");
+        List<String> rowsList = new ArrayList<>();
+        if (rowsKey != null && rowsKey.matches(CONVERT_REGEX)) {
+            JSONArray rows = request.getJSONArray(rowsKey);
+            rowsList = processRowsData(rows, headerFields, converts);
         }
 
         // 将 header 和 rows 合并为 data
-        List<String> data = new ArrayList<>(headerList);
-        data.addAll(rowList);
+        List<String> data = new ArrayList<>(header);
+        data.addAll(rowsList);
         element.put("data", data);
+    }
+
+    private static List<String> processRowsData(JSONArray rows, List<String> headerFields, JSONObject converts) {
+        List<String> rowList = new ArrayList<>();
+        if (rows != null ) {
+            for (int i = 0; i < rows.size(); i++) {
+                JSONObject row = rows.getJSONObject(i);
+                for (int j = 0; j < headerFields.size(); j++) {
+                    String field = headerFields.get(j);
+                    String value = row.getString(field);
+                    // 转换
+                    value = convertRowsValue(field, value, converts);
+                    rowList.add(value);
+                }
+            }
+        }
+        return rowList;
+    }
+
+    /** 转换表格中的值 */
+    private static String convertRowsValue(String field, String value, JSONObject converts) {
+        if (converts != null) {
+            JSONObject convert = converts.getJSONObject(field);
+            if (convert != null) {
+                String format = null;
+                if ((format = convert.getString(TABLE_FORMAT_CONVERT)) != null && format.contains(TABLE_FORMAT_CONVERT)) {
+                    value = String.format(format.replace(TABLE_FORMAT_CONVERT, "%s"), value);
+                } else {
+                    String target = convert.getString(value);
+                    value = target == null ? value : target;
+                }
+            }
+        }
+        return value;
+    }
+
+    private static List<String> processRowsData(JSONArray rows, List<String> headerFields) {
+        return rows
+                .stream()
+                .flatMap(row -> headerFields.stream().map(((JSONObject)row)::getString))
+                .collect(Collectors.toList());
     }
 
     /** 处理LinearFlow */
@@ -219,7 +265,7 @@ public class PdfTemplatePrinter {
     }
 
     /** 获取测试模版文件 */
-    private static JSONObject readTemplateFile(String fileName) {
+    public static JSONObject readTemplateFile(String fileName) {
         String path = String.format("templates/%s.json", fileName);
         StringBuilder sb = new StringBuilder();
         try {
