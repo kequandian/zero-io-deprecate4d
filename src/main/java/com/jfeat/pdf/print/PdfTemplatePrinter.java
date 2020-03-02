@@ -25,6 +25,12 @@ public class PdfTemplatePrinter {
     /** 用于表示在表格中使用格式化转换的标志*/
     private static final String TABLE_FORMAT_CONVERT = "{}";
 
+    /**
+     *  模版打印pdf
+     * @param template json格式模版
+     * @param request 自定义参数
+     * @return 字节流
+     */
     public static ByteArrayOutputStream print(JSONObject template, JSONObject request) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         JSONObject pdfJsonRequest = processTemplate(template, request);
