@@ -1,9 +1,12 @@
 package com.jfeat.pdf.print;
 
+import cn.hutool.core.date.DateTime;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.itextpdf.text.DocumentException;
 import com.jfeat.util.JsonUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.*;
@@ -19,11 +22,40 @@ import java.util.stream.Collectors;
  */
 public class PdfTemplatePrinter {
 
+    protected final static Logger logger = LoggerFactory.getLogger(PdfTemplatePrinter.class);
+
     /** 用于匹配自定义字符数据的正则 */
     private static final String CONVERT_REGEX = "\\$\\{.*\\}";
 
+    /** 用于匹配时间的标志*/
+    private static final String DATE_REGEX = "${date}";
+
     /** 用于表示在表格中使用格式化转换的标志*/
     private static final String TABLE_FORMAT_CONVERT = "{}";
+
+    public static void main(String[] args) throws FileNotFoundException {
+        JSONObject template = readTemplateFile("test");
+        String jsonString = "[\n" +
+                "    {\n" +
+                "        \"name\": \"a\",\n" +
+                "        \"activityName\": \"b\",\n" +
+                "        \"projectName\": \"c\",\n" +
+                "        \"workTime\": \"d\",\n" +
+                "        \"activityFree\": \"e\",\n" +
+                "        \"kmCount\": \"f\",\n" +
+                "        \"outOfKmFree\": \"g\",\n" +
+                "        \"othersFree\": \"h\",\n" +
+                "        \"allFree\": \"i\",\n" +
+                "        \"createTime\": \"j\",\n" +
+                "        \"note\": \"k\"\n" +
+                "    }\n" +
+                "]";
+        JSONObject request = new JSONObject();
+        request.put("${rows}", JSONObject.parseArray(jsonString));
+
+        JSONObject pdfJsonRequest = processTemplate(template, request);
+        print(new FileOutputStream("template-test.pdf"),pdfJsonRequest);
+    }
 
     /**
      *  模版打印pdf
@@ -144,6 +176,11 @@ public class PdfTemplatePrinter {
             List<String> dataList = JsonUtil.toList(data)
                     .stream()
                     .map(d -> {
+                        // 获取当前时间
+                        if (DATE_REGEX.equals(d)) {
+                            return new DateTime().toString("yyyy-MM-dd HH:mm:ss");
+                        }
+                        // request 自定义值
                         if (d != null && d.matches(CONVERT_REGEX)) {
                             return request.getString(d);
                         }

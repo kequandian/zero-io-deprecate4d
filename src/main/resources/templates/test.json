@@ -1,6 +1,94 @@
 {
   "flows": [
     {
+      "name": "title",
+      "element": {
+        "formatName": "title",
+        "alignment": "ALIGN_CENTER",
+        "content": "title"
+      }
+    },
+
+    {
+      "name": "linear",
+      "element": {
+        "layout": {
+          "columnWidths": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "numColumns": 0
+        },
+        "elements": [
+          {
+            "name": "content",
+            "element": {
+              "layout": {
+                "columnWidths": [
+                  1.0,
+                  2.0
+                ],
+                "numColumns": 0
+              },
+              "data": [
+                "股东毛利净利报表",
+                "",
+                ""
+              ],
+              "format": {
+                "formatName": "default",
+                "height": 20.0
+              },
+              "title": [
+                "项目名称:",
+                "备注:",
+                ""
+              ]
+            }
+          },
+          {
+            "name": "content",
+            "element": {
+              "layout": {},
+              "data": [],
+              "title": [],
+              "format": {
+                "formatName": "default",
+                "height": 20.0
+              }
+            }
+          },
+          {
+            "name": "content",
+            "element": {
+              "layout": {
+                "columnWidths": [
+                  1.0,
+                  2.0
+                ],
+                "numColumns": 0
+              },
+              "data": [
+                "${date}",
+                "",
+                ""
+              ],
+              "format": {
+                "formatName": "default",
+                "height": 20.0
+              },
+              "title": [
+                "打印日期:",
+                "负责人:",
+                "确认人:"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "table",
       "element": {
         "layout": {
