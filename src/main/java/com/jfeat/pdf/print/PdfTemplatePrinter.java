@@ -34,24 +34,11 @@ public class PdfTemplatePrinter {
     private static final String TABLE_FORMAT_CONVERT = "{}";
 
     public static void main(String[] args) throws FileNotFoundException {
-        JSONObject template = readTemplateFile("test");
-        String jsonString = "[\n" +
-                "    {\n" +
-                "        \"name\": \"a\",\n" +
-                "        \"activityName\": \"b\",\n" +
-                "        \"projectName\": \"c\",\n" +
-                "        \"workTime\": \"d\",\n" +
-                "        \"activityFree\": \"e\",\n" +
-                "        \"kmCount\": \"f\",\n" +
-                "        \"outOfKmFree\": \"g\",\n" +
-                "        \"othersFree\": \"h\",\n" +
-                "        \"allFree\": \"i\",\n" +
-                "        \"createTime\": \"j\",\n" +
-                "        \"note\": \"k\"\n" +
-                "    }\n" +
-                "]";
+        JSONObject template = readTemplateFile("test2");
+
+        List<String> rowsList = Arrays.asList("1", "2", "3", "0.5000", "5", "6", "7", "8", "9", "10", "11");
         JSONObject request = new JSONObject();
-        request.put("${rows}", JSONObject.parseArray(jsonString));
+        request.put("${rows}", rowsList);
 
         JSONObject pdfJsonRequest = processTemplate(template, request);
         print(new FileOutputStream("template-test.pdf"),pdfJsonRequest);
@@ -198,7 +185,7 @@ public class PdfTemplatePrinter {
     }
 
     /** 处理TableFlow */
-    public static void processTableFlow(JSONObject tableFlow, JSONObject request) {
+    public static void processTableFlowOld(JSONObject tableFlow, JSONObject request) {
         JSONObject element = tableFlow.getJSONObject("element");
         JSONObject layout = element.getJSONObject("layout");
         JSONObject convert = tableFlow.getJSONObject("convert");
@@ -224,6 +211,68 @@ public class PdfTemplatePrinter {
             JSONArray rows = request.getJSONArray(rowsKey);
             rowsList = processRowsData(rows, headerFields, converts);
         }
+
+        // 将 header 和 rows 合并为 data
+        List<String> data = new ArrayList<>(header);
+        data.addAll(rowsList);
+        element.put("data", data);
+    }
+
+    public static void processTableFlow(JSONObject tableFlow, JSONObject request) {
+        JSONObject element = tableFlow.getJSONObject("element");
+        JSONObject layout = element.getJSONObject("layout");
+
+        // header
+        List<String> header = JsonUtil.toList(element.getJSONArray("header"));
+
+        // columnWidths
+        JSONArray columnWidths = layout.getJSONArray("columnWidths");
+        // 设置等宽
+        if (columnWidths == null) {
+            layout.put("numColumns", header.size());
+        }
+
+        // rows
+        String rowsKey = element.getString("rows");
+        List<String> rowsList = new ArrayList<>();
+        if (rowsKey != null && rowsKey.matches(CONVERT_REGEX)) {
+            rowsList = JsonUtil.toList(request.getJSONArray(rowsKey));
+        }
+        logger.info("rowsList --> {}", rowsList);
+
+        /* convert rows */
+        JSONObject convert = tableFlow.getJSONObject("convert");
+        List<String> convertRowsList = new ArrayList<>();
+
+        if (convert != null && convert.size() != 0) {
+            // convertColumns
+            List<String> convertColumns = JsonUtil.toList(convert.getJSONArray("convert_columns"));
+            if (convertColumns != null) {
+                if (convertColumns.size() != header.size()) {
+                    throw new RuntimeException("convertColumns size must be same as header !");
+                }
+                JSONObject convertFormats = convert.getJSONObject("convert_formats");
+                if (convertFormats != null && convertFormats.size() != 0) {
+                    for (int i = 0; i < rowsList.size(); i++) {
+                        String value = rowsList.get(i);
+                        JSONObject convertFormat = convertFormats.getJSONObject(convertColumns.get(i % convertColumns.size()));
+                        if (convertFormat != null) {
+                            String format = null;
+                            if ((format = convertFormat.getString(TABLE_FORMAT_CONVERT)) != null && format.contains(TABLE_FORMAT_CONVERT)) {
+                                value = String.format(format.replace(TABLE_FORMAT_CONVERT, "%s"), value);
+                            } else {
+                                String target = convertFormat.getString(value);
+                                value = target == null ? value : target;
+                            }
+                        }
+                        convertRowsList.add(value);
+                    }
+                }
+            }
+            logger.info("convertRowsList --> {}", convertRowsList);
+            rowsList = convertRowsList;
+        }
+
 
         // 将 header 和 rows 合并为 data
         List<String> data = new ArrayList<>(header);
