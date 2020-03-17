@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.jfeat</groupId>
-    <artifactId>zero-io</artifactId>
-    <version>0.0.2</version>
-    <packaging>jar</packaging>
+    <artifactId>zero-io-pom</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
 
-    <name>zero-io</name>
+    <name>zero-io-pom</name>
     <description>IO Library for Business</description>
 
     <parent>
@@ -18,141 +18,10 @@
         <relativePath/>
     </parent>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <skipStandalone>false</skipStandalone>
-        <fastjson.version>1.2.49</fastjson.version>
-        <slf4j.version>1.7.25</slf4j.version>
-        <junit.version>4.11</junit.version>
-        <poi-ooxml.version>3.9</poi-ooxml.version>
-        <itext-asian.version>5.2.0</itext-asian.version>
-        <aliyun-sdk-oss.version>3.4.0</aliyun-sdk-oss.version>
-        <hutool-core.version>5.1.0</hutool-core.version>
-        <crud-base.version>0.0.2</crud-base.version>
-    </properties>
+    <modules>
+        <module>zero-io</module>
+        <module>pdf-export</module>
+    </modules>
 
-    <dependencies>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.jfeat</groupId>
-            <artifactId>crud-base</artifactId>
-            <version>${crud-base.version}</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-core -->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-core</artifactId>
-            <version>${hutool-core.version}</version>
-        </dependency>
-
-        <!-- pdf依赖 https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
-        <dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>itextpdf</artifactId>
-            <version>5.5.12</version>
-        </dependency>
-
-        <!-- 中文字体 -->
-        <dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>itext-asian</artifactId>
-            <version>${itext-asian.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>${fastjson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>${logback.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>${poi-ooxml.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.aliyun.oss</groupId>
-            <artifactId>aliyun-sdk-oss</artifactId>
-            <version>${aliyun-sdk-oss.version}</version>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.0</version>
-                <configuration>
-                    <source>11</source>
-                    <target>11</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.2</version>
-            </plugin>
-
-
-        </plugins>
-
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </resource>
-        </resources>
-    </build>
-
-
-
-    <distributionManagement>
-        <repository>
-            <id>archiva-internal</id>
-            <name>Internal Repository</name>
-            <url>http://120.79.49.72:8081/repository/internal</url>
-        </repository>
-    </distributionManagement>
-
-    <repositories>
-        <repository>
-            <id>archiva-internal</id>
-            <name>Internal Repository</name>
-            <url>http://120.79.49.72:8081/repository/internal</url>
-        </repository>
-    </repositories>
 
 </project>
