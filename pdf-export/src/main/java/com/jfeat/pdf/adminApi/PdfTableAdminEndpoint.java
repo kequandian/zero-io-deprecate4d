@@ -1,4 +1,4 @@
-package com.jfeat.pdf.api.crud;
+package com.jfeat.pdf.adminApi;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.jfeat.am.module.log.annotation.BusinessLog;
@@ -28,9 +28,9 @@ import javax.annotation.Resource;
 @RestController
 
 @RequestMapping("/api/io/crud/pdf/pdfTables")
-public class PdfTableEndpoint {
+public class PdfTableAdminEndpoint {
 
-    protected final static Logger logger = LoggerFactory.getLogger(PdfTableEndpoint.class);
+    protected final static Logger logger = LoggerFactory.getLogger(PdfTableAdminEndpoint.class);
 
     // CRUD
 
@@ -135,12 +135,5 @@ public class PdfTableEndpoint {
         record.setTemplateContent(templateContent);
         page.setRecords(queryPdfTableDao.findPdfTablePage(page, record, search, orderBy, null, null));
         return SuccessTip.create(page);
-    }
-
-    // find editable
-
-    @GetMapping("/editable")
-    public Tip findPdfTablesEditable() {
-        return SuccessTip.create(queryPdfTableDao.findPdfTablesEditable());
     }
 }
