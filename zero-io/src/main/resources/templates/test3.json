@@ -16,15 +16,10 @@
             "name": "content",
             "element": {
               "layout": {
-                "columnWidths": [
-                  1.0,
-                  2.0
-                ],
+
                 "numColumns": 0
               },
               "data": [
-                "报销清单",
-                "",
                 ""
               ],
               "format": {
@@ -32,37 +27,18 @@
                 "height": 20.0
               },
               "title": [
-                "项目名称:",
-                "备注:",
-                ""
+                "报销清单报销清单报销清单报销清单报销清单报销清单报销清单报销清单报销清单"
               ]
             }
           },
           {
             "name": "content",
             "element": {
-              "layout": {},
-              "data": [],
-              "title": [],
-              "format": {
-                "formatName": "default",
-                "height": 20.0
-              }
-            }
-          },
-          {
-            "name": "content",
-            "element": {
               "layout": {
-                "columnWidths": [
-                  1.0,
-                  2.0
-                ],
+
                 "numColumns": 0
               },
               "data": [
-                "${date}",
-                "",
                 ""
               ],
               "format": {
@@ -70,9 +46,26 @@
                 "height": 20.0
               },
               "title": [
-                "打印日期:",
-                "负责人:",
-                "确认人:"
+                "报销清单"
+              ]
+            }
+          },
+          {
+            "name": "content",
+            "element": {
+              "layout": {
+
+                "numColumns": 0
+              },
+              "data": [
+                ""
+              ],
+              "format": {
+                "formatName": "default",
+                "height": 20.0
+              },
+              "title": [
+                "报销清单"
               ]
             }
           }
@@ -113,16 +106,7 @@
       }
     }
   ],
-  "服务数据报表": {
-    "bindList": [
-      {
-        "text": "名字",
-        "key": "name"
-      },
-      {},
-      {}
-    ]
-  },
+
   "page": {
     "marginRight": 20.0,
     "pageSize": {

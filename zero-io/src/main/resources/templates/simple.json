@@ -1,0 +1,63 @@
+{
+  "flows": [
+    {
+      "name": "linear",
+      "columnWidths": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "elements": [
+        {
+          "name": "text",
+          "data": "text A",
+          "height": 25
+        },
+        {
+          "name": "text",
+          "data": "text B",
+          "height": 25
+        },
+        {
+          "name": "text",
+          "data": "text C",
+          "height": 25
+        }
+      ]
+    },
+    {
+      "name": "content",
+      "columnWidths": [1, 2],
+      "title": [ "姓名:","地址："],
+      "data": ["某某","黄埔区"],
+      "height": "25"
+    },
+    {
+      "name": "table",
+      "columnWidths": [
+        1,
+        1
+      ],
+      "columnKeyBindings": [
+        {
+          "column": "ID",
+          "key": "id"
+        },
+        {
+          "column": "名字",
+          "key": "name"
+        }
+      ],
+      "header": [],
+      "data": [],
+      "converts": {},
+      "rowHeight": 50,
+      "headerHeight": 40
+    }
+  ],
+
+  "page":  {
+    "pageName": "A4",
+    "margin": "40"
+  }
+}

@@ -34,7 +34,7 @@ public class PdfTemplatePrinter {
     private static final String TABLE_FORMAT_CONVERT = "{}";
 
     public static void main(String[] args) throws FileNotFoundException {
-        JSONObject template = readTemplateFile("test2");
+        JSONObject template = readTemplateFile("test3");
 
         List<String> rowsList = Arrays.asList("1", "2", "3", "0.5000", "5", "6", "7", "8", "9", "10", "11");
         JSONObject request = new JSONObject();
