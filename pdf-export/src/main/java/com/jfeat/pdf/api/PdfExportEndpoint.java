@@ -11,6 +11,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created on 2020/3/10.
@@ -30,8 +32,8 @@ public class PdfExportEndpoint {
     @GetMapping("/{tableName}")
     public void exportPdf(@PathVariable String tableName, HttpServletResponse response, HttpServletRequest request) throws IOException {
 
-        response.setContentType("application/octet-stream");
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s.pdf", tableName));
+        response.setContentType("application/pdf");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=\"%s.pdf\"", URLEncoder.encode(tableName, StandardCharsets.UTF_8)));
         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
         // output
         response.getOutputStream().write(pdfExportService.export(tableName).readAllBytes());
