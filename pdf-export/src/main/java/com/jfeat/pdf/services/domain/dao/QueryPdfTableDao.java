@@ -21,7 +21,10 @@ public interface QueryPdfTableDao extends BaseMapper<PdfTable> {
                                           @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
 
-    @Select("SELECT id, name, template_content FROM io_pdf_table where editable = true")
-    List<PdfTableEditable> findPdfTablesEditable();
+    /* @Select("SELECT id, name, template_content FROM io_pdf_table where editable = true") */
 
+
+    List<PdfTableRecord> findPdfTableEditablePage(Page<PdfTableRecord> page, @Param("record") PdfTableRecord record,
+                                               @Param("search") String search, @Param("orderBy") String orderBy,
+                                               @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 }

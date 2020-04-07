@@ -4,7 +4,8 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, editable, type, api, header_field AS headerField, field, template_content AS templateContent
+        id, name, editable, type, api, header_field AS headerField, field, template_content AS templateContent,
+        origin_config As originConfig
     </sql>
 
     <sql id="QueryOwnedOrgIds">
@@ -17,6 +18,51 @@
         SELECT <include refid="Base_Column_List"/>
         FROM io_pdf_table
         WHERE 1=1
+        <if test="record.id != null and record.id>0 ">
+            AND io_pdf_table.id LIKE CONCAT('%',#{record.id},'%')
+        </if>
+        <if test="record.name != null and record.name!= ''">
+            AND io_pdf_table.name LIKE CONCAT('%',#{record.name},'%')
+        </if>
+        <if test="record.editable != null and record.editable>0 ">
+            AND io_pdf_table.editable LIKE CONCAT('%',#{record.editable},'%')
+        </if>
+        <if test="record.type != null and record.type!= ''">
+            AND io_pdf_table.type LIKE CONCAT('%',#{record.type},'%')
+        </if>
+        <if test="record.api != null and record.api!= ''">
+            AND io_pdf_table.api LIKE CONCAT('%',#{record.api},'%')
+        </if>
+
+        <if test="record.headerField != null and record.headerField!= ''">
+            AND io_pdf_table.header_field LIKE CONCAT('%',#{record.headerField},'%')
+        </if>
+        <if test="record.field != null and record.field!= ''">
+            AND io_pdf_table.field LIKE CONCAT('%',#{record.field},'%')
+        </if>
+
+        <if test="record.templateContent != null and record.templateContent!= ''">
+            AND io_pdf_table.template_content LIKE CONCAT('%',#{record.templateContent},'%')
+        </if>
+        <if test="startTime != null">
+            <![CDATA[AND io_pdf_table.start_time >= DATE(#{startTime})]]>
+        </if>
+        <if test="endTime != null">
+            <![CDATA[AND io_pdf_table.end_time <= DATE(#{endTime)]]>
+        </if>
+        <!--
+    <if test="search != null and search != ''">
+        OR io_pdf_table.name LIKE CONCAT('%',#{search},'%')
+    </if>
+    -->
+    </select>
+
+    <select id="findPdfTableEditablePage" resultType="PdfTableRecord" parameterType="PdfTableRecord">
+        SELECT <include refid="Base_Column_List"/>
+        FROM io_pdf_table
+        WHERE 1=1
+        AND
+        io_pdf_table.editable=1
         <if test="record.id != null and record.id>0 ">
             AND io_pdf_table.id LIKE CONCAT('%',#{record.id},'%')
         </if>

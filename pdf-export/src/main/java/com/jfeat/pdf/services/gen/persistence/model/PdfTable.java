@@ -65,6 +65,12 @@ public class PdfTable extends Model<PdfTable> {
 	@TableField("template_content")
 	private String templateContent;
 
+	/**
+	 * 前端模版内容
+	 */
+	@TableField("origin_config")
+	private String originConfig;
+
 
 	public Long getId() {
 		return id;
@@ -138,6 +144,14 @@ public class PdfTable extends Model<PdfTable> {
 		return this;
 	}
 
+	public String getOriginConfig() {
+		return originConfig;
+	}
+
+	public void setOriginConfig(String originConfig) {
+		this.originConfig = originConfig;
+	}
+
 	public static final String ID = "id";
 
 	public static final String NAME = "name";
@@ -153,6 +167,8 @@ public class PdfTable extends Model<PdfTable> {
 	public static final String FIELD = "field";
 
 	public static final String TEMPLATE_CONTENT = "template_content";
+
+	public static final String ORIGIN_CONFIG = "origin_config";
 
 	@Override
 	protected Serializable pkVal() {

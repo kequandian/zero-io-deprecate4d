@@ -1,0 +1,35 @@
+{
+  "flows": [
+    {
+      "name": "linear",
+      "columnWidths": [
+            1.0,
+            1.0
+        ],
+      "elements": [
+
+      ]
+      },
+    {
+      "name": "table",
+      "columnWidths": [
+        1,
+        1
+      ],
+      "columnKeyBindings": [
+        {
+          "column": "ID",
+          "key": "id"
+        },
+        {
+          "column": "名字",
+          "key": "name"
+        }
+      ],
+      "converts": {},
+      "rowHeight": 50,
+      "headerHeight": 40
+    }
+  ],
+  "page": "A4"
+}
