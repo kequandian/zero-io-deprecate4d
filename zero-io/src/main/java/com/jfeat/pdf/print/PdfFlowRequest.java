@@ -83,9 +83,14 @@ public class PdfFlowRequest {
         }
 
         public Rectangle getPageSize(String pageName){
-            if("A4".equals(pageName)){
+
+            if("A5".equals(pageName)){
+                return PageSize.A5;
+            } else if("A4".equals(pageName)){
                 return PageSize.A4;
-            }else{
+            } else if("A3".equals(pageName)){
+                return PageSize.A3;
+            } else{
                 throw new RuntimeException("not implement, provide the page if required.");
             }
         }
