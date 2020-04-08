@@ -34,6 +34,7 @@
     },
     {
       "name": "table",
+      "type": "api",
       "columnWidths": [
         1,
         1
@@ -49,7 +50,7 @@
         }
       ],
       "header": [],
-      "data": [],
+      "data": "${records}",
       "converts": {},
       "rowHeight": 50,
       "headerHeight": 40
