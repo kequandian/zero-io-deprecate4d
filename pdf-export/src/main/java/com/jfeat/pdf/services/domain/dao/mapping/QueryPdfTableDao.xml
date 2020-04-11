@@ -13,6 +13,13 @@
         t_sys_org.right_num >= children.left_num and t_sys_org.id=#{ownerOrgId} order by t_sys_org.node_level ASC
     </sql>
 
+    <select id="findPdfTableByName" resultType="com.jfeat.pdf.services.gen.persistence.model.PdfTable" parameterType="String">
+        SELECT <include refid="Base_Column_List"/>
+        FROM io_pdf_table
+        WHERE io_pdf_table.name = #{name}
+    </select>
+
+
 
     <select id="findPdfTablePage" resultType="PdfTableRecord" parameterType="PdfTableRecord">
         SELECT <include refid="Base_Column_List"/>

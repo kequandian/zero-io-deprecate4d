@@ -23,6 +23,7 @@ public interface QueryPdfTableDao extends BaseMapper<PdfTable> {
 
     /* @Select("SELECT id, name, template_content FROM io_pdf_table where editable = true") */
 
+    PdfTable findPdfTableByName(@Param("name") String name);
 
     List<PdfTableRecord> findPdfTableEditablePage(Page<PdfTableRecord> page, @Param("record") PdfTableRecord record,
                                                @Param("search") String search, @Param("orderBy") String orderBy,

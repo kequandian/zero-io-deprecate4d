@@ -15,8 +15,5 @@ import org.springframework.stereotype.Service;
  */
 @Service("pdfTableService")
 public class PdfTableServiceImpl extends CRUDPdfTableServiceImpl implements PdfTableService {
-    @Override
-    public PdfTable findByName(String tableName) {
-        return this.pdfTableMapper.selectOne(new PdfTable().setName(tableName));
-    }
+
 }

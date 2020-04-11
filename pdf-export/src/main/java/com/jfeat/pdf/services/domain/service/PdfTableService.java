@@ -7,6 +7,4 @@ import com.jfeat.pdf.services.gen.persistence.model.PdfTable;
  * Created by vincent on 2017/10/19.
  */
 public interface PdfTableService extends CRUDPdfTableService {
-
-    PdfTable findByName(String tableName);
 }

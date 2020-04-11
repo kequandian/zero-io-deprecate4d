@@ -12,11 +12,13 @@
 		<result column="header_field" property="headerField" />
 		<result column="field" property="field" />
 		<result column="template_content" property="templateContent" />
+		<result column="origin_config" property="originConfig"/>
 	</resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, editable, type, api, header_field AS headerField, field, template_content AS templateContent
+        id, name, editable, type, api, header_field AS headerField, field, template_content AS templateContent,
+		origin_config As originConfig
     </sql>
 
 </mapper>
