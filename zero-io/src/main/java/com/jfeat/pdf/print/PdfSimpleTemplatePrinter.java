@@ -1,5 +1,6 @@
 package com.jfeat.pdf.print;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.itextpdf.text.DocumentException;
@@ -7,6 +8,8 @@ import com.jfeat.pdf.print.base.BorderDefinition;
 import com.jfeat.pdf.print.base.ColorDefinition;
 import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.util.Fonts;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.*;
@@ -19,12 +22,19 @@ import java.util.*;
  */
 public class PdfSimpleTemplatePrinter {
 
+    protected final static Logger logger = LoggerFactory.getLogger(PdfSimpleTemplatePrinter.class);
+
+    /** 用于匹配自定义字符数据的正则 */
+    private static final String CONVERT_REGEX = "\\$\\{.*\\}";
+
+
     public static void main(String[] args) throws FileNotFoundException {
         JSONObject template = readTemplateFile("simple");
 
         List<String> rowsList = Arrays.asList("1", "2", "3", "0.5000", "5", "6", "7", "8", "9", "10", "11");
+        JSONArray rowsArray = JSONArray.parseArray(JSON.toJSONString(rowsList));
         JSONObject request = new JSONObject();
-        request.put("${rows}", rowsList);
+        request.put("${rows}", rowsArray);
 
         PdfFlowRequest data = convertToPdfFlowRequest(template, request);
         print(new FileOutputStream("template-simple.pdf"), data);
@@ -148,6 +158,15 @@ public class PdfSimpleTemplatePrinter {
         String data = flow.getString("data");
         Float height = flow.getFloat("height");
 
+        if (data != null && data.matches(CONVERT_REGEX)) {
+            Object o = request.get("data");
+            if (o instanceof String) {
+                data = (String) o;
+            } else {
+                data = "";
+            }
+        }
+
         PdfFlowRequest.ContentFlowData contentFlowData = PdfFlowRequest.ContentFlowData.build()
                 .setLayout(new float[]{1})
                 .setTitle(new String[]{data})
@@ -190,9 +209,26 @@ public class PdfSimpleTemplatePrinter {
         for (int i = 0; i < columnKeyBindings.size(); i++) {
             header.add(columnKeyBindings.getJSONObject(i).getString("column"));
         }
+        // header keys
+        List<String> keys = new ArrayList<>();
+        for (int i = 0; i < columnKeyBindings.size(); i++) {
+            keys.add(columnKeyBindings.getJSONObject(i).getString("key"));
+        }
         // rows
         List<String> rowsList = new ArrayList<>();
-        rowsList = request.getJSONArray("${rows}").toJavaList(String.class);
+        // rowsList = request.getJSONArray("${rows}").toJavaList(String.class);
+        JSONArray rows = null;
+        String data = flow.getString("data");
+        if (data != null && data.matches(CONVERT_REGEX)) {
+            Object o = request.get(data);
+            if (o instanceof JSONArray) {
+                rows = (JSONArray) o;
+                // handle key bindings
+                rowsList = handleKeyBindings(rows, keys);
+            }
+        }
+
+
         // data
         List<String> dataList = new ArrayList<>(header);
         dataList.addAll(rowsList);
@@ -233,5 +269,23 @@ public class PdfSimpleTemplatePrinter {
         }
 
         return JSONObject.parseObject(sb.toString());
+    }
+
+    private static List<String> handleKeyBindings(JSONArray rows, List<String> keys) {
+        List<String> rowsList = new ArrayList<>();
+        if (rows != null) {
+            for (int i = 0; i < rows.size(); i++) {
+                Object o = rows.get(i);
+                if (o instanceof  JSONObject) {
+                    JSONObject row = rows.getJSONObject(i);
+                    for (String key : keys) {
+                        rowsList.add(row.getString(key));
+                    }
+                } else {
+                    rowsList.add(o.toString());
+                }
+            }
+        }
+        return rowsList;
     }
 }

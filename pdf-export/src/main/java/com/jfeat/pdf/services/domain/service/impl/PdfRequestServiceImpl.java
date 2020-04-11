@@ -32,26 +32,16 @@ public class PdfRequestServiceImpl implements PdfRequestService {
     public JSONObject getApiRequest(JSONObject apiData, JSONObject template) {
         JSONObject request = new JSONObject();
 
-        // rows data
-        JSONArray rowsData = apiData.getJSONArray("records");
-        logger.info("rowsData --> {}", rowsData);
-
-        // rows keys
-        List<String> rowsKeys = getRowsKeys(template);
-
-        // rows request
-        List<String> rowsList = getRowsList(rowsData, rowsKeys);
-
-        request.put("${rows}", rowsList);
-
-        // set up request from other api data
+        // set up request from all api data
         Set<String> dataKeys = apiData.keySet();
         for (String key : dataKeys) {
             Object o = apiData.get(key);
             if (o == null) {
                 request.put(String.format(FORMAT, key), "");
-            } else if (o instanceof JSONObject) {
-                request.put(String.format(FORMAT, key), ((JSONObject)o).toString());
+            } else if (o instanceof JSONArray){
+                request.put(String.format(FORMAT, key), o);
+            } else if (o instanceof  JSONObject) {
+                request.put(String.format(FORMAT, key), o.toString());
             } else {
                 request.put(String.format(FORMAT, key), o);
             }
@@ -72,36 +62,5 @@ public class PdfRequestServiceImpl implements PdfRequestService {
 
         request.put("${rows}", rowsList);
         return request;
-    }
-
-    private List<String> getRowsKeys(JSONObject template) {
-        List<String> rowsKeys = new ArrayList<>();
-
-        JSONArray flows = template.getJSONArray("flows");
-        for (int i = 0; i < flows.size(); i++) {
-            JSONObject flow = flows.getJSONObject(i);
-            if ("table".equals(flow.getString("name"))) {
-                JSONArray columnKeyBindings = flow.getJSONArray("columnKeyBindings");
-                for (int k = 0; k < columnKeyBindings.size(); k++) {
-                    JSONObject columnKeyBinding = columnKeyBindings.getJSONObject(k);
-                    rowsKeys.add(columnKeyBinding.getString("key"));
-                }
-            }
-        }
-        return rowsKeys;
-    }
-
-    private List<String> getRowsList(JSONArray rowsData, List<String> rowsKeys) {
-        List<String> rowsList = new ArrayList<>();
-        if (rowsData != null) {
-            for (int i = 0; i < rowsData.size(); i++) {
-                JSONObject row = rowsData.getJSONObject(i);
-                for (String s : rowsKeys) {
-                    String value = row.getString(s);
-                    rowsList.add(value);
-                }
-            }
-        }
-        return rowsList;
     }
 }
