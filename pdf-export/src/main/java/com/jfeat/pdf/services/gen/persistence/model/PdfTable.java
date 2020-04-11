@@ -50,6 +50,16 @@ public class PdfTable extends Model<PdfTable> {
      * 绑定api
      */
 	private String api;
+	/**
+	 * api返回的字段
+	 */
+	@TableField("api_field")
+	private String apiField;
+	/**
+	 * api返回的列表字段
+	 */
+	@TableField("api_list")
+	private String apiList;
     /**
      * api返回数据的键值
      */
@@ -115,6 +125,22 @@ public class PdfTable extends Model<PdfTable> {
 	public PdfTable setApi(String api) {
 		this.api = api;
 		return this;
+	}
+
+	public String getApiField() {
+		return apiField;
+	}
+
+	public void setApiField(String apiField) {
+		this.apiField = apiField;
+	}
+
+	public String getApiList() {
+		return apiList;
+	}
+
+	public void setApiList(String apiList) {
+		this.apiList = apiList;
 	}
 
 	public String getHeaderField() {

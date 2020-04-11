@@ -4,7 +4,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, editable, type, api, header_field AS headerField, field, template_content AS templateContent,
+        id, name, editable, type, api, header_field AS headerField, api_field AS apiField, api_list As apiList, field, template_content AS templateContent,
         origin_config As originConfig
     </sql>
 
