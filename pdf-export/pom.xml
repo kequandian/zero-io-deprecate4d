@@ -19,7 +19,7 @@
     <properties>
         <skipStandalone>false</skipStandalone>
         <crud-dev.version>0.0.1</crud-dev.version>
-        <zero-io.version>0.0.2</zero-io.version>
+        <zero-io.version>0.0.3</zero-io.version>
         <crud-plus.version>0.0.6</crud-plus.version>
         <crud-core.version>0.0.2</crud-core.version>
     </properties>

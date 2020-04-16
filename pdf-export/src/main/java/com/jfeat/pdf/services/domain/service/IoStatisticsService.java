@@ -1,5 +1,6 @@
 package com.jfeat.pdf.services.domain.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.jfeat.pdf.services.domain.model.IoStatisticsMeta;
 
 import java.util.List;
@@ -32,5 +33,5 @@ public interface IoStatisticsService {
      */
     IoStatisticsMeta getStatisticsMetaByField(String field);
 
-    List<String> getrowsList(String sql);
+    JSONArray getrowsJSONArray(String sql);
 }

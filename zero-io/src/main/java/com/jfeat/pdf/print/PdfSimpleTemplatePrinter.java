@@ -34,9 +34,16 @@ public class PdfSimpleTemplatePrinter {
         JSONObject template = readTemplateFile("simple");
 
         List<String> rowsList = Arrays.asList("1", "2", "3", "0.5000", "5", "6", "7", "8", "9", "10", "11");
+
+        JSONArray rowsJSONArray = new JSONArray();
+        JSONObject rowJSONObject = new JSONObject();
+        rowJSONObject.put("id", "1");
+        rowJSONObject.put("name", "no name");
+        rowsJSONArray.add(rowJSONObject);
+
         JSONArray rowsArray = JSONArray.parseArray(JSON.toJSONString(rowsList));
         JSONObject request = getRequest();
-        request.put("${rows}", rowsArray);
+        request.put("${rows}", rowsJSONArray);
 
         PdfFlowRequest data = convertToPdfFlowRequest(template, request);
         print(new FileOutputStream("template-simple.pdf"), data);
@@ -234,7 +241,9 @@ public class PdfSimpleTemplatePrinter {
         }
         // rows
         List<String> rowsList = new ArrayList<>();
-        // rowsList = request.getJSONArray("${rows}").toJavaList(String.class);
+        // converts
+        JSONObject converts = flow.getJSONObject("converts");
+
         JSONArray rows = null;
         String data = flow.getString("data");
         if (data != null && data.matches(CONVERT_REGEX)) {
@@ -242,10 +251,9 @@ public class PdfSimpleTemplatePrinter {
             if (o instanceof JSONArray) {
                 rows = (JSONArray) o;
                 // handle key bindings
-                rowsList = handleKeyBindings(rows, keys);
+                rowsList = processRowsList(rows, keys, converts);
             }
         }
-
 
         // data
         List<String> dataList = new ArrayList<>(header);
@@ -289,15 +297,18 @@ public class PdfSimpleTemplatePrinter {
         return JSONObject.parseObject(sb.toString());
     }
 
-    private static List<String> handleKeyBindings(JSONArray rows, List<String> keys) {
+    private static List<String> processRowsList(JSONArray rows, List<String> keys, JSONObject converts) {
         List<String> rowsList = new ArrayList<>();
         if (rows != null) {
+            // process key binding
             for (int i = 0; i < rows.size(); i++) {
                 Object o = rows.get(i);
                 if (o instanceof  JSONObject) {
                     JSONObject row = rows.getJSONObject(i);
                     for (String key : keys) {
-                        rowsList.add(row.getString(key));
+                        // process convert
+                        String value = processConverts(key, row.getString(key), converts);
+                        rowsList.add(value);
                     }
                 } else {
                     rowsList.add(o.toString());
@@ -305,5 +316,19 @@ public class PdfSimpleTemplatePrinter {
             }
         }
         return rowsList;
+    }
+
+    public static String CONVERT_FORMAT = "{}";
+
+    private static String processConverts(String key, String value,  JSONObject converts) {
+        if (converts != null) {
+            JSONObject convertsJSONObject = converts.getJSONObject(key);
+            if (convertsJSONObject == null) { return value; }
+            String convertFormat = convertsJSONObject.getString(CONVERT_FORMAT);
+            if (convertFormat != null)  { return String.format(convertFormat.replace(CONVERT_FORMAT, "%s"), value); }
+            String convertString = convertsJSONObject.getString(value);
+            if (convertString != null) { return convertString; }
+        }
+        return value;
     }
 }

@@ -56,11 +56,11 @@ public class PdfRequestServiceImpl implements PdfRequestService {
         // sql
         String sql = ioStatisticsService.getSqlByField(field);
         // rows
-        List<String> rowsList = ioStatisticsService.getrowsList(sql);
+        JSONArray rowsJSONArray = ioStatisticsService.getrowsJSONArray(sql);
 
         // columns
 
-        request.put("${rows}", rowsList);
+        request.put("${rows}", rowsJSONArray);
         return request;
     }
 }

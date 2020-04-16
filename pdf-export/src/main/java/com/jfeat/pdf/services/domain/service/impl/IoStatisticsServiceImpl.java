@@ -3,6 +3,8 @@ package com.jfeat.pdf.services.domain.service.impl;
 import cn.hutool.core.lang.Editor;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.jfeat.crud.base.exception.BusinessCode;
 import com.jfeat.crud.base.exception.BusinessException;
 import com.jfeat.pdf.enums.MetaColumnEnum;
@@ -103,18 +105,20 @@ public class IoStatisticsServiceImpl implements IoStatisticsService {
     }
 
     @Override
-    public List<String> getrowsList(String sql) {
+    public JSONArray getrowsJSONArray(String sql) {
 
-        List<String> data = new ArrayList<>();
+        JSONArray rowsJSONArray = new JSONArray();
         jdbcTemplate.query(sql, (rs, rowNum) -> {
+            JSONObject row = new JSONObject();
             for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++){
-                data.add(rs.getString(i));
+                String label = rs.getMetaData().getColumnLabel(i);
+                row.put(label, rs.getString(i));
             }
+            rowsJSONArray.add(row);
             return null;
         });
-        logger.info("data list --> {}", data);
-
-        return data;
+        logger.info("data array --> {}", rowsJSONArray);
+        return rowsJSONArray;
     }
 
     /**
