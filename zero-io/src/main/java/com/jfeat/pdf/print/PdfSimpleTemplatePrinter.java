@@ -1,5 +1,6 @@
 package com.jfeat.pdf.print;
 
+import cn.hutool.core.date.DateTime;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -14,6 +15,7 @@ import org.springframework.core.io.ClassPathResource;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created on 2020/4/6.
@@ -33,7 +35,7 @@ public class PdfSimpleTemplatePrinter {
 
         List<String> rowsList = Arrays.asList("1", "2", "3", "0.5000", "5", "6", "7", "8", "9", "10", "11");
         JSONArray rowsArray = JSONArray.parseArray(JSON.toJSONString(rowsList));
-        JSONObject request = new JSONObject();
+        JSONObject request = getRequest();
         request.put("${rows}", rowsArray);
 
         PdfFlowRequest data = convertToPdfFlowRequest(template, request);
@@ -66,6 +68,13 @@ public class PdfSimpleTemplatePrinter {
         } catch (FileNotFoundException | DocumentException e) {
             e.printStackTrace();
         }
+    }
+
+    public static JSONObject getRequest() {
+        JSONObject request = new JSONObject();
+        // 设置 默认变量
+        request.put("${createDate}", new DateTime().toString());
+        return request;
     }
 
 
@@ -189,6 +198,15 @@ public class PdfSimpleTemplatePrinter {
         List<String> title = flow.getJSONArray("title").toJavaList(String.class);
         // data
         List<String> data = flow.getJSONArray("data").toJavaList(String.class);
+
+        // handle request in data
+        data = data.stream().map(item -> {
+            if (item != null && item.matches(CONVERT_REGEX)) {
+                return request.getString(item);
+            }
+            return item;
+        }).collect(Collectors.toList());
+
         PdfFlowRequest.ContentFlowData contentFlowData = PdfFlowRequest.ContentFlowData.build()
                 .rowFormat("default", height)
                 .setTitle(title.toArray(String[]::new))

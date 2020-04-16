@@ -2,6 +2,7 @@ package com.jfeat.pdf.services.domain.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jfeat.pdf.print.PdfSimpleTemplatePrinter;
 import com.jfeat.pdf.services.domain.service.IoStatisticsService;
 import com.jfeat.pdf.services.domain.service.PdfRequestService;
 import org.slf4j.Logger;
@@ -9,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -30,7 +30,7 @@ public class PdfRequestServiceImpl implements PdfRequestService {
 
     @Override
     public JSONObject getApiRequest(JSONObject apiData, JSONObject template) {
-        JSONObject request = new JSONObject();
+        JSONObject request = PdfSimpleTemplatePrinter.getRequest();
 
         // set up request from all api data
         Set<String> dataKeys = apiData.keySet();
@@ -51,7 +51,7 @@ public class PdfRequestServiceImpl implements PdfRequestService {
 
     @Override
     public JSONObject getStatisticsRequest(String field, JSONObject template) {
-        JSONObject request = new JSONObject();
+        JSONObject request = PdfSimpleTemplatePrinter.getRequest();
 
         // sql
         String sql = ioStatisticsService.getSqlByField(field);
