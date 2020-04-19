@@ -9,11 +9,14 @@ import com.jfeat.pdf.print.base.BorderDefinition;
 import com.jfeat.pdf.print.base.ColorDefinition;
 import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.util.Fonts;
+import com.jfeat.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ClassPathResource;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,7 +34,7 @@ public class PdfSimpleTemplatePrinter {
 
 
     public static void main(String[] args) throws FileNotFoundException {
-        JSONObject template = readTemplateFile("simple");
+        JSONObject template = JsonUtil.readTemplateFile("simple");
 
         List<String> rowsList = Arrays.asList("1", "2", "3", "0.5000", "5", "6", "7", "8", "9", "10", "11");
 
@@ -112,9 +115,9 @@ public class PdfSimpleTemplatePrinter {
             if (flowJson == null) { continue; }
             String name = flowJson.getString("name");
             if (PdfFlowRequest.Flow.LINEAR_FLOW.equals(name)) {
-                flows.add(processLinearFlow(flowJson, request));
+                flows.add(processLinearFlow(flowJson, data, request));
             } else {
-                flows.add(processFlow(flowJson, request));
+                flows.add(processFlow(flowJson, data, request));
             }
         }
 
@@ -127,11 +130,11 @@ public class PdfSimpleTemplatePrinter {
         return data;
     }
 
-    public static PdfFlowRequest.Flow processFlow(JSONObject flow, JSONObject request) {
+    public static PdfFlowRequest.Flow processFlow(JSONObject flow, PdfFlowRequest pdfFlowRequest, JSONObject request) {
         String name = flow.getString("name");
         switch (name) {
             case "table":
-                return processTableFlow(flow, request);
+                return processTableFlow(flow, pdfFlowRequest, request);
             case "text":
                 return processTextFlow(flow, request);
             case "content":
@@ -141,7 +144,7 @@ public class PdfSimpleTemplatePrinter {
         }
     }
 
-    public static PdfFlowRequest.Flow processLinearFlow(JSONObject flow, JSONObject request) {
+    public static PdfFlowRequest.Flow processLinearFlow(JSONObject flow, PdfFlowRequest pdfFlowRequest, JSONObject request) {
 
         // layout
         List<Float> columnWidths = flow.getJSONArray("columnWidths").toJavaList(Float.class);
@@ -160,10 +163,10 @@ public class PdfSimpleTemplatePrinter {
             if (PdfFlowRequest.Flow.LINEAR_FLOW.equals(name)) {
                 if (element.getJSONArray("columnWidths").size() == 1) {
                     // 递归
-                    wrapper.add(processLinearFlow(element, request));
+                    wrapper.add(processLinearFlow(element, pdfFlowRequest, request));
                 }
             } else {
-                wrapper.add(processFlow(element, request));
+                wrapper.add(processFlow(element, pdfFlowRequest, request));
             }
         }
 
@@ -223,7 +226,7 @@ public class PdfSimpleTemplatePrinter {
         return contentFlowData.flow();
     }
 
-    public static PdfFlowRequest.Flow processTableFlow(JSONObject flow, JSONObject request) {
+    public static PdfFlowRequest.Flow processTableFlow(JSONObject flow, PdfFlowRequest pdfFlowRequest, JSONObject request) {
         // row height
         float rowHeight = flow.getFloat("rowHeight");
         // header height
@@ -265,36 +268,30 @@ public class PdfSimpleTemplatePrinter {
         float[] layout = new float[size];
         for (int i = 0; i < size; i++) { layout[i] = columnWidths.get(i); }
 
+        // font format
+        String rowsFormatName = "table-row";
+        String headerFormatName = "table-firstrow";
+        JSONObject rowsFormat = flow.getJSONObject("rowsFormat");
+        JSONObject headerFormat = flow.getJSONObject("headerFormat");
+        Map<String, FontDefinition> fonts = pdfFlowRequest.getDefinitions().getFonts();
+        if (rowsFormat != null) {
+            rowsFormatName = "rowsFormat";
+            Float formatSize = rowsFormat.getFloat("size");
+            fonts.put(rowsFormatName, new FontDefinition(Fonts.Definition.SONG.toString(), formatSize, FontDefinition.BOLD, ColorDefinition.BLACK));
+        }
+        if (headerFormat != null) {
+            headerFormatName = "headerFormat";
+            Float formatSize = headerFormat.getFloat("size");
+            fonts.put(headerFormatName, new FontDefinition(Fonts.Definition.SONG.toString(), formatSize, FontDefinition.BOLD, ColorDefinition.BLACK));
+        }
+
         PdfFlowRequest.TableFlowData tableFlowData = PdfFlowRequest.TableFlowData.build()
-                .rowFormat("table-row", rowHeight)
-                .firstRowFormat("table-firstrow", headerHeight)
+                .rowFormat(rowsFormatName, rowHeight)
+                .firstRowFormat(headerFormatName, headerHeight)
                 .data(dataList.toArray(String[]::new))
                 .layout(layout);
 
         return tableFlowData.flow();
-    }
-
-    /** 获取测试模版文件 */
-    public static JSONObject readTemplateFile(String fileName) {
-        String path = String.format("templates/%s.json", fileName);
-        StringBuilder sb = new StringBuilder();
-        try {
-            InputStream inputStream = new ClassPathResource(path).getInputStream();
-            BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
-            String s;
-            try {
-                while ((s = in.readLine()) != null) {
-                    sb.append(s);
-                    sb.append("\n");
-                }
-            } finally {
-                in.close();
-            }
-        } catch (IOException var8) {
-            throw new RuntimeException(var8);
-        }
-
-        return JSONObject.parseObject(sb.toString());
     }
 
     private static List<String> processRowsList(JSONArray rows, List<String> keys, JSONObject converts) {
