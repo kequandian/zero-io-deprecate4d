@@ -282,6 +282,7 @@ public class PdfSimpleTemplatePrinter {
         if (headerFormat != null) {
             headerFormatName = "headerFormat";
             Float formatSize = headerFormat.getFloat("size");
+            logger.info("headerFormat size = {}", formatSize);
             fonts.put(headerFormatName, new FontDefinition(Fonts.Definition.SONG.toString(), formatSize, FontDefinition.BOLD, ColorDefinition.BLACK));
         }
 
@@ -317,21 +318,35 @@ public class PdfSimpleTemplatePrinter {
 
     public static String CONVERT_FORMAT = "{}";
 
+    public static String NULL = "{null}";
+
     public static String MULTIPLE = "{multiplication}";
 
     private static String processConverts(String key, String value,  JSONObject converts) {
         if (converts != null) {
             JSONObject convertsJSONObject = converts.getJSONObject(key);
+            logger.info("convert key = {}, converts value = {}", key, value);
             if (convertsJSONObject == null) { return value; }
+
+            // 处理 null 空值
+            String nullFormat = convertsJSONObject.getString(NULL);
+            logger.info("nullFormat = {}", nullFormat);
+            if (value == null && nullFormat != null) { return nullFormat; }
+
             // Float 乘法
             Float multiple = convertsJSONObject.getFloat(MULTIPLE);
+            logger.info("multiple = {}", multiple);
             if (multiple != null) {
                 float floatValue = Float.parseFloat(value);
                 value = String.valueOf(floatValue * multiple);
             }
+
             String convertString = convertsJSONObject.getString(value);
+            logger.info("convertString =  {}", convertString);
             if (convertString != null) { return convertString; }
+
             String convertFormat = convertsJSONObject.getString(CONVERT_FORMAT);
+            logger.info("convertFormat =  {}", convertFormat);
             if (convertFormat != null)  { return String.format(convertFormat.replace(CONVERT_FORMAT, "%s"), value); }
         }
         return value;
