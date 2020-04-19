@@ -320,14 +320,22 @@ public class PdfSimpleTemplatePrinter {
 
     public static String CONVERT_FORMAT = "{}";
 
+    public static String MULTIPLE = "{multiplication}";
+
     private static String processConverts(String key, String value,  JSONObject converts) {
         if (converts != null) {
             JSONObject convertsJSONObject = converts.getJSONObject(key);
             if (convertsJSONObject == null) { return value; }
-            String convertFormat = convertsJSONObject.getString(CONVERT_FORMAT);
-            if (convertFormat != null)  { return String.format(convertFormat.replace(CONVERT_FORMAT, "%s"), value); }
+            // Float 乘法
+            Float multiple = convertsJSONObject.getFloat(MULTIPLE);
+            if (multiple != null) {
+                float floatValue = Float.parseFloat(value);
+                value = String.valueOf(floatValue * multiple);
+            }
             String convertString = convertsJSONObject.getString(value);
             if (convertString != null) { return convertString; }
+            String convertFormat = convertsJSONObject.getString(CONVERT_FORMAT);
+            if (convertFormat != null)  { return String.format(convertFormat.replace(CONVERT_FORMAT, "%s"), value); }
         }
         return value;
     }
