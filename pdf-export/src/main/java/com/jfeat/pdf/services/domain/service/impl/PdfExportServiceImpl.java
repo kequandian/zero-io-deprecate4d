@@ -7,7 +7,6 @@ import com.jfeat.pdf.print.PdfSimpleTemplatePrinter;
 import com.jfeat.pdf.services.domain.dao.QueryPdfTableDao;
 import com.jfeat.pdf.services.domain.service.PdfExportService;
 import com.jfeat.pdf.services.domain.service.PdfRequestService;
-import com.jfeat.pdf.services.domain.service.PdfTableService;
 import com.jfeat.pdf.services.gen.persistence.model.PdfTable;
 import com.jfeat.pdf.util.HttpUtil;
 import org.slf4j.Logger;
@@ -77,6 +76,8 @@ public class PdfExportServiceImpl implements PdfExportService {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         HttpServletRequest httpRequest = ((ServletRequestAttributes) requestAttributes).getRequest();
         String authorization = httpRequest.getHeader("Authorization");
+        // process api
+        api = processApi(api, authorization);
         // api data
         JSONObject apiData = HttpUtil.getResponse(api, authorization).getJSONObject("data");
 
@@ -100,5 +101,16 @@ public class PdfExportServiceImpl implements PdfExportService {
         JSONObject request = pdfRequestService.getStatisticsRequest(field, template);
         logger.info("statistics request --> {}", request);
         return  request;
+    }
+
+    private String processApi(String api, String authorization) {
+        JSONObject data = HttpUtil.getResponse(api, authorization).getJSONObject("data");
+        // get total
+        String total = data.getString("total");
+        // format pageSize
+        if (total != null) {
+            api = String.format("%s?pageSize=%s", api, total);
+        }
+        return api;
     }
 }
