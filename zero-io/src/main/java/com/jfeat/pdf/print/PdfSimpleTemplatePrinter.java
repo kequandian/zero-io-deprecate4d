@@ -17,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -334,11 +335,12 @@ public class PdfSimpleTemplatePrinter {
             if (value == null && nullFormat != null) { return nullFormat; }
 
             // Float 乘法
-            Float multiple = convertsJSONObject.getFloat(MULTIPLE);
+            String multiple = convertsJSONObject.getString(MULTIPLE);
             logger.info("multiple = {}", multiple);
             if (multiple != null) {
-                float floatValue = Float.parseFloat(value);
-                value = String.valueOf(floatValue * multiple);
+                BigDecimal multipleBigDecimal = new BigDecimal(multiple);
+                BigDecimal valueBigDecimal = new BigDecimal(value);
+                value = String.valueOf(valueBigDecimal.multiply(multipleBigDecimal));
             }
 
             String convertString = convertsJSONObject.getString(value);
