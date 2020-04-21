@@ -1,13 +1,10 @@
 package com.jfeat.pdf.services.domain.dao;
 
-import com.jfeat.pdf.services.domain.model.PdfTableEditable;
-import com.jfeat.pdf.services.domain.model.PdfTableRecord;
-
-import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Param;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.jfeat.pdf.services.domain.model.PdfTableRecord;
 import com.jfeat.pdf.services.gen.persistence.model.PdfTable;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;

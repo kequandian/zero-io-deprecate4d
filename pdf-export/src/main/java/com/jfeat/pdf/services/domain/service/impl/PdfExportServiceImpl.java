@@ -104,13 +104,39 @@ public class PdfExportServiceImpl implements PdfExportService {
     }
 
     private String processApi(String api, String authorization) {
-        JSONObject data = HttpUtil.getResponse(api, authorization).getJSONObject("data");
-        // get total
-        String total = data.getString("total");
-        // format pageSize
-        if (total != null) {
-            api = String.format("%s?pageSize=%s", api, total);
+        // get pageSize
+        String pageSize = HttpUtil.getQueryParam(api, "pageSize");
+        // set pageSize
+        if (pageSize == null) {
+            // get total
+            JSONObject data = HttpUtil.getResponse(api, authorization).getJSONObject("data");
+            String total = data.getString("total");
+            if (total != null) {
+                api = HttpUtil.setQueryParam(api, "pageSize", total);
+            }
         }
         return api;
+
     }
+
+
+    private static String requestForPageSize(String url, String auth) {
+        return "20";
+    }
+
+    public static void main(String[] args) {
+        String api = "http://47.112.34.149/api/crud/project/projects";
+        String auth = "";
+        // get pageSize
+        String pageSize = HttpUtil.getQueryParam(api, "pageSize");
+        // setPageSize
+        if (pageSize == null) {
+            // pageSize = requestForPageSize(api, auth);
+            pageSize = "20";
+            api = HttpUtil.setQueryParam(api, "pageSize", pageSize);
+        }
+        System.out.println(api);
+        // return api;
+    }
+
 }

@@ -6,7 +6,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * Created on 2020/3/13.
@@ -30,5 +33,24 @@ public class HttpUtil {
         String body = responseEntity.getBody();
         JSONObject jsonObject = JSON.parseObject(body);
         return jsonObject;
+    }
+
+    public static String getQueryParam(String url, String param) {
+        UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(url).build();
+        MultiValueMap<String, String> queryParams = uriComponents.getQueryParams();
+        return queryParams.getFirst(param);
+    }
+
+    public static String setQueryParam(String url, String key, String value) {
+        return UriComponentsBuilder.fromHttpUrl(url).queryParam(key, value).build().toString();
+    }
+
+    public static void main(String[] args) {
+        String api = "http://cloud.smallsaas.cn/api/crud/tenants?pageNum=1&pageSize=10";
+        String auth = "";
+
+        JSONObject response = getResponse(api, auth);
+
+        System.out.println(response);
     }
 }
