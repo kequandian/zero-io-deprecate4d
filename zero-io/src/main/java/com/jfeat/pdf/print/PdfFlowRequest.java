@@ -66,6 +66,13 @@ public class PdfFlowRequest {
             setMargin(margin);
         }
 
+        public Page(String pageName, Boolean rotate, float margin) {
+            this.pageName = pageName;
+            Rectangle pageSize = getPageSize(pageName);
+            this.pageSize = rotate == null ? pageSize : (rotate ? pageSize.rotate() : pageSize);
+            setMargin(margin);
+        }
+
         public Page(String pageName, float marginLeft, float marginTop, float marginRight, float marginBottom){
             this.pageName = pageName;
             this.pageSize = getPageSize(pageName);

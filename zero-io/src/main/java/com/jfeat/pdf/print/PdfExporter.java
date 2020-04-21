@@ -136,6 +136,10 @@ public class PdfExporter {
         return export(new FileOutputStream(filePath), PageSize.A4, margins, margins, margins, margins);
     }
 
+    public PdfExporter export(String filePath, Rectangle pageSize, float margins) throws FileNotFoundException, DocumentException {
+        return export(new FileOutputStream(filePath), pageSize, margins, margins, margins, margins);
+    }
+
 
     public PdfExporter export(String filePath) throws FileNotFoundException, DocumentException {
         return export(new FileOutputStream(filePath), PageSize.A4, 0, 0, 0, 0);

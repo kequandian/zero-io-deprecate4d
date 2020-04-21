@@ -321,7 +321,7 @@ public class TableFlow extends PositionFlowElement {
 
         PdfExporter exporter = new PdfExporter();
 
-        PdfContentByte canvas = exporter.export("table.pdf", 20).canvas();
+        PdfContentByte canvas = exporter.export("table.pdf", PageSize.A4, 20).canvas();
         Rectangle pageSize=  exporter.getPageSize();
 
         tableFlow.draw(canvas);

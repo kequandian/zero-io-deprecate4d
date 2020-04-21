@@ -126,7 +126,9 @@ public class PdfSimpleTemplatePrinter {
         JSONObject page = template.getJSONObject("page");
         String pageName = page.getString("pageName");
         float margin = Float.parseFloat(page.getString("margin"));
-        data.setPage(new PdfFlowRequest.Page(pageName, margin));
+        Boolean rotate = page.getBoolean("rotate");
+        logger.info("rotate = {}", rotate);
+        data.setPage(new PdfFlowRequest.Page(pageName, rotate, margin));
 
         return data;
     }

@@ -53,7 +53,7 @@ public class TextBox extends Rectangle implements ListRow {
     public TextBox(Rectangle position, String content, Font font){
         super(position);
         this.content = content;
-        this.font = font;;
+        this.font = font;
     }
 
     public void setContent(String content) {
@@ -123,14 +123,18 @@ public class TextBox extends Rectangle implements ListRow {
         canvas.saveState();
         float tx = alignment == Element.ALIGN_LEFT ? getLeft() : (getLeft()+getRight())*0.5f;  // else ALIGN_CENTER
 
-        int contentLen = (int)(stringWidth / getWidth()) + (stringWidth%getWidth()>0?1:0);
+        // int contentLen = (int)(stringWidth / getWidth()) + (stringWidth%getWidth()>0?1:0);
         final int stringYOffset = 4;
 
         // get text array
         String[] lines = alignUpPosition(metrics, content, this);
+
+        int contentLen = lines.length;
         //String[] lines = new String[] {content.substring(0,5), content.substring(6,content.length())};
 
-        for(int i=0; i<contentLen; i++) {
+
+
+        for(int i=0; i < contentLen; i++) {
             String text = lines[i];
 
             float cellHeight = getHeight();
