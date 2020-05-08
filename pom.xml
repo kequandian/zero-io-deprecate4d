@@ -21,6 +21,7 @@
     <modules>
         <module>zero-io</module>
         <module>pdf-export</module>
+        <module>excel-export</module>
     </modules>
 
 
