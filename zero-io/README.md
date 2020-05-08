@@ -202,3 +202,14 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
 	"color": "BLACK"        // 矩形颜色， BLACK, WHITE, YELLOW, RED ...
 }
 ```
+
+#### 嵌套布局元素：
+```
+{
+    "name": "linear",           // 元素名
+    "columnWidths": [1,1,1],    // 嵌套布局比例
+    "elements":[                // 布局所嵌套的元素
+        ...
+    ]
+}
+```
