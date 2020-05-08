@@ -130,14 +130,14 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
 ![](https://github.com/kequandian/zero-io/blob/master/zero-io/simple-template.png)
 
 ###  模版 flows 属性:
-``` json
+```
 { 
 	"flows": [] //flows中代表各个PDF元素，以垂直流布局的形式排列
 	...
 }
 ```
 ###  模版 page 属性:
-``` json
+``` 
 { 
 	...
 	"page": {
@@ -151,7 +151,7 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
 ###  模版元素:
 
 #### 文本元素：
-``` json
+``` 
 {
   "name": "text",		// 元素名，表示文本元素
   "data": "内容",		// 文本的内容
@@ -160,7 +160,7 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
 ```
 
 #### 内容列表元素：
-``` json
+``` 
 {
   "name": "content",					// 元素名，表示内容列表元素
   "columnWidths": ["1", "2"],	// 列宽度比例， 代表两列内容的比例 （只有两列）
@@ -170,7 +170,7 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
 },
 ```
 #### 表格元素：
-``` json
+``` 
 {
   "name": "table",					  // 元素名，表示表格元素
   "columnWidths": ["1", "1"],	// 列宽度比例，代表列内容的比例
@@ -194,7 +194,7 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
 },
 ```
 ####  矩形元素：
-``` json
+``` 
 {
 	"name": "rectangle",			// 元素名
 	"height": 50,							// 矩形高度
