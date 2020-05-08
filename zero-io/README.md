@@ -127,6 +127,4 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
 
 显示效果:
 
-```
 ![](https://github.com/kequandian/zero-io/blob/master/zero-io/simple-template.png)
-```
