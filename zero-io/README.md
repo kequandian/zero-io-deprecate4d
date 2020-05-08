@@ -21,195 +21,112 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
 
 
 
-##### 模版格式:
+##### 简单模版格式例子:
 ```json
 {
   "flows": [
     {
-      "name": "title",
-      "element": {
-        "formatName": "title",
-        "alignment": "ALIGN_CENTER",
-        "content": "title"
-      }
+      "name": "linear",
+      "columnWidths": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "elements": [
+        {
+          "name": "text",
+          "data": "text A",
+          "height": 25
+        },
+        {
+          "name": "text",
+          "data": "text B",
+          "height": 25
+        },
+        {
+          "name": "table",
+          "type": "api",
+          "columnWidths": [
+            "1",
+            "1"
+          ],
+          "columnKeyBindings": [
+            {
+              "column": "ID",
+              "key": "id"
+            },
+            {
+              "column": "名字",
+              "key": "name"
+            }
+          ],
+          "header": [],
+          "data": "${rows}",
+          "converts": {
+            "id": {
+              "{}": "No.{}"
+            },
+            "name": {
+              "name": "名字"
+            }
+          },
+          "rowHeight": 50,
+          "headerHeight": 40,
+
+          "headerFormat": {
+            "size":"9"
+          }
+        }
+      ]
     },
     {
-      "name": "table",
-      "element": {
-        "layout": {
-          "columnWidths": [1,1,2,1,1,1,1,1,1,1,1]
+      "name": "content",
+      "columnWidths": ["1", "2"],
+      "title": [ "姓名:","地址："],
+      "data": ["某某","黄埔区"],
+      "height": "25"
+    },
+    {
+      "name": "linear",
+      "columnWidths": [1, 1, 1],
+      "elements": [
+        {
+          "name": "text",
+          "data": "text B",
+          "height": 25
         },
-        "header": [
-          "报销人",
-          "出工名",
-          "项目",
-          "工作时长",
-          "出工费用",
-          "里程数/km",
-          "路费",
-          "其他费用",
-          "共计",
-          "时间",
-          "备注"
-        ],
-        "rows": "${rows}",
-        "format": {
-          "rowFormat": {
-            "formatName": "default",
-            "height": 90.0
-          },
-          "firstRowFormat": {
-            "formatName": "table-firstrow",
-            "height": 40
-          }
+        {
+          "name": "rectangle",
+          "height": 70,
+          "width": null,
+          "color": "YELLOW"
+        },
+        {
+          "name": "rectangle",
+          "height": 70,
+          "width": null,
+          "color": "GREEN"
         }
-      },
-      "convert": {
-        "headerFields": [
-          "name",
-          "activityName",
-          "projectName",
-          "workTime",
-          "activityFree",
-          "kmCount",
-          "outOfKmFree",
-          "othersFree",
-          "allFree",
-          "createTime",
-          "note"
-        ],
-        "converts": {
-          "workTime": {
-            "0.5000": "上午",
-            "0.6250": "下午",
-            "1.0000": "整天"
-          },
-          "activityFree": {
-            "{}": "¥ {}"
-          },
-          "outOfKmFree": {
-            "{}": "¥ {}"
-          },
-          "othersFree": {
-            "{}": "¥ {}"
-          },
-          "allFree": {
-            "{}": "¥ {}"
-          }
-        }
-      }
+      ]
+    },
+    {
+      "name": "rectangle",
+      "height": 30,
+      "width": 30,
+      "color": "BLACK"
     }
   ],
-  "page": {
-    "marginRight": 20.0,
-    "pageSize": {
-      "border": -1,
-      "borderWidthBottom": -1.0,
-      "bottom": 0.0,
-      "chunks": [],
-      "rotation": 0,
-      "right": 595.0,
-      "content": true,
-      "borderWidthLeft": -1.0,
-      "borderWidthRight": -1.0,
-      "top": 842.0,
-      "left": 0.0,
-      "useVariableBorders": false,
-      "borderWidth": -1.0,
-      "grayFill": 0.0,
-      "nestable": false,
-      "width": 595.0,
-      "borderWidthTop": -1.0,
-      "height": 842.0
-    },
-    "marginBottom": 20.0,
-    "pageHeight": 842.0,
+
+  "page":  {
     "pageName": "A4",
-    "marginTop": 20.0,
-    "pageWidth": 595.0,
-    "marginLeft": 20.0
-  },
-  "definitions": {
-    "borders": {
-      "table-border": {
-        "color": {
-          "red": 0,
-          "green": 0,
-          "blue": 0
-        },
-        "width": 2.0,
-        "colorname": "BLACK"
-      },
-      "line": {
-        "color": {
-          "red": 0,
-          "green": 0,
-          "blue": 0
-        },
-        "width": 2.0,
-        "style": "TOP",
-        "colorname": "BLACK"
-      },
-      "right": {
-        "width": 10.0,
-        "style": "RIGHT",
-        "colorname": "BLACK"
-      }
-    },
-    "fonts": {
-      "default": {
-        "size": 9.0,
-        "familyname": "",
-        "style": "NORMAL",
-        "baseColor": {
-          "red": 0,
-          "green": 0,
-          "blue": 0
-        }
-      },
-      "table-firstrow": {
-        "size": 12.0,
-        "familyname": "宋体",
-        "style": "BOLD",
-        "baseColor": {
-          "red": 0,
-          "green": 0,
-          "blue": 0
-        }
-      },
-      "table-header": {
-        "size": 14.0,
-        "familyname": "宋体",
-        "style": "BOLD",
-        "baseColor": {
-          "red": 0,
-          "green": 0,
-          "blue": 0
-        }
-      },
-      "title": {
-        "size": 16.0,
-        "familyname": "宋体",
-        "style": "NORMAL",
-        "baseColor": {
-          "red": 0,
-          "green": 0,
-          "blue": 0
-        }
-      },
-      "table-row": {
-        "size": 10.0,
-        "familyname": "宋体",
-        "style": "NORMAL",
-        "baseColor": {
-          "red": 0,
-          "green": 0,
-          "blue": 0
-        }
-      }
-    },
-    "background": "${background}"
+    "rotate": true,
+    "margin": "40"
   }
 }
 ```
 
+显示效果:
+
+```
+![](https://github.com/kequandian/zero-io/blob/master/zero-io/simple-template.png)
+```
