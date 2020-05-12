@@ -144,6 +144,7 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
       "pageName": "A4",        // PDF页面大小
       "rotate": true,		// 是否横向打印PDF
       "margin": "40"		// PDF页面边距
+      "backgroundImageUrl": ""  // 背景底图
    }
 }
 ```
@@ -173,11 +174,12 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
 ``` 
 {
   "name": "table",              // 元素名，表示表格元素
-  "columnWidths": ["1", "1"],	// 列宽度比例，代表列内容的比例
   "columnKeyBindings": [       // api返回数据key与表头列的对应关系
     {
       "column": "名字",		// 表头列名
       "key": "name"		// api key
+      "visible": true         // 是否显示
+      "columnWidth": 1          //列宽比例 
     }, 
     ...
   ],
@@ -200,6 +202,15 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
 	"height": 50,           // 矩形高度
 	"width": 100,           // 矩形宽度， 如果为null，则横向自适应
 	"color": "BLACK"        // 矩形颜色， BLACK, WHITE, YELLOW, RED ...
+}
+```
+
+#### 图片元素
+```
+{
+    "name": "image"         // 元素名
+    "url": "http://xxxx"    // 图片url
+    "data": ""              // 图片内容，字节格式
 }
 ```
 
