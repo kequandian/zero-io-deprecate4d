@@ -24,6 +24,8 @@ public class PdfExporter {
 
     private PdfContentByte _canvas;
 
+    private PdfContentByte _backCanves;
+
 
     public PdfExporter(){
 
@@ -32,6 +34,8 @@ public class PdfExporter {
     public PdfContentByte canvas(){
         return this._canvas;
     }
+
+    public PdfContentByte backCanvas() { return this._backCanves; }
 
     public Document document(){
         return _document;
@@ -92,7 +96,7 @@ public class PdfExporter {
             _document.open();
 
             _canvas = writer.getDirectContent();
-
+            _backCanves = writer.getDirectContentUnder();
             //HeaderFlowReport reporter = builder.build();
             //reporter.draw(canvas);
 

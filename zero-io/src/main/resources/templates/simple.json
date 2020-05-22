@@ -19,46 +19,87 @@
           "height": 25
         },
         {
-          "name": "text",
-          "data": "text C",
-          "height": 25
+          "name": "table",
+          "columnKeyBindings": [
+            {
+              "column": "ID",
+              "key": "id",
+              "columnWidth": 1,
+              "visible": false
+            },
+            {
+              "column": "名字",
+              "key": "name",
+              "columnWidth": 1,
+              "visible": true
+            }
+          ],
+          "header": [],
+          "data": "${rows}",
+          "converts": {
+            "id": {
+              "{}": "No.{}"
+            },
+            "name": {
+              "name": "名字"
+            }
+          },
+          "rowHeight": 50,
+          "headerHeight": 40,
+
+          "headerFormat": {
+            "size":"9"
+          }
         }
       ]
     },
     {
       "name": "content",
-      "columnWidths": [1, 2],
+      "columnWidths": ["1", "2"],
       "title": [ "姓名:","地址："],
       "data": ["某某","黄埔区"],
       "height": "25"
     },
     {
-      "name": "table",
-      "type": "api",
-      "columnWidths": [
-        1,
-        1
-      ],
-      "columnKeyBindings": [
+      "name": "linear",
+      "columnWidths": [1, 1, 1],
+      "elements": [
         {
-          "column": "ID",
-          "key": "id"
+          "name": "image",
+          "url": "https://uploadfile.huiyi8.com/up/f1/47/72/f14772f5c23affca1b516096b80cf3e2.jpg",
+          "width": 200,
+          "height": 200
         },
         {
-          "column": "名字",
-          "key": "name"
+          "name": "rectangle",
+          "height": 70,
+          "width": null,
+          "color": "YELLOW"
+        },
+        {
+          "name": "rectangle",
+          "height": 210,
+          "width": null,
+          "color": "GREEN"
         }
-      ],
-      "header": [],
-      "data": "${records}",
-      "converts": {},
-      "rowHeight": 50,
-      "headerHeight": 40
+      ]
+    },
+    {
+      "name": "rectangle",
+      "height": 30,
+      "width": 30,
+      "color": "BLACK"
+    },
+    {
+      "name": "barCode",
+      "data": "00000000000"
     }
   ],
 
   "page":  {
     "pageName": "A4",
-    "margin": "40"
+    "rotate": true,
+    "margin": "40",
+    "backgroundImageUrl": "https://tse1-mm.cn.bing.net/th/id/OIP.afETdw6wTSUvKgIBI33AYgHaKe?pid=Api&rs=1"
   }
 }

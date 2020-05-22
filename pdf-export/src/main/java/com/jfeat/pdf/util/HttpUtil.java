@@ -1,5 +1,6 @@
 package com.jfeat.pdf.util;
 
+import cn.hutool.core.util.URLUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.http.HttpEntity;
@@ -43,6 +44,12 @@ public class HttpUtil {
 
     public static String setQueryParam(String url, String key, String value) {
         return UriComponentsBuilder.fromHttpUrl(url).queryParam(key, value).build().toString();
+    }
+
+    public static String setQueryParams(String url, String queryString) {
+        String decode = URLUtil.decode(queryString);
+        System.out.println("decode --> " + decode);
+        return UriComponentsBuilder.fromHttpUrl(url).query(decode).build().toString();
     }
 
     public static void main(String[] args) {

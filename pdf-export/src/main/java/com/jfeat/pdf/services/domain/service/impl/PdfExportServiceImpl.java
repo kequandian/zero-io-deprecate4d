@@ -42,6 +42,8 @@ public class PdfExportServiceImpl implements PdfExportService {
 
     public static final String API_TABLE = "api";
 
+    public static final Integer ROWS_LIMIT = 5;
+
     @Override
     public ByteArrayInputStream export(String tableName) {
         logger.info("pdfTable name --> {}", tableName);
@@ -69,6 +71,35 @@ public class PdfExportServiceImpl implements PdfExportService {
         return new ByteArrayInputStream(baos.toByteArray());
     }
 
+    @Override
+    public ByteArrayInputStream exportPreview(String tableName) {
+        logger.info("pdfTable name --> {}", tableName);
+        PdfTable pdfTable = queryPdfTableDao.findPdfTableByName(tableName);
+        logger.info("pdfTable --> {}", pdfTable);
+        if (pdfTable == null) {
+            throw new BusinessException(BusinessCode.CRUD_QUERY_FAILURE, "列表名不存在");
+        }
+        // type
+        String type = pdfTable.getType();
+        // pdf request
+        JSONObject request = null;
+        if (STATISTICS_TABLE.equals(type)) {
+            request = getStatisticsRequest(pdfTable);
+        } else if (API_TABLE.equals(type)) {
+            request = getApiRequest(pdfTable);
+        } else {
+            throw new BusinessException(BusinessCode.InvalidKey, "非法列表类别");
+        }
+        // template content
+        JSONObject template = JSONObject.parseObject(pdfTable.getTemplateContent());
+
+        // 加入rows数量限制
+        request.put("${rowsLimit}", ROWS_LIMIT);
+        // export
+        ByteArrayOutputStream baos = PdfSimpleTemplatePrinter.print(template, request);
+        return new ByteArrayInputStream(baos.toByteArray());
+    }
+
     public JSONObject getApiRequest(PdfTable pdfTable) {
         // api
         String api = pdfTable.getApi();
@@ -76,8 +107,12 @@ public class PdfExportServiceImpl implements PdfExportService {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         HttpServletRequest httpRequest = ((ServletRequestAttributes) requestAttributes).getRequest();
         String authorization = httpRequest.getHeader("Authorization");
-        // process api
-        api = processApi(api, authorization);
+        // process search
+        api = processSearch(api);
+        logger.info("search api --> {}", api);
+        // process total page
+        api = processTotalPage(api, authorization);
+        logger.info("process total api --> {}", api);
         // api data
         JSONObject apiData = HttpUtil.getResponse(api, authorization).getJSONObject("data");
 
@@ -103,7 +138,16 @@ public class PdfExportServiceImpl implements PdfExportService {
         return  request;
     }
 
-    private String processApi(String api, String authorization) {
+    private String processSearch(String api) {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+                .getRequestAttributes()).getRequest();
+
+        String queryString = request.getQueryString();
+        return HttpUtil.setQueryParams(api, queryString);
+    }
+
+    private String processTotalPage(String api, String authorization) {
+        // 检测total
         // get pageSize
         String pageSize = HttpUtil.getQueryParam(api, "pageSize");
         // set pageSize
@@ -116,12 +160,6 @@ public class PdfExportServiceImpl implements PdfExportService {
             }
         }
         return api;
-
-    }
-
-
-    private static String requestForPageSize(String url, String auth) {
-        return "20";
     }
 
     public static void main(String[] args) {

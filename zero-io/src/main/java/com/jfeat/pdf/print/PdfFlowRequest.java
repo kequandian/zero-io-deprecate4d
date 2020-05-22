@@ -52,6 +52,7 @@ public class PdfFlowRequest {
     public static class Page{
         private String pageName;
         private Rectangle pageSize;
+        private String imageUrl;
 
         private float marginLeft;
         private float marginTop;
@@ -68,6 +69,14 @@ public class PdfFlowRequest {
 
         public Page(String pageName, Boolean rotate, float margin) {
             this.pageName = pageName;
+            Rectangle pageSize = getPageSize(pageName);
+            this.pageSize = rotate == null ? pageSize : (rotate ? pageSize.rotate() : pageSize);
+            setMargin(margin);
+        }
+
+        public Page(String pageName, Boolean rotate, String imageUrl, float margin) {
+            this.pageName = pageName;
+            this.imageUrl = imageUrl;
             Rectangle pageSize = getPageSize(pageName);
             this.pageSize = rotate == null ? pageSize : (rotate ? pageSize.rotate() : pageSize);
             setMargin(margin);
@@ -100,6 +109,14 @@ public class PdfFlowRequest {
             } else{
                 throw new RuntimeException("not implement, provide the page if required.");
             }
+        }
+
+        public String getImageUrl() {
+            return imageUrl;
+        }
+
+        public void setImageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
         }
 
         public String getPageName() {
@@ -186,6 +203,7 @@ public class PdfFlowRequest {
         public static final String TITLE_FLOW = "title";
         public static final String SEPARATOR_FLOW = "line";
         public static final String QRCODE_FLOW = "qrcode";
+        public static final String BARCODE_FLOW = "barcode";
         public static final String TABLE_FLOW = "table";
         public static final String LAYOUT_FLOW = "layout";
         public static final String CONTENT_FLOW = "content";
@@ -193,6 +211,7 @@ public class PdfFlowRequest {
         public static final String NEW_LINE = "newLine";
         public static final String NEW_PAGE = "newPage";
         public static final String IMAGE_FLOW = "image";
+        public static final String RECTANGLE_FLOW = "rectangle";
 
         public Flow() {}
         /**
@@ -282,6 +301,53 @@ public class PdfFlowRequest {
         Flow flow();
     }
 
+    /**
+     *  rectangle 矩形流实体定义
+     */
+     public static class RectangleFlowData implements FlowElement {
+
+         private Float height;
+
+         private Float width;
+
+         private String color;
+
+         public static RectangleFlowData build() {
+             return new RectangleFlowData();
+         }
+
+         public RectangleFlowData setHeight(Float height) {
+             this.height = height;
+             return this;
+         }
+
+         public Float getHeight() {
+             return this.height;
+         }
+
+         public RectangleFlowData setWidth(Float width) {
+             this.width = width;
+             return this;
+         }
+
+         public Float getWidth() {
+             return this.width;
+         }
+
+         public RectangleFlowData setColor(String color) {
+             this.color = color;
+             return this;
+         }
+
+         public String getColor() {
+             return this.color;
+         }
+
+        @Override
+        public Flow flow() {
+            return new Flow(Flow.RECTANGLE_FLOW, this);
+        }
+    }
 
     /**
      * 分隔线流实体定义
@@ -665,14 +731,56 @@ public class PdfFlowRequest {
      **/
     public static class ImageFlowData implements FlowElement {
         private byte[] data;
+        private String url;
+        private float width;
+        private float height;
         public ImageFlowData(byte[] data) {
             this.data = data;
+        }
+
+        public ImageFlowData(byte[] data, float width, float height) {
+            this.data = data;
+            this.width = width;
+            this.height = height;
+        }
+
+        public ImageFlowData(String url) { this.url = url; }
+
+        public ImageFlowData(String url, float width, float height) {
+            this.url = url;
+            this.width = width;
+            this.height = height;
         }
 
         @Override
         public Flow flow() {
             return new Flow(Flow.IMAGE_FLOW, this);
         }
+
+        public float getWidth() {
+            return width;
+        }
+
+        public void setWidth(float width) {
+            this.width = width;
+        }
+
+        public float getHeight() {
+            return height;
+        }
+
+        public void setHeight(float height) {
+            this.height = height;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
         public byte[] getData() {
             return data;
         }

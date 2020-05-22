@@ -48,6 +48,7 @@ public class PdfSimpleTemplatePrinter {
         JSONArray rowsArray = JSONArray.parseArray(JSON.toJSONString(rowsList));
         JSONObject request = getRequest();
         request.put("${rows}", rowsJSONArray);
+        request.put("${rowsLimit}", 1);
 
         PdfFlowRequest data = convertToPdfFlowRequest(template, request);
         print(new FileOutputStream("template-simple.pdf"), data);
@@ -101,6 +102,7 @@ public class PdfSimpleTemplatePrinter {
         fontDefs.put("table-firstrow", new FontDefinition(Fonts.Definition.SONG.toString(), 12, FontDefinition.BOLD, ColorDefinition.BLACK));
         fontDefs.put("table-row", new FontDefinition(Fonts.Definition.BASE.toString(), 9, FontDefinition.NORMAL, ColorDefinition.BLACK));
         fontDefs.put("default", new FontDefinition(Fonts.Definition.BASE.toString(), 10, FontDefinition.NORMAL, ColorDefinition.BLACK));
+        fontDefs.put("qrcode", new FontDefinition(Fonts.Definition.HELVETICA.toString(), 9, FontDefinition.NORMAL, ColorDefinition.BLACK));
 
         // border
         borderDefs.put("table-border", new BorderDefinition(null, 2, ColorDefinition.BLACK));
@@ -128,7 +130,9 @@ public class PdfSimpleTemplatePrinter {
         float margin = Float.parseFloat(page.getString("margin"));
         Boolean rotate = page.getBoolean("rotate");
         logger.info("rotate = {}", rotate);
-        data.setPage(new PdfFlowRequest.Page(pageName, rotate, margin));
+        String imageUrl = page.getString("backgroundImageUrl");
+        logger.info("backgroundImageUrl = {}", imageUrl);
+        data.setPage(new PdfFlowRequest.Page(pageName, rotate, imageUrl, margin));
 
         return data;
     }
@@ -142,6 +146,12 @@ public class PdfSimpleTemplatePrinter {
                 return processTextFlow(flow, request);
             case "content":
                 return processContentFlow(flow, request);
+            case "rectangle":
+                return processRectangle(flow, request);
+            case "barCode":
+                return processBarCode(flow, request);
+            case "image":
+                return processImage(flow, request);
             default:
                 throw new RuntimeException("错误的flow name");
         }
@@ -198,6 +208,36 @@ public class PdfSimpleTemplatePrinter {
         return contentFlowData.flow();
     }
 
+    public static PdfFlowRequest.Flow processRectangle(JSONObject flow, JSONObject request) {
+        Float height = flow.getFloat("height");
+        Float width = flow.getFloat("width");
+        String color = flow.getString("color");
+
+        PdfFlowRequest.RectangleFlowData rectangleFlowData = PdfFlowRequest.RectangleFlowData.build()
+                .setHeight(height)
+                .setWidth(width)
+                .setColor(color);
+
+        return rectangleFlowData.flow();
+    }
+
+    public static PdfFlowRequest.Flow processBarCode(JSONObject flow, JSONObject request) {
+        String data = flow.getString("data");
+        return new PdfFlowRequest.QRCodeFlowData(data, "qrcode").flow();
+    }
+
+    public static PdfFlowRequest.Flow processImage(JSONObject flow, JSONObject request) {
+        String imageUrl = flow.getString("url");
+        float width = flow.getFloat("width");
+        float height = flow.getFloat("height");
+        byte[] data = flow.getBytes("data");
+        if (imageUrl == null && data != null) {
+            return new PdfFlowRequest.ImageFlowData(data, width, height).flow();
+        }
+
+        return new PdfFlowRequest.ImageFlowData(imageUrl, width, height).flow();
+    }
+
     public static PdfFlowRequest.Flow processContentFlow(JSONObject flow, JSONObject request) {
 
         // layout
@@ -238,12 +278,16 @@ public class PdfSimpleTemplatePrinter {
         List<String> header = new ArrayList<>();
         JSONArray columnKeyBindings = flow.getJSONArray("columnKeyBindings");
         for (int i = 0; i < columnKeyBindings.size(); i++) {
-            header.add(columnKeyBindings.getJSONObject(i).getString("column"));
+            if (columnKeyBindings.getJSONObject(i).getBoolean("visible")) {
+                header.add(columnKeyBindings.getJSONObject(i).getString("column"));
+            }
         }
         // header keys
         List<String> keys = new ArrayList<>();
         for (int i = 0; i < columnKeyBindings.size(); i++) {
-            keys.add(columnKeyBindings.getJSONObject(i).getString("key"));
+            if (columnKeyBindings.getJSONObject(i).getBoolean("visible")) {
+                keys.add(columnKeyBindings.getJSONObject(i).getString("key"));
+            }
         }
         // rows
         List<String> rowsList = new ArrayList<>();
@@ -257,7 +301,9 @@ public class PdfSimpleTemplatePrinter {
             if (o instanceof JSONArray) {
                 rows = (JSONArray) o;
                 // handle key bindings
-                rowsList = processRowsList(rows, keys, converts);
+                // 处理rowsList 限制数量
+                Integer limit = request.getInteger("${rowsLimit}");
+                rowsList = processRowsList(rows, keys, converts, limit);
             }
         }
 
@@ -266,7 +312,25 @@ public class PdfSimpleTemplatePrinter {
         dataList.addAll(rowsList);
 
         // layout
-        List<Float> columnWidths = flow.getJSONArray("columnWidths").toJavaList(Float.class);
+        // List<Float> columnWidths = flow.getJSONArray("columnWidths").toJavaList(Float.class);
+        // int size = columnWidths.size();
+        // float[] layout = new float[size];
+        // for (int i = 0; i < size; i++) { layout[i] = columnWidths.get(i); }
+
+//        List<Float> columnWidths = columnKeyBindings.stream()
+//                .filter(column -> ((JSONObject) column).getBoolean("visible"))
+//                .map(column -> ((JSONObject) column).getFloat("columnWidth"))
+//                .collect(Collectors.toList());
+        List<Float> columnWidths = new ArrayList<>();
+        for (int i = 0; i < columnKeyBindings.size(); i++) {
+            if (columnKeyBindings.getJSONObject(i).getBoolean("visible")) {
+                Float columnWidth = columnKeyBindings.getJSONObject(i).getFloat("columnWidth");
+                if (columnWidth == null) {
+                    throw new RuntimeException("columnWidth 不能设置为空");
+                }
+                columnWidths.add(columnWidth);
+            }
+        }
         int size = columnWidths.size();
         float[] layout = new float[size];
         for (int i = 0; i < size; i++) { layout[i] = columnWidths.get(i); }
@@ -298,12 +362,15 @@ public class PdfSimpleTemplatePrinter {
         return tableFlowData.flow();
     }
 
-    private static List<String> processRowsList(JSONArray rows, List<String> keys, JSONObject converts) {
+    private static List<String> processRowsList(JSONArray rows, List<String> keys, JSONObject converts, Integer limit) {
         List<String> rowsList = new ArrayList<>();
         if (rows != null) {
-            // process key binding
-            for (int i = 0; i < rows.size(); i++) {
+            // 限制rowsList 数量
+            logger.info("rows.size = {}, limit = {}", rows.size(), limit);
+            int size = (limit == null ? rows.size() : (limit > rows.size() ? rows.size() : limit));
+            for (int i = 0; i < size; i++) {
                 Object o = rows.get(i);
+                // process key binding
                 if (o instanceof  JSONObject) {
                     JSONObject row = rows.getJSONObject(i);
                     for (String key : keys) {
@@ -318,6 +385,7 @@ public class PdfSimpleTemplatePrinter {
         }
         return rowsList;
     }
+
 
     public static String CONVERT_FORMAT = "{}";
 

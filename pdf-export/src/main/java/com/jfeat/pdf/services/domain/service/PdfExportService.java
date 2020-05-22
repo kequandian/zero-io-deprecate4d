@@ -10,4 +10,6 @@ import java.io.ByteArrayInputStream;
 public interface PdfExportService {
 
     ByteArrayInputStream export(String tableName);
+
+    ByteArrayInputStream exportPreview(String tableName);
 }

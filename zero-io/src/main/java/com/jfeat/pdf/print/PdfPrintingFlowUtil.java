@@ -2,6 +2,7 @@ package com.jfeat.pdf.print;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.jfeat.pdf.print.base.BorderDefinition;
@@ -158,11 +159,27 @@ public class PdfPrintingFlowUtil {
     public PdfPrintingFlowUtil export(OutputStream io) throws DocumentException{
         PdfExporter exporter = new PdfExporter();
 
-        PdfContentByte canvas = exporter.export(io,
+        PdfExporter export = exporter.export(io,
                 page.getPageSize(),
                 page.getMarginLeft(), page.getMarginRight(),
                 page.getMarginTop(), page.getMarginBottom()
-                ).canvas();
+        );
+        PdfContentByte canvas = export.canvas();
+
+        String imageUrl = page.getImageUrl();
+        if (imageUrl != null) {
+            PdfContentByte backCanvas = export.backCanvas();
+            Image image = null;
+            try {
+                image = Image.getInstance(imageUrl);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            image.scaleAbsolute(page.getPageSize());
+            image.setAbsolutePosition(0, 0);
+            backCanvas.addImage(image);
+        }
+
 
         for(Flow flow : flows){
            if (flow.getName().equals(Flow.LINEAR_FLOW)) {
@@ -186,7 +203,12 @@ public class PdfPrintingFlowUtil {
                         throw new UnsupportedOperationException();
                     }
 
-                    wrapLayout.add((PdfPTable) getFlowElement(element, canvas));
+                    Element innerElement = getFlowElement(element, canvas);
+                    if (innerElement instanceof Image) {
+                        wrapLayout.add((Image)innerElement);
+                    } else {
+                        wrapLayout.add((PdfPTable) innerElement);
+                    }
                 }
                 exporter.addElement(wrapLayout);
             }  else {
@@ -219,25 +241,25 @@ public class PdfPrintingFlowUtil {
             qrCodeLayout.add(BarCodes.createBarCode39(canvas, flowData.getCode(), true));
             qrCodeLayout.add(new Phrase(flowData.getCode(), this.fonts.get(flowData.getFormatName())));
             element = qrCodeLayout;
-        }else if(flow.getName().equals(Flow.TABLE_FLOW)){
+        }else if(flow.getName().equals(Flow.TABLE_FLOW)) {
 
-            TableFlowData flowData = (TableFlowData)flow.getElement();
+            TableFlowData flowData = (TableFlowData) flow.getElement();
 
             TableFlowBuilder builder = new TableFlowBuilder();
 
-            if(flowData.getLayout().getNumColumns()>0) {
+            if (flowData.getLayout().getNumColumns() > 0) {
                 builder.numColumns(flowData.getLayout().getNumColumns());
-            }else{
+            } else {
                 builder.columnWidths(flowData.getLayout().getColumnWidths());
             }
             // set header
-            if(flowData.getFormat() != null) {
-                if(flowData.getFormat().getHeader()!=null) {
-                    RowFormat header =flowData.getFormat().getHeader();
-                    if(header.getColor() != null) {
+            if (flowData.getFormat() != null) {
+                if (flowData.getFormat().getHeader() != null) {
+                    RowFormat header = flowData.getFormat().getHeader();
+                    if (header.getColor() != null) {
                         builder.header().headerColor(header.getColor());
                     }
-                    if(header.getHeight()> 0) {
+                    if (header.getHeight() > 0) {
                         builder.header().headerHeight(header.getHeight());
                     }
                     builder.header().headerFormat(this.fonts.get(header.getFormatName()));
@@ -246,24 +268,24 @@ public class PdfPrintingFlowUtil {
                 }
 
                 // set first row
-                if(flowData.getFormat().getFirstRowFormat()!=null) {
-                    RowFormat firstRowFormat =flowData.getFormat().getFirstRowFormat();
-                    if(firstRowFormat.getHeight()>0) {
+                if (flowData.getFormat().getFirstRowFormat() != null) {
+                    RowFormat firstRowFormat = flowData.getFormat().getFirstRowFormat();
+                    if (firstRowFormat.getHeight() > 0) {
                         builder.firstRow().firstRowHeight(firstRowFormat.getHeight());
                     }
-                    if(firstRowFormat.getColor() != null) {
+                    if (firstRowFormat.getColor() != null) {
                         builder.firstRow().firstRowColor(firstRowFormat.getColor());
                     }
                     builder.firstRow().firstRowFormat(this.fonts.get(firstRowFormat.getFormatName()));
                 }
                 // set row
-                if(flowData.getFormat().getRowFormat()!=null) {
-                    RowFormat rowFormat =flowData.getFormat().getRowFormat();
+                if (flowData.getFormat().getRowFormat() != null) {
+                    RowFormat rowFormat = flowData.getFormat().getRowFormat();
                     builder.row().rowFormat(this.fonts.get(rowFormat.getFormatName()));
-                    if(rowFormat.getHeight()>0) {
+                    if (rowFormat.getHeight() > 0) {
                         builder.row().rowHeight(rowFormat.getHeight());
                     }
-                    if(rowFormat.getColor() != null) {
+                    if (rowFormat.getColor() != null) {
                         builder.row().rowColor(rowFormat.getColor());
                     }
                     // rows()
@@ -273,16 +295,15 @@ public class PdfPrintingFlowUtil {
                 }
 
                 // set border
-                if(flowData.getBorderFormat() != null) {
+                if (flowData.getBorderFormat() != null) {
                     TableFlowData.TableBorderFormat borderFormat = flowData.getBorderFormat();
-                    if(borderFormat.getStyle() != null) {
+                    if (borderFormat.getStyle() != null) {
                         builder.borderStyle(borderFormat.getStyle());
                     }
-                    if(borderFormat.getWidth() != null) {
+                    if (borderFormat.getWidth() != null) {
                         builder.borderWidth(borderFormat.getWidth());
                     }
                 }
-
             }
 
             TableFlow tableFlow = builder.build();
@@ -290,7 +311,25 @@ public class PdfPrintingFlowUtil {
 
             // append table to document
             element = tableFlow.getElement();
+        } else if (flow.getName().equals(Flow.RECTANGLE_FLOW)) {
+            RectangleFlowData flowData = (RectangleFlowData) flow.getElement();
+            Float width = flowData.getWidth();
+            Float height = flowData.getHeight();
+            BaseColor baseColor = com.jfeat.pdf.print.simple.base.ColorDefinition.getBaseColor(flowData.getColor());
 
+            PdfPTable rect = new PdfPTable(1);
+            rect.setSpacingAfter(2);
+            rect.setSpacingBefore(2);
+            if (width != null) {
+                rect.setLockedWidth(true);
+                rect.setTotalWidth(width);
+            }
+            PdfPCell cell = new PdfPCell();
+            cell.setFixedHeight(height);
+            cell.setBorderWidth(0);
+            cell.setBackgroundColor(baseColor);
+            rect.addCell(cell);
+            element = rect;
         }else if(flow.getName().equals(Flow.LAYOUT_FLOW)){
 
         } else if(flow.getName().equals(Flow.CONTENT_FLOW)) {
@@ -329,14 +368,23 @@ public class PdfPrintingFlowUtil {
             element = dottedLineSeparator;
         } else if(flow.getName().equals(Flow.IMAGE_FLOW)) {
             ImageFlowData imageFlowData = (ImageFlowData) flow.getElement();
+            String url = imageFlowData.getUrl();
+            byte[] data = imageFlowData.getData();
+            float height = imageFlowData.getHeight();
+            float width = imageFlowData.getWidth();
             Image image = null;
             try {
-                image = Image.getInstance(imageFlowData.getData());
-            } catch (BadElementException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+                if (url != null) {
+                    image = Image.getInstance(url);
+                    image.scaleAbsolute(width, height);
+                } else if (data != null) {
+                    image = Image.getInstance(data);
+                    image.scaleAbsolute(width, height);
+                }
+            } catch (IOException | BadElementException e) {
                 e.printStackTrace();
             }
+
             element = image;
         }
         return element;

@@ -39,4 +39,12 @@ public class PdfExportEndpoint {
         response.getOutputStream().write(pdfExportService.export(tableName).readAllBytes());
     }
 
+    @GetMapping("/preview/{tableName}")
+    public void exportPreviewPdf(@PathVariable String tableName, HttpServletResponse response, HttpServletRequest request) throws IOException {
+        response.setContentType("application/pdf");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=\"%s-preview.pdf\"", URLEncoder.encode(tableName, StandardCharsets.UTF_8)));
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
+        // output
+        response.getOutputStream().write(pdfExportService.exportPreview(tableName).readAllBytes());
+    }
 }
