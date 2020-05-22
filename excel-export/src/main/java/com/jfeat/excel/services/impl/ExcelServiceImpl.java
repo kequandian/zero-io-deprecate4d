@@ -50,7 +50,7 @@ public class ExcelServiceImpl implements ExcelService {
 
         // export
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PoiAgentExporter.exportExcel(rowsMapList, header, null, baos);
+        PoiAgentExporter.exportExcel(rowsMapList, header, header, baos);
         return new ByteArrayInputStream(baos.toByteArray());
     }
 
