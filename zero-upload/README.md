@@ -4,7 +4,7 @@
 ---  
 ```yaml
 io:
-  fileUploadPath: "/upload-files"
+  fileUploadPath: "/images"
   fileHost: ""
   sso:
     endpoint: "http://oss-cn-shenzhen.aliyuncs.com"
@@ -15,7 +15,7 @@ io:
     thumbParam: "x-oss-process=image/resize,m_fill,h_750,w_750"
     accessUrl: "http://muaskin.oss-cn-shenzhen.aliyuncs.com/"
 ```
->/upload-files 为文件上传目录
+>/images 为文件上传目录
 
 #### docker-compose.yml 例子
 
@@ -28,9 +28,9 @@ services:
     container_name: zero-upload
     volumes:
       - ./zero-upload:/webapps
-      - ./upload-files:/upload-files
+      - ./images:/images
     ports:
       - '8080:8080'
 ```
 
->/upload-files 为文件上传目录
+>/images 为文件上传目录
