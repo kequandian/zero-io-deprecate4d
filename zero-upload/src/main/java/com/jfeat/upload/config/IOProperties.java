@@ -19,23 +19,23 @@ public class IOProperties {
 
     private String fileHost;
 
-    private SSOProperties ssoProperties = new SSOProperties();
+    private SSOProperties sso = new SSOProperties();
 
     @Data
     public class SSOProperties {
-        public String endpoint = "";
-        public String accessKeyId = "";
-        public String accessKeySecret = "";
-        public String bucketName = "";
-        public String username = "";
+        private String endpoint = "";
+        private String accessKeyId = "";
+        private String accessKeySecret = "";
+        private String bucketName = "";
+        private String username = "";
         /**
          * 图片压缩参数
          **/
-        public String thumbParam = "x-oss-process=image/resize,m_fill,h_750,w_750";
+        private String thumbParam = "x-oss-process=image/resize,m_fill,h_750,w_750";
         /**
          * 访问域名
          **/
-        public String accessUrl = "";
+        private String accessUrl = "";
     }
 
 }
