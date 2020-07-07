@@ -9,7 +9,7 @@ import com.alibaba.fastjson.JSONObject;
  */
 public interface PdfRequestService {
 
-    JSONObject getApiRequest(JSONObject apiData, JSONObject template);
+    JSONObject getApiRequest(JSONObject apiData);
 
     JSONObject getStatisticsRequest(String field, JSONObject template);
 }

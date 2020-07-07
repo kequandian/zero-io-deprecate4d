@@ -52,6 +52,28 @@ public class JsonUtil {
         return JSONObject.parseObject(sb.toString());
     }
 
+    public static JSONArray readJSONArrayFile(String fileName) {
+        String path = String.format("templates/%s.json", fileName);
+        StringBuilder sb = new StringBuilder();
+        try {
+            InputStream inputStream = new ClassPathResource(path).getInputStream();
+            BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+            String s;
+            try {
+                while ((s = in.readLine()) != null) {
+                    sb.append(s);
+                    sb.append("\n");
+                }
+            } finally {
+                in.close();
+            }
+        } catch (IOException var8) {
+            throw new RuntimeException(var8);
+        }
+
+        return JSONObject.parseArray(sb.toString());
+    }
+
     public static void main(String[] args) {
         List<String> list = Arrays.asList("${test}", "test");
 

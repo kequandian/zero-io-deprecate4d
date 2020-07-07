@@ -12,6 +12,7 @@ import com.jfeat.pdf.print.util.Fonts;
 import com.jfeat.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -140,6 +141,12 @@ public class PdfSimpleTemplatePrinter {
     public static PdfFlowRequest.Flow processFlow(JSONObject flow, PdfFlowRequest pdfFlowRequest, JSONObject request) {
         String name = flow.getString("name");
         switch (name) {
+            case "detail":
+                return processDetailFlow(flow, pdfFlowRequest, request);
+            case "newLine":
+                return new PdfFlowRequest.Flow(PdfFlowRequest.Flow.NEW_LINE);
+            case "dottedLine":
+                return new PdfFlowRequest.Flow(PdfFlowRequest.Flow.SEPARATOR_FLOW);
             case "table":
                 return processTableFlow(flow, pdfFlowRequest, request);
             case "text":
@@ -155,6 +162,60 @@ public class PdfSimpleTemplatePrinter {
             default:
                 throw new RuntimeException("错误的flow name");
         }
+    }
+
+    public static PdfFlowRequest.Flow processDetailFlow(JSONObject flow, PdfFlowRequest pdfFlowRequest, JSONObject request) {
+
+        float height = flow.getFloat("height");
+        JSONObject left = flow.getJSONObject("left");
+        JSONObject right = flow.getJSONObject("right");
+        JSONObject converts = flow.getJSONObject("converts");
+
+        List<String> leftTitles = left.getJSONArray("title").toJavaList(String.class)
+                .stream().map(v -> v + (StringUtils.isEmpty(v) ? "" : ":")).collect(Collectors.toList());
+        List<String> leftData = left.getJSONArray("data").toJavaList(String.class)
+                .stream()
+                .map(v -> v.matches(CONVERT_REGEX) ? convertDetailData(v, request.getString(v), converts) : v)
+                .collect(Collectors.toList());
+
+        List<String> rightTitles = right.getJSONArray("title").toJavaList(String.class)
+                .stream().map(v -> v + (StringUtils.isEmpty(v) ? "" : ":")).collect(Collectors.toList());
+        List<String> rightData = right.getJSONArray("data").toJavaList(String.class)
+                .stream()
+                .map(v -> v.matches(CONVERT_REGEX) ? convertDetailData(v, request.getString(v), converts) : v)
+                .collect(Collectors.toList());
+
+        PdfFlowRequest.ContentFlowData leftContentFLow = PdfFlowRequest.ContentFlowData.build()
+                .setLayout(new float[]{1, 2})
+                .setTitle(leftTitles.toArray(String[]::new))
+                .setData(leftData.toArray(String[]::new))
+                .rowFormat("default", height);
+
+        PdfFlowRequest.ContentFlowData spaceContentFLow = PdfFlowRequest.ContentFlowData.build()
+                .setLayout(new float[]{1, 2})
+                .setTitle(new String[]{""})
+                .setData(new String[]{""})
+                .rowFormat("default", height);
+
+        PdfFlowRequest.ContentFlowData rightContentFlow = PdfFlowRequest.ContentFlowData.build()
+                .setLayout(new float[]{1, 2})
+                .setTitle(rightTitles.toArray(String[]::new))
+                .setData(rightData.toArray(String[]::new))
+                .rowFormat("default", height);
+
+        PdfFlowRequest.LinearFlowData wrapper = new PdfFlowRequest.LinearFlowData(new float[]{1, 1, 1});
+        wrapper.add(leftContentFLow.flow());
+        wrapper.add(spaceContentFLow.flow());
+        wrapper.add(rightContentFlow.flow());
+        return wrapper.flow();
+    }
+
+    public static String convertDetailData(String key, String data, JSONObject converts) {
+        if (converts.containsKey(key)) {
+            JSONObject convertMap = converts.getJSONObject(key);
+            return convertMap.getString(data);
+        }
+        return data;
     }
 
     public static PdfFlowRequest.Flow processLinearFlow(JSONObject flow, PdfFlowRequest pdfFlowRequest, JSONObject request) {

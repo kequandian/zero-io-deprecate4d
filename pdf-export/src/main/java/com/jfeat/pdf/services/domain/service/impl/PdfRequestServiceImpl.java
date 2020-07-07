@@ -28,7 +28,7 @@ public class PdfRequestServiceImpl implements PdfRequestService {
     IoStatisticsService ioStatisticsService;
 
     @Override
-    public JSONObject getApiRequest(JSONObject apiData, JSONObject template) {
+    public JSONObject getApiRequest(JSONObject apiData) {
         JSONObject request = PdfSimpleTemplatePrinter.getRequest();
 
         // set up request from all api data

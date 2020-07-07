@@ -1,12 +1,12 @@
 package com.jfeat.pdf.services.gen.persistence.model;
 
-import java.io.Serializable;
-
-import com.baomidou.mybatisplus.enums.IdType;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -80,6 +80,9 @@ public class PdfTable extends Model<PdfTable> {
 	 */
 	@TableField("origin_config")
 	private String originConfig;
+
+	@TableField("sub_apis")
+	private String subApis;
 
 
 	public Long getId() {
@@ -168,6 +171,14 @@ public class PdfTable extends Model<PdfTable> {
 	public PdfTable setTemplateContent(String templateContent) {
 		this.templateContent = templateContent;
 		return this;
+	}
+
+	public String getSubApis() {
+		return subApis;
+	}
+
+	public void setSubApis(String subApis) {
+		this.subApis = subApis;
 	}
 
 	public String getOriginConfig() {

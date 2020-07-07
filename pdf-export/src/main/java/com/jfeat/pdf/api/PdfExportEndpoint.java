@@ -2,10 +2,7 @@ package com.jfeat.pdf.api;
 
 import com.jfeat.pdf.services.domain.service.PdfExportService;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -46,5 +43,14 @@ public class PdfExportEndpoint {
         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
         // output
         response.getOutputStream().write(pdfExportService.exportPreview(tableName).readAllBytes());
+    }
+
+    @GetMapping("/multiple/{tableName}")
+    public void exportMultipleApisPdf(@PathVariable String tableName, @RequestParam Long id, HttpServletResponse response, HttpServletRequest request) throws IOException {
+        response.setContentType("application/pdf");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=\"%s.pdf\"", URLEncoder.encode(tableName, StandardCharsets.UTF_8)));
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
+        // output
+        response.getOutputStream().write(pdfExportService.exportMultiApis(tableName, id).readAllBytes());
     }
 }

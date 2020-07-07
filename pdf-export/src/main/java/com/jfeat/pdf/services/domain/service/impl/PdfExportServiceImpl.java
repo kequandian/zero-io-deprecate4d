@@ -1,5 +1,6 @@
 package com.jfeat.pdf.services.domain.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfeat.crud.base.exception.BusinessCode;
 import com.jfeat.crud.base.exception.BusinessException;
@@ -100,6 +101,34 @@ public class PdfExportServiceImpl implements PdfExportService {
         return new ByteArrayInputStream(baos.toByteArray());
     }
 
+    @Override
+    public ByteArrayInputStream exportMultiApis(String tableName, Long id) {
+
+        PdfTable pdfTable = queryPdfTableDao.findPdfTableByName(tableName);
+        if (pdfTable == null) {
+            throw new BusinessException(BusinessCode.CRUD_QUERY_FAILURE, "列表名不存在");
+        }
+        // only API type
+        // API
+        String api = pdfTable.getApi() + id;
+        // authorization
+        String authorization = HttpUtil.getHttpAuthorization();
+        // api data
+        JSONObject apiData = HttpUtil.getResponse(api, authorization).getJSONObject("data");
+        // request
+        JSONObject request = pdfRequestService.getApiRequest(apiData);
+
+        // 子API
+        JSONArray subApis = JSONObject.parseArray(pdfTable.getSubApis());
+        logger.info("subApis --> {}", pdfTable.getSubApis());
+        processSubApiRequests(request, subApis, id);
+        // template content
+        JSONObject template = JSONObject.parseObject(pdfTable.getTemplateContent());
+        // export
+        ByteArrayOutputStream baos = PdfSimpleTemplatePrinter.print(template, request);
+        return new ByteArrayInputStream(baos.toByteArray());
+    }
+
     public JSONObject getApiRequest(PdfTable pdfTable) {
         // api
         String api = pdfTable.getApi();
@@ -120,9 +149,33 @@ public class PdfExportServiceImpl implements PdfExportService {
         JSONObject template = JSONObject.parseObject(pdfTable.getTemplateContent());
 
         // request
-        JSONObject request = pdfRequestService.getApiRequest(apiData, template);
+        JSONObject request = pdfRequestService.getApiRequest(apiData);
         logger.info("api request --> {}", request);
         return request;
+    }
+
+    private void processSubApiRequests(JSONObject request, JSONArray apisArray, Long id) {
+        if (apisArray != null) {
+            for (int i = 0; i < apisArray.size(); i++) {
+                JSONObject subApiJSON = apisArray.getJSONObject(i);
+                // api
+                String api = subApiJSON.getString("api") + id;
+                // Authorization
+                String authorization = HttpUtil.getHttpAuthorization();
+                // field data
+                String fieldName = subApiJSON.getString("fieldName");
+                // map name
+                String mapName = subApiJSON.getString("mapName");
+                // api data
+                Object apiData = HttpUtil.getResponse(api, authorization).get("data");
+                if (apiData instanceof JSONObject) {
+                    JSONObject fieldData = ((JSONObject) apiData).getJSONObject(fieldName);
+                    request.put(mapName, fieldData);
+                } else {
+                    request.put(mapName, apiData);
+                }
+            }
+        }
     }
 
     public JSONObject getStatisticsRequest(PdfTable pdfTable) {
@@ -174,7 +227,6 @@ public class PdfExportServiceImpl implements PdfExportService {
             api = HttpUtil.setQueryParam(api, "pageSize", pageSize);
         }
         System.out.println(api);
-        // return api;
     }
 
 }

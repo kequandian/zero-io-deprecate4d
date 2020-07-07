@@ -9,8 +9,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created on 2020/3/13.
@@ -50,6 +55,13 @@ public class HttpUtil {
         String decode = URLUtil.decode(queryString);
         System.out.println("decode --> " + decode);
         return UriComponentsBuilder.fromHttpUrl(url).query(decode).build().toString();
+    }
+
+    public static String getHttpAuthorization() {
+        // Authorization
+        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest httpRequest = ((ServletRequestAttributes) requestAttributes).getRequest();
+        return httpRequest.getHeader("Authorization");
     }
 
     public static void main(String[] args) {

@@ -11,5 +11,7 @@ public interface PdfExportService {
 
     ByteArrayInputStream export(String tableName);
 
+    ByteArrayInputStream exportMultiApis(String tableName, Long id);
+
     ByteArrayInputStream exportPreview(String tableName);
 }
