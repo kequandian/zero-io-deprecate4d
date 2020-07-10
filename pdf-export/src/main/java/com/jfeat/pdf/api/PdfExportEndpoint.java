@@ -48,7 +48,7 @@ public class PdfExportEndpoint {
     @GetMapping("/multiple/{tableName}")
     public void exportMultipleApisPdf(@PathVariable String tableName, @RequestParam Long id, HttpServletResponse response, HttpServletRequest request) throws IOException {
         response.setContentType("application/pdf");
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=\"%s.pdf\"", URLEncoder.encode(tableName, StandardCharsets.UTF_8)));
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=\"%s.pdf\"", URLEncoder.encode(tableName, StandardCharsets.UTF_8)));
         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
         // output
         response.getOutputStream().write(pdfExportService.exportMultiApis(tableName, id).readAllBytes());
