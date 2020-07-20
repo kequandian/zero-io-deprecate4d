@@ -2,9 +2,7 @@ package com.jfeat.excel.util;
 
 import cn.hutool.core.util.URLUtil;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.jfeat.poi.agent.PoiAgentExporter;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -14,10 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.util.*;
 
 /**
  * Created on 2020/4/27.
@@ -60,7 +55,7 @@ public class HttpUtil {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        String api = "http://cloud.biliya.cn/api/adm/stat/meta/teamReward?_t=1587977586112&pageNum=1&pageSize=20";
+        /* String api = "http://cloud.biliya.cn/api/adm/stat/meta/teamReward?_t=1587977586112&pageNum=1&pageSize=20";
         String authorization = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJvcmdJZCI6IjEwMDAwMDAwMDAwMDAwMDAwMSIsInVzZXJJZCI6Ijg3NjcwODA4MjQzNzE5NzgyNyIsImFjY291bnQiOiJhZG1pbiIsImlhdCI6MTU4Nzk3NDgyNSwianRpIjoiODc2NzA4MDgyNDM3MTk3ODI3Iiwic3ViIjoiYWRtaW4iLCJleHAiOjE1ODgyMzQwMjV9.tBbLszOcRs-I15w-TFEvAEuNjqF7aw8xGVf46UYjdWRsBmtDMtflzXJvrDa4jH_FDHaUNXjwfG9uHxdytD6IKg";
         JSONObject data = HttpUtil.getResponse(api, authorization).getJSONObject("data");
 
@@ -82,6 +77,13 @@ public class HttpUtil {
         }
 
         PoiAgentExporter.exportExcel(rowsMapList, header, null, new FileOutputStream(new File("excel-test.xlsx")));
+
+        System.out.println(data); */
+
+
+        String api = "http://39.108.14.206:8070/api/adm/equipment/equipments?categoryId=&activeKey=list";
+        String authorization = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ0ZW5hbnRJZCI6Ijg3NjcwODA4MjQzNzE5NzgyNCIsInVzZXJJZCI6Ijg3NjcwODA4MjQzNzE5NzgyNyIsImFjY291bnQiOiJhZG1pbiIsImlhdCI6MTU5NTIxMjUwMiwianRpIjoiODc2NzA4MDgyNDM3MTk3ODI3Iiwic3ViIjoiYWRtaW4iLCJleHAiOjE1OTU0NzE3MDJ9.9qEY1vAb20YCwQOcUoA3LUmculu2NPKFzHHDncGalHN0fRkssJIs2O8HF0-dTvTVrKsf_nFn7FgkeG0vaf-5NA";
+        JSONObject data = HttpUtil.getResponse(api, authorization).getJSONObject("data");
 
         System.out.println(data);
     }

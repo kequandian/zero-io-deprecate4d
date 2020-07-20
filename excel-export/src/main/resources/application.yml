@@ -19,3 +19,11 @@ spring:
     schema: classpath*:sql/*-schema.sql
     data: classpath*:sql/*-data.sql
     initialize: false
+
+---
+excel:
+  template-directory: "excel-templates"
+  export:
+    test:
+      api: "http://39.108.14.206:8070/api/adm/equipment/equipments?categoryId=&activeKey=list"
+      template-name: "equipment.xlsx"

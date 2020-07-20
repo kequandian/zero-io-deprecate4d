@@ -1,10 +1,17 @@
 package com.jfeat.excel.services.impl;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jfeat.excel.model.ExportParam;
+import com.jfeat.excel.properties.ExcelProperties;
 import com.jfeat.excel.services.ExcelService;
 import com.jfeat.excel.util.HttpUtil;
 import com.jfeat.poi.agent.PoiAgentExporter;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -13,6 +20,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -22,9 +30,13 @@ import java.util.*;
  */
 
 @Service
+@Slf4j
 public class ExcelServiceImpl implements ExcelService {
 
     private static final String API_PREFIX = "/api/adm/stat/meta";
+    @Autowired
+    ExcelProperties excelProperties;
+
     @Override
     public ByteArrayInputStream export(String field) {
 
@@ -52,6 +64,72 @@ public class ExcelServiceImpl implements ExcelService {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PoiAgentExporter.exportExcel(rowsMapList, header, header, baos);
         return new ByteArrayInputStream(baos.toByteArray());
+    }
+
+    @Override
+    public ByteArrayInputStream export(ExportParam exportParam) {
+
+        String exportName = exportParam.getExportName();
+        // Authorization
+        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest httpRequest = ((ServletRequestAttributes) requestAttributes).getRequest();
+        String authorization = httpRequest.getHeader("Authorization");
+        // api
+        Map<String, ExcelProperties.ExcelPojo> exportMap = excelProperties.getExport();
+        ExcelProperties.ExcelPojo excelPojo = exportMap.get(exportName);
+        String apiPath = excelPojo.getApi();
+
+        // handle page
+        apiPath = HttpUtil.setQueryParam(apiPath, "pageSize", exportParam.getPageTotal());
+        log.info("apiPath: {}", apiPath);
+        JSONObject response = HttpUtil.getResponse(apiPath, authorization);
+        JSONObject data = response.getJSONObject("data");
+        log.info("data : {}", data);
+
+        // template file
+        String templateDirectory = excelProperties.getTemplateDirectory();
+        String templateName = excelPojo.getTemplateName();
+        String templateFilePath = templateDirectory + "/" + templateName;
+        log.info("templateFilePath : {}", templateFilePath);
+
+        // handle easy poi
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            TemplateExportParams params = new TemplateExportParams(templateFilePath);
+            JSONArray records = data.getJSONArray("records");
+            Map<String, Map<String, String>> dict = exportParam.getDict();
+            log.info("template dict: {}", dict);
+            Map<String, Object> map = new HashMap<>();
+            List<Map<String, Object>> list = new ArrayList<>();
+            for (int i = 0; i < records.size(); i++) {
+                Map<String, Object> innerMap = records.getJSONObject(i).getInnerMap();
+                handleExcelDictionary(innerMap, dict);
+                list.add(records.getJSONObject(i).getInnerMap());
+            }
+            map.put("list", list);
+            Workbook workbook = ExcelExportUtil.exportExcel(params, map);
+            workbook.write(baos);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ByteArrayInputStream(baos.toByteArray());
+    }
+
+    /**
+     * 处理字典数据转换
+     * @param recordMap - 行数据
+     * @param dict      - 字典
+     */
+    private void handleExcelDictionary(Map<String, Object> recordMap,
+                                       Map<String, Map<String, String>> dict) {
+
+        recordMap.forEach((key, value) -> {
+            Map<String, String> convertMap = dict.get(key);
+            if (convertMap != null && !convertMap.isEmpty()) {
+                String convertValue = convertMap.getOrDefault(value, (String)value);
+                recordMap.put(key, convertValue);
+            }
+        });
     }
 
     private List<Map<String, String>> getRowsMapList(JSONArray rows) {
