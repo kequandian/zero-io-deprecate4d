@@ -141,15 +141,25 @@ public class TextBox extends Rectangle implements ListRow {
         //String[] lines = new String[] {content.substring(0,5), content.substring(6,content.length())};
 
 
+        float boxHeight = getHeight();
+        int textTotalHeight = 0, limitContentLen = 0, k;
+        for (int i = 1; i <= contentLen; i++) {
+            if ((k = (stringHeight * i + stringYOffset * (i - 1))) > boxHeight) {
+                break;
+            }
+            limitContentLen++;
+            textTotalHeight = k;
+        }
 
-        for(int i=0; i < contentLen; i++) {
+        logger.info("boxHeight {}", boxHeight);
+        logger.info("textTotalHeight {}", textTotalHeight);
+        logger.info("limitContentLen : {}", limitContentLen);
+
+        float offset = (boxHeight - textTotalHeight) * 0.5f;
+        for(int i=0; i < limitContentLen; i++) {
             String text = lines[i];
-
-            float cellHeight = getHeight();
-            int textTotalHeight = stringHeight * contentLen + stringYOffset * (contentLen-1);
-            float offset = (getHeight() - textTotalHeight)*0.5f;
-
-            float ty = verticalAlignment == Element.ALIGN_TOP ? getTop() : getTop() - offset - stringHeight*0.5f - ( stringHeight*i + stringYOffset*i );
+            float ty = verticalAlignment == Element.ALIGN_TOP ? getTop() :
+                    getTop() - offset - stringHeight*0.5f - ( stringHeight*i + stringYOffset*i);
             ty -= stringHeight * 0.5f;  // offset string vertical center
 
             //float ty_old = (getTop() + getBottom()) * 0.5f - stringHeight * 0.5f;
@@ -180,12 +190,12 @@ public class TextBox extends Rectangle implements ListRow {
 
         int i = 0, j = 0, currWidth = 0;
         while (i < len) {
-            int charWidth = metrics.getStringWidth(String.valueOf(content.charAt(i))) ;
+            int charWidth = metrics.getStringWidth(String.valueOf(content.charAt(i)));
             if (charWidth > totalWidth) {
                 throw new RuntimeException("字符宽度不能大于限定框宽度");
             }
             currWidth += charWidth;
-            logger.info("curWidth total --> {}, {}", currWidth, totalWidth);
+            // logger.info("curWidth total --> {}, {}", currWidth, totalWidth);
             if (currWidth > totalWidth) {
                 lines.add(content.substring(j, i));
                 j = i;
