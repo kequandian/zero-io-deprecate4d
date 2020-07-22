@@ -308,6 +308,8 @@ public class PdfSimpleTemplatePrinter {
         for (int i = 0; i < size; i++) { layout[i] = columnWidths.get(i); }
         // height
         float height = flow.getFloat("height");
+        // align
+        int align = flow.getInteger("align");
         // title
         List<String> title = flow.getJSONArray("title").toJavaList(String.class);
         // data
@@ -321,10 +323,12 @@ public class PdfSimpleTemplatePrinter {
             return item;
         }).collect(Collectors.toList());
 
+        logger.info("template align : {}", align);
         PdfFlowRequest.ContentFlowData contentFlowData = PdfFlowRequest.ContentFlowData.build()
                 .rowFormat("default", height)
                 .setTitle(title.toArray(String[]::new))
                 .setData(data.toArray(String[]::new))
+                .setAlign(align)
                 .setLayout(layout);
 
         return contentFlowData.flow();

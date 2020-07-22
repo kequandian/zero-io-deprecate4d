@@ -26,6 +26,8 @@ public class TextBox extends Rectangle implements ListRow {
     private Font font;
     private int alignment = Element.ALIGN_CENTER;
 
+    private int verticalAlignment = Element.ALIGN_MIDDLE;
+
     private AccessibleElementId cellId;
 
     public TextBox(){
@@ -35,6 +37,12 @@ public class TextBox extends Rectangle implements ListRow {
     public TextBox(int alignment){
         super(0,0,0,0);
         this.alignment = alignment;
+    }
+
+    public TextBox(int alignment, int verticalAlignment) {
+        super(0, 0, 0, 0);
+        this.alignment = alignment;
+        this.verticalAlignment = verticalAlignment;
     }
 
     public TextBox(String content, Font font){
@@ -141,7 +149,7 @@ public class TextBox extends Rectangle implements ListRow {
             int textTotalHeight = stringHeight * contentLen + stringYOffset * (contentLen-1);
             float offset = (getHeight() - textTotalHeight)*0.5f;
 
-            float ty = getTop() - offset - stringHeight*0.5f - ( stringHeight*i + stringYOffset*i );
+            float ty = verticalAlignment == Element.ALIGN_TOP ? getTop() : getTop() - offset - stringHeight*0.5f - ( stringHeight*i + stringYOffset*i );
             ty -= stringHeight * 0.5f;  // offset string vertical center
 
             //float ty_old = (getTop() + getBottom()) * 0.5f - stringHeight * 0.5f;

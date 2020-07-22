@@ -339,7 +339,6 @@ public class PdfPrintingFlowUtil {
             ContentFlowBuilder builder = new ContentFlowBuilder();
             builder.title();
             builder.columnWidths(flowData.getLayout().getColumnWidths());
-
             // set format
             if(flowData.getFormat() != null) {
                 // set row
@@ -351,6 +350,7 @@ public class PdfPrintingFlowUtil {
                 // rows()
                 builder.titles(flowData.getTitle());
                 builder.lines(flowData.getData());
+                builder.align(flowData.getAlign());
             }
             TableFlow tableFlow = builder.build();
             tableFlow.draw(canvas);

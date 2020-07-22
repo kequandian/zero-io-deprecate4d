@@ -7,6 +7,8 @@ import com.jfeat.pdf.print.base.ListRow;
 import com.jfeat.pdf.print.element.TextBox;
 import com.jfeat.pdf.print.util.ChineseFont;
 import com.jfeat.pdf.print.util.Fonts;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ import static com.itextpdf.text.Font.NORMAL;
  */
 public class ContentFlowBuilder {
 
+    protected final static Logger logger = LoggerFactory.getLogger(ContentFlowBuilder.class);
+
     private boolean title;
     private float contentHeight;
     private Font contentFormat;
@@ -28,6 +32,7 @@ public class ContentFlowBuilder {
     private String [] titles;
     private float[] columnWidths;
     private String[] lines;
+    private int align;
 
     public ContentFlowBuilder(){
     }
@@ -82,21 +87,29 @@ public class ContentFlowBuilder {
         return this;
     }
 
+    public ContentFlowBuilder align(int align) {
+        this.align = align;
+        return this;
+    }
+
     public TableFlow build(){
         if(contentHeight<=0){
             throw new RuntimeException("contentHeight must be set!");
         }
+
         TableFlow report = new TableFlow();
         report.setColumnWidths(columnWidths);
         report.setBorderStyle(Rectangle.NO_BORDER);
         report.setRowHeight(contentHeight);
         report.setWidthPercentage(100);
+        int verticalAlign = this.align;
 
+        logger.info("content flow verticalAlign : {}", verticalAlign);
         List<ListRow> listRows = new ArrayList<>();
 
         for (int i = 0; i< lines.length; i++){
             String line = lines[i];
-            TextBox lineRow = new TextBox(Element.ALIGN_LEFT);
+            TextBox lineRow = new TextBox(Element.ALIGN_LEFT, verticalAlign);
             if(numberFormat != null && line.matches("^\\d+$")) {
                 lineRow.setContent(line, numberFormat);
             }else{
@@ -105,7 +118,7 @@ public class ContentFlowBuilder {
 
             if(titles!=null){
                 String title = titles[i];
-                TextBox titleRow = new TextBox(Element.ALIGN_LEFT);
+                TextBox titleRow = new TextBox(Element.ALIGN_LEFT, verticalAlign);
                 if(numberFormat != null && title.matches("^\\d+$")) {
                     titleRow.setContent(title, numberFormat);
                 }else{
