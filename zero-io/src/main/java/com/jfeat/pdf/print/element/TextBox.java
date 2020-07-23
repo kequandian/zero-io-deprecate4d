@@ -223,13 +223,14 @@ public class TextBox extends Rectangle implements ListRow {
         // 超出限定框高度限制
         if (!lines.isEmpty() && lines.size() > maxLine) {
             logger.debug("超出限定框高度限制");
+            // 删除超出高度的行
             lines = lines.subList(0, maxLine);
+            String last = null;
             // 最后一行省略号
-            String last = lines.remove(maxLine - 1);
-            if (!last.isEmpty() && last.length() > 4) {
+            if (!lines.isEmpty() && (last = lines.remove(maxLine - 1)).length() > 4) {
                 last = StrUtil.subPre(last, last.length() - 4) + "……";
+                lines.add(last);
             }
-            lines.add(last);
             logger.info("last line : {}", last);
         }
 
