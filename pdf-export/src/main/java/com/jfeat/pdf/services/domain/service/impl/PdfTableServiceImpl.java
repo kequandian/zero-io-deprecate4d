@@ -2,7 +2,6 @@ package com.jfeat.pdf.services.domain.service.impl;
 
 import com.jfeat.pdf.services.domain.service.PdfTableService;
 import com.jfeat.pdf.services.gen.crud.service.impl.CRUDPdfTableServiceImpl;
-import com.jfeat.pdf.services.gen.persistence.model.PdfTable;
 import org.springframework.stereotype.Service;
 
 /**

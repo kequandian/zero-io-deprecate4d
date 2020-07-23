@@ -36,21 +36,32 @@ public class PdfFontMetrics {
 
         String temp_font = "wqy-microhei";
         this.ifont = ifont;
-        logger.info("name: {} style: {} size: {}", ifont.getFamilyname(), ifont.getStyle(), ifont.getSize());
+        /// logger.info("name: {} style: {} size: {}", ifont.getFamilyname(), ifont.getStyle(), ifont.getSize());
         //java.awt.Font font = new java.awt.Font(ifont.getFamilyname(), ifont.getStyle(), (int) ifont.getSize());
         // 临时设置字体
+        // 使用 awt
         java.awt.Font font = new java.awt.Font(temp_font, ifont.getStyle(), (int) ifont.getSize());
 
         PdfGraphics2D graphics2D = createGraphics2D(canvas);
         graphics2D.setFont(font);
         fontMetrics = graphics2D.getFontMetrics(font);
+
+        logger.info("name: {} style: {} size: {}", ifont.getFamilyname(), ifont.getStyle(), ifont.getSize());
         logger.info("chinese width --> {}, letter width --> {}", fontMetrics.stringWidth("测"), fontMetrics.stringWidth("A"));
+        float width1 = ifont.getCalculatedBaseFont(true).getWidthPoint("测", ifont.getCalculatedSize());
+        float width2 = ifont.getCalculatedBaseFont(true).getWidthPoint("A", ifont.getCalculatedSize());
+        logger.info("chinese width --> {}, letter width --> {}", width1, width2);
 
         graphics2D.dispose();
     }
 
     public int getStringWidth(String content){
         return fontMetrics.stringWidth(content);
+    }
+
+    public int getFontStringWidth(String content) {
+        return Math.round(ifont.getCalculatedBaseFont(true)
+                .getWidthPoint(content, ifont.getCalculatedSize()));
     }
 
     public int getStringHeight(){

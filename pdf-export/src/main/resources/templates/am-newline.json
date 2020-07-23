@@ -1,0 +1,71 @@
+{
+  "flows": [
+    {
+      "name": "table",
+      "columnKeyBindings": [
+        {
+          "column": "步骤名称",
+          "key": "stepName",
+          "columnWidth": 1,
+          "visible": true
+        },
+        {
+          "column": "经办人",
+          "key": "userName",
+          "columnWidth": 1,
+          "visible": true
+        },
+        {
+          "column": "处理结果",
+          "key": "result",
+          "columnWidth": 1,
+          "visible": true
+        },
+        {
+          "column": "处理意见",
+          "key": "comment",
+          "columnWidth": 4,
+          "visible": true
+        },
+        {
+          "column": "处理时间",
+          "key": "handleTime",
+          "columnWidth": 1,
+          "visible": true
+        },
+        {
+          "column": "文件信息",
+          "key": "equipmentSupplier",
+          "columnWidth": 1,
+          "visible": true
+        }
+      ],
+      "header": [],
+      "data": "${histories}",
+      "converts": {
+        "result": {
+          "HANDLED_REJECTED": "审核不通过",
+          "INITED": "起草拟稿"
+        }
+      },
+      "rowHeight": 60,
+      "headerHeight": 40,
+      "headerFormat": {
+        "size": "9"
+      },
+      "rowsFormat": {
+        "size": 9
+      }
+    },
+    {
+      "name": "text",
+      "data": "测试",
+      "height": "20"
+    }
+  ],
+  "page": {
+    "pageName": "A4",
+    "rotate": false,
+    "margin": "40"
+  }
+}

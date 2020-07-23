@@ -1,5 +1,6 @@
 package com.jfeat.pdf.print.element;
 
+import cn.hutool.core.util.StrUtil;
 import com.itextpdf.awt.AsianFontMapper;
 import com.itextpdf.awt.FontMapper;
 import com.itextpdf.awt.PdfGraphics2D;
@@ -135,31 +136,37 @@ public class TextBox extends Rectangle implements ListRow {
         final int stringYOffset = 4;
 
         // get text array
-        String[] lines = alignUpPosition(metrics, content, this);
+        List<String> lines = alignUpPosition(metrics, content, this);
 
-        int contentLen = lines.length;
+        int contentLen = lines.size();
         //String[] lines = new String[] {content.substring(0,5), content.substring(6,content.length())};
 
 
         float boxHeight = getHeight();
-        int textTotalHeight = 0, limitContentLen = 0, k;
+        /*int textTotalHeight = 0, limitContentLen = 0, k;
         for (int i = 1; i <= contentLen; i++) {
             if ((k = (stringHeight * i + stringYOffset * (i - 1))) > boxHeight) {
                 break;
             }
             limitContentLen++;
             textTotalHeight = k;
-        }
+        }*/
+
+
+        /// logger.info("textTotalHeight {}", textTotalHeight);
+        /// logger.info("limitContentLen : {}", limitContentLen);
+        int textTotalHeight = stringHeight * contentLen + stringYOffset * (contentLen - 1);
+        float offset = (boxHeight - textTotalHeight) * 0.5f;
 
         logger.info("boxHeight {}", boxHeight);
+        logger.info("stringHeight {}", stringHeight);
         logger.info("textTotalHeight {}", textTotalHeight);
-        logger.info("limitContentLen : {}", limitContentLen);
+        logger.info("offset {}", offset);
 
-        float offset = (boxHeight - textTotalHeight) * 0.5f;
-        for(int i=0; i < limitContentLen; i++) {
-            String text = lines[i];
+        for (int i = 0; i < contentLen; i++) {
+            String text = lines.get(i);
             float ty = verticalAlignment == Element.ALIGN_TOP ? getTop() :
-                    getTop() - offset - stringHeight*0.5f - ( stringHeight*i + stringYOffset*i);
+                    getTop() - offset - stringHeight * 0.5f - (stringHeight * i + stringYOffset * i);
             ty -= stringHeight * 0.5f;  // offset string vertical center
 
             //float ty_old = (getTop() + getBottom()) * 0.5f - stringHeight * 0.5f;
@@ -178,24 +185,30 @@ public class TextBox extends Rectangle implements ListRow {
      * @param position  矩形位置
      * @return
      */
-    public static String[] alignUpPosition(PdfFontMetrics metrics, String content, Rectangle position){
-
-        if(content.contains("亮")){
-            "".toUpperCase();
-        }
+    public static List<String> alignUpPosition(PdfFontMetrics metrics, String content, Rectangle position){
 
         float totalWidth = position.getWidth();
+        float totalHeight = position.getHeight();
+        logger.info("totalWidth : {}, totalHeight : {}", totalWidth, totalHeight);
+        // 垂直间距
+        int verticalOffset = 4;
+        int stringHeight = metrics.getStringHeight();
+        // 预计算高度, 最大行数
+        int maxLine = (int) Math.floor
+                ((totalHeight + verticalOffset) / (stringHeight + verticalOffset));
+
         List<String> lines = new ArrayList<>();
         int len = content.length();
 
         int i = 0, j = 0, currWidth = 0;
         while (i < len) {
-            int charWidth = metrics.getStringWidth(String.valueOf(content.charAt(i)));
+            int charWidth = metrics.getFontStringWidth(String.valueOf(content.charAt(i)));
             if (charWidth > totalWidth) {
                 throw new RuntimeException("字符宽度不能大于限定框宽度");
             }
             currWidth += charWidth;
-            // logger.info("curWidth total --> {}, {}", currWidth, totalWidth);
+            /// logger.info("curWidth total --> {}, {}", currWidth, totalWidth);
+            logger.info("charWidth : {}", charWidth);
             if (currWidth > totalWidth) {
                 lines.add(content.substring(j, i));
                 j = i;
@@ -207,7 +220,25 @@ public class TextBox extends Rectangle implements ListRow {
         // 最后一行
         lines.add(content.substring(j));
 
-        return lines.toArray(String[]::new);
+        // 超出限定框高度限制
+        if (!lines.isEmpty() && lines.size() > maxLine) {
+            logger.debug("超出限定框高度限制");
+            lines = lines.subList(0, maxLine);
+            // 最后一行省略号
+            String last = lines.remove(maxLine - 1);
+            if (!last.isEmpty() && last.length() > 4) {
+                last = StrUtil.subPre(last, last.length() - 4) + "……";
+            }
+            lines.add(last);
+            logger.info("last line : {}", last);
+        }
+
+        logger.info("lines size: {}", lines.size());
+        logger.info("lines array : {}", lines);
+        logger.info("metrics.getStringWidth(content) : {}", metrics.getFontStringWidth(content));
+        logger.info("totalWidth: {}", totalWidth);
+
+        return lines;
     }
 
 

@@ -113,6 +113,8 @@ public class PdfExportServiceImpl implements PdfExportService {
         String api = pdfTable.getApi() + id;
         // authorization
         String authorization = HttpUtil.getHttpAuthorization();
+        logger.info("api : {}", api);
+        logger.info("authorization: {}", authorization);
         // api data
         JSONObject apiData = HttpUtil.getResponse(api, authorization).getJSONObject("data");
         // request
@@ -215,18 +217,5 @@ public class PdfExportServiceImpl implements PdfExportService {
         return api;
     }
 
-    public static void main(String[] args) {
-        String api = "http://47.112.34.149/api/crud/project/projects";
-        String auth = "";
-        // get pageSize
-        String pageSize = HttpUtil.getQueryParam(api, "pageSize");
-        // setPageSize
-        if (pageSize == null) {
-            // pageSize = requestForPageSize(api, auth);
-            pageSize = "20";
-            api = HttpUtil.setQueryParam(api, "pageSize", pageSize);
-        }
-        System.out.println(api);
-    }
 
 }

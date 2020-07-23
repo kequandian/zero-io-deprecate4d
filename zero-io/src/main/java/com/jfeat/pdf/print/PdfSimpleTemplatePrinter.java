@@ -409,7 +409,8 @@ public class PdfSimpleTemplatePrinter {
         if (rowsFormat != null) {
             rowsFormatName = "rowsFormat";
             Float formatSize = rowsFormat.getFloat("size");
-            fonts.put(rowsFormatName, new FontDefinition(Fonts.Definition.SONG.toString(), formatSize, FontDefinition.BOLD, ColorDefinition.BLACK));
+            logger.info("rowsFormat size = {}", formatSize);
+            fonts.put(rowsFormatName, new FontDefinition(Fonts.Definition.SONG.toString(), formatSize, FontDefinition.NORMAL, ColorDefinition.BLACK));
         }
         if (headerFormat != null) {
             headerFormatName = "headerFormat";
