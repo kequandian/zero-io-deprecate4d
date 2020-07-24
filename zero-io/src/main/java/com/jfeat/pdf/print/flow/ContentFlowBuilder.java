@@ -32,7 +32,8 @@ public class ContentFlowBuilder {
     private String [] titles;
     private float[] columnWidths;
     private String[] lines;
-    private int align;
+    private int verticalAlign = Element.ALIGN_MIDDLE;
+    private int horizontalAlign = Element.ALIGN_LEFT;
 
     public ContentFlowBuilder(){
     }
@@ -87,8 +88,13 @@ public class ContentFlowBuilder {
         return this;
     }
 
-    public ContentFlowBuilder align(int align) {
-        this.align = align;
+    public ContentFlowBuilder verticalAlign(int align) {
+        this.verticalAlign = align;
+        return this;
+    }
+
+    public ContentFlowBuilder horizontalAlign(int horizontalAlign) {
+        this.horizontalAlign = horizontalAlign;
         return this;
     }
 
@@ -102,14 +108,22 @@ public class ContentFlowBuilder {
         report.setBorderStyle(Rectangle.NO_BORDER);
         report.setRowHeight(contentHeight);
         report.setWidthPercentage(100);
-        int verticalAlign = this.align;
 
         logger.info("content flow verticalAlign : {}", verticalAlign);
+        logger.info("content flow horizontalAlign : {}", horizontalAlign);
+        logger.info("content flow numberFormat : {}", numberFormat);
+        logger.info("content flow contentFormat : {}", contentFormat);
         List<ListRow> listRows = new ArrayList<>();
-
+        // 标题字体样式 加粗
+        ChineseFont titleFormat = new ChineseFont(contentFormat.getFamilyname(), contentFormat.getSize(), Font.BOLD, BaseColor.BLACK);
         for (int i = 0; i< lines.length; i++){
             String line = lines[i];
+            // 内容始终左对齐
             TextBox lineRow = new TextBox(Element.ALIGN_LEFT, verticalAlign);
+            // 标题右对齐则需要增加空格间隔
+            if (Element.ALIGN_RIGHT == horizontalAlign) {
+                line = "  " + line;
+            }
             if(numberFormat != null && line.matches("^\\d+$")) {
                 lineRow.setContent(line, numberFormat);
             }else{
@@ -118,11 +132,11 @@ public class ContentFlowBuilder {
 
             if(titles!=null){
                 String title = titles[i];
-                TextBox titleRow = new TextBox(Element.ALIGN_LEFT, verticalAlign);
+                TextBox titleRow = new TextBox(horizontalAlign, verticalAlign);
                 if(numberFormat != null && title.matches("^\\d+$")) {
                     titleRow.setContent(title, numberFormat);
                 }else{
-                    titleRow.setContent(title, contentFormat);
+                    titleRow.setContent(title, titleFormat);
                 }
 
                 listRows.add(titleRow);

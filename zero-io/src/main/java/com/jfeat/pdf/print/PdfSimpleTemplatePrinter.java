@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
 import com.jfeat.pdf.print.base.BorderDefinition;
 import com.jfeat.pdf.print.base.ColorDefinition;
 import com.jfeat.pdf.print.base.FontDefinition;
@@ -171,6 +172,7 @@ public class PdfSimpleTemplatePrinter {
         JSONObject right = flow.getJSONObject("right");
         JSONObject converts = flow.getJSONObject("converts");
 
+        String horizontalAlign = flow.getString("horizontalAlign");
         JSONArray columnWidths = flow.getJSONArray("columnWidths");
         JSONArray subColumnWidths = flow.getJSONArray("subColumnWidths");
 
@@ -201,11 +203,28 @@ public class PdfSimpleTemplatePrinter {
             subColumnWidthLayout = JsonUtil.toFloatArray(floats);
         }
 
+        int horizontalAlignValue = Element.ALIGN_LEFT;
+        if (horizontalAlign != null) {
+            switch (horizontalAlign) {
+                case "RIGHT":
+                    horizontalAlignValue = Element.ALIGN_RIGHT;
+                    break;
+                case "MIDDLE":
+                    horizontalAlignValue = Element.ALIGN_MIDDLE;
+                    break;
+                case "LEFT":
+                default:
+                    horizontalAlignValue = Element.ALIGN_LEFT;
+                    break;
+            }
+        }
+
 
         PdfFlowRequest.ContentFlowData leftContentFLow = PdfFlowRequest.ContentFlowData.build()
                 .setLayout(subColumnWidthLayout)
                 .setTitle(leftTitles.toArray(String[]::new))
                 .setData(leftData.toArray(String[]::new))
+                .setHorizontalAlign(horizontalAlignValue)
                 .rowFormat("default", height);
 
         PdfFlowRequest.ContentFlowData spaceContentFLow = PdfFlowRequest.ContentFlowData.build()
@@ -218,6 +237,7 @@ public class PdfSimpleTemplatePrinter {
                 .setLayout(subColumnWidthLayout)
                 .setTitle(rightTitles.toArray(String[]::new))
                 .setData(rightData.toArray(String[]::new))
+                .setHorizontalAlign(horizontalAlignValue)
                 .rowFormat("default", height);
 
         logger.info("subColumnWidthLayout : " + Arrays.toString(subColumnWidthLayout));
@@ -280,8 +300,8 @@ public class PdfSimpleTemplatePrinter {
 
         PdfFlowRequest.ContentFlowData contentFlowData = PdfFlowRequest.ContentFlowData.build()
                 .setLayout(new float[]{1})
-                .setTitle(new String[]{data})
-                .setData(new String[]{""})
+                .setTitle(new String[]{""})
+                .setData(new String[]{data})
                 .rowFormat("default", height);
 
         return contentFlowData.flow();
@@ -326,8 +346,10 @@ public class PdfSimpleTemplatePrinter {
         for (int i = 0; i < size; i++) { layout[i] = columnWidths.get(i); }
         // height
         float height = flow.getFloat("height");
-        // align
-        int align = flow.getInteger("align");
+        // 垂直对齐
+        String verticalAlign = flow.getString("verticalAlign");
+        // 水平对齐
+        String horizontalAlign = flow.getString("horizontalAlign");
         // title
         List<String> title = flow.getJSONArray("title").toJavaList(String.class);
         // data
@@ -341,12 +363,43 @@ public class PdfSimpleTemplatePrinter {
             return item;
         }).collect(Collectors.toList());
 
-        logger.info("template align : {}", align);
+        int horizontalAlignValue = Element.ALIGN_LEFT;
+        if (horizontalAlign != null) {
+            switch (horizontalAlign) {
+                case "RIGHT":
+                    horizontalAlignValue = Element.ALIGN_RIGHT;
+                    break;
+                case "MIDDLE":
+                    horizontalAlignValue = Element.ALIGN_MIDDLE;
+                    break;
+                case "LEFT":
+                default:
+                    horizontalAlignValue = Element.ALIGN_LEFT;
+                    break;
+            }
+        }
+
+        int verticalAlignValue = Element.ALIGN_CENTER;
+        if (verticalAlign != null) {
+            switch (verticalAlign) {
+                case "TOP":
+                    verticalAlignValue = Element.ALIGN_TOP;
+                    break;
+                case "CENTER":
+                default:
+                    verticalAlignValue = Element.ALIGN_CENTER;
+                    break;
+            }
+        }
+
+        logger.info("content  vertical align : {}", verticalAlign);
+        logger.info("content  horizontal align : {}", horizontalAlign);
         PdfFlowRequest.ContentFlowData contentFlowData = PdfFlowRequest.ContentFlowData.build()
                 .rowFormat("default", height)
                 .setTitle(title.toArray(String[]::new))
                 .setData(data.toArray(String[]::new))
-                .setVerticalAlign(align)
+                .setVerticalAlign(verticalAlignValue)
+                .setHorizontalAlign(horizontalAlignValue)
                 .setLayout(layout);
 
         return contentFlowData.flow();

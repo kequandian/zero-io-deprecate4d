@@ -25,7 +25,7 @@ public class TextBox extends Rectangle implements ListRow {
 
     private String content;
     private Font font;
-    private int alignment = Element.ALIGN_CENTER;
+    private int horizontalAlignment = Element.ALIGN_CENTER;
 
     private int verticalAlignment = Element.ALIGN_MIDDLE;
 
@@ -35,14 +35,14 @@ public class TextBox extends Rectangle implements ListRow {
         super(0,0,0,0);
     }
 
-    public TextBox(int alignment){
+    public TextBox(int horizontalAlignment){
         super(0,0,0,0);
-        this.alignment = alignment;
+        this.horizontalAlignment = horizontalAlignment;
     }
 
-    public TextBox(int alignment, int verticalAlignment) {
+    public TextBox(int horizontalAlignment, int verticalAlignment) {
         super(0, 0, 0, 0);
-        this.alignment = alignment;
+        this.horizontalAlignment = horizontalAlignment;
         this.verticalAlignment = verticalAlignment;
     }
 
@@ -52,11 +52,11 @@ public class TextBox extends Rectangle implements ListRow {
         this.font = font;
     }
 
-    public TextBox(String content, Font font, int alignment){
+    public TextBox(String content, Font font, int horizontalAlignment){
         super(0,0,0,0);
         this.content = content;
         this.font = font;
-        this.alignment = alignment;
+        this.horizontalAlignment = horizontalAlignment;
     }
 
     public TextBox(Rectangle position, String content, Font font){
@@ -130,7 +130,20 @@ public class TextBox extends Rectangle implements ListRow {
 
         ///draw text
         canvas.saveState();
-        float tx = alignment == Element.ALIGN_LEFT ? getLeft() : (getLeft()+getRight())*0.5f;  // else ALIGN_CENTER
+
+        float tx;
+        switch (horizontalAlignment) {
+            case Element.ALIGN_LEFT:
+                tx = getLeft();
+                break;
+            case Element.ALIGN_RIGHT:
+                tx = getRight();
+                break;
+            case Element.ALIGN_CENTER:
+            default: // else ALIGN_CENTER
+                tx = (getLeft() + getRight()) * 0.5f;
+                break;
+        }
 
         // int contentLen = (int)(stringWidth / getWidth()) + (stringWidth%getWidth()>0?1:0);
         final int stringYOffset = 4;
@@ -171,7 +184,7 @@ public class TextBox extends Rectangle implements ListRow {
 
             //float ty_old = (getTop() + getBottom()) * 0.5f - stringHeight * 0.5f;
 
-            ColumnText.showTextAligned(canvas, alignment, new Phrase(text, font), tx, ty, 0);
+            ColumnText.showTextAligned(canvas, horizontalAlignment, new Phrase(text, font), tx, ty, 0);
         }
 
         canvas.restoreState();

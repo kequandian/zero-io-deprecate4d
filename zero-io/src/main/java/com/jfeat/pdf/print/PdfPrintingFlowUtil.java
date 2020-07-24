@@ -350,7 +350,8 @@ public class PdfPrintingFlowUtil {
                 // rows()
                 builder.titles(flowData.getTitle());
                 builder.lines(flowData.getData());
-                builder.align(flowData.getVerticalAlign());
+                builder.verticalAlign(flowData.getVerticalAlign());
+                builder.horizontalAlign(flowData.getHorizontalAlign());
             }
             TableFlow tableFlow = builder.build();
             tableFlow.draw(canvas);
