@@ -227,8 +227,8 @@ public class TextBox extends Rectangle implements ListRow {
             lines = lines.subList(0, maxLine);
             String last = null;
             // 最后一行省略号
-            if (!lines.isEmpty() && (last = lines.remove(maxLine - 1)).length() > 4) {
-                last = StrUtil.subPre(last, last.length() - 4) + "……";
+            if (!lines.isEmpty() && (last = lines.remove(maxLine - 1)).length() > 3) {
+                last = StrUtil.subPre(last, last.length() - 3) + "...";
                 lines.add(last);
             }
             logger.info("last line : {}", last);
