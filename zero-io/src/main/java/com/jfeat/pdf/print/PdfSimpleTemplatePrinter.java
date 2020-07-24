@@ -171,6 +171,9 @@ public class PdfSimpleTemplatePrinter {
         JSONObject right = flow.getJSONObject("right");
         JSONObject converts = flow.getJSONObject("converts");
 
+        JSONArray columnWidths = flow.getJSONArray("columnWidths");
+        JSONArray subColumnWidths = flow.getJSONArray("subColumnWidths");
+
         List<String> leftTitles = left.getJSONArray("title").toJavaList(String.class)
                 .stream().map(v -> v + (StringUtils.isEmpty(v) ? "" : ":")).collect(Collectors.toList());
         List<String> leftData = left.getJSONArray("data").toJavaList(String.class)
@@ -185,25 +188,40 @@ public class PdfSimpleTemplatePrinter {
                 .map(v -> v.matches(CONVERT_REGEX) ? convertDetailData(v, request.getString(v), converts) : v)
                 .collect(Collectors.toList());
 
+        // 默认宽度比
+        float[] columnWidthLayout = {1, 1, 1};
+        float[] subColumnWidthLayout = {1, 2};
+
+        if (columnWidths != null) {
+            List<Float> floats = columnWidths.toJavaList(Float.class);
+            columnWidthLayout = JsonUtil.toFloatArray(floats);
+        }
+        if (subColumnWidths != null) {
+            List<Float> floats = subColumnWidths.toJavaList(Float.class);
+            subColumnWidthLayout = JsonUtil.toFloatArray(floats);
+        }
+
+
         PdfFlowRequest.ContentFlowData leftContentFLow = PdfFlowRequest.ContentFlowData.build()
-                .setLayout(new float[]{1, 2})
+                .setLayout(subColumnWidthLayout)
                 .setTitle(leftTitles.toArray(String[]::new))
                 .setData(leftData.toArray(String[]::new))
                 .rowFormat("default", height);
 
         PdfFlowRequest.ContentFlowData spaceContentFLow = PdfFlowRequest.ContentFlowData.build()
-                .setLayout(new float[]{1, 2})
+                .setLayout(subColumnWidthLayout)
                 .setTitle(new String[]{""})
                 .setData(new String[]{""})
                 .rowFormat("default", height);
 
         PdfFlowRequest.ContentFlowData rightContentFlow = PdfFlowRequest.ContentFlowData.build()
-                .setLayout(new float[]{1, 2})
+                .setLayout(subColumnWidthLayout)
                 .setTitle(rightTitles.toArray(String[]::new))
                 .setData(rightData.toArray(String[]::new))
                 .rowFormat("default", height);
 
-        PdfFlowRequest.LinearFlowData wrapper = new PdfFlowRequest.LinearFlowData(new float[]{1, 1, 1});
+        logger.info("subColumnWidthLayout : " + Arrays.toString(subColumnWidthLayout));
+        PdfFlowRequest.LinearFlowData wrapper = new PdfFlowRequest.LinearFlowData(columnWidthLayout);
         wrapper.add(leftContentFLow.flow());
         wrapper.add(spaceContentFLow.flow());
         wrapper.add(rightContentFlow.flow());
@@ -328,7 +346,7 @@ public class PdfSimpleTemplatePrinter {
                 .rowFormat("default", height)
                 .setTitle(title.toArray(String[]::new))
                 .setData(data.toArray(String[]::new))
-                .setAlign(align)
+                .setVerticalAlign(align)
                 .setLayout(layout);
 
         return contentFlowData.flow();

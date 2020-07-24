@@ -27,6 +27,16 @@ public class JsonUtil {
         return jsonArray == null ? null : jsonArray.toJavaList(clazz);
     }
 
+    public static float[] toFloatArray(List<Float> floatList) {
+        float[] floatArray = new float[floatList.size()];
+        int i = 0;
+
+        for (Float f : floatList) {
+            floatArray[i++] = (f != null ? f : Float.NaN); // Or whatever default you want.
+        }
+        return floatArray;
+    }
+
     /**
      * 获取测试模版文件
      */

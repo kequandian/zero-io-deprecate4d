@@ -457,7 +457,8 @@ public class PdfFlowRequest {
         private RowFormat format;
         private String[] title;
         private String[] data;
-        private int align;
+        private int verticalAlign;
+        private int horizontalAlign;
 
         @Override
         public Flow flow() {
@@ -511,12 +512,21 @@ public class PdfFlowRequest {
             return this;
         }
 
-        public int getAlign() {
-            return align;
+        public int getVerticalAlign() {
+            return verticalAlign;
         }
 
-        public ContentFlowData setAlign(int align) {
-            this.align = align;
+        public ContentFlowData setVerticalAlign(int verticalAlign) {
+            this.verticalAlign = verticalAlign;
+            return this;
+        }
+
+        public int getHorizontalAlign() {
+            return horizontalAlign;
+        }
+
+        public ContentFlowData setHorizontalAlign(int horizontalAlign) {
+            this.horizontalAlign = horizontalAlign;
             return this;
         }
     }
