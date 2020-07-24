@@ -84,6 +84,12 @@ public class PdfTable extends Model<PdfTable> {
 	@TableField("sub_apis")
 	private String subApis;
 
+	/**
+	 * 模版形式 （0=数据库， 1=文件）
+	 */
+	@TableField("template_type")
+	private Integer templateType;
+
 
 	public Long getId() {
 		return id;
@@ -179,6 +185,14 @@ public class PdfTable extends Model<PdfTable> {
 
 	public void setSubApis(String subApis) {
 		this.subApis = subApis;
+	}
+
+	public Integer getTemplateType() {
+		return templateType;
+	}
+
+	public void setTemplateType(Integer templateType) {
+		this.templateType = templateType;
 	}
 
 	public String getOriginConfig() {
