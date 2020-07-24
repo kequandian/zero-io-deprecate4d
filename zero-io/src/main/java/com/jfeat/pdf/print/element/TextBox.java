@@ -192,14 +192,16 @@ public class TextBox extends Rectangle implements ListRow {
         logger.info("totalWidth : {}, totalHeight : {}", totalWidth, totalHeight);
         // 垂直间距
         int verticalOffset = 4;
+        // 字高
         int stringHeight = metrics.getStringHeight();
-        // 预计算高度, 最大行数
+        // 根据高度计算最大行数
         int maxLine = (int) Math.floor
                 ((totalHeight + verticalOffset) / (stringHeight + verticalOffset));
 
         List<String> lines = new ArrayList<>();
         int len = content.length();
 
+        // 对文本内容进行分行
         int i = 0, j = 0, currWidth = 0;
         while (i < len) {
             int charWidth = metrics.getFontStringWidth(String.valueOf(content.charAt(i)));
@@ -225,10 +227,12 @@ public class TextBox extends Rectangle implements ListRow {
             logger.debug("超出限定框高度限制");
             // 删除超出高度的行
             lines = lines.subList(0, maxLine);
+            // 被省略号替换的字符长度
+            int replaceLen = 3;
             String last = null;
-            // 最后一行省略号
-            if (!lines.isEmpty() && (last = lines.remove(maxLine - 1)).length() > 3) {
-                last = StrUtil.subPre(last, last.length() - 3) + "...";
+            // 在最后一行加上省略号
+            if (!lines.isEmpty() && (last = lines.remove(maxLine - 1)).length() > replaceLen) {
+                last = StrUtil.subPre(last, last.length() - replaceLen) + "...";
                 lines.add(last);
             }
             logger.info("last line : {}", last);
