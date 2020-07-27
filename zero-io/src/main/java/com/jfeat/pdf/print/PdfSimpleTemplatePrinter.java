@@ -251,7 +251,7 @@ public class PdfSimpleTemplatePrinter {
     public static String convertDetailData(String key, String data, JSONObject converts) {
         if (converts.containsKey(key)) {
             JSONObject convertMap = converts.getJSONObject(key);
-            return convertMap.getString(data);
+            return Optional.ofNullable(convertMap.getString(data)).orElse("");
         }
         return data;
     }
