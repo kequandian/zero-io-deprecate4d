@@ -143,7 +143,7 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
    "page": {
       "pageName": "A4",        // PDF页面大小
       "rotate": true,		// 是否横向打印PDF
-      "margin": "40"		// PDF页面边距
+      "margin": "40",		// PDF页面边距
       "backgroundImageUrl": ""  // 背景底图
    }
 }
