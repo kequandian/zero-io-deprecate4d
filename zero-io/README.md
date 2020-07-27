@@ -159,6 +159,33 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
   "height": 10          // 高度
 },
 ```
+#### 详情页元素:
+```
+{
+      "name": "detail",             // 元素名, 表示详情页元素
+      "height": 20,                 // 高度
+      "horizontalAlign": "RIGHT",   // 水平对齐 ： 右对齐｜左对齐
+       "columnWidths": [1, 0, 1],   // 左中右宽度比例
+      "subColumnWidths": [1, 3],    // 标题和内容宽度比例
+      "left": {                     // 左边的详情
+        "title": ["单号", "申请人", "申请时间", "封存日期", "单据状态"],     // 标题
+        "data": ["${number}", "${applicant}", "${applyTime}", "${sealedTime}", "${status}"] //内容
+      },
+      "right": {                    // 右边的详情
+        "title": ["封存部门", "执行人", "计划启用日期", "",""],
+        "data": ["${sealDepartmentName}", "${executor}", "${plannedUnsealTime}", "", ""]
+      },
+      "converts": {                 // 内容格式化转换
+        "${status}": {              // 被转换的 key
+          "DRAFT": "未审核",         // 转换值
+          "VERIFYING": "审核中",
+          "VERIFIED": "已审核",
+          "EXECUTED": "已执行",
+          "CLOSED": "已作废"
+        }
+      }
+ }
+```
 
 #### 内容列表元素：
 ``` 
