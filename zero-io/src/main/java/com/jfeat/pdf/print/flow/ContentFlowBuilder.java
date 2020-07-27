@@ -118,12 +118,10 @@ public class ContentFlowBuilder {
         ChineseFont titleFormat = new ChineseFont(contentFormat.getFamilyname(), contentFormat.getSize(), Font.BOLD, BaseColor.BLACK);
         for (int i = 0; i< lines.length; i++){
             String line = lines[i];
+            // 标题右对齐则需要增加水平间隔
+            int horizontalPadding = (Element.ALIGN_RIGHT == horizontalAlign) ? 20 : 0;
             // 内容始终左对齐
-            TextBox lineRow = new TextBox(Element.ALIGN_LEFT, verticalAlign);
-            // 标题右对齐则需要增加空格间隔
-            if (Element.ALIGN_RIGHT == horizontalAlign) {
-                line = "  " + line;
-            }
+            TextBox lineRow = new TextBox(Element.ALIGN_LEFT, verticalAlign, horizontalPadding);
             if(numberFormat != null && line.matches("^\\d+$")) {
                 lineRow.setContent(line, numberFormat);
             }else{

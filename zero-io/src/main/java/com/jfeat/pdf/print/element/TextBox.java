@@ -29,6 +29,11 @@ public class TextBox extends Rectangle implements ListRow {
 
     private int verticalAlignment = Element.ALIGN_MIDDLE;
 
+    /**
+     * 左右间距
+     */
+    private int horizontalPadding = 0;
+
     private AccessibleElementId cellId;
 
     public TextBox(){
@@ -38,6 +43,13 @@ public class TextBox extends Rectangle implements ListRow {
     public TextBox(int horizontalAlignment){
         super(0,0,0,0);
         this.horizontalAlignment = horizontalAlignment;
+    }
+
+    public TextBox(int horizontalAlignment, int verticalAlignment, int horizontalPadding) {
+        super(0, 0, 0, 0);
+        this.horizontalPadding = horizontalPadding;
+        this.horizontalAlignment = horizontalAlignment;
+        this.verticalAlignment = verticalAlignment;
     }
 
     public TextBox(int horizontalAlignment, int verticalAlignment) {
@@ -145,11 +157,13 @@ public class TextBox extends Rectangle implements ListRow {
                 break;
         }
 
+        tx += horizontalPadding;
+
         // int contentLen = (int)(stringWidth / getWidth()) + (stringWidth%getWidth()>0?1:0);
         final int stringYOffset = 4;
 
         // get text array
-        List<String> lines = alignUpPosition(metrics, content, this);
+        List<String> lines = alignUpPosition(metrics, content, this, horizontalPadding);
 
         int contentLen = lines.size();
         //String[] lines = new String[] {content.substring(0,5), content.substring(6,content.length())};
@@ -176,10 +190,12 @@ public class TextBox extends Rectangle implements ListRow {
         logger.info("textTotalHeight {}", textTotalHeight);
         logger.info("offset {}", offset);
 
+        if (verticalAlignment == Element.ALIGN_TOP) {
+            offset = 0;
+        }
         for (int i = 0; i < contentLen; i++) {
             String text = lines.get(i);
-            float ty = verticalAlignment == Element.ALIGN_TOP ? getTop() :
-                    getTop() - offset - stringHeight * 0.5f - (stringHeight * i + stringYOffset * i);
+            float ty = getTop() - offset - stringHeight * 0.5f - (stringHeight * i + stringYOffset * i);
             ty -= stringHeight * 0.5f;  // offset string vertical center
 
             //float ty_old = (getTop() + getBottom()) * 0.5f - stringHeight * 0.5f;
@@ -198,9 +214,9 @@ public class TextBox extends Rectangle implements ListRow {
      * @param position  矩形位置
      * @return
      */
-    public static List<String> alignUpPosition(PdfFontMetrics metrics, String content, Rectangle position){
+    public static List<String> alignUpPosition(PdfFontMetrics metrics, String content, Rectangle position, int padding){
 
-        float totalWidth = position.getWidth();
+        float totalWidth = position.getWidth() - padding * 2;
         float totalHeight = position.getHeight();
         logger.info("totalWidth : {}, totalHeight : {}", totalWidth, totalHeight);
         // 垂直间距
