@@ -299,7 +299,7 @@ public class PdfSimpleTemplatePrinter {
         }
 
         PdfFlowRequest.ContentFlowData contentFlowData = PdfFlowRequest.ContentFlowData.build()
-                .setLayout(new float[]{1})
+                .setLayout(new float[]{0, 1})
                 .setTitle(new String[]{""})
                 .setData(new String[]{data})
                 .rowFormat("default", height);
@@ -412,19 +412,23 @@ public class PdfSimpleTemplatePrinter {
         float headerHeight = flow.getFloat("headerHeight");
         // header
         List<String> header = new ArrayList<>();
-        JSONArray columnKeyBindings = flow.getJSONArray("columnKeyBindings");
-        for (int i = 0; i < columnKeyBindings.size(); i++) {
-            if (columnKeyBindings.getJSONObject(i).getBoolean("visible")) {
-                header.add(columnKeyBindings.getJSONObject(i).getString("column"));
-            }
-        }
         // header keys
         List<String> keys = new ArrayList<>();
+        // columnWidths
+        List<Float> columnWidths = new ArrayList<>();
+
+        JSONArray columnKeyBindings = flow.getJSONArray("columnKeyBindings");
         for (int i = 0; i < columnKeyBindings.size(); i++) {
-            if (columnKeyBindings.getJSONObject(i).getBoolean("visible")) {
-                keys.add(columnKeyBindings.getJSONObject(i).getString("key"));
-            }
+            Boolean visible = columnKeyBindings.getJSONObject(i).getBoolean("visible");
+            if (visible != null && !visible) { continue; }
+            header.add(columnKeyBindings.getJSONObject(i).getString("column"));
+            keys.add(columnKeyBindings.getJSONObject(i).getString("key"));
+            // width
+            Float columnWidth = columnKeyBindings.getJSONObject(i).getFloat("columnWidth");
+            Float defaultWidth = 1.0f;
+            columnWidths.add(Optional.ofNullable(columnWidth).orElse(defaultWidth));
         }
+
         // rows
         List<String> rowsList = new ArrayList<>();
         // converts
@@ -447,26 +451,20 @@ public class PdfSimpleTemplatePrinter {
         List<String> dataList = new ArrayList<>(header);
         dataList.addAll(rowsList);
 
-        // layout
-        // List<Float> columnWidths = flow.getJSONArray("columnWidths").toJavaList(Float.class);
-        // int size = columnWidths.size();
-        // float[] layout = new float[size];
-        // for (int i = 0; i < size; i++) { layout[i] = columnWidths.get(i); }
-
-//        List<Float> columnWidths = columnKeyBindings.stream()
-//                .filter(column -> ((JSONObject) column).getBoolean("visible"))
-//                .map(column -> ((JSONObject) column).getFloat("columnWidth"))
-//                .collect(Collectors.toList());
-        List<Float> columnWidths = new ArrayList<>();
-        for (int i = 0; i < columnKeyBindings.size(); i++) {
-            if (columnKeyBindings.getJSONObject(i).getBoolean("visible")) {
-                Float columnWidth = columnKeyBindings.getJSONObject(i).getFloat("columnWidth");
-                if (columnWidth == null) {
-                    throw new RuntimeException("columnWidth 不能设置为空");
-                }
-                columnWidths.add(columnWidth);
-            }
+        // layout 兼容
+        JSONArray columnWidthJson = flow.getJSONArray("columnWidths");
+        if (columnWidthJson != null) {
+            columnWidths = flow.getJSONArray("columnWidths").toJavaList(Float.class);
         }
+//        for (int i = 0; i < columnKeyBindings.size(); i++) {
+//            if (columnKeyBindings.getJSONObject(i).getBoolean("visible")) {
+//                Float columnWidth = columnKeyBindings.getJSONObject(i).getFloat("columnWidth");
+//                if (columnWidth == null) {
+//                    throw new RuntimeException("columnWidth 不能设置为空");
+//                }
+//                columnWidths.add(columnWidth);
+//            }
+//        }
         int size = columnWidths.size();
         float[] layout = new float[size];
         for (int i = 0; i < size; i++) { layout[i] = columnWidths.get(i); }
