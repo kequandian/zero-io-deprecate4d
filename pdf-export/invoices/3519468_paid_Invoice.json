@@ -1,0 +1,240 @@
+{ 
+   "page": {
+      "pageName": "A4",        
+      "rotate": false,		
+      "margin": "40",		
+      //"backgroundImageUrl": ""  
+   },
+
+
+	"flows": [
+	{
+    "name": "linear",           
+    "columnWidths": [3,1,3],    
+    "elements":[
+    {
+    "name": "text",       
+    "data": "",	
+    "height": 15,
+    },
+    {
+    "name": "text",       
+    "data": "PAID INVOICE",	
+    "height": 15,
+    },
+    {
+    "name": "text",       
+    "data": "",	
+    "height": 15,
+    },	
+    ],
+    }
+	{
+    "name": "text",       
+    "data": "Article Details",        
+    "height": 20,
+    }
+	{
+      "name": "detail",             
+      "height": 23,                 
+      "horizontalAlign": "LEFT",	  
+       "columnWidths": [0.5, 0.1, 0.89],   
+      "subColumnWidths": [1, 2],	  
+      "left": {                     
+        "title": ["Journal Title", "Article"],   
+        "data": ["Wireless Communications and Mobile Computing", "Distributed Beamforming design for Nonrengenerative Two-way Relay Networks with Simultaneous Wireless Information and Power Transfer"]        
+	  },
+      "right": {                    
+        "title": ["Article ID", "Article Type", "License", "Author (Corresponding)"],
+        "data": ["3519468", "Research Article", "CC-BY 4.0", "Sai Zhao (ORCID: 0000-0001-6572-5289)"]
+      },
+    },
+	{
+	"name": "rectangle",     
+	"height": 25,           
+	"width": 10000,          
+ 	"color": "WHITE",        
+    },
+    {
+    "name": "text",       
+    "data": "The charges for this article are listed below.", 	
+    "height": 35,
+    }
+    {
+    "name": "linear",           
+    "columnWidths": [1,1],    
+    "elements":[ 
+    {
+     "name": "content",	
+     "verticalAlign": "TOP",	 
+     "columnWidths": ["2", "1"],	
+     "title": [ "Article Processing Charges","Net Charges", "Total"],  
+     "data": ["2100.00","2100.00", "USD 2100.00"],	
+     "height": "45"		
+    },
+    {
+     "name": "content",	
+     "verticalAlign": "TOP",	 
+     "columnWidths": ["1", "1.5"],	
+     "title": [ "Invoice Issue Date","Date of Supply", "Invoice Ref. No.", "  ", "  ", "  ", "  ", "  ", "  "],  
+     "data": ["1 November 2019","1 November 2019", "16447/2019" "  ", "  ", "  ", "  ", "  ", "  "],	
+     "height": "15"		
+    },	
+    ]
+    }
+	
+    {
+    "name": "linear",           
+    "columnWidths": [0.5,1,0.5],    
+    "elements":[
+    {
+    "name": "text",       
+    "data": "",	
+    "height": 10,
+    }
+    {
+    "name": "text",       
+    "data": "Outside the scope of UK VAT as per Article 44 of 2006/112/EC.",	
+    "height": 10,
+    }
+    {
+    "name": "text",       
+    "data": "",	
+    "height": 10,
+    }	
+    ]
+    }
+	{
+    "name": "text",       
+    "data": "Bill to",	
+    "height": 20,
+    }
+	{
+      "name": "detail",             
+      "height": 15,                 
+      "horizontalAlign": "LEFT",   
+       "columnWidths": [1.3, 0.3, 1],   
+      "subColumnWidths": [1.5, 3],
+      "size": 5,	  
+      "left": {                     
+        "title": ["Payer Name", "Email", "Institution", "Address"],		
+        "data": ["Sai Zhao", "zhaosai@gzhu.edu.cn", "Guangzhou University", "Guangzhou University,Panyu District"] 
+      },
+	   "right": {                    
+        "title": ["City", "Country"],
+        "data": ["Guangzhou", "China"]
+      },
+    },
+	{
+	"name": "rectangle",     
+	"height": 90,           
+	"width": 10000,          
+ 	"color": "WHITE",        
+    },
+	{
+    "name": "linear",           
+    "columnWidths": [0.2,1,0.2],    
+    "elements":[
+    {
+    "name": "text",       
+    "data": "",	
+    "height": 10,
+    },
+    {
+    "name": "text",       
+    "data": "The amount above is paid in full to “Hindawi Limited.” This “Paid Invoice” is your receipt.",	
+    "height": 10,
+    },
+    {
+    "name": "text",       
+    "data": "",	
+    "height": 10,
+    },	
+    ],
+    },
+	{
+    "name": "linear",           
+    "columnWidths": [3,1,3],    
+    "elements":[
+    {
+    "name": "text",       
+    "data": "",	
+    "height": 15,
+    },
+    {
+    "name": "text",       
+    "data": "Hindawi Limited",	
+    "height": 15,
+    },
+    {
+    "name": "text",       
+    "data": "",	
+    "height": 15,
+    },	
+    ],
+    },
+	{
+    "name": "linear",           
+    "columnWidths": [0.3,1,0.3],    
+    "elements":[
+    {
+    "name": "text",       
+    "data": "",	
+    "height": 10,
+    },
+    {
+    "name": "text",       
+    "data": "Hindawi Ltd., Adam House, Third Floor, 1 Fitzroy Square, London W1T 5HF, UK",	
+    "height": 10,
+    },
+    {
+    "name": "text",       
+    "data": "",	
+    "height": 10,
+    },	
+    ],
+    },
+	{
+    "name": "linear",           
+    "columnWidths": [0.5,1,0.5],    
+    "elements":[
+    {
+    "name": "text",       
+    "data": "",	
+    "height": 10,
+    },
+    {
+    "name": "text",       
+    "data": "Company Reg. No.: 08671628 VAT Reg. No.: GB 181 0941 19",	
+    "height": 10,
+    },
+    {
+    "name": "text",       
+    "data": "",	
+    "height": 10,
+    },	
+    ],
+    },
+	{
+    "name": "linear",           
+    "columnWidths": [0.46,1,0.46],    
+    "elements":[
+    {
+    "name": "text",       
+    "data": "",	
+    "height": 10,
+    },
+    {
+    "name": "text",       
+    "data": "For assistance, please contact accounts.receivable@hindawi.com",	
+    "height": 10,
+    },
+    {
+    "name": "text",       
+    "data": "",	
+    "height": 10,
+    },	
+    ],
+    },
+	],
+}
