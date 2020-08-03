@@ -65,28 +65,29 @@ public class ExcelReaderUtils {
                     if (cell == null){
                         column = "";
                     }else {
-                        int cellType = cell.getCellType();
+                        // int cellType = cell.getCellType();
+                        CellType cellType = cell.getCellType();
                         switch (cellType) {
-                            case Cell.CELL_TYPE_NUMERIC:
+                            case NUMERIC:
                                 double numberValue = cell.getNumericCellValue();
-                                cell.setCellType(Cell.CELL_TYPE_STRING);
+                                cell.setCellType(CellType.STRING);
                                 column = cell.getStringCellValue();
                                 if (column.contains("E")) {
                                     column = BigDecimal.valueOf(numberValue).toPlainString();
                                 }
                                 break;
-                            case Cell.CELL_TYPE_STRING:
+                            case STRING:
                                 column = cell.getStringCellValue();
                                 break;
-                            case Cell.CELL_TYPE_BOOLEAN:
+                            case BOOLEAN:
                                 column = cell.getBooleanCellValue() + "";
                                 break;
-                            case Cell.CELL_TYPE_FORMULA:
+                            case FORMULA:
                                 column = cell.getCellFormula();
                                 break;
-                            case Cell.CELL_TYPE_ERROR:
+                            case ERROR:
 
-                            case Cell.CELL_TYPE_BLANK:
+                            case BLANK:
                                 column = " ";
                                 break;
                             default:

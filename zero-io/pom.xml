@@ -22,7 +22,7 @@
         <fastjson.version>1.2.49</fastjson.version>
         <slf4j.version>1.7.25</slf4j.version>
         <junit.version>4.11</junit.version>
-        <poi-ooxml.version>3.9</poi-ooxml.version>
+        <poi-ooxml.version>4.1.0</poi-ooxml.version>
         <itext-asian.version>5.2.0</itext-asian.version>
         <aliyun-sdk-oss.version>3.4.0</aliyun-sdk-oss.version>
         <hutool-core.version>5.1.0</hutool-core.version>
@@ -34,6 +34,12 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.6</version>
         </dependency>
 
         <dependency>
