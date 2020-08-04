@@ -1,0 +1,167 @@
+##########################################################
+##################  所有profile共有的配置  #################
+##########################################################
+
+###################  am配置  ###################
+am:
+  swagger-open: true #是否开启swagger (true/false)
+  kaptcha-open: false #是否开启登录时验证码 (true/false)
+  #file-upload-path: d:/tmp  #文件上传目录(不配置的话为java.io.tmpdir目录)
+  worker-id: 0 # id gen service machine id 0~1023
+  redis-host: 127.0.0.1
+  redis-port: 6379
+  json-serialize-date-format: dd/MM/yyyy HH:mm:ss
+
+###################  jwt配置  ###################
+jwt:
+  encoded-key: L7A/6zARSkK1j7Vd5SDD9pSSqZlqF7mAhiOgRbgv9Smce6tf4cJnvKOjtKPxNNnWQj+2lQEScm3XIUjhW+YVZg==
+  #tll-mills:
+  #token-type: Bearer
+  non-shiro-permission-check: false
+  normalEncodedKey: bm9ybWFsRW5jb2RlZEtleQ==
+
+###################  getUrl配置  ###################
+getUrl:
+  location: http://192.168.3.14:8080
+
+###################  项目启动端口  ###################
+server:
+  port: 8080
+  ssl:
+    enabled: false
+    key-store: classpath:sb.keystore
+    key-store-password: changeme
+    key-store-type: JKS
+    key-alias: sbkey
+#https://my.oschina.net/kingchen8080/blog/994367
+
+###################  beetl配置  ###################
+beetl:
+  delimiter-statement-start: \@   #开始结束标签(yaml不允许@开头)
+  delimiter-statement-end: null
+  resource-tagroot: common/tags   #自定义标签文件Root目录和后缀
+  resource-tagsuffix: tag
+
+
+###################  spring配置  ###################
+spring:
+  profiles:
+    active: dev
+  mvc:
+    static-path-pattern: /static/**
+    view:
+      prefix: /WEB-INF/view
+  http:
+    multipart:
+      max-file-size: 80MB
+      max-request-size: 80MB
+    converters:
+      preferred-json-mapper: fastjson
+
+  aop:
+    proxy-target-class: true
+
+  # rabbitmq配置
+#  rabbitmq:
+#    # host: 115.231.156.16
+#    host: 115.231.156.16
+#    port: 5672
+#    username: mcu
+#    password: bnp@1234
+#    virtual-host: vms
+
+###################  mybatis-plus配置  ###################
+mybatis-plus:
+  mapper-locations: classpath*:com/jfeat/**/mapping/*.xml
+  typeAliasesPackage: com.jfeat.**.model
+  global-config:
+    id-type: 2  #0:数据库ID自增   1:用户输入id   2:全局唯一id(IdWorker)   3:全局唯一ID(uuid)  4: 该类型为未设置主键类型(none)
+    db-column-underline: false
+    refresh-mapper: true
+    logic-delete-value: -1
+    logic-not-delete-value: 1
+    sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+    meta-object-handler: com.jfeat.crud.plus.CRUDMetaObjectHandler
+  configuration:
+    map-underscore-to-camel-case: false
+    cache-enabled: true #配置的缓存的全局开关
+    lazyLoadingEnabled: true #延时加载的开关
+    multipleResultSetsEnabled: true #开启的话，延时加载一个属性时会加载该对象全部属性，否则按需加载属性
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #打印sql语句,调试用
+
+---
+
+##########################################################
+###################  测试环境的profile  ###################
+##########################################################
+spring:
+  profiles: test
+  datasource:
+    url: jdbc:h2:mem:power;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    filters: log4j,wall,mergeStat
+    schema: classpath*:sql/*-schema.sql
+    data: classpath*:sql/*-data.sql
+
+logging:
+  level: debug
+  file: logs/sbseed.log
+
+am:
+  shiro-cache-redis: false
+---
+
+##########################################################
+###################  开发环境的profile  ###################
+##########################################################
+spring:
+  profiles: dev
+  datasource:
+    #      url: jdbc:mysql://120.79.77.207:3306/power?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+    #url: jdbc:mysql://192.168.2.122:3306/smartsee?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://127.0.0.1:3306/test?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
+    username: root
+    password: root
+    filters: log4j,wall,mergeStat
+    schema: classpath*:sql/**/*-schema.sql
+    data: classpath*:sql/**/*-data.sql
+    initialize: false
+
+logging:
+  level: debug
+  file: logs/sbseed.log
+
+am:
+  shiro-cache-redis: false
+  file-upload-path: E:\work-power\uploadfile
+  fileHost: http://127.0.0.1:8080
+  jsonSerializeDateFormat: dd/MM/yyyy HH:mm:ss
+  readFileUploadPath: E:\work-power\uploadfile\reading
+
+pdf:
+  template-directory: "pdf-templates"
+---
+
+##########################################################
+###################  正式环境的profile  ###################
+##########################################################
+spring:
+  profiles: produce
+  datasource:
+    url: jdbc:mysql://mysql57:3306/power?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: my-secret-pw
+    filters: log4j,wall,mergeStat
+    schema: classpath*:sql/**/*-schema.sql
+    data: classpath*:sql/**/*-data.sql
+    initialize: false
+
+
+logging:
+  level: warn
+  file: logs/sbseed.log
+
+am:
+  shiro-cache-redis: false

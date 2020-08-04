@@ -1,0 +1,194 @@
+{
+  "flows": [
+    {
+      "name": "linear",
+      "columnWidths": [
+        1,
+        1,
+        1
+      ],
+      "elements": [
+        {
+          "name": "content",
+          "columnWidths": [
+            1,
+            2
+          ],
+          "height": 20,
+          "title": [
+            "项目名称:",
+            "备注:",
+            ""
+          ],
+          "data": [
+            "报销清单",
+            "",
+            ""
+          ]
+        },
+        {
+          "name": "text",
+          "data": "",
+          "height": 25
+        },
+        {
+          "name": "content",
+          "columnWidths": [
+            1,
+            2
+          ],
+          "height": 20,
+          "title": [
+            "打印日期:",
+            "负责人:",
+            "确认人:"
+          ],
+          "data": [
+            "${createDate}",
+            "",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "name": "table",
+      "type": "api",
+      "columnWidths": [
+        "1",
+        "1",
+        "2.5",
+        "1",
+        "0.5",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ],
+      "columnKeyBindings": [
+        {
+          "column": "报销人",
+          "key": "name"
+        },
+        {
+          "column": "出工名",
+          "key": "activityName"
+        },
+        {
+          "column": "项目",
+          "key": "projectName"
+        },
+        {
+          "column": "出工时长",
+          "key": "workTime"
+        },
+        {
+          "column": "时间单位",
+          "key": "workTimeType"
+        },
+        {
+          "column": "出工费用",
+          "key": "activityFree"
+        },
+        {
+          "column": "里程（KM）",
+          "key": "kmCount"
+        },
+        {
+          "column": "油费",
+          "key": "outOfKmFree"
+        },
+        {
+          "column": "路费",
+          "key": "travellingExpenses"
+        },
+        {
+          "column": "其他费用",
+          "key": "othersFree"
+        },
+        {
+          "column": "共计",
+          "key": "allFree"
+        },
+        {
+          "column": "时间",
+          "key": "createTime"
+        },
+        {
+          "column": "备注",
+          "key": "note"
+        }
+      ],
+      "header": [],
+      "data": "${records}",
+      "converts": {
+        "workTimeType": {
+          "DAY": "天",
+          "AM": "上午",
+          "PM": "下午"
+        },
+        "activityFree": {
+          "{}": "¥ {}"
+        },
+        "outOfKmFree": {
+          "{}": "¥ {}"
+        },
+        "othersFree": {
+          "{}": "¥ {}"
+        },
+        "allFree": {
+          "{}": "¥ {}"
+        }
+      },
+      "rowHeight": 90,
+      "headerHeight": 50,
+      "headerFormat": {
+        "size": "9"
+      }
+    },
+
+    {
+      "name": "table",
+      "columnKeyBindings": [
+        {
+          "column": "总出工费用",
+          "key": "总出工费用"
+        },
+        {
+          "column": "总里程（KM）",
+          "key": "总里程（KM）"
+        },
+        {
+          "column": "总油费",
+          "key": "总油费"
+        },
+        {
+          "column": "总路费",
+          "key": "总路费"
+        },
+        {
+          "column": "总其他费用",
+          "key": "总其他费用"
+        },
+        {
+          "column": "总共计",
+          "key": "总共计"
+        }
+      ],
+      "data": "${lastColumn}",
+      "rowHeight": 20,
+      "headerHeight": 30,
+      "headerFormat": {
+        "size": "9"
+      }
+    }
+  ],
+  "page": {
+    "pageName": "A4",
+    "margin": "10"
+  }
+}

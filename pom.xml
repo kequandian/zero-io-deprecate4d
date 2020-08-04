@@ -20,9 +20,8 @@
 
     <modules>
         <module>zero-io</module>
-        <module>pdf-export</module>
-        <module>excel-export</module>
-        <module>zero-upload</module>
+        <module>excel-api</module>
+        <module>pdf-api</module>
     </modules>
 
 
