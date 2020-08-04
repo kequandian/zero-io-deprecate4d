@@ -6,6 +6,9 @@
     {
       "name": "detail",
       "height": 20,
+      "columnWidths": [1, 0, 1],
+      "subColumnWidths": [1, 3],
+      "horizontalAlign": "RIGHT",
       "left": {
         "title": [
           "单号",
@@ -49,6 +52,11 @@
       }
     },
     {
+      "name": "text",
+      "data": "",
+      "height": 3
+    },
+    {
       "name": "linear",
       "columnWidths": [
         1.0
@@ -56,16 +64,17 @@
       "elements": [
         {
           "name": "content",
+          "horizontalAlign": "RIGHT",
+          "verticalAlign": "TOP",
           "columnWidths": [
             1.0,
-            6.0
+            7.0
           ],
           "data": [
             "${measures}",
             "${remark}"
           ],
           "height": 80.0,
-          "align": 4,
           "title": [
             "封存维护措施:",
             "备注:"
