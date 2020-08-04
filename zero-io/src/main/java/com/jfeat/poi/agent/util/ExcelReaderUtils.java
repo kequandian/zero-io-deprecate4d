@@ -4,25 +4,31 @@ import com.jfeat.poi.agent.util.lang.ExcelException;
 import org.apache.poi.ss.usermodel.*;
 
 import java.io.File;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExcelReaderUtils {
 
+
+    public static List<List<List<String>>> readSheets(File file, int sheetIndex, int startRow, int endRow) {
+        Workbook wb = readWorkBook(file);
+        return readSheets(wb, sheetIndex, startRow, endRow);
+    }
+
+
+    public static List<List<List<String>>> readSheets(InputStream inputStream, int sheetIndex, int startRow, int endRow ) {
+        Workbook wb = readWorkBook(inputStream);
+        return readSheets(wb, sheetIndex, startRow, endRow);
+    }
+
     /**
      * 多sheet
-     * @param file
      * @return
      */
-    public static List<List<List<String>>> readSheets(File file, int sheetIndex, int startRow, int endRow ) {
+    public static List<List<List<String>>> readSheets(Workbook wb, int sheetIndex, int startRow, int endRow ) {
         List<List<List<String>>> result = new ArrayList<>();
-        Workbook wb;
-        try {
-            wb = WorkbookFactory.create(file);
-        } catch (Exception e) {
-            throw new ExcelException(e);
-        }
 
         int startSheet = sheetIndex, endSheet = sheetIndex;
         if(sheetIndex==-1){
@@ -132,6 +138,11 @@ public class ExcelReaderUtils {
         return readSheets(file, 0, 0, -1).get(0);
     }
 
+    public static List<List<String>> readSheet(InputStream inputStream) {
+        return readSheets(inputStream, 0, 0, -1).get(0);
+    }
+
+
 
     public static List<List<String>> getSubContents(List<List<String>> contents, int start, int end){
         List<List<String>> subContents = new ArrayList<>();
@@ -159,5 +170,25 @@ public class ExcelReaderUtils {
         }
 
         return subContents;
+    }
+
+    public static Workbook readWorkBook(File file) {
+        Workbook wb;
+        try {
+            wb = WorkbookFactory.create(file);
+        } catch (Exception e) {
+            throw new ExcelException(e);
+        }
+        return wb;
+    }
+
+    public static Workbook readWorkBook(InputStream inputStream) {
+        Workbook wb;
+        try {
+            wb = WorkbookFactory.create(inputStream);
+        } catch (Exception e) {
+            throw new ExcelException(e);
+        }
+        return wb;
     }
 }

@@ -108,4 +108,14 @@ public class TableTarget {
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "TableTarget{" +
+                "table='" + table + '\'' +
+                ", fields=" + fields +
+                ", values=" + values +
+                ", valueConverterMap=" + valueConverterMap +
+                '}';
+    }
 }

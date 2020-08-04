@@ -15,6 +15,8 @@ import com.jfeat.pdf.print.flow.TableFlow;
 import com.jfeat.pdf.print.flow.TableFlowBuilder;
 import com.jfeat.pdf.print.util.Fonts;
 import com.jfeat.pdf.print.util.ImageUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -33,6 +35,8 @@ import static com.jfeat.pdf.print.PdfFlowRequest.*;
  * Created by vincent on 2018/10/8.
  */
 public class PdfPrintingFlowUtil {
+
+    protected final static Logger logger = LoggerFactory.getLogger(PdfPrintingFlowUtil.class);
 
     /**
      * 测试
@@ -370,6 +374,7 @@ public class PdfPrintingFlowUtil {
         } else if(flow.getName().equals(Flow.IMAGE_FLOW)) {
             ImageFlowData imageFlowData = (ImageFlowData) flow.getElement();
             String url = imageFlowData.getUrl();
+            logger.info("image url : {}", url);
             byte[] data = imageFlowData.getData();
             float height = imageFlowData.getHeight();
             float width = imageFlowData.getWidth();

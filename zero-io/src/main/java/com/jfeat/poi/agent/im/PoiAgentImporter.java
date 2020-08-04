@@ -11,6 +11,7 @@ import com.jfeat.poi.agent.util.converter.ValueConverter;
 import com.jfeat.poi.agent.util.converter.impl.ValueConverterImpl;
 
 import java.io.File;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
@@ -189,6 +190,27 @@ public class PoiAgentImporter implements POIAgent {
             contents = (List<List<String>>) valueConverter.convert(this.convert, this.target, contents);
         }
 
+
+        if (header) {
+            contents.remove(0);
+        }
+
+        return importExcel(connection, contents);
+    }
+
+    /**
+     *  从输入流导入
+     * @return
+     */
+    public int importExcel(Connection connection, InputStream inputStream, boolean header) throws SQLException {
+
+        /// only the first sheet
+        List<List<String>> contents = ExcelReaderUtils.readSheet(inputStream);
+
+        if (this.convert != null) {
+            ValueConverter valueConverter = new ValueConverterImpl();
+            contents = (List<List<String>>) valueConverter.convert(this.convert, this.target, contents);
+        }
 
         if (header) {
             contents.remove(0);

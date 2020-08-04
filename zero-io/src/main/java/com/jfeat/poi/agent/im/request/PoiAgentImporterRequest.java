@@ -266,5 +266,22 @@ public class PoiAgentImporterRequest {
     public void setRelationOnly(int relationOnly) {
         this.relationOnly = relationOnly;
     }
+
+    @Override
+    public String toString() {
+        return "PoiAgentImporterRequest{" +
+                "level=" + level +
+                ", source='" + source + '\'' +
+                ", duplicate=" + duplicate +
+                ", header=" + header +
+                ", overwrite=" + overwrite +
+                ", relationOnly=" + relationOnly +
+                ", target=" + target +
+                ", unique=" + unique +
+                ", notnull=" + notnull +
+                ", relation=" + relation +
+                ", convert=" + convert +
+                '}';
+    }
 }
 
