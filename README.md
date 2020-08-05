@@ -8,8 +8,8 @@
 
 |              **名称**              |     **描述**     |
 | :--------------------------------: | :--------------: |
-|      [exce-api](./excel-api)       | excel导入导出api |
-|        [pdf-api](./pdf-api)        |    pdf导出api    |
+|  [zero-io-excel](./zero-io-excel)  | excel导入导出api |
+|    [zero-io-pdf](./zero-io-pdf)    |    pdf导出api    |
 | [zero-io-common](./zero-io-common) |     公共模块     |
 |   [zero-io-core](./zero-io-core)   |     核心模块     |
 
