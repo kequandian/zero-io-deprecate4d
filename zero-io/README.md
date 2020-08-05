@@ -288,7 +288,7 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
 
 #### 嵌套布局元素：
 
-> > > 可以填入更多内容或图片，填入的内容或图片以水平横向的方式显示，"columnWidths"表示嵌套的布局比例，如两张图片，则输入[1,1]，"elements"填入的嵌套的内容，可以输入模板元素的内容，也可以输入别的内容，等等。
+> > > 可以填入更多内容或图片，填入的内容或图片以水平横向的方式显示，"columnWidths"表示嵌套的布局比例，如两张图片，则输入[1,1]，嵌套多少内容[]内就输入多少，一一对应"elements"填入的嵌套的内容，可以输入模板元素的内容，也可以输入别的内容，等等。
 
 ```
 {
