@@ -5,7 +5,7 @@
 
     <parent>
         <groupId>com.jfeat</groupId>
-        <artifactId>sb-parent</artifactId>
+        <artifactId>zero-io-pom</artifactId>
         <version>1.0.0</version>
         <relativePath/>
     </parent>
@@ -13,50 +13,28 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.jfeat</groupId>
-    <artifactId>zero-io</artifactId>
+    <artifactId>zero-io-core</artifactId>
     <version>0.0.4</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <skipStandalone>false</skipStandalone>
-        <fastjson.version>1.2.49</fastjson.version>
-        <slf4j.version>1.7.25</slf4j.version>
-        <junit.version>4.11</junit.version>
         <poi-ooxml.version>4.1.0</poi-ooxml.version>
         <itext-asian.version>5.2.0</itext-asian.version>
-        <aliyun-sdk-oss.version>3.4.0</aliyun-sdk-oss.version>
-        <hutool-core.version>5.1.0</hutool-core.version>
         <crud-base.version>0.0.2</crud-base.version>
+        <zero-io-common.version>1.0.0</zero-io-common.version>
     </properties>
 
     <dependencies>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-        </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>mysql</groupId>-->
-<!--            <artifactId>mysql-connector-java</artifactId>-->
-<!--            <version>5.1.6</version>-->
-<!--        </dependency>-->
-
         <dependency>
             <groupId>com.jfeat</groupId>
             <artifactId>crud-base</artifactId>
             <version>${crud-base.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-        </dependency>
 
-        <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-core -->
         <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-core</artifactId>
-            <version>${hutool-core.version}</version>
+            <groupId>com.jfeat</groupId>
+            <artifactId>zero-io-common</artifactId>
+            <version>${zero-io-common.version}</version>
         </dependency>
 
         <!-- pdf依赖 https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
@@ -72,42 +50,11 @@
             <artifactId>itext-asian</artifactId>
             <version>${itext-asian.version}</version>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>${fastjson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>${logback.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>${poi-ooxml.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.aliyun.oss</groupId>
-            <artifactId>aliyun-sdk-oss</artifactId>
-            <version>${aliyun-sdk-oss.version}</version>
         </dependency>
     </dependencies>
 
@@ -122,16 +69,12 @@
                     <target>11</target>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.1.2</version>
             </plugin>
-
-
         </plugins>
-
         <resources>
             <resource>
                 <directory>src/main/resources</directory>

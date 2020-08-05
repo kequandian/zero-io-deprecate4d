@@ -1,4 +1,4 @@
-package com.jfeat.util;
+package com.jfeat.common;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -44,6 +44,7 @@ public class JsonUtil {
         String path = String.format("templates/%s.json", fileName);
         StringBuilder sb = new StringBuilder();
         try {
+
             InputStream inputStream = new ClassPathResource(path).getInputStream();
             BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
             String s;

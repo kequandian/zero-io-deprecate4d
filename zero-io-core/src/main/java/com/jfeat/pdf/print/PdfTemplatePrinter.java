@@ -4,12 +4,14 @@ import cn.hutool.core.date.DateTime;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.itextpdf.text.DocumentException;
-import com.jfeat.util.JsonUtil;
+import com.jfeat.common.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ClassPathResource;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,14 +36,14 @@ public class PdfTemplatePrinter {
     private static final String TABLE_FORMAT_CONVERT = "{}";
 
     public static void main(String[] args) throws FileNotFoundException {
-        JSONObject template = readTemplateFile("test3");
+        JSONObject template = JsonUtil.readTemplateFile("test3");
 
         List<String> rowsList = Arrays.asList("1", "2", "3", "0.5000", "5", "6", "7", "8", "9", "10", "11");
         JSONObject request = new JSONObject();
         request.put("${rows}", rowsList);
 
         JSONObject pdfJsonRequest = processTemplate(template, request);
-        print(new FileOutputStream("template-test.pdf"),pdfJsonRequest);
+        print(new FileOutputStream("template-test.pdf"), pdfJsonRequest);
     }
 
     /**
@@ -356,26 +358,4 @@ public class PdfTemplatePrinter {
         return data;
     }
 
-    /** 获取测试模版文件 */
-    public static JSONObject readTemplateFile(String fileName) {
-        String path = String.format("templates/%s.json", fileName);
-        StringBuilder sb = new StringBuilder();
-        try {
-            InputStream inputStream = new ClassPathResource(path).getInputStream();
-            BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
-            String s;
-            try {
-                while ((s = in.readLine()) != null) {
-                    sb.append(s);
-                    sb.append("\n");
-                }
-            } finally {
-                in.close();
-            }
-        } catch (IOException var8) {
-            throw new RuntimeException(var8);
-        }
-
-        return JSONObject.parseObject(sb.toString());
-    }
 }

@@ -9,7 +9,10 @@ import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.report.builder.FlowReportBuilder;
 import com.jfeat.pdf.print.report.builder.RowLayout;
 import com.jfeat.pdf.print.report.reports.HeaderFlowReport;
-import com.jfeat.pdf.print.report.request.*;
+import com.jfeat.pdf.print.report.request.Definitions;
+import com.jfeat.pdf.print.report.request.FlowReportRequest;
+import com.jfeat.pdf.print.report.request.GroupFormatRequest;
+import com.jfeat.pdf.print.report.request.RowFormatRequest;
 import com.jfeat.pdf.print.util.PageUtil;
 
 import java.io.*;

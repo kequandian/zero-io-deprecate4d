@@ -2,6 +2,7 @@ package com.jfeat.pdf.services.domain.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jfeat.common.HttpUtil;
 import com.jfeat.crud.base.exception.BusinessCode;
 import com.jfeat.crud.base.exception.BusinessException;
 import com.jfeat.pdf.print.PdfSimpleTemplatePrinter;
@@ -9,7 +10,6 @@ import com.jfeat.pdf.services.domain.dao.QueryPdfTableDao;
 import com.jfeat.pdf.services.domain.service.PdfExportService;
 import com.jfeat.pdf.services.domain.service.PdfRequestService;
 import com.jfeat.pdf.services.gen.persistence.model.PdfTable;
-import com.jfeat.pdf.util.HttpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

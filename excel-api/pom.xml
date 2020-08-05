@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>com.jfeat</groupId>
-        <artifactId>sb-parent</artifactId>
+        <artifactId>zero-io-pom</artifactId>
         <version>1.0.0</version>
         <relativePath/>
     </parent>
@@ -17,7 +17,7 @@
     <properties>
         <skipStandalone>false</skipStandalone>
         <crud-dev.version>0.0.1</crud-dev.version>
-        <zero-io.version>0.0.3</zero-io.version>
+        <zero-io-core.version>0.0.4</zero-io-core.version>
         <crud-plus.version>0.0.6</crud-plus.version>
         <crud-core.version>0.0.2</crud-core.version>
     </properties>
@@ -40,23 +40,10 @@
             <version>${crud-plus.version}</version>
         </dependency>
 
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-starter-undertow</artifactId>-->
-        <!--        </dependency>-->
-
         <dependency>
             <groupId>com.jfeat</groupId>
-            <artifactId>zero-io</artifactId>
-            <version>${zero-io.version}</version>
-        </dependency>
-
-        <!--Lombok-->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.12</version>
-            <scope>provided</scope>
+            <artifactId>zero-io-core</artifactId>
+            <version>${zero-io-core.version}</version>
         </dependency>
 
         <dependency>

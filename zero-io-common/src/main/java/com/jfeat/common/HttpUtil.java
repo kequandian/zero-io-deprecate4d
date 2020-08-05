@@ -1,4 +1,4 @@
-package com.jfeat.excel.util;
+package com.jfeat.common;
 
 import cn.hutool.core.util.URLUtil;
 import com.alibaba.fastjson.JSON;
@@ -9,9 +9,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.util.Map;
 
@@ -37,6 +41,13 @@ public class HttpUtil {
         String body = responseEntity.getBody();
         JSONObject jsonObject = JSON.parseObject(body);
         return jsonObject;
+    }
+
+    public static String getHttpAuthorization() {
+        // Authorization
+        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest httpRequest = ((ServletRequestAttributes) requestAttributes).getRequest();
+        return httpRequest.getHeader("Authorization");
     }
 
     public static String getQueryParam(String url, String param) {
