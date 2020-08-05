@@ -234,7 +234,7 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
 
 > > > 可以设置页面的表格和表格里面的内容，"columnKeyBindings"表示api返回的数据显示的字段，可根据显示的内容进行定义需要打印哪一字段，其中"columnWidth"表示列宽，数值越大，列的宽度越大。"data"表示列数据，"columnKeyBindings"就是在"data"中取的字段。"rowHeight"表示每一行的高度，数值越大，行高越高，"headerHeight"表示表头的高度，即表格开头标题一行的高度，数值越大，越高，"converts"值的转换，例如，api返回的结果是英文，但页面则显示中文，这时可以用"converts"进行值的转换，具体表格的配置如下图：
 > > >
-> > > <img src="https://github.com/kequandian/zero-io/blob/master/zero-io/%E8%A1%A8%E6%A0%BC%E5%85%83%E7%B4%A0%E7%A4%BA%E4%BE%8B%E5%9B%BE.png" />
+> > > <img src=https://github.com/kequandian/zero-io/blob/master/zero-io-core/%E8%A1%A8%E6%A0%BC%E5%85%83%E7%B4%A0%E7%A4%BA%E4%BE%8B%E5%9B%BE.png />
 
 ``` 
 {
