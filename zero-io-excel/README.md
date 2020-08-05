@@ -37,14 +37,14 @@ excel:
 
 模版文件 equipment.json：
 
-```json
+```
 {
-  "convert": [
+  "convert": [	// 字段转换
     {
-      "field": "status",
-      "newValue": "IN_USE",
-      "oldValue": "使用中",
-      "table": "equipment"
+      "field": "status",     // 字段名称
+      "newValue": "IN_USE",  // 转换结果
+      "oldValue": "使用中",   // 转换值
+      "table": "equipment"   // 表名
     },
     {
       "field": "status",
@@ -54,14 +54,14 @@ excel:
     },
     ...
   ],
-  "duplicate": 0,
-  "header": 1,
-  "level": 1,
-  "overwrite": 1,
-  "relationOnly": 0,
-  "target": [
+  "duplicate": 0,      // 是否允许添加与数据库中完全相同的数据，1允许存在完全相同数据，0为不允许
+  "header": 1,         // excel是否包含表头
+  "level": 1,          // 1=单表，2=多表
+  "overwrite": 1,      // 对导入复复项，是否重写, 默认重复导入可更新
+  "relationOnly": 0,   // 是否仅建立多表关系，仅用于多表关联，跳过查入检查时间
+  "target": [          // 导入到数据库的表目的字段
     {
-      "fields": [
+      "fields": [		//导入字段
         "project_code",
         "project_name",
         "code",
@@ -69,14 +69,14 @@ excel:
         "name",
         ...
       ],
-      "table": "equipment",
+      "table": "equipment",	// 导入表名
       "valueConverterMap": {},
       "values": []
     }
   ],
-  "unique": [
+  "unique": [             // 唯一字段， 用于设置更新
     {
-      "fields": [
+      "fields": [        // 字段名
         "code"
       ],
       "table": "equipment",
