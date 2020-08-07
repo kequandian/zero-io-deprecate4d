@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>zero-io-pom</artifactId>
+        <groupId>com.jfeat</groupId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>zero-io-all</artifactId>
+
+    <properties>
+        <skipStandalone>false</skipStandalone>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.jfeat</groupId>
+            <artifactId>zero-io-pdf</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jfeat</groupId>
+            <artifactId>zero-io-excel</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+<!--            <plugin>-->
+<!--                <groupId>com.jfeat</groupId>-->
+<!--                <artifactId>cg-maven-plugin</artifactId>-->
+<!--                <version>1.1.0</version>-->
+<!--                <configuration>-->
+<!--                    <dbUrl>jdbc:mysql://127.0.0.1:3306/test?characterEncoding=utf-8</dbUrl>-->
+<!--                    <username>root</username>-->
+<!--                    <password>root</password>-->
+<!--                    <moduleName>pdf</moduleName>-->
+<!--                    <parentPackage>com.jfeat.am</parentPackage>-->
+<!--                    <outputDir>src/main/java</outputDir>-->
+<!--                    <fileOverride>false</fileOverride>-->
+<!--                    <tables>-->
+<!--                        <table>io_pdf_table</table>-->
+<!--                        <table>equipment</table>-->
+<!--                    </tables>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <skip>${skipStandalone}</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>standalone</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.2</version>
+            </plugin>
+        </plugins>
+
+        <resources>
+            <resource>
+                <directory>src/main/webapp</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+</project>
