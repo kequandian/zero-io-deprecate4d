@@ -30,9 +30,6 @@ application.yml配置如下：
 ```yaml
 excel:
   template-directory: "excel-templates"
-  import-map:
-    equipment:
-      template-name: "equipment.json"
 ```
 
 模版文件 equipment.json：
@@ -90,4 +87,4 @@ excel:
 
 
 
-接收`name`参数后，通过yaml配置文件的`template-directory`和`template-name`读取到模版文件，然后处理`multipartFile`中的Excel数据，从而进行**批量更新数据库**的操作。
+接收`name`参数后，通过yaml配置文件的`template-directory`和`name`读取到模版文件，然后处理`multipartFile`中的Excel数据，从而进行**批量更新数据库**的操作。

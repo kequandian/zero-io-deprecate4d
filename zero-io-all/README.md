@@ -34,18 +34,10 @@ spring:
       data: classpath*:sql/*-data.sql
       initialize: false
 ---
-excel:
-  template-directory: "excel-templates"
-  export-map:
-    equipment:
-      api: "http://39.108.14.206:8070/api/adm/equipment/equipments"
-      template-name: "equipment.xlsx"
-    equipment-templates:
-      api: "http://39.108.14.206:8070/api/adm/equipment/equipment_templates"
-      template-name: "equipment-templates.xlsx"
-  import-map:
-    equipment:
-      template-name: "equipment.json"
+io:
+  excel:
+    template-directory: "excel-templates"
+
 logging:
   level: warn 
   config: config/logback-spring.xml
