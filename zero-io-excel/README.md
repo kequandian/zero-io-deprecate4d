@@ -2,6 +2,8 @@
 >自动报表的EXCEL导出API
 
 ## 导出
+### 自动报表导出
+
 GET `/api/io/excel/{field}`
 
 field: 自动报表字段，导出excel的文件名
@@ -11,6 +13,73 @@ prefix: 自动报表api前缀
 `private static final String API_PREFIX = "/api/adm/stat/meta";`
 
 访问接口后会将/api/adm/stat/meta/{field} 自动报表API中的返回数据导出成EXCEl
+
+###  API和SQL方式导出
+
+POST `/api/io/excel/export`
+
+> 支持API和SQL两种形式的Excel导出
+
+参数列表：
+
+
+|  **参数**  |     **描述**     |
+| :--------: | :--------------: |
+| exportName |     导出名称     |
+|    type    | 值为`API`或`SQL` |
+|    api     |       API        |
+|   search   | 搜索和分页的参数 |
+|    dict    |     转换字典     |
+
+参数例子:
+
+```json
+{
+    "exportName": "equipment",
+    "type": "API",
+    "api": "http://39.108.14.206:8070/api/adm/equipment/equipments",
+    "search": {
+        "categoryId": "",
+        "activeKey": "list",
+        "pageSize": 99
+    },
+    "dict": {
+        "status": {
+            "IN_USE": "使用中",
+            "STAND_BY": "待用"
+        },
+        "changeStatus": {
+            "": "无",
+            "SCRAPPED": "报废",
+            "SEALED": "封存",
+            "DISABLED": "停用"
+        },
+        "stockStatus": {
+            "TO_STOCKTAKE": "待盘点",
+            "TO_STOCK_ADJUST": "待调整"
+        }
+    }
+}
+```
+
+sql例子：
+
+```sql
+SELECT
+	(@i:=@i+1) AS "序号",
+	id AS '编号',
+	CASE status
+	WHEN 'IN_USE' THEN
+		'使用中'
+	WHEN 'STAND_BY' THEN
+		'待机中'
+	END AS '状态'
+FROM
+	equipment ,(select @i:=0)t
+
+```
+
+
 
 ## 导入
 
