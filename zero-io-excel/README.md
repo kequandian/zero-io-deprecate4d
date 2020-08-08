@@ -44,7 +44,7 @@ io:
 |   search   | 搜索和分页的参数 |
 |    dict    |     转换字典     |
 
-参数例子:
+请求参数例子:
 
 ```json
 {
@@ -79,14 +79,29 @@ io:
 
 参数列表：
 
-|  **参数**  | **描述**  |
-| :--------: | :-------: |
-| exportName | 导出名称  |
-|    type    | 值为`SQL` |
+|  **参数**  |               **描述**                |
+| :--------: | :-----------------------------------: |
+| exportName |               导出名称                |
+|    type    |               值为`SQL`               |
+|   search   | 搜索过滤参数，用于替换SQL中的模版字段 |
 
-> sql文件存放在配置文件的 `template-dir`文件夹下，文件名与导出名称`exportName`相同。
+请求参数例子:
+
+```js
+{
+    "exportName": "equipment",
+    "type": "SQL",
+    "search": {           
+        "status": "IN_USE"   // SQL替换字段
+    }
+}
+```
+
+> Sql文件存放在配置文件的 `template-dir`文件夹下，文件名与导出名称`exportName`相同。
 
 sql例子：
+
+> `search`字段中的值会替换SQL中`#{}`格式的变量并取消注释,  注释的格式规定为`--`。
 
 ```sql
 SELECT
@@ -100,6 +115,8 @@ SELECT
 	END AS '状态'
 FROM
 	equipment ,(select @i:=0)t
+WHERE 1=1
+--AND status = '#{status}'
 
 ```
 
