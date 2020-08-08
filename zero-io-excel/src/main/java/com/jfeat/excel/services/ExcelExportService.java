@@ -31,8 +31,9 @@ public interface ExcelExportService {
 
     /**
      * 导出 Excel, sql 方式, 处理字节流数据
-     * @param exportName
+     * @param exportName    - 导出名称
+     * @param search        - 搜索字段
      * @return
      */
-    ByteArrayInputStream exportBySql(String exportName);
+    ByteArrayInputStream exportBySql(String exportName, Map<String, String> search);
 }

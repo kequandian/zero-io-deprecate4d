@@ -19,6 +19,7 @@ spring:
     data: classpath*:sql/*-data.sql
     initialize: false
 
+
 ---
 io:
   excel-template-dir: "excel-templates"

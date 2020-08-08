@@ -154,7 +154,6 @@ public class PoiAgentExporterApiUtil implements POIAgent {
         return 1;
     }
 
-
     public int export(DataSource dataSource, String query, String[] headersParam, String[] columnsParam, OutputStream os) throws IOException {
 
         if (query != null && !"".equals(query)) {

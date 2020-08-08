@@ -28,4 +28,16 @@ public interface ExcelConstant {
     String EXPORT_TEMPLATE_SUFFIX = ".xlsx";
 
     String EXPORT_SQL_SUFFIX = ".sql";
+
+    /**
+     * SQL模版的替换前缀，同时也是注释
+     */
+    String EXPORT_SQL_REPLACE_PREFIX = "--";
+
+    /**
+     * SQL模版替换格式, #{replace}
+     */
+    String EXPORT_SQL_REPLACE_FORMAT = "#{%s}";
+
+    String NEW_LINE = "\n";
 }

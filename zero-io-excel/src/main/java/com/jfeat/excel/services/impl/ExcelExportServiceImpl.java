@@ -2,9 +2,10 @@ package com.jfeat.excel.services.impl;
 
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
-import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jfeat.common.FileUtil;
 import com.jfeat.common.HttpUtil;
 import com.jfeat.excel.constant.ExcelConstant;
 import com.jfeat.excel.model.ExportParam;
@@ -26,7 +27,6 @@ import javax.sql.DataSource;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileReader;
 import java.util.*;
 
 /**
@@ -86,7 +86,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
                     exportParam.getSearch(), exportParam.getDict());
         } else if (ExcelConstant.SQL_EXPORT.equals(type)) {
             // sql
-            return exportBySql(exportName);
+            return exportBySql(exportName, exportParam.getSearch());
         }
         throw new RuntimeException("错误的导出模式!");
     }
@@ -133,16 +133,47 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     }
 
     @SneakyThrows
-    public ByteArrayInputStream exportBySql(String exportName) {
+    public ByteArrayInputStream exportBySql(String exportName, Map<String, String> search) {
         String templateDirectory = excelProperties.getExcelTemplateDir();
         // sql 文件名称
         String sqlTemplateName = exportName + ExcelConstant.EXPORT_SQL_SUFFIX;
         String templateFilePath = templateDirectory + File.separator + sqlTemplateName;
-        // 读取 sql
-        String sql = IoUtil.read(new FileReader(new File(templateFilePath)));
+        // 逐行读取 sql文件
+        List<String> sqlLines = FileUtil.readLine(templateFilePath);
+        // 替换注释并构建 sql
+        String sql = processSqlLines(sqlLines, search);
+        log.info("template sql: {}", sql);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         new PoiAgentExporterApiUtil().export(dataSource, sql, baos);
         return new ByteArrayInputStream(baos.toByteArray());
+    }
+
+
+    private String processSqlLines(List<String> sqlLines, Map<String, String> replaceMap) {
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlLines.stream()
+                // 消除注释并替换
+                .map(line -> replaceSqlLine(line, replaceMap).concat(ExcelConstant.NEW_LINE))
+                // 跳过仍为注释的行
+                .filter(line -> !line.startsWith(ExcelConstant.EXPORT_SQL_REPLACE_PREFIX))
+                .forEach(sqlBuilder::append);
+        return sqlBuilder.toString();
+    }
+
+    private String replaceSqlLine(String sqlLine, Map<String, String> replaceMap) {
+        sqlLine = StrUtil.trimStart(sqlLine);
+        // 注释开头
+        if (sqlLine.startsWith(ExcelConstant.EXPORT_SQL_REPLACE_PREFIX)) {
+            for (Map.Entry<String, String> entry : replaceMap.entrySet()) {
+                String replace = String.format(ExcelConstant.EXPORT_SQL_REPLACE_FORMAT, entry.getKey());
+                if (sqlLine.contains(replace)) {
+                    // 替换字段并消除注释
+                    sqlLine = StrUtil.removePrefix(sqlLine, ExcelConstant.EXPORT_SQL_REPLACE_PREFIX);
+                    sqlLine = StrUtil.replace(sqlLine, replace, entry.getValue());
+                }
+            }
+        }
+        return sqlLine;
     }
 
     /**
