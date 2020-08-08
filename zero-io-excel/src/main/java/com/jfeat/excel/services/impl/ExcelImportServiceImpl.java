@@ -37,7 +37,7 @@ public class ExcelImportServiceImpl implements ExcelImportService {
     @SneakyThrows
     public Boolean importExcel(String importName, InputStream inputStream) {
 
-        String templateDirectory = excelProperties.getTemplateDir();
+        String templateDirectory = excelProperties.getExcelTemplateDir();
         String templateFileName = importName + ExcelConstant.IMPORT_TEMPLATE_SUFFIX;
 
         // template file

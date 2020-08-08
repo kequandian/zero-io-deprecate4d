@@ -116,7 +116,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         List<Map<String, Object>> rowsMapList = getRowsMapList(records, dict);
 
         // 模版文件
-        String templateDirectory = excelProperties.getTemplateDir();
+        String templateDirectory = excelProperties.getExcelTemplateDir();
         String templateFileName = exportName + ExcelConstant.EXPORT_TEMPLATE_SUFFIX;
         String templateFilePath = templateDirectory + File.separator + templateFileName;
         log.info("templateFilePath : {}", templateFilePath);
@@ -134,7 +134,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
 
     @SneakyThrows
     public ByteArrayInputStream exportBySql(String exportName) {
-        String templateDirectory = excelProperties.getTemplateDir();
+        String templateDirectory = excelProperties.getExcelTemplateDir();
         // sql 文件名称
         String sqlTemplateName = exportName + ExcelConstant.EXPORT_SQL_SUFFIX;
         String templateFilePath = templateDirectory + File.separator + sqlTemplateName;

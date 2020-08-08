@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Wen Hao
  */
 @Configuration
-@ConfigurationProperties(prefix = "io.excel")
+@ConfigurationProperties(prefix = "io")
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ExcelProperties {
@@ -20,7 +20,7 @@ public class ExcelProperties {
     /**
      * 模版文件目录
      */
-    String templateDir;
+    String excelTemplateDir;
 
     /**
      * excel 导出

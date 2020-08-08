@@ -28,8 +28,7 @@ application.yml配置：
 
 ```yaml
 io:
-  excel:
-    template-dir: "excel-templates"
+  excel-template-dir: "excel-templates"
 ```
 
 ####  API方式
@@ -123,8 +122,7 @@ application.yml配置如下：
 
 ```yaml
 io:
-  excel:
-    template-dir: "excel-templates"
+  excel-template-dir: "excel-templates"
 ```
 
 模版文件 equipment.json：
