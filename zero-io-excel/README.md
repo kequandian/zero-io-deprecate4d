@@ -6,13 +6,16 @@
 
 GET `/api/io/excel/{field}`
 
-field: 自动报表字段，导出excel的文件名
+参数列表：
 
-prefix: 自动报表api前缀
 
-`private static final String API_PREFIX = "/api/adm/stat/meta";`
+| **参数** |    **描述**    |
+| :------: | :------------: |
+|  field   | 自动报表字段名 |
 
-访问接口后会将/api/adm/stat/meta/{field} 自动报表API中的返回数据导出成EXCEl
+默认的自动报表API前缀是`/api/adm/stat/meta`
+
+访问接口后会拼接API`/api/adm/stat/meta/{field}` ，获取API中的数据并导出Excel.
 
 ###  API和SQL方式导出
 
@@ -20,13 +23,24 @@ POST `/api/io/excel/export`
 
 > 支持API和SQL两种形式的Excel导出
 
+
+application.yml配置：
+
+```yaml
+io:
+  excel:
+    template-dir: "excel-templates"
+```
+
+####  API方式
+
 参数列表：
 
 
 |  **参数**  |     **描述**     |
 | :--------: | :--------------: |
 | exportName |     导出名称     |
-|    type    | 值为`API`或`SQL` |
+|    type    |    值为`API`     |
 |    api     |       API        |
 |   search   | 搜索和分页的参数 |
 |    dict    |     转换字典     |
@@ -61,6 +75,17 @@ POST `/api/io/excel/export`
     }
 }
 ```
+
+#### SQL方式
+
+参数列表：
+
+|  **参数**  | **描述**  |
+| :--------: | :-------: |
+| exportName | 导出名称  |
+|    type    | 值为`SQL` |
+
+> sql文件存放在配置文件的 `template-dir`文件夹下，文件名与导出名称`exportName`相同。
 
 sql例子：
 
@@ -97,8 +122,9 @@ POST  `/api/io/excel/import`
 application.yml配置如下：
 
 ```yaml
-excel:
-  template-directory: "excel-templates"
+io:
+  excel:
+    template-dir: "excel-templates"
 ```
 
 模版文件 equipment.json：

@@ -36,7 +36,7 @@ spring:
 ---
 io:
   excel:
-    template-directory: "excel-templates"
+    template-dir: "excel-templates"
 
 logging:
   level: warn 
