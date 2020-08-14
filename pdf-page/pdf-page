@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+java -jar build/libs/pdf-page-all.jar $@

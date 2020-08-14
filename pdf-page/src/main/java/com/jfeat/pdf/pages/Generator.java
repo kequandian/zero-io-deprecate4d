@@ -16,24 +16,27 @@ import java.util.List;
 public class Generator {
 
     public static void printUsage(){
-        System.out.println("Usage: pdf-page <image-url|image-dir>");
-        System.out.println("       pdf-page <source> <OPTIONS> <PARAM> [..]");
+        System.out.println("Usage: pdf-page <image-url|image-dir>  # create new pdf file with images");
+        System.out.println("       pdf-page <source.pdf> <OPTIONS> <PARAM> [..]");
+        System.out.println("       ");
+        System.out.println("Page range support 1,2 [3-5], -1 mean last page.");
         System.out.println("OPTIONS:");
         System.out.println(" -h,--head   Head with images/pages.");
         System.out.println("             pdf-page <source> -h <image-url|image-dir>");
         System.out.println(" -t,--tail   Tail up images/pages");
         System.out.println("             pdf-page <source> -t <image-url|image-dir|pages.pdf>");
+        System.out.println(" -p,--pick   Pick up the range pages as new file.");
+        System.out.println("             pdf-page <source> -o <page-range>");
         System.out.println(" -d,--delete Delete page.");
         System.out.println("             pdf-page <source> -d <page-range>");
-        System.out.println("             Page range support 1,2 [3-5], -1 mean last page.");
         System.out.println(" -m,--mask   Mask specific area on page.");
         System.out.println("             pdf-page <source> -m <page-number> <pos> <size>");
         System.out.println(" -r,--ruler  Draw a ruler on page.");
         System.out.println("             pdf-page <source> -r <page-number>");
         System.out.println(" -T,--text   Draw text on page.");
         System.out.println("             pdf-page <source> -t <page-number> <posx> <posy> <text> <LEFT|CENTER|RIGHT> <fontSize> [fontFamily]");
-        System.out.println(" -p,--print  Print the number of position on the page.");
-        System.out.println("             pdf-page <source> -p <page-number>");
+        System.out.println(" -n,--number Number the page.");
+        System.out.println("             pdf-page <source> -n <page-number>");
     }
 
     public static void main(String[] args) {
@@ -135,7 +138,7 @@ public class Generator {
                     PdfPages.createPage(pdfFilePath, imageUrls.toArray(new String[0]));
                 }
 
-            }else if(op.equals("-p") || op.equals("--print")){
+            }else if(op.equals("-n") || op.equals("--number")){
                 int pageNumber = Integer.parseInt(param);
                 PdfPageNum.printPageNumber(pdfFilePath, pageNumber);
 
@@ -190,7 +193,7 @@ public class Generator {
                         int pi = Integer.parseInt(nums[i]);
                         range_num[i] = pi;
                     }
-                } else if ( range.contains("-") && range.indexOf("-")>0 ) {
+                } else if (range.contains("-") && range.indexOf("-") > 0) {
                     String[] nums = range.split("-");
 
                     int starti = Integer.parseInt(nums[0]);
@@ -207,6 +210,34 @@ public class Generator {
 
                 PdfPages.deletePage(pdfFilePath, range_num);
 
+            } else if (op.equals("-p") || op.equals("--pick")) {
+                // delete page
+                String range = param;
+                int[] range_num = new int[0];
+                if (range.contains(",")) {
+                    String[] nums = range.split(",");
+                    range_num = new int[nums.length];
+
+                    for (int i = 0; i < nums.length; i++) {
+                        int pi = Integer.parseInt(nums[i]);
+                        range_num[i] = pi;
+                    }
+                } else if (range.contains("-") && range.indexOf("-") > 0) {
+                    String[] nums = range.split("-");
+
+                    int starti = Integer.parseInt(nums[0]);
+                    int endi = Integer.parseInt(nums[1]);
+                    range_num = new int[endi - starti + 1];
+
+                    for (int i = starti; i <= endi; i++) {
+                        range_num[i - starti] = i;
+                    }
+                } else {
+                    range_num = new int[1];
+                    range_num[0] = Integer.parseInt(range);
+                }
+
+                PdfPages.pickPage(pdfFilePath, range_num);
             }
 
         } catch (NumberFormatException e) {

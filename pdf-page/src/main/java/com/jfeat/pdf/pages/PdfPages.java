@@ -109,6 +109,45 @@ public class PdfPages {
         mergeReader.close();
     }
 
+    public static  void pickPage(String pdfFilePath, int[] pageNum) throws IOException, DocumentException {
+        PdfReader reader = new PdfReader(pdfFilePath);
+        int numberOfPages = reader.getNumberOfPages();
+        java.util.List<Integer> list = new ArrayList<>();
+
+        for(int i=1;i<=numberOfPages;i++){
+            boolean pick=false;
+            for(int pi : pageNum) {
+
+                // if page num < 0, means the last one
+                if(pi<0){
+                    pi = numberOfPages + pi + 1;
+                }
+                // end
+
+                if(i==pi){
+                    pick = true;
+                }
+            }
+
+            if (pick) {
+                list.add(i);
+            }
+
+            //reset
+            pick = false;
+        }
+
+        String rangeString =  pageNum.length==1 ? String.valueOf(pageNum[0]) : (
+                String.valueOf(pageNum[0]) + "-" + String.valueOf(pageNum[pageNum.length-1])
+        );
+        String newPdfFile = FilePathExtention.removeExtension(pdfFilePath) + "-" + rangeString + ".pdf";
+
+        reader.selectPages(list);
+        PdfStamper stamp = new PdfStamper(reader, new FileOutputStream(newPdfFile));
+        stamp.close();
+        reader.close();
+    }
+
     public static  void deletePage(String pdfFilePath, int[] pageNum) throws IOException, DocumentException {
         PdfReader reader = new PdfReader(pdfFilePath);
         int numberOfPages = reader.getNumberOfPages();
