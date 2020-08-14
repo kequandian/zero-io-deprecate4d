@@ -2,6 +2,7 @@ package com.jfeat.excel.services.impl;
 
 import cn.hutool.core.io.IoUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.jfeat.excel.constant.ExcelConstant;
 import com.jfeat.excel.properties.ExcelProperties;
 import com.jfeat.excel.services.ExcelImportService;
 import com.jfeat.poi.agent.im.PoiAgentImporterUtil;
@@ -15,7 +16,6 @@ import javax.sql.DataSource;
 import java.io.File;
 import java.io.FileReader;
 import java.io.InputStream;
-import java.util.Map;
 
 /**
  * Created on 2020/8/4.
@@ -37,16 +37,11 @@ public class ExcelImportServiceImpl implements ExcelImportService {
     @SneakyThrows
     public Boolean importExcel(String importName, InputStream inputStream) {
 
-        String templateDirectory = excelProperties.getTemplateDirectory();
-        Map<String, ExcelProperties.ExcelPojo> importMap = excelProperties.getImportMap();
+        String templateDirectory = excelProperties.getExcelTemplateDir();
+        String templateFileName = importName + ExcelConstant.IMPORT_TEMPLATE_SUFFIX;
 
-        ExcelProperties.ExcelPojo excelPojo = importMap.get(importName);
-        if (excelPojo == null) {
-            throw new RuntimeException("导入名称不存在！");
-        }
         // template file
-        String importTemplate = excelPojo.getTemplateName();
-        String templateFilePath = templateDirectory + File.separator + importTemplate;
+        String templateFilePath = templateDirectory + File.separator + templateFileName;
         log.info("import template file : {}", templateFilePath);
 
         // request

@@ -5,10 +5,6 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created on 2020/7/20.
@@ -16,7 +12,7 @@ import java.util.Map;
  * @author Wen Hao
  */
 @Configuration
-@ConfigurationProperties(prefix = "excel")
+@ConfigurationProperties(prefix = "io")
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ExcelProperties {
@@ -24,24 +20,24 @@ public class ExcelProperties {
     /**
      * 模版文件目录
      */
-    String templateDirectory;
+    String excelTemplateDir;
 
     /**
      * excel 导出
      */
-    Map<String, ExcelPojo> exportMap = new HashMap<>();
+    // Map<String, ExcelPojo> exportMap = new HashMap<>();
 
     /**
      * excel 导入
      */
-    Map<String, ExcelPojo> importMap = new HashMap<>();
+    // Map<String, ExcelPojo> importMap = new HashMap<>();
 
-    @Data
+    /*@Data
     @Component
     public static class ExcelPojo {
 
         private String api;
 
         private String templateName;
-    }
+    }*/
 }

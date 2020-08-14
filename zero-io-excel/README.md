@@ -2,15 +2,125 @@
 >自动报表的EXCEL导出API
 
 ## 导出
+### 自动报表导出
+
 GET `/api/io/excel/{field}`
 
-field: 自动报表字段，导出excel的文件名
+参数列表：
 
-prefix: 自动报表api前缀
 
-`private static final String API_PREFIX = "/api/adm/stat/meta";`
+| **参数** |    **描述**    |
+| :------: | :------------: |
+|  field   | 自动报表字段名 |
 
-访问接口后会将/api/adm/stat/meta/{field} 自动报表API中的返回数据导出成EXCEl
+默认的自动报表API前缀是`/api/adm/stat/meta`
+
+访问接口后会拼接API`/api/adm/stat/meta/{field}` ，获取API中的数据并导出Excel.
+
+###  API和SQL方式导出
+
+POST `/api/io/excel/export`
+
+> 支持API和SQL两种形式的Excel导出
+
+
+application.yml配置：
+
+```yaml
+io:
+  excel-template-dir: "excel-templates"
+```
+
+####  API方式
+
+参数列表：
+
+
+|  **参数**  |     **描述**     |
+| :--------: | :--------------: |
+| exportName |     导出名称     |
+|    type    |    值为`API`     |
+|    api     |       API        |
+|   search   | 搜索和分页的参数 |
+|    dict    |     转换字典     |
+
+请求参数例子:
+
+```json
+{
+    "exportName": "equipment",
+    "type": "API",
+    "api": "http://39.108.14.206:8070/api/adm/equipment/equipments",
+    "search": {
+        "categoryId": "",
+        "activeKey": "list",
+        "pageSize": 99
+    },
+    "dict": {
+        "status": {
+            "IN_USE": "使用中",
+            "STAND_BY": "待用"
+        },
+        "changeStatus": {
+            "": "无",
+            "SCRAPPED": "报废",
+            "SEALED": "封存",
+            "DISABLED": "停用"
+        },
+        "stockStatus": {
+            "TO_STOCKTAKE": "待盘点",
+            "TO_STOCK_ADJUST": "待调整"
+        }
+    }
+}
+```
+
+#### SQL方式
+
+参数列表：
+
+|  **参数**  |               **描述**                |
+| :--------: | :-----------------------------------: |
+| exportName |               导出名称                |
+|    type    |               值为`SQL`               |
+|   search   | 搜索过滤参数，用于替换SQL中的模版字段 |
+
+请求参数例子:
+
+```js
+{
+    "exportName": "equipment",
+    "type": "SQL",
+    "search": {           
+        "status": "IN_USE"   // SQL替换字段
+    }
+}
+```
+
+> Sql文件存放在配置文件的 `template-dir`文件夹下，文件名与导出名称`exportName`相同。
+
+sql例子：
+
+> `search`字段中的值会替换SQL中`#{}`格式的变量并取消注释,  注释的格式规定为`--`。
+
+```sql
+SELECT
+	(@i:=@i+1) AS "序号",
+	id AS '编号',
+	CASE status
+	WHEN 'IN_USE' THEN
+		'使用中'
+	WHEN 'STAND_BY' THEN
+		'待机中'
+	END AS '状态'
+FROM
+	equipment ,(select @i:=0)t
+WHERE 1=1
+--AND status = '#{status}'
+
+```
+
+
 
 ## 导入
 
@@ -28,11 +138,8 @@ POST  `/api/io/excel/import`
 application.yml配置如下：
 
 ```yaml
-excel:
-  template-directory: "excel-templates"
-  import-map:
-    equipment:
-      template-name: "equipment.json"
+io:
+  excel-template-dir: "excel-templates"
 ```
 
 模版文件 equipment.json：
@@ -90,4 +197,4 @@ excel:
 
 
 
-接收`name`参数后，通过yaml配置文件的`template-directory`和`template-name`读取到模版文件，然后处理`multipartFile`中的Excel数据，从而进行**批量更新数据库**的操作。
+接收`name`参数后，通过yaml配置文件的`template-directory`和`name`读取到模版文件，然后处理`multipartFile`中的Excel数据，从而进行**批量更新数据库**的操作。

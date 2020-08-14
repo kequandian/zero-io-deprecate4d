@@ -36,6 +36,7 @@
         <module>zero-io-excel</module>
         <module>zero-io-pdf</module>
         <module>zero-io-common</module>
+        <module>zero-io-all</module>
     </modules>
 
 

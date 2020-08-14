@@ -1,0 +1,190 @@
+{ 
+   "page": {
+      "pageName": "A4",        
+      "rotate": false,		
+      "margin": "20",		
+      "backgroundImageUrl": "/images/background_2.png"  
+   },
+
+
+	"flows": [
+	{
+     "name": "text",       
+     "data": " ",        
+     "height": 55          
+    },
+	{
+      "name": "detail",             
+      "height": 17,                 
+      "horizontalAlign": "LEFT",   
+       "columnWidths": [1, 0.4, 1],   
+      "subColumnWidths": [0, 3],    
+      "left": {                     
+        "title": ["", "",],     
+        "data": ["", ""] 
+      },
+      "right": {                    
+        "title": ["",""],
+        "data": ["(01 Jan 2020-31 Jan 2020)  plan name ", "Last read at 30 Dec 2016       this read at 31 Jan 2020"]
+      },
+    }
+	{
+     "name": "text",       
+     "data": " ",        
+     "height": 65          
+    },
+	{
+     "name": "text",       
+     "data": "Electricisy Service at:",        
+     "height": 15          
+    },
+	{
+     "name": "text",       
+     "data": "59 Rockfield Rd Auckland",        
+     "height": 15          
+    },
+	{
+	"name": "rectangle",     
+	"height": 21.5,           
+	"width": 100,           
+	"color": "WHITE"        
+    }
+	{
+    "name": "linear",           
+    "columnWidths": [2,2,4],    
+    "elements":[                
+    {
+     "name": "content",	
+     "verticalAlign": "TOP",	 
+     "columnWidths": ["0", "2"],	
+     "title": [""],  
+     "data": ["ICP:020134567NLC001"],	
+     "height": "27"		
+    },
+    {
+     "name": "content",
+     "verticalAlign": "TOP",	 
+     "columnWidths": ["1", "1"],	
+     "title": [ "Usage","Daliy","GST"],  
+     "data": ["","",""],	
+     "height": "27"		
+    },
+    {
+     "name": "content",
+     "verticalAlign": "TOP",	 
+     "columnWidths": ["3", "1"],	
+     "title": [ "0.2988cents/kWhx465KWH","0.3333cents/DAYx31Day","15%"],  
+     "data": ["$115.69","$10.33","$18.90"],	
+     "height": "27"		
+    },	
+    ]
+    }
+	{
+    "name": "linear",           
+    "columnWidths": [2,6],    
+    "elements":[                
+    {
+	 "name": "rectangle",     
+	 "height": 27,           
+	 "width": 27,           
+	 "color": "WHITE"        
+    }
+    {
+     "name": "content",
+     "verticalAlign": "TOP",	 
+     "columnWidths": ["5", "1"],	
+     "title": [ "Total"],  
+     "data": ["$144.92"],	
+     "height": "27"		
+    },    	
+    ]
+    }
+	{
+     "name": "text",       
+     "data": " ",        
+     "height": 155          
+    },
+	{
+    "name": "linear",           
+    "columnWidths": [0.5,5,0.5],    
+    "elements":[                
+    {
+     "name": "text",       
+     "data": " ",        
+     "height": 15          
+    },
+	{
+     "name": "content",
+     "verticalAlign": "TOP",	 
+     "columnWidths": ["1.2", "3.8"],	
+     "title": [ "DIRECT DEBIT:",""],  
+     "data": ["Pay weekly,fortnightly,monthly,quarterly or annually.","Visit www.smartorange.co.nz or call 0800 xxx xxx to set this up."],	
+     "height": "15"		
+    },
+	{
+     "name": "text",       
+     "data": " ",        
+     "height": 15          
+    }
+    ]
+    }
+	{
+     "name": "text",       
+     "data": " ",        
+     "height": 33          
+    },
+	{
+    "name": "linear",           
+    "columnWidths": [0.5,5,0.5],    
+    "elements":[                
+    {
+     "name": "text",       
+     "data": " ",        
+     "height": 15          
+    },
+	{
+     "name": "content",
+     "verticalAlign": "TOP",	 
+     "columnWidths": ["1.2", "3.8"],	
+     "title": [ "Our WEBSITE:",""],  
+     "data": ["Visit www.smartorange.co.nz to pay online via credit card.","A 2.5% fee applies to credit card payments."],	
+     "height": "15"		
+    },
+	{
+     "name": "text",       
+     "data": " ",        
+     "height": 15          
+    }
+    ]
+    }
+	{
+     "name": "text",       
+     "data": " ",        
+     "height": 33          
+    },
+	{
+    "name": "linear",           
+    "columnWidths": [0.5,5,0.5],    
+    "elements":[                
+    {
+     "name": "text",       
+     "data": " ",        
+     "height": 15          
+    },
+	{
+     "name": "content",
+     "verticalAlign": "TOP",	 
+     "columnWidths": ["1.2", "3.8"],	
+     "title": [ "INTERNET BANKING:","","","",""],  
+     "data": ["Payee name:Orange Services Limited","Bank account number:xx-xxxx-xxxxxxx-xx","Particulars:CST000001","Code:ACC2019060600915NBA","Reference:INV2019060600504RoD"],	
+     "height": "15"		
+    },
+	{
+     "name": "text",       
+     "data": " ",        
+     "height": 15          
+    }
+    ]
+    }
+	] 
+}

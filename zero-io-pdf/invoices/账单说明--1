@@ -1,0 +1,176 @@
+{ 
+   "page": {
+      "pageName": "A4",        
+      "rotate": false,		
+      "margin": "20",		
+      "backgroundImageUrl": "/images/background_1.jpeg"  
+   },
+
+
+	"flows": [
+	{
+     "name": "text",       
+     "data": "",        
+     "height": 25          
+    },
+	{
+     "name": "linear",           
+     "columnWidths": [2,1],    
+     "elements":[
+    {
+     "name": "text",       
+     "data": "",        
+     "height": 60        
+    },
+	{
+     "name": "content",		 
+     "columnWidths": ["1", "1.2"],	
+     "title": [ "Account No:","Account Name：","Countract No:","Invoice Date:","Invoice No:"],  
+     "data": ["ACC2019060600915","CST000001","ACC2019060600916","6th June 2019","INV2019060600504Ro"],	
+     "height": "12"		
+    },
+    ]
+    }
+	{
+     "name": "text",       
+     "data": "",        
+     "height": 72        
+    }
+    {
+     "name": "linear",  
+     "columnWidths": [2,1],    
+     "elements":[
+    {
+     "name": "text",       
+     "data": "",        
+     "height": 90        
+    },
+	{
+     "name": "content",
+     "horizontalAlign": "RIGHT",		 
+     "columnWidths": ["1", "0.1"],	
+     "title": [ "46 Challenger Street","St Heliers","Auckland 1026"],  
+     "data": ["","",""],	
+     "height": "30"		
+    },
+    ]
+    }
+	 {
+     "name": "text",       
+     "data": "",        
+     "height": 110        
+    }
+    {
+     "name": "linear",  
+     "columnWidths": [2,3],    
+     "elements":[
+	{
+     "name": "content",		 
+     "columnWidths": ["1", "1"],	
+     "title": [ "01 Jan 2020","14 Jan 2020","14 Jan 2020"],  
+     "data": ["","",""],	
+     "height": "30"		
+    },
+	{
+     "name": "content",		 
+     "columnWidths": ["2", "1"],	
+     "title": [ "Opening Balance","Direct debit paymant","Discount for prompt paymant credit"],  
+     "data": ["$301.23","$225.93cr","$75.3kr"],	
+     "height": "30"		
+    },
+    ]
+    }
+	{
+     "name": "content",		 
+     "columnWidths": ["4", "1"],	
+     "title": [ "Opening balance on this bill"],  
+     "data": ["$0.00"],	
+     "height": "30"		
+    }
+	{
+	"name": "rectangle",     
+	"height": 90,           
+	"width": 100,           
+  	"color": "WHITE"        
+    }
+	 {
+    "name": "linear",           
+    "columnWidths": [2,1,2,1,2,1,2],   
+    "elements":[                
+    {
+     "name": "text",       
+     "data": "Opening balance",        
+     "height": 15          
+    },
+	{
+     "name": "text",       
+     "data": "+",        
+     "height": 15          
+    },
+	{
+     "name": "text",       
+     "data": "current change",        
+     "height": 15          
+    },
+	{
+     "name": "text",       
+     "data": "-",        
+     "height": 15          
+    },
+	{
+     "name": "text",       
+     "data": "wellcome crealit",        
+     "height": 15          
+    },
+	{
+     "name": "text",       
+     "data": "=",        
+     "height": 15          
+    },
+	{
+     "name": "text",       
+     "data": "Amount due",        
+     "height": 15          
+    },
+    ]
+    }
+	{
+    "name": "linear",          
+    "columnWidths": [0.5,3,3.3,3.2,1.5,0.5],    
+    "elements":[                
+    {
+	"name": "rectangle",     
+	"height": 12,           
+	"width": 25,          
+	"color": "WHITE"        
+    },
+	{
+     "name": "text",       
+     "data": "$0.00",        
+     "height": 12          
+    },
+	{
+     "name": "text",       
+     "data": "$207.22",        
+     "height": 12          
+    },
+	{
+     "name": "text",       
+     "data": "$50cr",        
+     "height": 12          
+    },
+	{
+     "name": "text",       
+     "data": "$115.49",        
+     "height": 12          
+    },
+	{
+	"name": "rectangle",     
+	"height": 12,           
+	"width": 25,          
+	"color": "WHITE"        
+    },
+    ]
+    }
+	] 
+}
