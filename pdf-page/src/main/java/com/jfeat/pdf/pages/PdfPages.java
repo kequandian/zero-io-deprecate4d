@@ -3,11 +3,14 @@ package com.jfeat.pdf.pages;
 import com.itextpdf.text.*;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.*;
-import com.jfeat.pdf.pages.util.FilePathExtention;
+import com.jfeat.pdf.pages.util.StringUtils;
+
 import com.jfeat.pdf.pages.util.ImageUtil;
+import com.jfeat.pdf.pages.util.StringUtils;
 
 import java.awt.*;
 import java.awt.Image;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,7 +39,7 @@ public class PdfPages {
         PdfReader reader = new PdfReader(pdfFilePath);
         Rectangle pageSize = reader.getPageSize(1);
 
-        String newPdfFile = FilePathExtention.removeExtension(pdfFilePath) + "-new.pdf";
+        String newPdfFile = StringUtils.removeExtension(pdfFilePath) + "-new.pdf";
 
         PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(newPdfFile));
 
@@ -56,7 +59,7 @@ public class PdfPages {
         PdfReader reader = new PdfReader(pdfFilePath);
         Rectangle pageSize = reader.getPageSize(1);
 
-        String newPdfFile = FilePathExtention.removeExtension(pdfFilePath) + "-new.pdf";
+        String newPdfFile = StringUtils.removeExtension(pdfFilePath) + "-new.pdf";
 
         PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(newPdfFile));
 
@@ -89,7 +92,7 @@ public class PdfPages {
         PdfReader reader = new PdfReader(pdfFilePath);
         PdfReader mergeReader = new PdfReader(mergePdfFielPath);
 
-        String newPdfFile = FilePathExtention.removeExtension(pdfFilePath) + "-new.pdf";
+        String newPdfFile = StringUtils.removeExtension(pdfFilePath) + "-new.pdf";
 
         PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(newPdfFile));
 
@@ -140,13 +143,62 @@ public class PdfPages {
         String rangeString =  pageNum.length==1 ? String.valueOf(pageNum[0]) : (
                 String.valueOf(pageNum[0]) + "-" + String.valueOf(pageNum[pageNum.length-1])
         );
-        String newPdfFile = FilePathExtention.removeExtension(pdfFilePath) + "-" + rangeString + ".pdf";
+        String newPdfFile = StringUtils.removeExtension(pdfFilePath) + "-" + rangeString + ".pdf";
 
         reader.selectPages(list);
         PdfStamper stamp = new PdfStamper(reader, new FileOutputStream(newPdfFile));
         stamp.close();
         reader.close();
     }
+
+    public static  void splitPage(String pdfFilePath, int pagesOfNum) throws IOException, DocumentException {
+        PdfReader reader = new PdfReader(pdfFilePath);
+        int numberOfPages = reader.getNumberOfPages();
+        reader.close();
+
+        java.util.List<Integer> list = new ArrayList<>();
+        
+        // new file dir
+        String pdfSplitPath = StringUtils.removeExtension(pdfFilePath);
+        File theDir = new File(pdfSplitPath);
+        if(!theDir.exists()){
+            try{
+                theDir.mkdir();
+            } 
+            catch(SecurityException se){
+            }        
+        }
+
+        for(int i=1;i<=numberOfPages;i++){
+
+            list.add(i);
+
+            // new pdf or last pdf
+            if(i%pagesOfNum == 0 || i==numberOfPages){
+                // first page and the past page
+                String rangeString =  String.valueOf(i- pagesOfNum + 1) + "-" + String.valueOf(i);
+                String newPdfFile = pdfSplitPath + "/" + StringUtils.getBaseName(pdfFilePath) + "-" + rangeString + ".pdf";
+
+                File checkNewFile = new File(newPdfFile);
+                if(!checkNewFile.exists()){
+                    System.out.println(newPdfFile);
+
+                    PdfReader nextReader = new PdfReader(pdfFilePath);
+
+                    nextReader.selectPages(list);
+                    PdfStamper stamp = new PdfStamper(nextReader, new FileOutputStream(newPdfFile));
+                    stamp.close();
+                    nextReader.close();
+                }
+
+                // reset, and go next
+                list.clear();
+            }
+        }
+
+        
+    }
+
 
     public static  void deletePage(String pdfFilePath, int[] pageNum) throws IOException, DocumentException {
         PdfReader reader = new PdfReader(pdfFilePath);
@@ -175,7 +227,7 @@ public class PdfPages {
             skip = false;
         }
 
-        String newPdfFile = FilePathExtention.removeExtension(pdfFilePath) + "-new.pdf";
+        String newPdfFile = StringUtils.removeExtension(pdfFilePath) + "-new.pdf";
 
         reader.selectPages(list);
         PdfStamper stamp = new PdfStamper(reader, new FileOutputStream(newPdfFile));
