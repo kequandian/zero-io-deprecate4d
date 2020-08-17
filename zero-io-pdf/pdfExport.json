@@ -1,0 +1,72 @@
+{
+  "flows": [
+
+    {
+      "name": "linear",
+      "columnWidths": [
+        1.0
+      ],
+      "elements": [
+        {
+          "name": "table",
+          "columnWidths": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1.2"
+          ],
+          "columnKeyBindings": [
+            {
+              "column": "结算年度",
+              "key": "结算年度"
+            },
+            {
+              "column": "合作伙伴",
+              "key": "合作伙伴"
+            },
+            {
+              "column": "股东净利润",
+              "key": "股东净利润"
+            },
+            {
+              "column": "股东毛利",
+              "key": "股东毛利"
+            },
+            {
+              "column": "合同金额",
+              "key": "合同金额"
+            },
+            {
+              "column": "实际应收款总金额",
+              "key": "实际应收款总金额"
+            }
+          ],
+          "header": [],
+          "data": "${rows}",
+          "converts": {
+            "股东净利润": {
+              "{}": "¥ {}"
+            },
+            "股东毛利": {
+              "{}": "¥ {}"
+            },
+            "合同金额": {
+              "{}": "¥ {}"
+            },
+            "实际应收款总金额": {
+              "{}": "¥ {}"
+            }
+          },
+          "rowHeight": 25,
+          "headerHeight": 40
+        }
+      ]
+    }
+  ],
+  "page": {
+    "pageName": "A4",
+    "margin": "10"
+  }
+}
