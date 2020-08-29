@@ -3,9 +3,10 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>zero-io-pom</artifactId>
         <groupId>com.jfeat</groupId>
+        <artifactId>sb-parent</artifactId>
         <version>1.0.0</version>
+        <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -17,6 +18,7 @@
         <fastjson.version>1.2.49</fastjson.version>
         <slf4j.version>1.7.25</slf4j.version>
         <junit.version>4.11</junit.version>
+        <lombok.version>1.18.12</lombok.version>
     </properties>
 
 
@@ -25,6 +27,13 @@
         <groupId>cn.hutool</groupId>
         <artifactId>hutool-core</artifactId>
         <version>${hutool-core.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>${lombok.version}</version>
+        <scope>provided</scope>
     </dependency>
 
     <!-- log -->

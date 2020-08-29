@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>com.jfeat</groupId>
-        <artifactId>zero-io-pom</artifactId>
+        <artifactId>sb-parent</artifactId>
         <version>1.0.0</version>
         <relativePath/>
     </parent>
@@ -20,9 +20,16 @@
         <zero-io-core.version>0.0.4</zero-io-core.version>
         <crud-plus.version>0.0.6</crud-plus.version>
         <crud-core.version>0.0.2</crud-core.version>
+        <lombok.version>1.18.12</lombok.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>com.jfeat</groupId>
             <artifactId>crud-dev</artifactId>

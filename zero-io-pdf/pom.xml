@@ -11,7 +11,7 @@
 
     <parent>
         <groupId>com.jfeat</groupId>
-        <artifactId>zero-io-pom</artifactId>
+        <artifactId>sb-parent</artifactId>
         <version>1.0.0</version>
         <relativePath/>
     </parent>
