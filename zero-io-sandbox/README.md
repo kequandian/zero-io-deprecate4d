@@ -3,7 +3,7 @@
 
 #### 准备 zero-io包
 
-在[zero-io-all](./zero-io-all) 项目下执行`mvn package`，将生成的 `zero-io-all-1.0.0-standalone.jar` 放入`io-api`目录下。
+在[zero-io-all](../zero-io-all) 项目下执行`mvn package`，将生成的 `zero-io-all-1.0.0-standalone.jar` 放入`io-api`目录下。
 
 ```
 $ ls ./io-api
