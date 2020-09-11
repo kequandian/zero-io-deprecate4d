@@ -2,6 +2,7 @@ version: "3"
 services:
   zero-io:
     image: zelejs/allin-web:jdk11
+    privileged: true
     container_name: zero-io 
     volumes:
       - /etc/localtime:/etc/localtime:ro
