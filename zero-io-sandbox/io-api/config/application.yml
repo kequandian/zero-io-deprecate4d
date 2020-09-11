@@ -1,0 +1,20 @@
+---
+spring:
+  profiles: produce
+  datasource:
+    url: jdbc:mysql://mysqlserver:3306/test?useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+    username: root
+    password: root
+    filters: log4j,wall,mergeStat
+    sql-script-encoding: UTF-8
+    schema: classpath*:sql/*-schema.sql
+    data: classpath*:sql/*-data.sql
+    initialize: false
+
+logging:
+  level: debug
+  config: config/logback-spring.xml
+
+---
+io:
+  excel-template-dir: "templates"
