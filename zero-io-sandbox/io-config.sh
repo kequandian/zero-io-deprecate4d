@@ -34,8 +34,8 @@ fi
 
 
 ## start zero-io docker
-echo 'start up docker-compose ...'
-docker-compose -f docker-compose.yml up -d
+#echo 'docker-compose up ...'
+#docker-compose -f docker-compose.yml up
 
 
 
