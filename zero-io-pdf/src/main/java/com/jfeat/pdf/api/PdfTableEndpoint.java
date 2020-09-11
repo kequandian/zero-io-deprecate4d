@@ -1,7 +1,7 @@
 package com.jfeat.pdf.api;
 
 import com.baomidou.mybatisplus.plugins.Page;
-import com.jfeat.am.module.log.annotation.BusinessLog;
+import com.jfeat.am.common.annotation.BusinessLog;
 import com.jfeat.crud.base.exception.BusinessCode;
 import com.jfeat.crud.base.exception.BusinessException;
 import com.jfeat.crud.base.tips.SuccessTip;
