@@ -65,7 +65,8 @@ public class ExcelIoEndpoint {
     @PostMapping("/import")
     public Tip importExcelFile(@RequestBody MultipartFile multipartFile) throws Exception {
         assert multipartFile != null;
-        String name = multipartFile.getName();
+        String fullName = multipartFile.getOriginalFilename();
+        String name = fullName.substring(0, fullName.lastIndexOf("."));
         logger.info("import name : {}", name);
         return SuccessTip.create(excelImportService
                 .importExcel(name, multipartFile.getInputStream()));
