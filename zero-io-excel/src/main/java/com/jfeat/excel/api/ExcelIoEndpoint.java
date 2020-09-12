@@ -63,10 +63,10 @@ public class ExcelIoEndpoint {
     }
 
     @PostMapping("/import")
-    public Tip importExcelFile(@RequestParam String name, @RequestBody MultipartFile multipartFile) throws Exception {
-        ImportParams params = new ImportParams();
-        logger.info("import name : {}", name);
+    public Tip importExcelFile(@RequestBody MultipartFile multipartFile) throws Exception {
         assert multipartFile != null;
+        String name = multipartFile.getName();
+        logger.info("import name : {}", name);
         return SuccessTip.create(excelImportService
                 .importExcel(name, multipartFile.getInputStream()));
     }
