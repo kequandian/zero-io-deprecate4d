@@ -43,6 +43,5 @@ mybatis-plus:
 
 ---
 io:
-  excel:
-    template-dir: "excel-templates"
+  excel-template-dir: "excel-templates"
 

@@ -55,7 +55,7 @@ public class ExcelImportServiceImpl implements ExcelImportService {
         // success 永远是 0
         log.info("success : {}", success);
 
-        return success >= 0;
+        return success > 0;
     }
 
 
