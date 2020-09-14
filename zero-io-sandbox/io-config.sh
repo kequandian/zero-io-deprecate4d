@@ -20,7 +20,6 @@ fi
 # config docker network
 if [ -f $webapps/docker-compose.yml ];then
   sed -i "s/name:[[:space:]]*\${network}/name: $network/" $webapps/docker-compose.yml
-exit
 else
   echo docker-compose.yml not found!
 fi
