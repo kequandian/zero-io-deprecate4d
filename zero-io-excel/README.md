@@ -42,7 +42,6 @@ io:
 |    type    |    值为`API`     |
 |    api     |       API        |
 |   search   | 搜索和分页的参数 |
-|    dict    |     转换字典     |
 
 请求参数例子:
 
@@ -55,25 +54,38 @@ io:
         "categoryId": "",
         "activeKey": "list",
         "pageSize": 99
-    },
-    "dict": {
-        "status": {
-            "IN_USE": "使用中",
-            "STAND_BY": "待用"
-        },
-        "changeStatus": {
-            "": "无",
-            "SCRAPPED": "报废",
-            "SEALED": "封存",
-            "DISABLED": "停用"
-        },
-        "stockStatus": {
-            "TO_STOCKTAKE": "待盘点",
-            "TO_STOCK_ADJUST": "待调整"
-        }
     }
 }
 ```
+
+**字段转换字典配置:**
+
+> 为了转换API中的返回的字段值，需要额外在模版目录放入文件名为"*导出名称*.json"的转换文件。
+
+字典配置例子:
+
+```json
+{
+  "status": {
+    "IN_USE": "使用中",
+    "STAND_BY": "待用"
+  },
+  "changeStatus": {
+    "": "无",
+    "SCRAPPED": "报废",
+    "SEALED": "封存",
+    "DISABLED": "停用"
+  },
+  "stockStatus": {
+    "TO_STOCKTAKE": "待盘点",
+    "TO_STOCK_ADJUST": "待调整"
+  }
+}
+```
+
+
+
+
 
 #### SQL方式
 
