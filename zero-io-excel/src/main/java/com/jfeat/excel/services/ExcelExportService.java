@@ -26,8 +26,7 @@ public interface ExcelExportService {
      * @param   - 导出参数
      * @return
      */
-    ByteArrayInputStream exportByApi(String exportName, String api, Map<String, String> search,
-                                     Map<String, Map<String, String>> dict);
+    ByteArrayInputStream exportByApi(String exportName, String api, Map<String, String> search);
 
     /**
      * 导出 Excel, sql 方式, 处理字节流数据

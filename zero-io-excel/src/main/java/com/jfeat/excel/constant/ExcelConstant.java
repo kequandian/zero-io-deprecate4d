@@ -27,6 +27,11 @@ public interface ExcelConstant {
      */
     String EXPORT_TEMPLATE_SUFFIX = ".xlsx";
 
+    /**
+     * 导出字段转换字段
+     */
+    String EXPORT_DICT_SUFFIX = ".json";
+
     String EXPORT_SQL_SUFFIX = ".sql";
 
     /**

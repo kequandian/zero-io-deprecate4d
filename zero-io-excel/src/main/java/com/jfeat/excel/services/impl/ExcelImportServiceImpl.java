@@ -2,6 +2,7 @@ package com.jfeat.excel.services.impl;
 
 import cn.hutool.core.io.IoUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.jfeat.common.FileUtil;
 import com.jfeat.excel.constant.ExcelConstant;
 import com.jfeat.excel.properties.ExcelProperties;
 import com.jfeat.excel.services.ExcelImportService;
@@ -45,7 +46,7 @@ public class ExcelImportServiceImpl implements ExcelImportService {
         log.info("import template file : {}", templateFilePath);
 
         // request
-        PoiAgentImporterRequest request = readRequestFile(templateFilePath);
+        PoiAgentImporterRequest request = FileUtil.readJsonFile(templateFilePath, PoiAgentImporterRequest.class);
 
         // import
         int success = new PoiAgentImporterUtil()

@@ -5,6 +5,7 @@ import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.jfeat.common.FileUtil;
 import com.jfeat.common.HttpUtil;
 import com.jfeat.excel.constant.ExcelConstant;
@@ -82,8 +83,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
 
         if (ExcelConstant.API_EXPORT.equals(type)) {
             // api
-            return exportByApi(exportName, exportParam.getApi(),
-                    exportParam.getSearch(), exportParam.getDict());
+            return exportByApi(exportName, exportParam.getApi(), exportParam.getSearch());
         } else if (ExcelConstant.SQL_EXPORT.equals(type)) {
             // sql
             return exportBySql(exportName, exportParam.getSearch());
@@ -93,8 +93,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
 
     @Override
     @SneakyThrows
-    public ByteArrayInputStream exportByApi(String exportName, String api, Map<String, String> search,
-                                            Map<String, Map<String, String>> dict) {
+    public ByteArrayInputStream exportByApi(String exportName, String api, Map<String, String> search) {
         // Authorization
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         HttpServletRequest httpRequest = ((ServletRequestAttributes) requestAttributes).getRequest();
@@ -112,11 +111,19 @@ public class ExcelExportServiceImpl implements ExcelExportService {
 
         // API数据转换成row
         JSONArray records = data.getJSONArray("records");
+
+        String templateDirectory = excelProperties.getExcelTemplateDir();
+        // 转换字典
+        String dictName = exportName + ExcelConstant.EXPORT_DICT_SUFFIX;
+        String dictPath = templateDirectory + File.separator + dictName;
+        log.info("dictPath : {}", dictPath);
+        Map<String, Map<String, String>> dict = FileUtil.parseJsonFile(dictPath,
+                new TypeReference<HashMap<String, Map<String, String>>>() {});
         log.info("template dict: {}", dict);
         List<Map<String, Object>> rowsMapList = getRowsMapList(records, dict);
+        log.info("rowsMapList : {}", rowsMapList);
 
         // 模版文件
-        String templateDirectory = excelProperties.getExcelTemplateDir();
         String templateFileName = exportName + ExcelConstant.EXPORT_TEMPLATE_SUFFIX;
         String templateFilePath = templateDirectory + File.separator + templateFileName;
         log.info("templateFilePath : {}", templateFilePath);
@@ -133,6 +140,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     }
 
     @SneakyThrows
+    @Override
     public ByteArrayInputStream exportBySql(String exportName, Map<String, String> search) {
         String templateDirectory = excelProperties.getExcelTemplateDir();
         // sql 文件名称
