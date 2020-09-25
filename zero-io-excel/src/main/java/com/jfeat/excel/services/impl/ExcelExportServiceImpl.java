@@ -2,6 +2,7 @@ package com.jfeat.excel.services.impl;
 
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -105,6 +106,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         log.info("search parameter : {}", search);
         apiPath = HttpUtil.setQueryParams(apiPath, search);
         log.info("api search Path: {}", apiPath);
+
         JSONObject response = HttpUtil.getResponse(apiPath, authorization);
         JSONObject data = response.getJSONObject("data");
         log.info("data : {}", data);
@@ -209,8 +211,8 @@ public class ExcelExportServiceImpl implements ExcelExportService {
                                        Map<String, Map<String, String>> dict) {
         recordMap.forEach((key, value) -> {
             Map<String, String> convertMap = dict.get(key);
-            if (convertMap != null && !convertMap.isEmpty()) {
-                String convertValue = convertMap.getOrDefault(value, (String)value);
+            if (!CollectionUtil.isEmpty(convertMap)) {
+                String convertValue = convertMap.getOrDefault(String.valueOf(value), String.valueOf(value));
                 recordMap.put(key, convertValue);
             }
         });
