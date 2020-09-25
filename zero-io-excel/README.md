@@ -210,3 +210,19 @@ io:
 
 
 接收`name`参数后，通过yaml配置文件的`template-directory`和`name`读取到模版文件，然后处理`multipartFile`中的Excel数据，从而进行**批量更新数据库**的操作。
+
+
+
+## 需要注意的问题
+
+* API方式导出时出现 `No route to host (Host unreachable)` 的问题，可能是由于防火墙导致的。
+
+  ```
+  # 查看防火墙状态
+  $ firewall-cmd --state
+  $ systemctl status firewalld
+  # 关闭防火墙
+  $ systemctl stop firewalld
+  ```
+
+  
