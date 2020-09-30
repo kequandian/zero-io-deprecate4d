@@ -49,7 +49,7 @@ io:
 {
     "exportName": "equipment",
     "type": "API",
-    "api": "http://39.108.14.206:8070/api/adm/equipment/equipments",
+    "api": "/api/adm/equipment/equipments",
     "search": {
         "categoryId": "",
         "activeKey": "list",
