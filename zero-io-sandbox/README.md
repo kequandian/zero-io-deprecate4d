@@ -11,27 +11,21 @@ config   templates   zero-io-all-1.0.0-standalone.jar
 ```
 
 #### 准备模版文件
+> 不同业务所需模板不同
 将模版文件放入 `io-api/templates`目录。
 ```
 $ ls ./io-api/templates
 template.json
 ```
 
-#### nginx 配置文件
-
-将`io.conf` 配置文件拷贝到接入网络的nginx服务的`conf.d`目录
-
 #### 运行配置文件
-
 > `network`参数为接入的docker网络名称
 
 ```
-$ sh io-config.sh
-Usage: io-config.sh <network> <mysqlurl> <database>
+$ sh config.sh
+Usage: config.sh <network>
 Option:
       network   - docker network name you want to connect
-      mysqlurl  - mysql server url
-      database  - database name
 ```
 
 #### 启动docker容器
