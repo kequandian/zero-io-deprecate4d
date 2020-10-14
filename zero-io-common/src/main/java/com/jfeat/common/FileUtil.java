@@ -8,9 +8,6 @@ import com.alibaba.fastjson.TypeReference;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.mockito.internal.util.io.IOUtil;
-
-
 
 import java.io.File;
 import java.io.FileReader;
@@ -46,7 +43,8 @@ public class FileUtil {
         log.info("read file path: {}", fileName);
         FileReader fileReader = new FileReader(new File(fileName));
         String jsonStr = IoUtil.read(fileReader);
-        IOUtil.close(fileReader);
+        IoUtil.close(fileReader);
+
         return jsonStr;
     }
 
