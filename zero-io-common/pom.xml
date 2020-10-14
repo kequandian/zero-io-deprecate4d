@@ -14,7 +14,7 @@
     <version>1.0.0</version>
 
     <properties>
-        <hutool-core.version>5.1.0</hutool-core.version>
+        <hutool-core.version>5.2.5</hutool-core.version>
         <fastjson.version>1.2.52</fastjson.version>
         <slf4j.version>1.7.25</slf4j.version>
         <junit.version>4.11</junit.version>
