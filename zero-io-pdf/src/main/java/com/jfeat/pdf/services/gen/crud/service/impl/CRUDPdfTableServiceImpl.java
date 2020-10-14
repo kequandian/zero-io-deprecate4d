@@ -1,6 +1,6 @@
 package com.jfeat.pdf.services.gen.crud.service.impl;
 
-import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jfeat.crud.plus.impl.CRUDServiceOnlyImpl;
 import com.jfeat.pdf.services.gen.crud.service.CRUDPdfTableService;
 import com.jfeat.pdf.services.gen.persistence.dao.PdfTableMapper;

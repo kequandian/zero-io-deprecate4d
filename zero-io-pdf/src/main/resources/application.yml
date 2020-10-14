@@ -80,8 +80,8 @@ mybatis-plus:
     refresh-mapper: true
     logic-delete-value: -1
     logic-not-delete-value: 1
-    sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
-    meta-object-handler: com.jfeat.crud.plus.CRUDMetaObjectHandler
+    # sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+   #  meta-object-handler: com.jfeat.crud.plus.CRUDMetaObjectHandler
   configuration:
     map-underscore-to-camel-case: false
     cache-enabled: true #配置的缓存的全局开关
