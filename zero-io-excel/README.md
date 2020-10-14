@@ -1,6 +1,11 @@
 # zero-io-excel
 >自动报表的EXCEL导出API
 
+## 引用开源框架easypoi
+> 详细配置方法参考以下开源链接
+- [easypoi](https://gitee.com/lemur/easypoi)
+
+
 ## 导出
 ### 自动报表导出
 
@@ -49,7 +54,7 @@ io:
 {
     "exportName": "equipment",
     "type": "API",
-    "api": "http://39.108.14.206:8070/api/adm/equipment/equipments",
+    "api": "/api/adm/equipment/equipments",
     "search": {
         "categoryId": "",
         "activeKey": "list",

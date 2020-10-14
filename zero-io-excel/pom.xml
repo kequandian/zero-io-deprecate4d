@@ -15,8 +15,8 @@
     <version>1.1.0</version>
 
     <properties>
-        <skipStandalone>false</skipStandalone>
-        <crud-dev.version>0.0.2</crud-dev.version>
+        <skipStandalone>true</skipStandalone>
+        <crud-dev.version>0.0.1</crud-dev.version>
         <zero-io-core.version>0.0.4</zero-io-core.version>
         <crud-plus.version>0.1.0</crud-plus.version>
         <crud-core.version>0.0.5</crud-core.version>
@@ -34,6 +34,7 @@
             <groupId>com.jfeat</groupId>
             <artifactId>crud-dev</artifactId>
             <version>${crud-dev.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

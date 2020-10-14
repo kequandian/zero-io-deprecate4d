@@ -102,6 +102,13 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         log.info("Authorization: {}", authorization);
         // API
         String apiPath = api;
+        if(apiPath.startsWith("http")){
+            // ok
+        }else if(apiPath.startsWith("/")){
+            apiPath = httpRequest.getRequestURL().toString() + api;
+        }else{
+            log.warn("invalid api: " + api);
+        }
         // 处理API的分页和搜索
         log.info("search parameter : {}", search);
         apiPath = HttpUtil.setQueryParams(apiPath, search);
