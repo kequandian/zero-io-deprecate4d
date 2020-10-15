@@ -1,7 +1,7 @@
 package com.jfeat.pdf.services.domain.dao;
 
-import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jfeat.pdf.services.domain.model.PdfTableRecord;
 import com.jfeat.pdf.services.gen.persistence.model.PdfTable;
 import org.apache.ibatis.annotations.Param;
