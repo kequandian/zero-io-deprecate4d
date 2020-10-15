@@ -3,16 +3,26 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>zero-io-pom</artifactId>
         <groupId>com.jfeat</groupId>
+        <artifactId>zero-io-pom</artifactId>
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.jfeat</groupId>
     <artifactId>zero-io-all</artifactId>
+    <version>1.1.0</version>
+
+    <!-- upgrade history
+       1.0.0  dependency zero-io-pdf  1.1.0
+              dependency zero-io-excel 1.1.0
+
+       1.1.0 author: vincent
+             add dependency zero-io-fs 1.0.0
+       -->
 
     <properties>
-        <skipStandalone>false</skipStandalone>
+        <skipStandalone>true</skipStandalone>
     </properties>
 
     <dependencies>
@@ -26,28 +36,16 @@
             <artifactId>zero-io-excel</artifactId>
             <version>1.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.jfeat</groupId>
+            <artifactId>zero-io-fs</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-<!--            <plugin>-->
-<!--                <groupId>com.jfeat</groupId>-->
-<!--                <artifactId>cg-maven-plugin</artifactId>-->
-<!--                <version>1.1.0</version>-->
-<!--                <configuration>-->
-<!--                    <dbUrl>jdbc:mysql://127.0.0.1:3306/test?characterEncoding=utf-8</dbUrl>-->
-<!--                    <username>root</username>-->
-<!--                    <password>root</password>-->
-<!--                    <moduleName>pdf</moduleName>-->
-<!--                    <parentPackage>com.jfeat.am</parentPackage>-->
-<!--                    <outputDir>src/main/java</outputDir>-->
-<!--                    <fileOverride>false</fileOverride>-->
-<!--                    <tables>-->
-<!--                        <table>io_pdf_table</table>-->
-<!--                        <table>equipment</table>-->
-<!--                    </tables>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
