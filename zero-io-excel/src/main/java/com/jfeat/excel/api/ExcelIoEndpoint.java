@@ -61,14 +61,11 @@ public class ExcelIoEndpoint {
         response.getOutputStream().write(excelExportService.export(exportParam).readAllBytes());
     }
 
-    @PostMapping("/import")
-    public Tip importExcelFile(@RequestBody MultipartFile multipartFile) throws Exception {
+    @PostMapping("/import/{importName}")
+    public Tip importExcelFile(@PathVariable String importName, @RequestBody MultipartFile multipartFile) throws Exception {
         assert multipartFile != null;
-        String fullName = multipartFile.getOriginalFilename();
-        String name = fullName.substring(0, fullName.lastIndexOf("."));
-        logger.info("import name : {}", name);
         return SuccessTip.create(excelImportService
-                .importExcel(name, multipartFile.getInputStream()));
+                .importExcel(importName, multipartFile.getInputStream()));
     }
 
     private Map<String, List<String>> toPrintMap(Map<String, String[]> parameterMap) {
