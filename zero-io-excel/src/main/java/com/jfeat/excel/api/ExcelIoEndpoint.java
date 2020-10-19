@@ -1,5 +1,6 @@
 package com.jfeat.excel.api;
 
+import com.jfeat.am.common.annotation.UrlPermission;
 import com.jfeat.crud.base.tips.SuccessTip;
 import com.jfeat.crud.base.tips.Tip;
 import com.jfeat.excel.model.ExportParam;
@@ -49,7 +50,9 @@ public class ExcelIoEndpoint {
         response.getOutputStream().write(excelExportService.export(field).readAllBytes());
     }
 
-    @PostMapping("/export")
+    //modelName 用于权限控制
+    @UrlPermission
+    @PostMapping("/export/{modelName}")
     public void exportExcel(@Valid @RequestBody ExportParam exportParam, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, String[]> parameterMap = request.getParameterMap();
         logger.info("parameterMap --> {}", toPrintMap(parameterMap));
@@ -61,6 +64,7 @@ public class ExcelIoEndpoint {
         response.getOutputStream().write(excelExportService.export(exportParam).readAllBytes());
     }
 
+    @UrlPermission
     @PostMapping("/import/{importName}")
     public Tip importExcelFile(@PathVariable String importName, @RequestBody MultipartFile multipartFile) throws Exception {
         assert multipartFile != null;
