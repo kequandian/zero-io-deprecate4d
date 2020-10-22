@@ -49,19 +49,21 @@ public class ExcelIoEndpoint {
         response.getOutputStream().write(excelExportService.export(field).readAllBytes());
     }
 
-    @PostMapping("/export/{exportName}")
-    public void exportExcel(@PathVariable String exportName, @Valid @RequestBody ExportParam exportParam, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    //modelName 用于权限控制
+    @UrlPermission
+    @PostMapping("/export/{modelName}")
+    public void exportExcel(@Valid @RequestBody ExportParam exportParam, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, String[]> parameterMap = request.getParameterMap();
         logger.info("parameterMap --> {}", toPrintMap(parameterMap));
-        exportParam.setExportName(exportName);
-        logger.info("exportName : {}", exportName);
 
+        String exportName = exportParam.getExportName();
         response.setContentType("application/octet-stream");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s.xlsx", exportName));
         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
         response.getOutputStream().write(excelExportService.export(exportParam).readAllBytes());
     }
 
+    @UrlPermission
     @PostMapping("/import/{importName}")
     public Tip importExcelFile(@PathVariable String importName, @RequestBody MultipartFile multipartFile) throws Exception {
         assert multipartFile != null;
