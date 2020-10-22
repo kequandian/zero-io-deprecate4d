@@ -105,7 +105,12 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         if(apiPath.startsWith("http")){
             // ok
         }else if(apiPath.startsWith("/")){
-            apiPath = httpRequest.getRequestURL().toString() + api;
+            StringBuffer requestURL = httpRequest.getRequestURL();
+            String requestURI = httpRequest.getRequestURI();
+            String host = requestURL.delete(requestURL.length() -
+                    requestURI.length(), requestURL.length()).toString();
+            apiPath = host + api;
+            log.info("full api : {} ", apiPath);
         }else{
             log.warn("invalid api: " + api);
         }
