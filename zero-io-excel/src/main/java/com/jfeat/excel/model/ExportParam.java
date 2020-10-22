@@ -18,7 +18,7 @@ import java.util.Map;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ExportParam {
 
-    @NotNull
+    // @NotNull
     @ApiModelProperty(value = "导出名称")
     String exportName;
 
