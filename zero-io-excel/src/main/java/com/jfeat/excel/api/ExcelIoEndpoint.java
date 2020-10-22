@@ -1,5 +1,6 @@
 package com.jfeat.excel.api;
 
+import com.jfeat.am.common.annotation.UrlPermission;
 import com.jfeat.crud.base.tips.SuccessTip;
 import com.jfeat.crud.base.tips.Tip;
 import com.jfeat.excel.model.ExportParam;
@@ -51,12 +52,13 @@ public class ExcelIoEndpoint {
 
     //modelName 用于权限控制
     @UrlPermission
-    @PostMapping("/export/{modelName}")
-    public void exportExcel(@Valid @RequestBody ExportParam exportParam, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @PostMapping("/export/{exportName}")
+    public void exportExcel(@PathVariable String exportName, @Valid @RequestBody ExportParam exportParam, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, String[]> parameterMap = request.getParameterMap();
         logger.info("parameterMap --> {}", toPrintMap(parameterMap));
 
-        String exportName = exportParam.getExportName();
+        exportName = exportParam.getExportName();
+        logger.info("[exportName] : {}", exportName);
         response.setContentType("application/octet-stream");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s.xlsx", exportName));
         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
