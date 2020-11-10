@@ -1,0 +1,54 @@
+{
+    "duplicate": 0,      
+    "header": 1,         
+    "level": 1,          
+    "overwrite": 1,      
+    "relationOnly": 0,   
+    "target": [         
+      {
+        "fields": [		 
+          "projectCode",
+          "projectName",
+          "code",
+          "batchNumber",
+          "name",
+          "categoryName",
+          "installationSite",
+          "warehouseName",
+          "status",
+          "changeStatus",
+          "stockStatus",
+          "factory",
+          "system",
+          "spec",
+          "material",
+          "machineCode",
+          "brand",
+          "supplier",
+          "supplier",
+          "startTime",
+          "produceTime",
+          "serviceLife",
+          "note "
+        ],
+        "table": "equipment",
+        "valueConverterMap": {
+          "status": {
+            "IN_USE": "在用",
+            "STAND_BY": "已下发",
+            "LOST": "丢失"
+          },
+          "change_status": {
+            "SCRAPPED": "报废",
+            "SEALED": "封存",
+            "DISABLED": "停用"
+          },
+          "stock_status": {
+            "TO_STOCKTAKE": "待盘点",
+            "TO_STOCK_ADJUST": "待调整"
+          }
+        },
+        "values": []
+      }
+    ]
+  }
