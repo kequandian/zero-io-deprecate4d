@@ -36,7 +36,7 @@ io:
   excel-template-dir: "excel-templates"
 ```
 
-####  API方式
+###  API方式
 > 需要同时配置下述数据字典转换模板，以及easypoi定义的excel文件类型(*.xlsx)导出模板
 
 导出api参数说明：
@@ -86,13 +86,15 @@ io:
 }
 ```
 
-**基于easypoi的导出excel文件类型(*.xlsx)模板例子:**, 同样放进 `excel-template-dir` 定义的目录
+**基于easypoi的导出excel文件类型(*.xlsx)模板例子:
+> 同样放进 `excel-template-dir` 定义的目录
 |  **编号**  |               **名称**                |               **说明**                 |
 | :--------: | :-----------------------------------: | :-----------------------------------: | 
 |   {{ $fe: list t.entityNumber  |              t.name    |              t.note}} | 
 
 
-#### SQL方式
+
+### SQL方式
 
 参数列表：
 
