@@ -1,7 +1,7 @@
 # zero-io-excel
->自动报表的EXCEL导出API
+> 导出EXCEL使用说明
 
-## 引用开源框架easypoi
+##### 引用开源框架easypoi
 > 详细配置方法参考以下开源链接
 - [easypoi](https://gitee.com/lemur/easypoi)
 
@@ -13,7 +13,6 @@ GET `/api/io/excel/{field}`
 
 参数列表：
 
-
 | **参数** |    **描述**    |
 | :------: | :------------: |
 |  field   | 自动报表字段名 |
@@ -22,12 +21,13 @@ GET `/api/io/excel/{field}`
 
 访问接口后会拼接API`/api/adm/stat/meta/{field}` ，获取API中的数据并导出Excel.
 
-###  API和SQL方式导出
 
-POST `/api/io/excel/export`
+
+### 支持API和SQL两种方式导出
+
+POST `/api/io/excel/export/<exportName>`
 
 > 支持API和SQL两种形式的Excel导出
-
 
 application.yml配置：
 
@@ -37,24 +37,22 @@ io:
 ```
 
 ####  API方式
+> 需要同时配置下述数据字典转换模板，以及easypoi定义的excel文件类型(*.xlsx)导出模板
 
-参数列表：
-
+导出api参数说明：
 
 |  **参数**  |     **描述**     |
 | :--------: | :--------------: |
-| exportName |     导出名称     |
-|    type    |    值为`API`     |
-|    api     |       API        |
+|    type    |   固值为 `API`     |
+|    api     | 用于获取导出数据的 api |
 |   search   | 搜索和分页的参数 |
 
 请求参数例子:
 
 ```json
 {
-    "exportName": "equipment",
     "type": "API",
-    "api": "/api/adm/equipment/equipments",
+    "api": "/api/equipment/equipments",
     "search": {
         "categoryId": "",
         "activeKey": "list",
@@ -65,9 +63,9 @@ io:
 
 **字段转换字典配置:**
 
-> 为了转换API中的返回的字段值，需要额外在模版目录放入文件名为"*导出名称*.json"的转换文件。
+> 为了转换API中的返回的字段值，需要额外在模版目录`excel-template-dir`中放入文件名为 `exportName.json` 的转换文件。
 
-字典配置例子:
+配置文件`exportName.json`例子:
 
 ```json
 {
@@ -88,8 +86,10 @@ io:
 }
 ```
 
-
-
+**基于easypoi的导出excel文件类型(*.xlsx)模板例子:**, 同样放进 `excel-template-dir` 定义的目录
+|  **编号**  |               **名称**                |               **说明**                 |
+| :--------: | :-----------------------------------: | :-----------------------------------: | 
+|   {{ $fe: list t.entityNumber  |              t.name    |              t.note}} | 
 
 
 #### SQL方式
@@ -98,7 +98,6 @@ io:
 
 |  **参数**  |               **描述**                |
 | :--------: | :-----------------------------------: |
-| exportName |               导出名称                |
 |    type    |               值为`SQL`               |
 |   search   | 搜索过滤参数，用于替换SQL中的模版字段 |
 
@@ -106,7 +105,6 @@ io:
 
 ```js
 {
-    "exportName": "equipment",
     "type": "SQL",
     "search": {           
         "status": "IN_USE"   // SQL替换字段
@@ -114,7 +112,7 @@ io:
 }
 ```
 
-> Sql文件存放在配置文件的 `template-dir`文件夹下，文件名与导出名称`exportName`相同。
+> Sql文件存放在配置文件的 `excel-template-dir`文件夹下，文件名与导出名称 `exportName` 相同 (e.g. exportName.sql)。
 
 sql例子：
 
@@ -143,13 +141,12 @@ WHERE 1=1
 
 > 通过传入导入的名称和excel文件，对数据库进行**批量更新**。
 
-POST  `/api/io/excel/import`
+POST  `/api/io/excel/import/<importName>`
 
 参数列表：
 
 |   **参数**    |              **描述**              |
 | :-----------: | :--------------------------------: |
-|     name      | 导入名称，对应yml配置中`equipment` |
 | multipartFile |          导入的excel文件           |
 
 application.yml配置如下：
@@ -159,7 +156,7 @@ io:
   excel-template-dir: "excel-templates"
 ```
 
-模版文件 equipment.json：
+模版文件 importName.json：
 
 ```
 {
@@ -214,7 +211,7 @@ io:
 
 
 
-接收`name`参数后，通过yaml配置文件的`template-directory`和`name`读取到模版文件，然后处理`multipartFile`中的Excel数据，从而进行**批量更新数据库**的操作。
+接收`name`参数后，通过yaml配置文件的`excel-template-dir`和 `importName` 读取到模版文件 `importName.json`，然后处理`multipartFile`中的Excel数据，从而进行**批量更新数据库**的操作。
 
 
 
