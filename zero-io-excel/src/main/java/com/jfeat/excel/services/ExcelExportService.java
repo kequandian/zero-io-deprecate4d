@@ -12,8 +12,6 @@ import java.util.Map;
  */
 public interface ExcelExportService {
 
-    ByteArrayInputStream export(String field);
-
     /**
      * 导出Excel
      * @param exportParam

@@ -50,35 +50,6 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     DataSource dataSource;
 
     @Override
-    public ByteArrayInputStream export(String field) {
-
-        // Authorization
-        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest httpRequest = ((ServletRequestAttributes) requestAttributes).getRequest();
-        String authorization = httpRequest.getHeader("Authorization");
-        // api
-        String apiPath = getApiPath(httpRequest, field);
-        // process search
-        apiPath = processSearch(apiPath, httpRequest);
-        // process page size
-        apiPath = processPageSize(apiPath, authorization);
-
-        // 访问api 获取数据
-        JSONObject data = HttpUtil.getResponse(apiPath, authorization).getJSONObject("data");
-        // header
-        List<String> header = data.getJSONArray("header").toJavaList(String.class);
-        // rows jsonArray
-        JSONArray rows = data.getJSONArray("rows");
-        // rows map
-        List<Map<String, String>> rowsMapList = getRowsMapList(rows);
-
-        // export
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PoiAgentExporter.exportExcel(rowsMapList, header, header, baos);
-        return new ByteArrayInputStream(baos.toByteArray());
-    }
-
-    @Override
     public ByteArrayInputStream export(String exportName, ExportParam exportParam) {
         //String exportName = exportParam.getExportName();
         String type = exportParam.getType();
@@ -103,16 +74,16 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         log.info("Authorization: {}", authorization);
         // API
         String apiPath = api;
-        if(apiPath.startsWith("http")){
+        if (apiPath.startsWith("http")) {
             // ok
-        }else if(apiPath.startsWith("/")){
+        } else if (apiPath.startsWith("/")) {
             StringBuffer requestURL = httpRequest.getRequestURL();
             String requestURI = httpRequest.getRequestURI();
             String host = requestURL.delete(requestURL.length() -
                     requestURI.length(), requestURL.length()).toString();
             apiPath = host + api;
             log.info("full api : {} ", apiPath);
-        }else{
+        } else {
             log.warn("invalid api: " + api);
         }
         // 处理API的分页和搜索
@@ -232,41 +203,4 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         return recordMap;
     }
 
-    private List<Map<String, String>> getRowsMapList(JSONArray rows) {
-        List<Map<String, String>> rowsMapList = new ArrayList<>();
-
-        for (int i = 0; i < rows.size(); i++) {
-            JSONObject obj = rows.getJSONObject(i);
-            Map<String, String> rowMap = new HashMap<>();
-            // 循环转换
-            Iterator it = obj.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry<String, String> entry = (Map.Entry<String, String>) it.next();
-                rowMap.put(entry.getKey(), entry.getValue());
-            }
-            rowsMapList.add(rowMap);
-        }
-        return rowsMapList;
-    }
-
-    private String getApiPath(HttpServletRequest httpRequest, String field) {
-        String requestURI = httpRequest.getRequestURI();
-        StringBuffer requestURL = httpRequest.getRequestURL();
-        // String requestURL = "http://cloud.biliya.cn/api/io/excel/xxxx";
-        // String requestURI = "/api/io/excel/xxxx";
-        int index = requestURL.indexOf(requestURI);
-        return requestURL.substring(0, index) + API_PREFIX + "/" + field;
-    }
-
-    private String processSearch(String apiPath, HttpServletRequest request) {
-        String queryString = request.getQueryString();
-        return HttpUtil.setQueryParams(apiPath, queryString);
-    }
-
-    private String processPageSize(String apiPath, String authorization) {
-        JSONObject data = HttpUtil.getResponse(apiPath, authorization).getJSONObject("data");
-        String total = data.getString("total");
-        // apiPath = HttpUtil.setQueryParam(apiPath,"pageNum", "1");
-        return HttpUtil.setQueryParam(apiPath, "pageSize", total);
-    }
 }
