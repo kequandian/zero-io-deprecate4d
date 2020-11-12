@@ -94,7 +94,8 @@ io:
 | :--------: | :-----------------------------------: | :-----------------------------------: | 
 |   {{ $fe: list t.entityNumber  |              t.name    |              t.note}} | 
 
-
+> 配置例子可参考
+[equipment.xlsx](./src/main/resources/equipment.xlsx)
 
 ### SQL方式
 
@@ -195,7 +196,21 @@ io:
         ...
       ],
       "table": "equipment",	// 导入表名
-      "valueConverterMap": {},
+      "valueConverterMap": { //字典转换
+            "status": {
+                "IN_USE": "在用",
+                "STAND_BY": "已下发",
+                "LOST": "丢失"
+                },
+            "change_status": {
+                "SCRAPPED": "报废",
+                "SEALED": "封存",
+                "DISABLED": "停用"
+                },
+            "stock_status": {
+                "TO_STOCKTAKE": "待盘点",
+                "TO_STOCK_ADJUST": "待调整"
+            }},
       "values": []
     }
   ],
