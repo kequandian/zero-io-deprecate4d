@@ -57,12 +57,12 @@ public class ExcelIoEndpoint {
         Map<String, String[]> parameterMap = request.getParameterMap();
         logger.info("parameterMap --> {}", toPrintMap(parameterMap));
 
-        exportName = exportParam.getExportName();
-        logger.info("[exportName] : {}", exportName);
+        //exportName = exportParam.getExportName();
+        //logger.info("[exportName] : {}", exportName);
         response.setContentType("application/octet-stream");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s.xlsx", exportName));
         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
-        response.getOutputStream().write(excelExportService.export(exportParam).readAllBytes());
+        response.getOutputStream().write(excelExportService.export(exportName, exportParam).readAllBytes());
     }
 
     @UrlPermission

@@ -19,7 +19,7 @@ public interface ExcelExportService {
      * @param exportParam
      * @return
      */
-    ByteArrayInputStream export(ExportParam exportParam);
+    ByteArrayInputStream export(String exportName, ExportParam exportParam);
 
     /**
      * 导出Excel, api 方式, 处理字节流数据

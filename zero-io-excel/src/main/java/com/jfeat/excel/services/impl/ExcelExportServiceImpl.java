@@ -42,6 +42,7 @@ import java.util.*;
 public class ExcelExportServiceImpl implements ExcelExportService {
 
     private static final String API_PREFIX = "/api/adm/stat/meta";
+
     @Autowired
     ExcelProperties excelProperties;
 
@@ -78,8 +79,8 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     }
 
     @Override
-    public ByteArrayInputStream export(ExportParam exportParam) {
-        String exportName = exportParam.getExportName();
+    public ByteArrayInputStream export(String exportName, ExportParam exportParam) {
+        //String exportName = exportParam.getExportName();
         String type = exportParam.getType();
 
         if (ExcelConstant.API_EXPORT.equals(type)) {

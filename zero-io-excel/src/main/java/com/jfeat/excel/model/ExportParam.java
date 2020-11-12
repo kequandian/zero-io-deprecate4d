@@ -19,8 +19,8 @@ import java.util.Map;
 public class ExportParam {
 
     // @NotNull
-    @ApiModelProperty(value = "导出名称")
-    String exportName;
+    //@ApiModelProperty(value = "导出名称")
+    //String exportName;
 
     @ApiModelProperty(value = "导出数据来源(api url)")
     String api;
