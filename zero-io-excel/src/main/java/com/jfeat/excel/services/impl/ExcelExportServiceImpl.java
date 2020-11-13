@@ -4,11 +4,13 @@ import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.jfeat.common.FileUtil;
 import com.jfeat.common.HttpUtil;
+import com.jfeat.common.ResourceUtil;
 import com.jfeat.excel.constant.ExcelConstant;
 import com.jfeat.excel.model.ExportParam;
 import com.jfeat.excel.properties.ExcelProperties;
@@ -18,6 +20,7 @@ import com.jfeat.poi.api.PoiAgentExporterApiUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.mockito.internal.util.io.IOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestAttributes;
@@ -29,6 +32,7 @@ import javax.sql.DataSource;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -132,8 +136,15 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         String dictName = exportName + ExcelConstant.EXPORT_DICT_SUFFIX;
         String dictPath = templateDirectory + File.separator + dictName;
         log.info("dictPath : {}", dictPath);
-        Map<String, Map<String, String>> dict = FileUtil.parseJsonFile(dictPath,
-                new TypeReference<HashMap<String, Map<String, String>>>() {});
+
+        // enhance:
+        // get dict from system file or from classpath resource
+        String jsonStr = ResourceUtil.getDefaultResourceFileContent(dictPath);
+        Map<String, Map<String, String>> dict = JSON.parseObject(jsonStr, new TypeReference<HashMap<String, Map<String, String>>>(){});
+        //Map<String, Map<String, String>> dict = FileUtil.parseJsonFile(dictPath,
+        //        new TypeReference<HashMap<String, Map<String, String>>>() {});
+        // end enhance
+
         log.info("template dict: {}", dict);
         List<Map<String, Object>> rowsMapList = getRowsMapList(records, dict);
         log.info("rowsMapList : {}", rowsMapList);
@@ -161,8 +172,14 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         // sql 文件名称
         String sqlTemplateName = exportName + ExcelConstant.EXPORT_SQL_SUFFIX;
         String templateFilePath = templateDirectory + File.separator + sqlTemplateName;
+
         // 逐行读取 sql文件
-        List<String> sqlLines = FileUtil.readLine(templateFilePath);
+        // enhance:
+        InputStream sqlStream = ResourceUtil.getDefaultResourceFileAsStream(templateFilePath);
+        Collection<String> sqlLines = IOUtil.readLines(sqlStream);
+        //List<String> sqlLines = FileUtil.readLine(templateFilePath);
+        // end enhance
+
         // 替换注释并构建 sql
         String sql = processSqlLines(sqlLines, search);
         log.info("template sql: {}", sql);
@@ -172,7 +189,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     }
 
 
-    private String processSqlLines(List<String> sqlLines, Map<String, String> replaceMap) {
+    private String processSqlLines(Collection<String> sqlLines, Map<String, String> replaceMap) {
         StringBuilder sqlBuilder = new StringBuilder();
         sqlLines.stream()
                 // 消除注释并替换
