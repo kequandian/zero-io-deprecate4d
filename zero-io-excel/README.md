@@ -7,27 +7,9 @@
 
 
 ## 导出
-### 自动报表导出
-
-GET `/api/io/excel/{field}`
-
-参数列表：
-
-| **参数** |    **描述**    |
-| :------: | :------------: |
-|  field   | 自动报表字段名 |
-
-默认的自动报表API前缀是`/api/adm/stat/meta`
-
-访问接口后会拼接API`/api/adm/stat/meta/{field}` ，获取API中的数据并导出Excel.
-
-
-
-### 支持API和SQL两种方式导出
-
-POST `/api/io/excel/export/<exportName>`
-
 > 支持API和SQL两种形式的Excel导出
+
+POST `/api/io/excel/export/{exportName}`
 
 application.yml配置：
 
@@ -146,7 +128,7 @@ WHERE 1=1
 
 > 通过传入导入的名称和excel文件，对数据库进行**批量更新**。
 
-POST  `/api/io/excel/import/<importName>`
+POST  `/api/io/excel/import/{importName}`
 
 参数列表：
 

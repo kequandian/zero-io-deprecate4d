@@ -40,15 +40,6 @@ public class ExcelIoEndpoint {
     @Resource
     ExcelImportService excelImportService;
 
-    @GetMapping(value = "/{field}")
-    public void exportExcelFile(@PathVariable String field, HttpServletRequest request, HttpServletResponse response) throws IOException, IOException {
-        Map<String, String[]> parameterMap = request.getParameterMap();
-        logger.info("parameterMap --> {}", toPrintMap(parameterMap));
-        response.setContentType("application/octet-stream");
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s.xlsx", field));
-        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
-        response.getOutputStream().write(excelExportService.export(field).readAllBytes());
-    }
 
     //modelName 用于权限控制
     @UrlPermission
