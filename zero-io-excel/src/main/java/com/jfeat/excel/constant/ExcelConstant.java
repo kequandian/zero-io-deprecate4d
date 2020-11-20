@@ -45,4 +45,6 @@ public interface ExcelConstant {
     String EXPORT_SQL_REPLACE_FORMAT = "#{%s}";
 
     String NEW_LINE = "\n";
+
+    Integer DEFAULT_EXCEL_EXPORT_MAX_ROWS = 1000;
 }
