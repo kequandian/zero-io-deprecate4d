@@ -3,6 +3,7 @@ package com.jfeat.excel.properties;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,6 +22,11 @@ public class ExcelProperties {
      * 模版文件目录
      */
     String excelTemplateDir;
+
+    /**
+     * 导出最大长度
+     * */
+    private Integer excelExportMaxRows;
 
     /**
      * excel 导出

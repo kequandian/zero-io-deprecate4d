@@ -92,6 +92,19 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         }
         // 处理API的分页和搜索
         log.info("search parameter : {}", search);
+
+
+        if(search == null){
+            search = new HashMap<String, String>();
+        }
+        //设置最大 导出行数
+        Integer excelExportMaxRows = excelProperties.getExcelExportMaxRows();
+        if(excelExportMaxRows == null){
+            excelExportMaxRows = ExcelConstant.DEFAULT_EXCEL_EXPORT_MAX_ROWS;
+        }
+        log.info("excelExportMaxRows : {}", excelExportMaxRows);
+        search.put("pageSize",excelExportMaxRows.toString());
+
         apiPath = HttpUtil.setQueryParams(apiPath, search);
         log.info("api search Path: {}", apiPath);
 
