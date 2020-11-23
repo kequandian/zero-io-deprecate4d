@@ -144,7 +144,9 @@ public class DatabaseReadWrite {
         StringBuilder sqlStr = new StringBuilder("SELECT ");
         for (String field : checkFields) {
             if (field != null && field.length() > 0) {
+                sqlStr.append("`");
                 sqlStr.append(field);
+                sqlStr.append("`");
                 sqlStr.append(",");
             }
         }
