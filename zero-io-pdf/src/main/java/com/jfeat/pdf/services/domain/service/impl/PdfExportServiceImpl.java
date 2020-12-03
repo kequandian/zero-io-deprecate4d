@@ -21,6 +21,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
 
 /**
  * Created on 2020/3/16.
@@ -145,20 +147,24 @@ public class PdfExportServiceImpl implements PdfExportService {
 
     public JSONObject getApiRequest(PdfTable pdfTable) {
         // api
-        String api = pdfTable.getApi();
+       // String api = pdfTable.getApi();
         // Authorization
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         HttpServletRequest httpRequest = ((ServletRequestAttributes) requestAttributes).getRequest();
         String authorization = httpRequest.getHeader("Authorization");
         // process search
-        api = processSearch(api);
+        //api = processSearch(api);
+        //api改为直接从请求中的api参数获取
+        String api = getApi();
         logger.info("search api --> {}", api);
         // process total page
         api = processTotalPage(api, authorization);
         logger.info("process total api --> {}", api);
+        api = urlDecodeURL(api);
+        logger.info("urlEncodeURL api --> {}", api);
         // api data
         JSONObject apiData = HttpUtil.getResponse(api, authorization).getJSONObject("data");
-
+        logger.info("apiData --> {}", apiData);
         // template content
         JSONObject template = JSONObject.parseObject(pdfTable.getTemplateContent());
 
@@ -213,6 +219,14 @@ public class PdfExportServiceImpl implements PdfExportService {
         return HttpUtil.setQueryParams(api, queryString);
     }
 
+    private String getApi() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+                .getRequestAttributes()).getRequest();
+
+        String api = request.getParameter("api");
+        return api;
+    }
+
     private String processTotalPage(String api, String authorization) {
         // 检测total
         // get pageSize
@@ -227,6 +241,17 @@ public class PdfExportServiceImpl implements PdfExportService {
             }
         }
         return api;
+    }
+
+
+    public static String urlDecodeURL(String url) {
+        try {
+            String result = URLDecoder.decode(url, Charset.forName("UTF-8"));
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

@@ -60,7 +60,10 @@ public class ExcelExportServiceImpl implements ExcelExportService {
 
         if (ExcelConstant.API_EXPORT.equals(type)) {
             // api
-            return exportByApi(exportName, exportParam.getApi(), exportParam.getSearch());
+            //api中带参数 则直接缺取api不取参数   参数从exportParam的Search中获取
+            String[] split = exportParam.getApi().split("/?");
+            String api = split[0];
+            return exportByApi(exportName, api, exportParam.getSearch());
         } else if (ExcelConstant.SQL_EXPORT.equals(type)) {
             // sql
             return exportBySql(exportName, exportParam.getSearch());

@@ -13,6 +13,10 @@ public class Strings {
      */
     public static String[] alignUpStringArray(String[] rows, int align){
         final String empty = new String();
+        //排除除数为0的情况
+        if(align == 0){
+            align = 1;
+        }
         //用空格补充缺漏
         if((rows.length % align)>0) {
             int alignLen = rows.length + (align - rows.length % align);
