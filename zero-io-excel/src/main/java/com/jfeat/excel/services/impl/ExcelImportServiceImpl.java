@@ -12,13 +12,12 @@ import com.jfeat.poi.agent.im.request.PoiAgentImporterRequest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.mockito.internal.util.io.IOUtil;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
-import java.io.File;
-import java.io.FileReader;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Collection;
 
 /**
@@ -49,14 +48,16 @@ public class ExcelImportServiceImpl implements ExcelImportService {
         log.info("import template file : {}", templateFilePath);
 
         // enhance: get template from local file system io resource classpath:
-        InputStream templateStream = ResourceUtil.getDefaultResourceFileAsStream(templateFilePath);
-        Collection<String> templateLines = IOUtil.readLines(templateStream);
+        //InputStream templateStream = ResourceUtil.getDefaultResourceFileAsStream(templateFilePath);
+        //Collection<String> templateLines = IOUtil.readLines(templateStream);
+        //log.info("templateLines.toString(): {}", templateLines.toString());
         // end enhance
-
+        String templateJSONString = readJsonFile(templateFilePath);
+        log.info("templateLines.toString(): {}", templateJSONString);
         // request
         //PoiAgentImporterRequest request = FileUtil.readJsonFile(templateFilePath, PoiAgentImporterRequest.class);
-        PoiAgentImporterRequest request = JSONObject.parseObject(templateLines.toString(), PoiAgentImporterRequest.class);
-
+        //PoiAgentImporterRequest request = JSONObject.parseObject(templateLines.toString(), PoiAgentImporterRequest.class);
+        PoiAgentImporterRequest request = JSONObject.parseObject(templateJSONString, PoiAgentImporterRequest.class);
 
         // import
         int success = new PoiAgentImporterUtil()
@@ -67,6 +68,27 @@ public class ExcelImportServiceImpl implements ExcelImportService {
         log.info("success : {}", success);
 
         return success > 0;
+    }
+
+
+    //读取json文件
+    public static String readJsonFile(String fileName) {
+        String jsonStr = "";
+        try {
+            InputStream templateStream = ResourceUtil.getDefaultResourceFileAsStream(fileName);
+            Reader reader = new InputStreamReader(templateStream,"utf-8");
+            int ch = 0;
+            StringBuffer sb = new StringBuffer();
+            while ((ch = reader.read()) != -1) {
+                sb.append((char) ch);
+            }
+            reader.close();
+            jsonStr = sb.toString();
+            return jsonStr;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

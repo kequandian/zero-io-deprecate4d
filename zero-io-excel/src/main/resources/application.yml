@@ -23,4 +23,5 @@ spring:
 ---
 io:
   excel-template-dir: "excel-templates"
+  excel-export-max-rows: 1000
 

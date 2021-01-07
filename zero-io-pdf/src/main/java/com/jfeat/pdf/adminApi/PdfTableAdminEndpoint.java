@@ -26,7 +26,7 @@ import javax.annotation.Resource;
  * @author Wen Hao
  */
 @RestController
-
+@CrossOrigin(origins = "*",methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RequestMapping("/api/io/crud/pdf/pdfTables")
 public class PdfTableAdminEndpoint {
 

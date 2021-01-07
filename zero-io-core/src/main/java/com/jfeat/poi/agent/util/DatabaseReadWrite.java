@@ -5,15 +5,19 @@ import com.jfeat.crud.base.exception.BusinessCode;
 import com.jfeat.crud.base.exception.BusinessException;
 import com.jfeat.poi.agent.util.converter.ValueConverter;
 import com.jfeat.poi.agent.util.lang.ExcelException;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.jfeat.poi.agent.util.ExcelContentRowsUtil.*;
 
@@ -731,7 +735,7 @@ public class DatabaseReadWrite {
                 String columnName = fields.get(k);
                 if (columnName != null && columnName.length() > 0) {
                     String columnType = getColumnType(columnInfos, columnName);
-                    logger.debug("columnName = {}, value = {}", columnName, value);
+                    logger.debug("columnName = {},columnType= {}, value = {}", columnName,columnType, value);
                     try {
                         if ("INT".equals(columnType)) {
                             Integer res = value != null && !"".equals(value) ? Integer.parseInt(value) : null;
@@ -742,12 +746,34 @@ public class DatabaseReadWrite {
                         } else if ("DECIMAL".equals(columnType)) {
                             BigDecimal res = value != null && !"".equals(value) ? BigDecimal.valueOf(Double.parseDouble(value)) : null;
                             preparedStatementValues[j][n] = res;
-                        } else if ("DATE".equals(columnType)) {
+                        } else if ("DATE".equals(columnType) || "DATETIME".equals(columnType)) {
+                            //时间类型 为空的时候进行转换为NULL
                             String res = value != null && !"".equals(value) ? value : null;
-                            preparedStatementValues[j][n] = res;
-                        } else {
-                            preparedStatementValues[j][n] = value;
+                            logger.info("==== Data res: {}",res);
+
+                            if(!StringUtils.isEmpty(res)){
+
+                                //为日期格式 yyyy-mm-dd
+                                if(isDate(res)){
+                                    preparedStatementValues[j][n] = res;
+                                }
+                                else {
+
+                                        //为数字格式 时间戳
+                                        if(isInteger(res)){
+                                            Date date = HSSFDateUtil.getJavaDate(Double.parseDouble(res));
+                                            res = getTime(date);
+                                            preparedStatementValues[j][n] = res;
+                                        }else{
+                                            res = null;
+                                            preparedStatementValues[j][n] = res;
+                                        }
+                                     }
+                              } else {
+                                preparedStatementValues[j][n] = value;
+                              }
                         }
+
                         n++;
                     }catch (Exception e){
                         StringBuilder message = new StringBuilder();
@@ -761,7 +787,42 @@ public class DatabaseReadWrite {
         return preparedStatementValues;
     }
 
+    //判断是否为时间 yyyy-mm-dd
+    public boolean isDate(String date) {
+        //定义匹配规则
+        String path="\\d{4}-\\d{1,2}-\\d{1,2}";
+        //实例化Pattern
+        Pattern p= Pattern.compile(path);
+        //验证字符串
+        Matcher m=p.matcher(date);
+        if(m.matches()){
+            return true;
+        }
+        return false;
+    }
 
+    //判断是否为纯数字
+    public boolean isInteger(String num) {
+        //定义匹配规则
+        String path="\\d*";
+        //实例化Pattern
+        Pattern p= Pattern.compile(path);
+        //验证字符串
+        Matcher m=p.matcher(num);
+        if(m.matches()){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 获取时间
+     */
+    public static String getTime(Date date) {
+        String format = "yyyy-MM-dd";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(date);
+    }
 
     /**
      * class ColumnInfo
