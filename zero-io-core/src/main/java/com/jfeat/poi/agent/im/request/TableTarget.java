@@ -9,9 +9,24 @@ import java.util.*;
  *
  */
 public class TableTarget {
+
+    public static final String UPDATE="UPDATE";
+    public static final String POSTFIX = "POSTFIX";
+    public static final String UNIQUE_SEPARATE=":";
+    public static final String POST_FIX_SEPARATE="#-#";
+
     private String table;
     private List<String> fields = new ArrayList<>();
     private List<String> values = new ArrayList<>();  /// not necessary
+    private String option; //配置
+
+    public String getOption() {
+        return option;
+    }
+
+    public void setOption(String option) {
+        this.option = option;
+    }
 
     public TableTarget() {
     }
@@ -23,12 +38,14 @@ public class TableTarget {
     public TableTarget(String table, List<String> fields) {
         this.table = table;
         this.fields = fields;
+        this.option = UPDATE;
     }
 
-    public TableTarget(String table, List<String> fields, List<String> values) {
+    public TableTarget(String table, List<String> fields, List<String> values,String option) {
         this.table = table;
         this.fields = fields;
         this.values = values;
+        this.option = option;
     }
 
     public TableTarget addField(String field){

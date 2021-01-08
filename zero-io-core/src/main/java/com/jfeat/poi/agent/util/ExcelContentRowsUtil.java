@@ -188,10 +188,10 @@ public class ExcelContentRowsUtil {
             Map<String, String> rowHash = buildRowHash(row, fields);
 
             int ok = 0;
+            int n = 0;
+            for(String keyField:keys) {
 
-            for(int i=0; i<keys.size(); i++) {
-                String keyField = keys.get(i);
-                String keyValue = values.get(i);
+                String keyValue = values.get(n);
 
                 if(keyField!=null) {
 
@@ -206,6 +206,7 @@ public class ExcelContentRowsUtil {
                         }
                     }
                 }
+                n++;
             }
 
             if(ok==keys.size()){
@@ -231,13 +232,13 @@ public class ExcelContentRowsUtil {
             return null;
         }
 
-        if(unique!=null && rows.get(0).size()!=unique.size()){
+    /*    if(unique!=null && rows.get(0).size()!=unique.size()){
             throw new RuntimeException("fatal: unique size is not equal from query ones from database: " + unique.size() + "<->"+rows.get(0).size());
-        }
+        }*/
 
         List<List<String>> findOnes = new ArrayList<>();
 
-        if (unique != null) {
+        if (unique != null && unique.size()>0) {
 
             for (int i = 0; i < rows.size(); i++) {
                 List<String> row = rows.get(i);

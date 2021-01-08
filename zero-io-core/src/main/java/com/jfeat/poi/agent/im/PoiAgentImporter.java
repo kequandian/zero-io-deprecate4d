@@ -93,12 +93,12 @@ public class PoiAgentImporter implements POIAgent {
         return this;
     }
 
-    public PoiAgentImporter unique(String table, List<String> fields) {
+    public PoiAgentImporter unique(String table, List<String> fields,String type) {
         if (unique == null) {
             unique = new ArrayList<>();
         }
         if (!TableTarget.containsTable(unique, table)) {
-            unique.add(new TableTarget(table, fields));
+            unique.add(new TableTarget(table, fields,null,type));
         } else {
             /// update fields
             TableTarget t = TableTarget.getTarget(unique, table);
@@ -277,16 +277,18 @@ public class PoiAgentImporter implements POIAgent {
 
                 /// find unique
                 List<String> uniqueFields = null;
+                String uniqueOption = null;
                 if (uniqueHash != null) {
                     if (uniqueHash.containsKey(t.getTable())) {
                         TableTarget uniqueTarget = uniqueHash.get(t.getTable());
                         if (uniqueTarget != null) {
                             uniqueFields = uniqueTarget.getFields();
+                            uniqueOption = uniqueTarget.getOption();
                         }
                     }
                 }
 
-                success += readWrite.writeTable(connection, t.getTable(), fields, uniqueFields, overwrite, duplicate, targetTableContents, valueConverters);
+                success += readWrite.writeTable(connection, t.getTable(), fields, uniqueFields, overwrite, duplicate, targetTableContents, valueConverters,uniqueOption);
             }
         }
 
@@ -368,6 +370,8 @@ public class PoiAgentImporter implements POIAgent {
                     if(true){
                         //TODO, not yet verify
                     }
+                    //TODO option
+                    String uniqueOption = null;
 
                     String relationTable = relation.getRelativeTable();
                     String peerTable = relation.getPeerTable();     //peer master table
@@ -389,7 +393,7 @@ public class PoiAgentImporter implements POIAgent {
                             List<String> unique = peerTableFields;  ///多对多表两关键字段决定唯一性
 
                             readWrite.writeTable(connection, relationTable, peerTableFields,
-                                    unique, false, false, peerContents, valueConverters);
+                                    unique, false, false, peerContents, valueConverters,uniqueOption);
                         }
                     }
                 } else if (relation.getRelation().equalsIgnoreCase(TableRelation.R_GROUP)) {
@@ -446,7 +450,7 @@ public class PoiAgentImporter implements POIAgent {
                 fields.add(relativeField);
                 con.add(pId);
             }
-            readWrite.writeTable(connection, table, fields, null, overwrite, true, list, valueConverters);
+            readWrite.writeTable(connection, table, fields, null, overwrite, true, list, valueConverters,TableTarget.UPDATE);
             if (size != 1) {
                 Map<String, String> option = new HashMap<>();
                 option.put(field, contents.get(i));

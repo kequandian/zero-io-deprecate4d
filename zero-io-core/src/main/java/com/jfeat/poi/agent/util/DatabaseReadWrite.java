@@ -3,6 +3,7 @@ package com.jfeat.poi.agent.util;
 import com.alibaba.fastjson.JSON;
 import com.jfeat.crud.base.exception.BusinessCode;
 import com.jfeat.crud.base.exception.BusinessException;
+import com.jfeat.poi.agent.im.request.TableTarget;
 import com.jfeat.poi.agent.util.converter.ValueConverter;
 import com.jfeat.poi.agent.util.lang.ExcelException;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
@@ -20,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.jfeat.poi.agent.util.ExcelContentRowsUtil.*;
+import static com.jfeat.poi.agent.util.PostfixUtil.postfixDuplicateContentRows;
 
 /**
  * Created by Silent-Y on 2017/9/28.
@@ -141,12 +143,20 @@ public class DatabaseReadWrite {
         /// 如果duplication为空，则需要对所有项进行查询，判读是否所有项完全一致, 查询逻辑为  AND
         /// 如果duplication不为空，则仅需判断指定的唯一属性项是否已存在, 查询逻辑为  OR
 
-        List<String> checkFields = unique == null ? fields : unique;
+        //List<String> checkFields = unique == null ? fields : unique;
         final String OP = unique == null ? " AND " : " AND ";  ///都用 AND 逻辑
+        Set<String> selectSet = new HashSet<>();
+        if(unique!=null && unique.size()>0){
+            for (String filed:unique){
+                selectSet.addAll(Arrays.asList(filed.split(TableTarget.UNIQUE_SEPARATE)));
+            }
+        }else{
+            selectSet.addAll(fields);
+        }
 
 
         StringBuilder sqlStr = new StringBuilder("SELECT ");
-        for (String field : checkFields) {
+        for (String field : selectSet) {
             if (field != null && field.length() > 0) {
                 sqlStr.append("`");
                 sqlStr.append(field);
@@ -160,15 +170,23 @@ public class DatabaseReadWrite {
         sqlStr.append(tableName);
         sqlStr.append(" WHERE ");
 
-        for (String field : checkFields) {
-            if (field != null && field.length() > 0) {
-                sqlStr.append("`");
-                sqlStr.append(field);
-                sqlStr.append("` = ?");
-                sqlStr.append(OP);
+        for (String filed:unique){
+            sqlStr.append("(");
+            for(String fieldChi:filed.split(TableTarget.UNIQUE_SEPARATE)){
+
+                if (fieldChi != null && fieldChi.length() > 0) {
+                    sqlStr.append("`");
+                    sqlStr.append(fieldChi);
+                    sqlStr.append("` = ?");
+                    sqlStr.append(OP);
+                }
+                sqlStr.delete(sqlStr.length() - OP.length(), sqlStr.length() - 1);
+
             }
+            sqlStr.append(")");
+            sqlStr.append(" or ");
         }
-        sqlStr.delete(sqlStr.length() - OP.length(), sqlStr.length() - 1);
+        sqlStr.delete(sqlStr.length() - " or ".length(), sqlStr.length() - 1);
         sqlStr.append(" LIMIT 1");
         logger.debug("SQL: {}", sqlStr.toString());
 
@@ -180,10 +198,11 @@ public class DatabaseReadWrite {
             List<String> currentRow = contents.get(i);
 
             /// set values
-            for (int k = 0, n = 0; k < checkFields.size(); k++) {
+            int n = 0;
+            for (String field:unique) {
+                for (String checkField:field.split(TableTarget.UNIQUE_SEPARATE)){
                 String value = null;
                 {
-                    String checkField = checkFields.get(k);
                     if (checkField != null && checkField.length() > 0) {
 
                         int index = fields.indexOf(checkField);
@@ -191,8 +210,8 @@ public class DatabaseReadWrite {
                             value = currentRow.get(index);
                         }
                         preparedStatement.setObject(n + 1, value);
-
                         n++;
+                      }
                     }
                 }
 
@@ -235,42 +254,60 @@ public class DatabaseReadWrite {
      * @param valueConverters value converter for each field  [not used]
      * @return
      */
-    public int writeTable(Connection connection, String tableName, List<String> fields, List<String> unique, boolean overwrite,
+    public int writeTable(Connection connection, String tableName, List<String> fields, List<String> uniqueList, boolean overwrite,
                           boolean duplicate,
-                          List<List<String>> contents, Map<String, ValueConverter> valueConverters) {
+                          List<List<String>> contents, Map<String, ValueConverter> valueConverters
+                          ,String option) {
 
         try {
 
-            /// below merge duplicate rows
-            {
-                //merge duplicate rows with unique within contents
-                contents = mergeDuplicateContentRows(contents, fields, unique);
+                for (String uniques:uniqueList){
+                    //获取唯一键列表
+                    List<String> unique = Arrays.asList(uniques.split(":"));
 
-                /// merge entirely rows within contents
-                if (!duplicate) {
-                    contents = mergeDuplicateContentRows(contents);
-                }
+                    if(!StringUtils.isEmpty(option)&& option.equals(TableTarget.POSTFIX)){
+                        //todo 重复则修改对应唯一键
+                        List<List<String>> temp = postfixDuplicateContentRows(contents, fields, unique);
+                        contents = temp;
+                    }
+                    //重复则去掉
+                    //循环唯一键
+                    else{
+
+                         /// below merge duplicate rows
+                         {
+                             //merge duplicate rows with unique within contents
+                             contents = mergeDuplicateContentRows(contents, fields, unique);
+                             /// merge entirely rows within contents
+                             if (!duplicate) {
+                                 contents = mergeDuplicateContentRows(contents);
+                             }
+                         }
+                    }
+
+
             }
+
 
 
             primaryKeySet = getPrimaryKey(connection, tableName);
 
-            /// contains primary key
+            ///如果包含主键
             if (primaryKeySet != null && fields.contains(primaryKeySet[0])) {
-                if (unique == null) {
-                    unique = new ArrayList<>();
-                    unique.add(primaryKeySet[0]);
+                if (uniqueList == null) {
+                    uniqueList = new ArrayList<>();
+                    uniqueList.add(primaryKeySet[0]);
                 }
-                return update(connection, tableName, fields, unique, contents, valueConverters);
+                return update(connection, tableName, fields, uniqueList, contents, valueConverters);
 
-            } else if (unique != null && unique.size() > 0) {
+            } else if (uniqueList != null && uniqueList.size() > 0) {
                 /// no primary key
 
                 /// 仅包含重复字段
-                List<List<String>> duplicateFieldsData = queryDuplicateContents(connection, tableName, fields, unique, contents);
+                List<List<String>> duplicateFieldsData = queryDuplicateContents(connection, tableName, fields, uniqueList, contents);
 
                 // 通过重复字找到相同的项
-                List<List<String>> duplicateRows = findDuplicateRows(contents, fields, duplicateFieldsData, unique);
+                List<List<String>> duplicateRows = findDuplicateRows(contents, fields, duplicateFieldsData, uniqueList);
 
                 // 移走在数据库里已存在的项，无需加入
                 List<List<String>> insertedRows = subContentRows(contents, duplicateRows);
@@ -283,11 +320,11 @@ public class DatabaseReadWrite {
                 /// update duplicate ones
                 if (overwrite) {
                     if (duplicateRows != null && duplicateRows.size() > 0) {
-                        return update(connection, tableName, fields, unique, duplicateRows, valueConverters);
+                        return update(connection, tableName, fields, uniqueList, duplicateRows, valueConverters);
                     }
                 }
 
-            } else if (unique == null) {
+            } else if (uniqueList == null) {
                 /// check whether allow duplicate row
                 if (duplicate) {
                     if (contents != null && contents.size() > 0) {
@@ -448,13 +485,19 @@ public class DatabaseReadWrite {
         StringBuilder sqlStr = new StringBuilder(baseSqlStr);
         sqlStr.append(" WHERE ");
         if(unique!=null) {
-            for (String field : unique) {
-                sqlStr.append("`");
-                sqlStr.append(field);
-                sqlStr.append("` = ?");
-                sqlStr.append(" AND ");
-            }
+            for (String uniques : unique){
+            sqlStr.append("(");
+                for (String field : uniques.split(TableTarget.UNIQUE_SEPARATE)) {
+                    sqlStr.append("`");
+                    sqlStr.append(field);
+                    sqlStr.append("` = ?");
+                    sqlStr.append(" AND ");
+                }
             sqlStr.delete(sqlStr.length() - " AND ".length(), sqlStr.length() - 1);
+            sqlStr.append(")");
+            sqlStr.append(" or ");
+            }
+            sqlStr.delete(sqlStr.length() - " or ".length(), sqlStr.length() - 1);
         }else{
             /*for (String field : unique) {
                 sqlStr.append(field);
@@ -493,16 +536,19 @@ public class DatabaseReadWrite {
 
             // 设置 WHERE 字段
             List<String> row = contents.get(j);
-            for (String field : unique) {
-                String value = getFieldValue(row, fields, field);
-                if (value != null && value.length()>0) {
-                    preparedStatement.setObject(e + 1, value);
-                }else{
-                    preparedStatement.setObject(e + 1, "",  JDBCType.VARCHAR);
-                    //throw new RuntimeException("fatal: unique field value must not be empty");
+            for(String uni : unique){
+                for (String field:uni.split(TableTarget.UNIQUE_SEPARATE)) {
+                    String value = getFieldValue(row, fields, field);
+                    if (value != null && value.length()>0) {
+                        preparedStatement.setObject(e + 1, value);
+                    }else{
+                        preparedStatement.setObject(e + 1, "",  JDBCType.VARCHAR);
+                        //throw new RuntimeException("fatal: unique field value must not be empty");
+                    }
+                    e++;
                 }
-                e++;
             }
+
 
             //logger.debug("Parameters: {}", StringUtils.join(parameters, ","));
 
@@ -756,7 +802,7 @@ public class DatabaseReadWrite {
                                 //为日期格式 yyyy-mm-dd
                                 if(isDate(res)){
                                     preparedStatementValues[j][n] = res;
-                                }
+                                    }
                                 else {
 
                                         //为数字格式 时间戳
@@ -770,8 +816,11 @@ public class DatabaseReadWrite {
                                         }
                                      }
                               } else {
-                                preparedStatementValues[j][n] = value;
+                                preparedStatementValues[j][n] = res;
                               }
+                        }else{
+                            String res = value != null && !"".equals(value) ? value : null;
+                            preparedStatementValues[j][n] = res;
                         }
 
                         n++;
