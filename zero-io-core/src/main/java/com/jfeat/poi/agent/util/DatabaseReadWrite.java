@@ -266,7 +266,7 @@ public class DatabaseReadWrite {
                     List<String> unique = Arrays.asList(uniques.split(":"));
 
                     if(!StringUtils.isEmpty(option)&& option.equals(TableTarget.POSTFIX)){
-                        //todo 重复则修改对应唯一键
+
                         List<List<String>> temp = postfixDuplicateContentRows(contents, fields, unique);
                         contents = temp;
                     }

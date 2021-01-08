@@ -70,7 +70,7 @@ public class PostfixUtil {
         String contentValue = content.get(contentIndex.get(0));
         Integer number = 1;
         //检查之前是否已进行重写操作
-        if(firstKey.indexOf(POST_FIX_SEPARATE)>0){
+        if(firstKey.indexOf(POST_FIX_SEPARATE)>-1){
             String[] firstKeyList = firstKey.split(POST_FIX_SEPARATE);
             number = Integer.parseInt(firstKeyList[1]);
             number ++;
@@ -83,7 +83,8 @@ public class PostfixUtil {
                 contentValue = null;
             }
             else {
-                contentValue = contentValue+POST_FIX_SEPARATE+number;
+                String[] contentValueList = contentValue.split(POST_FIX_SEPARATE);
+                contentValue = contentValueList[0]+POST_FIX_SEPARATE+number;
             }
        keys.set(0,firstKey);
        content.set(contentIndex.get(0),contentValue);
