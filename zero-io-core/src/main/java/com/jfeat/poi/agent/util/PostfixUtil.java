@@ -2,6 +2,7 @@ package com.jfeat.poi.agent.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,7 +78,13 @@ public class PostfixUtil {
         }else{
             firstKey = firstKey +POST_FIX_SEPARATE+number;
         }
-       contentValue = contentValue+POST_FIX_SEPARATE+number;
+             //将空的设置为null 而不是""
+            if(StringUtils.isEmpty(contentValue)){
+                contentValue = null;
+            }
+            else {
+                contentValue = contentValue+POST_FIX_SEPARATE+number;
+            }
        keys.set(0,firstKey);
        content.set(contentIndex.get(0),contentValue);
     }
