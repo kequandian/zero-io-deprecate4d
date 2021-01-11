@@ -198,8 +198,8 @@ io:
   ],
   "unique": [             // 唯一字段， 用于设置更新 
     {
-      "fields": [        // 字段名 目前unique 仅支持设置一个fields
-        "code"
+      "fields": [        // 字段名 目前unique 在type为postfix情况下 仅支持设置一个fields
+        "code"          // 多个fields,  表达由多个field决定唯一性  例如  "fields": [ "code","num" ]
       ],
       "table": "equipment",
       "valueConverterMap": {},
