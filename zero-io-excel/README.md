@@ -196,13 +196,17 @@ io:
       "values": []
     }
   ],
-  "unique": [             // 唯一字段， 用于设置更新
+  "unique": [             // 唯一字段， 用于设置更新 
     {
-      "fields": [        // 字段名
+      "fields": [        // 字段名 目前unique 仅支持设置一个fields
         "code"
       ],
       "table": "equipment",
       "valueConverterMap": {},
+      "option": {
+        "postfix": "%%",   //postfix类型下的后缀
+        "type": "POSTFIX"  //类型 目前支持POSTFIX 和 UPDATE 无option情况下默认为UPDATE
+      }
       "values": []
     }
   ]

@@ -3,6 +3,7 @@ package com.jfeat.poi.agent.util;
 import com.alibaba.fastjson.JSON;
 import com.jfeat.crud.base.exception.BusinessCode;
 import com.jfeat.crud.base.exception.BusinessException;
+import com.jfeat.poi.agent.im.request.Option;
 import com.jfeat.poi.agent.im.request.TableTarget;
 import com.jfeat.poi.agent.util.converter.ValueConverter;
 import com.jfeat.poi.agent.util.lang.ExcelException;
@@ -247,7 +248,6 @@ public class DatabaseReadWrite {
      * @param connection      database connection
      * @param tableName       database table
      * @param fields          database table fields
-     * @param unique          database table unique fields
      * @param overwrite       overwrite the row if the unique field exists
      * @param contents        the excel content ti write into database
      * @param duplicate       duplicate row (all fields value equals) is allowed or not
@@ -257,17 +257,18 @@ public class DatabaseReadWrite {
     public int writeTable(Connection connection, String tableName, List<String> fields, List<String> uniqueList, boolean overwrite,
                           boolean duplicate,
                           List<List<String>> contents, Map<String, ValueConverter> valueConverters
-                          ,String option) {
+                          , Option option) {
 
         try {
 
                 for (String uniques:uniqueList){
                     //获取唯一键列表
                     List<String> unique = Arrays.asList(uniques.split(":"));
+                    String type = null;
+                    if(option!=null){type=option.getType();}else{type=TableTarget.UPDATE;}
+                    if(!StringUtils.isEmpty(type)&& type.equals(TableTarget.POSTFIX)){
 
-                    if(!StringUtils.isEmpty(option)&& option.equals(TableTarget.POSTFIX)){
-
-                        List<List<String>> temp = postfixDuplicateContentRows(contents, fields, unique);
+                        List<List<String>> temp = postfixDuplicateContentRows(contents, fields, unique,option);
                         contents = temp;
                     }
                     //重复则去掉
