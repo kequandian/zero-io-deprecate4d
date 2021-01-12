@@ -13,7 +13,9 @@ public class TableTarget {
     public static final String UPDATE="UPDATE";
     public static final String POSTFIX = "POSTFIX";
     public static final String UNIQUE_SEPARATE=":";
-    public static final String DEFAULT_POST_FIX="##";
+    public static final String DEFAULT_POST_FIX="##{1...}";
+
+
 
     private String table;
     private List<String> fields = new ArrayList<>();

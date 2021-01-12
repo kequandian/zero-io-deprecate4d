@@ -203,9 +203,10 @@ io:
       ],
       "table": "equipment",
       "valueConverterMap": {},
-      "option": {
-        "postfix": "%%",   //postfix类型下的后缀
+      "option": {           
+        "postfix": "%%",   //postfix类型下的后缀 
         "type": "POSTFIX"  //类型 目前支持POSTFIX 和 UPDATE 无option情况下默认为UPDATE
+                           //POSTFIX 类型时 ：发现相同项时，通过添加后缀插入项代替更新项
       }
       "values": []
     }
