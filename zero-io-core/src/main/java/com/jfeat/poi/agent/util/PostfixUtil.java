@@ -6,7 +6,6 @@ import com.jfeat.poi.agent.im.request.Option;
 import com.jfeat.poi.agent.im.request.PostfixInfo;
 import com.jfeat.poi.agent.im.request.PostfixType;
 import com.jfeat.poi.agent.im.request.TableTarget;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
