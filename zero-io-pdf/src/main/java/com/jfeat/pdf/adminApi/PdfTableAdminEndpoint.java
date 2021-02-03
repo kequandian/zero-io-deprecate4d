@@ -1,24 +1,11 @@
 package com.jfeat.pdf.adminApi;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jfeat.am.module.log.annotation.BusinessLog;
-import com.jfeat.crud.base.exception.BusinessCode;
-import com.jfeat.crud.base.exception.BusinessException;
-import com.jfeat.crud.base.tips.SuccessTip;
-import com.jfeat.crud.base.tips.Tip;
-import com.jfeat.pdf.services.domain.dao.QueryPdfTableDao;
-import com.jfeat.pdf.services.domain.model.PdfTableRecord;
-import com.jfeat.pdf.services.domain.service.PdfTableService;
-import com.jfeat.pdf.services.gen.persistence.model.PdfTable;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created on 2020/3/13.
@@ -34,13 +21,10 @@ public class PdfTableAdminEndpoint {
 
     // CRUD
 
-    @Resource
-    PdfTableService pdfTableService;
 
-    @Resource
-    QueryPdfTableDao queryPdfTableDao;
 
-    @BusinessLog(name = "PdfTable", value = "create PdfTable")
+
+    /*@BusinessLog(name = "PdfTable", value = "create PdfTable")
     @PostMapping
     @ApiOperation(value = "新建 PdfTable", response = PdfTable.class)
     public Tip createPdfTable(@RequestBody PdfTable entity) {
@@ -76,9 +60,9 @@ public class PdfTableAdminEndpoint {
     @ApiOperation("删除 PdfTable")
     public Tip deletePdfTable(@PathVariable Long id) {
         return SuccessTip.create(pdfTableService.deleteMaster(id));
-    }
+    }*/
 
-    @BusinessLog(name = "PdfTable", value = "查询列表 PdfTable")
+    /*@BusinessLog(name = "PdfTable", value = "查询列表 PdfTable")
     @ApiOperation(value = "PdfTable 列表信息", response = PdfTableRecord.class)
     @GetMapping
     @ApiImplicitParams({
@@ -135,5 +119,5 @@ public class PdfTableAdminEndpoint {
         record.setTemplateContent(templateContent);
         page.setRecords(queryPdfTableDao.findPdfTablePage(page, record, search, orderBy, null, null));
         return SuccessTip.create(page);
-    }
+    }*/
 }

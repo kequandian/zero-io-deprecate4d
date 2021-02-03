@@ -1,22 +1,7 @@
 package com.jfeat.pdf.api;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jfeat.am.module.log.annotation.BusinessLog;
-import com.jfeat.crud.base.exception.BusinessCode;
-import com.jfeat.crud.base.exception.BusinessException;
-import com.jfeat.crud.base.tips.SuccessTip;
-import com.jfeat.crud.base.tips.Tip;
-import com.jfeat.pdf.services.domain.dao.QueryPdfTableDao;
-import com.jfeat.pdf.services.domain.model.PdfTableRecord;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
 
 /**
  * Created on 2020/3/24.
@@ -27,14 +12,12 @@ import javax.annotation.Resource;
 @RequestMapping("/api/io/crud/pdf/normal/pdfTables")
 public class PdfTableEndpoint {
 
-    @Resource
-    QueryPdfTableDao queryPdfTableDao;
 
     // update
 
     // list
 
-    @BusinessLog(name = "PdfTable", value = "查询可编辑列表 PdfTable")
+    /*@BusinessLog(name = "PdfTable", value = "查询可编辑列表 PdfTable")
     @ApiOperation(value = "PdfTable 可编辑列表信息", response = PdfTableRecord.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", dataType = "Integer"),
@@ -91,7 +74,7 @@ public class PdfTableEndpoint {
         record.setTemplateContent(templateContent);
         page.setRecords(queryPdfTableDao.findPdfTableEditablePage(page, record, search, orderBy, null, null));
         return SuccessTip.create(page);
-    }
+    }*/
 
     // get
 }
