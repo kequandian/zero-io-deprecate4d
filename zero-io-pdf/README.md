@@ -1,6 +1,8 @@
 # zero-io-pdf
 > 通过数据库存储的pdf模版以及获取API中数据进行 pdf的导出。
 
+> 生成PDF库比较 [pdf-vs-pdfmake-vs-phantomjs-vs-react-pdf](https://www.npmtrends.com/pdf-vs-pdfmake-vs-phantomjs-vs-react-pdf)
+
 ### 数据库
 
 ```sql
