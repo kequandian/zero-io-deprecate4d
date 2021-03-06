@@ -7,29 +7,6 @@
 现在使用本地的JSON文件作为模版来打印PDF。
 > 生成PDF库比较 [pdf-vs-pdfmake-vs-phantomjs-vs-react-pdf](https://www.npmtrends.com/pdf-vs-pdfmake-vs-phantomjs-vs-react-pdf)
 
-### 数据库
-
-```sql
-CREATE TABLE `io_pdf_table` (
-  `id` bigint(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) DEFAULT NULL COMMENT '列表名',
-  `editable` tinyint(1) DEFAULT NULL COMMENT '是否可编辑',
-  `type` varchar(50) DEFAULT NULL COMMENT '类别(api 或 statistics)',
-  `api` varchar(255) DEFAULT NULL COMMENT '绑定api',
-  `api_field` varchar(255) DEFAULT NULL COMMENT 'api 中字段',
-  `api_list` varchar(255) DEFAULT NULL COMMENT 'api 中的列表字段',
-  `header_field` varchar(255) DEFAULT NULL COMMENT 'api返回数据的键值',
-  `field` varchar(50) DEFAULT NULL COMMENT '自动报表的field',
-  `template_content` text COMMENT '模版内容',
-  `origin_config` text COMMENT '前端模版内容',
-  `sub_apis` json DEFAULT NULL COMMENT '子api'
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
-```
-
-数据库中存储对应的PDF打印模版，以及对应的API，打印类型。
-
-
 ## 列表导出
 GET `/api/io/pdf/export/{tableName}`
 
