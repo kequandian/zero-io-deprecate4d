@@ -10,7 +10,7 @@
 ## 列表导出
 GET `/api/io/pdf/export/{tableName}`
 
-**tableName**对应数据库中`name`字段, 通过`name`在数据库中获取到打印的模版，从而打印PDF。模版格式参考[zero-io-core](../zero-io-core)，根据导出数据的来源有API和报表两种打印方式。
+**tableName**对应JSON文件名称, 通过JSON文件名读取JSON文件中的模版，从而打印PDF。JSON模版格式参考[zero-io-core](../zero-io-core)，根据导出数据的来源有API和报表两种打印方式。
 
 - API打印
 
@@ -22,17 +22,7 @@ GET `/api/io/pdf/export/{tableName}`
 
 通过访问**自动报表**API获取导出的数据，自动报表返回数据格式较为固定，更易于编写导出模版。
 
-## 详情页导出
-
-GET `/api/io/pdf/export/multiple/{tableName}`
-
-因为是详情页导出原因，还需要传入`id`参数
-
-#### 多API情况
-详情页数据来自多个API，所以需要获取多个API中的数据。数据库中`sub_api`字段对应多个API的json数组信息。
-
-sub_api例子：
-
+例子：
 ```json
 [
     {
