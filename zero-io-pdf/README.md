@@ -5,6 +5,8 @@
 ~~数据库中存储对应的PDF打印模版，以及对应的API，打印类型。~~
 ### JSON
 现在使用本地的JSON文件作为模版来打印PDF。
+> 通过配置文件中的 `pdf.template-directory`属性，配置JSON模版文件的存放目录。 
+
 > 生成PDF库比较 [pdf-vs-pdfmake-vs-phantomjs-vs-react-pdf](https://www.npmtrends.com/pdf-vs-pdfmake-vs-phantomjs-vs-react-pdf)
 
 ## 列表导出
