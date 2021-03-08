@@ -110,6 +110,19 @@ public class PdfPrintServiceImpl implements PdfPrintService {
         //api = processSearch(api);
         //api改为直接从请求中的api参数获取
         String api = getApi();
+        // 支持相对路径
+        if (api.startsWith("/")) {
+            StringBuffer requestURL = httpRequest.getRequestURL();
+            String requestURI = httpRequest.getRequestURI();
+            String host = requestURL.delete(requestURL.length() -
+                    requestURI.length(), requestURL.length()).toString();
+            api = host + api;
+            log.info("full api : {} ", api);
+        } else {
+            log.warn("invalid api: " + api);
+            throw new BusinessException(BusinessCode.CodeBase, "invalid api");
+        }
+
         log.info("search api --> {}", api);
         // process total page
         api = processTotalPage(api, authorization);
