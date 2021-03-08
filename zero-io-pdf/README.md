@@ -27,7 +27,7 @@ GET `/api/io/pdf/export/{tableName}`
 JSON例子：
 ```javascript
 {
-  "api": "",                // 获取数据 api（api模式） 
+  "api": "",                // 获取数据的api，支持相对路径（api类型）
   "type": "",               // 类型 API、STATISTICS
   "field": "",              // 自动报表的field
   "templateContent": "",    // pdf模版内容
