@@ -12,7 +12,7 @@
 ## 列表导出
 GET `/api/io/pdf/export/{tableName}`
 
-**tableName**对应JSON文件名称, 通过JSON文件名读取JSON文件中的模版，从而打印PDF。JSON模版格式参考[zero-io-core](../zero-io-core)，根据导出数据的来源有API和报表两种打印方式。
+**tableName**对应JSON文件名称, 通过JSON文件名读取本地JSON文件中的模版，从而打印PDF。根据导出数据的来源有API和报表两种打印方式。
 
 - API打印
 
@@ -24,14 +24,15 @@ GET `/api/io/pdf/export/{tableName}`
 
 通过访问**自动报表**API获取导出的数据，自动报表返回数据格式较为固定，更易于编写导出模版。
 
-例子：
-```json
-[
-    {
-        "api": "http://39.108.14.206:8070/api/wf/histories?formId=", 
-        "mapName": "${histories}",  // 将API获取字段的数据映射为变量
-        "fieldName": ""             // 从API中获取的字段
-    }
-]
+JSON例子：
+```javascript
+{
+  "api": "",                // 获取数据 api（api模式） 
+  "type": "",               // 类型 API、STATISTICS
+  "field": "",              // 自动报表的field
+  "templateContent": "",    // pdf模版内容
+  "originConfig": ""        // 前端所需（保留）
+}
 ```
+templateContent的格式参考 [zero-io-core](../zero-io-core)
 
