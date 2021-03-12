@@ -99,7 +99,7 @@ public class PdfPrintServiceImpl implements PdfPrintService {
 
     private JSONObject getApiRequest(PdfPrintModel pdfPrintModel) {
         // api
-        // String api = pdfTable.getApi();
+        String api = pdfPrintModel.getApi();
         // Authorization
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         HttpServletRequest httpRequest = ((ServletRequestAttributes) requestAttributes).getRequest();
@@ -107,7 +107,7 @@ public class PdfPrintServiceImpl implements PdfPrintService {
         // process search
         //api = processSearch(api);
         //api改为直接从请求中的api参数获取
-        String api = getApi();
+        // String api = getApi();
         // 支持相对路径
         if (api.startsWith("/")) {
             StringBuffer requestURL = httpRequest.getRequestURL();
@@ -116,7 +116,7 @@ public class PdfPrintServiceImpl implements PdfPrintService {
                     requestURI.length(), requestURL.length()).toString();
             api = host + api;
             log.info("full api : {} ", api);
-        } else {
+        } else if (!api.startsWith("http") && !api.startsWith("https")) {
             log.warn("invalid api: " + api);
             throw new BusinessException(BusinessCode.CodeBase, "invalid api");
         }
@@ -130,8 +130,6 @@ public class PdfPrintServiceImpl implements PdfPrintService {
         // api data
         JSONObject apiData = HttpUtil.getResponse(api, authorization).getJSONObject("data");
         log.info("apiData --> {}", apiData);
-        // template content
-        JSONObject template = JSONObject.parseObject(pdfPrintModel.getTemplateContent());
 
         // request
         JSONObject request = pdfRequestService.getApiRequest(apiData);
