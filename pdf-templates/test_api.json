@@ -1,0 +1,5 @@
+{
+  "api": "http://localhost:8080/api/io/pdf/export/test",
+  "type": "API",
+  "templateContent": "{\n  \"flows\": [\n    {\n      \"name\": \"linear\",\n      \"columnWidths\": [\n            1.0,\n            1.0\n        ],\n      \"elements\": [\n\n      ]\n      },\n    {\n      \"name\": \"table\",\n      \"columnWidths\": [\n        1,\n        1\n      ],\n      \"columnKeyBindings\": [\n        {\n          \"column\": \"ID\",\n          \"key\": \"id\"\n        },\n        {\n          \"column\": \"名字\",\n          \"key\": \"name\"\n        }\n      ],\n      \"data\": \"${records}\",\n      \"converts\": {},\n      \"rowHeight\": 50,\n      \"headerHeight\": 40\n    }\n  ]\n}"
+}
