@@ -15,8 +15,9 @@ GET `/api/io/pdf/export/{tableName}`
 **tableName**对应JSON文件名称, 通过JSON文件名读取本地JSON文件中的模版，从而打印PDF。根据导出数据的来源有API和报表两种打印方式。
 
 - API打印
+> 注意：因为对API返回数据格式有要求，所以仅限于CRUD框架下的API，且是列表API。
 
-通过访问通用的API获取导出的数据。
+通过访问通用的API获取导出的数据。 
 
 - 报表打印
 
