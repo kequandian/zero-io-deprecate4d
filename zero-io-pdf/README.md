@@ -35,5 +35,11 @@ JSON例子：
   "originConfig": ""        // 前端所需（保留）
 }
 ```
-templateContent的格式参考 [zero-io-core](../zero-io-core)
+> templateContent属性的格式参考 [zero-io-core](../zero-io-core)
 
+### 测试例
+
+
+API方式pdf打印测试接口: `/api/io/pdf/export/test/test_api`
+
+测试所使用的json文件:  [test_api.json](../pdf-templates/test_api.json)
