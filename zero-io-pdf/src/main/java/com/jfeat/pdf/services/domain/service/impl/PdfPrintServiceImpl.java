@@ -75,15 +75,13 @@ public class PdfPrintServiceImpl implements PdfPrintService {
             PdfPrintModel pdfPrintModel = jsonObject.toJavaObject(PdfPrintModel.class);
             log.info("pdf model : {}", pdfPrintModel);
             template = JSONObject.parseObject(pdfPrintModel.getTemplateContent());
-            switch (TemplateType.valueOf(pdfPrintModel.getType())) {
-                case API:
-                    request = getApiRequest(pdfPrintModel);
-                    break;
-                case STATISTICS:
-                    request = getStatisticsRequest(pdfPrintModel);
-                    break;
-                default:
-                    throw new BusinessException(BusinessCode.CodeBase, "PDF模版文件格式错误");
+            String type = pdfPrintModel.getType();
+            if (TemplateType.API.name().equals(type)) {
+                request = getApiRequest(pdfPrintModel);
+            } else if (TemplateType.STATISTICS.name().equals(type)) {
+                request = getStatisticsRequest(pdfPrintModel);
+            } else {
+                throw new BusinessException(BusinessCode.CodeBase, "不支持的打印类型");
             }
         } catch (FileNotFoundException e) {
             throw new BusinessException(BusinessCode.CRUD_MASTER_NOT_EXISTS, "打印PDF模版不存在");
