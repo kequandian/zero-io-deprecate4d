@@ -3,7 +3,6 @@ package com.jfeat.pdf.util;
 import cn.hutool.core.io.IoUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.experimental.UtilityClass;
-import org.mockito.internal.util.io.IOUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,7 +21,7 @@ public class TemplateFileUtil {
         String templateJsonPath = String.format("%s/%s.json", templateDir, fileName);
         FileReader fileReader = new FileReader(new File(templateJsonPath));
         String readJson = IoUtil.read(fileReader);
-        IOUtil.close(fileReader);
+        IoUtil.close(fileReader);
         return JSONObject.parseObject(readJson);
     }
 
