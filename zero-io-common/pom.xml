@@ -16,7 +16,7 @@
     <properties>
         <hutool-core.version>5.2.5</hutool-core.version>
         <fastjson.version>1.2.52</fastjson.version>
-        <commons-io.version>2.5</commons-io.version>
+        <commons-io.version>2.7</commons-io.version>
         <slf4j.version>1.7.25</slf4j.version>
         <junit.version>4.11</junit.version>
         <lombok.version>1.18.12</lombok.version>
