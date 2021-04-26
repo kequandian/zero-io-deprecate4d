@@ -127,17 +127,14 @@ public class PdfSimpleTemplatePrinter {
         }
 
         // 配置page
-        data.setPage(new PdfFlowRequest.Page("A4", 20));
         JSONObject page = template.getJSONObject("page");
-        if (page != null) {
-            String pageName = page.getString("pageName");
-            float margin = Float.parseFloat(page.getString("margin"));
-            Boolean rotate = page.getBoolean("rotate");
-            logger.info("rotate = {}", rotate);
-            String imageUrl = page.getString("backgroundImageUrl");
-            logger.info("backgroundImageUrl = {}", imageUrl);
-            data.setPage(new PdfFlowRequest.Page(pageName, rotate, imageUrl, margin));
-        }
+        String pageName = page.getString("pageName");
+        float margin = Float.parseFloat(page.getString("margin"));
+        Boolean rotate = page.getBoolean("rotate");
+        logger.info("rotate = {}", rotate);
+        String imageUrl = page.getString("backgroundImageUrl");
+        logger.info("backgroundImageUrl = {}", imageUrl);
+        data.setPage(new PdfFlowRequest.Page(pageName, rotate, imageUrl, margin));
 
         return data;
     }

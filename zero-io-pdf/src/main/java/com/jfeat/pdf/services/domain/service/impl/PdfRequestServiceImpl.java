@@ -34,7 +34,7 @@ public class PdfRequestServiceImpl implements PdfRequestService {
     @Override
     public JSONObject getApiRequest(JSONObject apiData) {
         JSONObject request = PdfSimpleTemplatePrinter.getRequest();
-        if (apiData == null) { return request; }
+
         // set up request from all api data
         Set<String> dataKeys = apiData.keySet();
         for (String key : dataKeys) {

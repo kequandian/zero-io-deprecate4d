@@ -27,7 +27,11 @@ GET `/api/io/excel/{field}`
 ```
 
 #### 通过api方式导出excel文档配置：
-
+说明：
+1、如果，type的类型是SQL，那么该api需要的参数是导出报表字段名（注意：在excel-templates文件夹下需要有一份
+sql语句，该sql语句是获取导出的数据的）
+2、如果type的类型为API方式导出，那么api需要的参数是导出报表的字段名（注意：在excel-templates文件夹下
+下需要有一份对应的字典json和导出的excel模板才可以）
 #### 方法访问路径：
 POST /api/io/excel/export/{exportName}
 
@@ -58,7 +62,7 @@ POST /api/io/excel/export/{exportName}
 ```
 
 ##### 导出excel文件的配置可参考
-[equipment.xlsx](./src/main/resources/excel-templates\equipment.xlsx)
+[equipment.xlsx](./src/main/resources/excel-templates/equipment.xlsx)
 
 ##### 在前端需传入参数
 
@@ -69,7 +73,8 @@ POST /api/io/excel/export/{exportName}
  }
 ```
 
-#### 通过api方式导出excel文档配置：
+
+#### 通过api方式导入excel文档配置：
 
 #### 方法访问路径：
 POST /api/io/excel/import/{importName}
@@ -140,5 +145,11 @@ POST /api/io/excel/import/{importName}
 ```
 ##### 导入excel文件的配置可参考
 > 提示：在导入excel文件的字段下添加需要导入的内容
-
+大致的流程：
+>api需要的参数是
+>importName：导入表单的名字，
+>multipartFile：excel文件，需要在excel里面
+添加对应的字段内容，该表单需要在数据库里面存在，要不然就会报错，程序启动的时候会扫描resources
+下面的excel-templates文件夹里面对应的json文件和excel文件，如果存在即可以把数据导入到数据库
+    
 [equipment-import.xlsx](./src/main/resources/excel-templates\equipment-import.xlsx)

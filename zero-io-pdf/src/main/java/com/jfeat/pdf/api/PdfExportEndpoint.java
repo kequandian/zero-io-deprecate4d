@@ -1,6 +1,6 @@
 package com.jfeat.pdf.api;
 
-import com.jfeat.pdf.services.domain.service.PdfPrintService;
+import com.jfeat.pdf.services.domain.service.PdfExportService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +24,7 @@ public class PdfExportEndpoint {
     // 导出
 
     @Resource
-    PdfPrintService pdfPrintService;
+    PdfExportService pdfExportService;
 
     @GetMapping("/{tableName}")
     public void exportPdf(@PathVariable String tableName, HttpServletResponse response, HttpServletRequest request) throws IOException {
@@ -32,8 +32,8 @@ public class PdfExportEndpoint {
         response.setContentType("application/pdf");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=\"%s.pdf\"", URLEncoder.encode(tableName, StandardCharsets.UTF_8)));
         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
-        // output
-        response.getOutputStream().write(pdfPrintService.print(tableName).readAllBytes());
+        // input
+        response.getOutputStream().write(pdfExportService.export(tableName).readAllBytes());
     }
 
     @GetMapping("/preview/{tableName}")
@@ -41,8 +41,16 @@ public class PdfExportEndpoint {
         response.setContentType("application/pdf");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=\"%s-preview.pdf\"", URLEncoder.encode(tableName, StandardCharsets.UTF_8)));
         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
-        // output
-        response.getOutputStream().write(pdfPrintService.printPreview(tableName).readAllBytes());
+        // input
+        response.getOutputStream().write(pdfExportService.exportPreview(tableName).readAllBytes());
     }
 
+    @GetMapping("/multiple/{tableName}")
+    public void exportMultipleApisPdf(@PathVariable String tableName, @RequestParam Long id, HttpServletResponse response, HttpServletRequest request) throws IOException {
+        response.setContentType("application/pdf");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=\"%s.pdf\"", URLEncoder.encode(tableName, StandardCharsets.UTF_8)));
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
+        // input
+        response.getOutputStream().write(pdfExportService.exportMultiApis(tableName, id).readAllBytes());
+    }
 }

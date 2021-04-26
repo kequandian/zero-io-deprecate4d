@@ -24,7 +24,7 @@ public class PoiAgentExporterApiUtil implements POIAgent {
          * 或者 (HttpServletResponse)
          *  response.setContentType("application/octet-stream");
          *  response.addHeader("Content-Disposition", "attachment; fileName=export.xlsx");
-         *  OutputStream output = response.getOutputStream();
+         *  OutputStream input = response.getOutputStream();
          **/
         FileOutputStream output = new FileOutputStream(new File("excel-test.xlsx"));
 
@@ -43,7 +43,7 @@ public class PoiAgentExporterApiUtil implements POIAgent {
         List<List<String>> data = new ArrayList<>();
         data.add(Arrays.asList(new String[] {"name", "", "sex"}));
         data.add(Arrays.asList(new String[] {"zy", "", "man"}));
-        // new PoiAgentExporterApiUtil().export(data, output);
+        // new PoiAgentExporterApiUtil().export(data, input);
 
 
         /**
@@ -74,9 +74,9 @@ public class PoiAgentExporterApiUtil implements POIAgent {
          * excel导出  query可以为单个表， 或查询sql
          *
          **/
-        // new PoiAgentExporterApiUtil().export(dataSource, "your_table_name", output);
+        // new PoiAgentExporterApiUtil().export(dataSource, "your_table_name", input);
 
-        // new PoiAgentExporterApiUtil().export(dataSource, "your_query_sql", output);
+        // new PoiAgentExporterApiUtil().export(dataSource, "your_query_sql", input);
 
         /**
          * 多表导入
@@ -113,7 +113,7 @@ public class PoiAgentExporterApiUtil implements POIAgent {
         Map<String, String[]> parameterMap = new HashMap<>();
         parameterMap.put("column1", new String[]{"row1_1"});
         parameterMap.put("column2", new String[]{"row1_2"});
-        // new PoiAgentExporterApiUtil().template(parameterMap, output);
+        // new PoiAgentExporterApiUtil().template(parameterMap, input);
     }
 
     public int template(Map<String, String[]> parameterMap, OutputStream os) throws IOException {

@@ -78,6 +78,23 @@
             <artifactId>easypoi-annotation</artifactId>
             <version>4.1.0</version>
         </dependency>
+
+        <!--引用报表模块-->
+        <dependency>
+            <groupId>com.jfeat</groupId>
+            <artifactId>statistic</artifactId>
+            <version>1.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--引用广告主模块-->
+     <!--   <dependency>
+            <groupId>com.jfeat</groupId>
+            <artifactId>gmic-cad-users</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+-->
     </dependencies>
 
     <build>

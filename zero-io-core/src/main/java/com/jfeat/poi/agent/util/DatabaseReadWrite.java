@@ -171,7 +171,6 @@ public class DatabaseReadWrite {
         sqlStr.append(tableName);
         sqlStr.append(" WHERE ");
 
-        if(unique!=null && unique.size()>0){
         for (String filed:unique){
             sqlStr.append("(");
             for(String fieldChi:filed.split(TableTarget.UNIQUE_SEPARATE)){
@@ -188,7 +187,6 @@ public class DatabaseReadWrite {
             sqlStr.append(")");
             sqlStr.append(" or ");
         }
-        }
         sqlStr.delete(sqlStr.length() - " or ".length(), sqlStr.length() - 1);
         sqlStr.append(" LIMIT 1");
         logger.debug("SQL: {}", sqlStr.toString());
@@ -202,24 +200,22 @@ public class DatabaseReadWrite {
 
             /// set values
             int n = 0;
-            if(unique!=null && unique.size()>0) {
-                for (String field : unique) {
-                    for (String checkField : field.split(TableTarget.UNIQUE_SEPARATE)) {
-                        String value = null;
-                        {
-                            if (checkField != null && checkField.length() > 0) {
+            for (String field:unique) {
+                for (String checkField:field.split(TableTarget.UNIQUE_SEPARATE)){
+                String value = null;
+                {
+                    if (checkField != null && checkField.length() > 0) {
 
-                                int index = fields.indexOf(checkField);
-                                if (index >= 0) {
-                                    value = currentRow.get(index);
-                                }
-                                preparedStatement.setObject(n + 1, value);
-                                n++;
-                            }
+                        int index = fields.indexOf(checkField);
+                        if (index >= 0) {
+                            value = currentRow.get(index);
                         }
+                        preparedStatement.setObject(n + 1, value);
+                        n++;
+                      }
                     }
-
                 }
+
             }
 
             List<String> row = new ArrayList<>();
@@ -264,8 +260,8 @@ public class DatabaseReadWrite {
                           , Option option) {
 
         try {
-                if(uniqueList!=null && uniqueList.size()>0){
-                    for (String uniques:uniqueList){
+
+                for (String uniques:uniqueList){
                     //获取唯一键列表
                     List<String> unique = Arrays.asList(uniques.split(":"));
                     String type = null;
@@ -291,8 +287,8 @@ public class DatabaseReadWrite {
                     }
 
 
-                }
-                }
+            }
+
 
 
             primaryKeySet = getPrimaryKey(connection, tableName);

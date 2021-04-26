@@ -52,11 +52,13 @@ public class HttpUtil {
 
     public static String getQueryParam(String url, String param) {
         UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(url).build();
+        System.out.println(uriComponents);
         MultiValueMap<String, String> queryParams = uriComponents.getQueryParams();
         return queryParams.getFirst(param);
     }
 
     public static String setQueryParam(String url, String key, String value) {
+        System.out.println("pp");
         return UriComponentsBuilder.fromHttpUrl(url).queryParam(key, value).build().toString();
     }
 

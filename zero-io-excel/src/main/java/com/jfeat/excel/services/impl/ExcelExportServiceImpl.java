@@ -8,14 +8,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.jfeat.common.FileUtil;
 import com.jfeat.common.HttpUtil;
 import com.jfeat.common.ResourceUtil;
 import com.jfeat.excel.constant.ExcelConstant;
 import com.jfeat.excel.model.ExportParam;
 import com.jfeat.excel.properties.ExcelProperties;
 import com.jfeat.excel.services.ExcelExportService;
-import com.jfeat.poi.agent.PoiAgentExporter;
 import com.jfeat.poi.api.PoiAgentExporterApiUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -61,7 +59,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         if (ExcelConstant.API_EXPORT.equals(type)) {
             // api
             //api中带参数 则直接缺取api不取参数   参数从exportParam的Search中获取
-            String[] split = exportParam.getApi().split("/?");
+            String[] split = exportParam.getApi().split("\\?");
             String api = split[0];
             return exportByApi(exportName, api, exportParam.getSearch());
         } else if (ExcelConstant.SQL_EXPORT.equals(type)) {
@@ -97,16 +95,16 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         log.info("search parameter : {}", search);
 
 
-        if(search == null){
+        if (search == null) {
             search = new HashMap<String, String>();
         }
         //设置最大 导出行数
         Integer excelExportMaxRows = excelProperties.getExcelExportMaxRows();
-        if(excelExportMaxRows == null){
+        if (excelExportMaxRows == null) {
             excelExportMaxRows = ExcelConstant.DEFAULT_EXCEL_EXPORT_MAX_ROWS;
         }
         log.info("excelExportMaxRows : {}", excelExportMaxRows);
-        search.put("pageSize",excelExportMaxRows.toString());
+        search.put("pageSize", excelExportMaxRows.toString());
 
         apiPath = HttpUtil.setQueryParams(apiPath, search);
         log.info("api search Path: {}", apiPath);
@@ -127,7 +125,9 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         // enhance:
         // get dict from system file or from classpath resource
         String jsonStr = ResourceUtil.getDefaultResourceFileContent(dictPath);
-        Map<String, Map<String, String>> dict = JSON.parseObject(jsonStr, new TypeReference<HashMap<String, Map<String, String>>>(){});
+        System.out.println(jsonStr);
+        Map<String, Map<String, String>> dict = JSON.parseObject(jsonStr, new TypeReference<HashMap<String, Map<String, String>>>() {
+        });
         //Map<String, Map<String, String>> dict = FileUtil.parseJsonFile(dictPath,
         //        new TypeReference<HashMap<String, Map<String, String>>>() {});
         // end enhance
@@ -139,6 +139,8 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         // 模版文件
         String templateFileName = exportName + ExcelConstant.EXPORT_TEMPLATE_SUFFIX;
         String templateFilePath = templateDirectory + File.separator + templateFileName;
+        System.out.println(templateFileName);
+        System.out.println(templateFilePath);
         log.info("templateFilePath : {}", templateFilePath);
 
         // 使用 easy poi 方法导出
@@ -148,6 +150,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         map.put("list", rowsMapList);
         Workbook workbook = ExcelExportUtil.exportExcel(params, map);
         workbook.write(baos);
+
 
         return new ByteArrayInputStream(baos.toByteArray());
     }
@@ -205,27 +208,31 @@ public class ExcelExportServiceImpl implements ExcelExportService {
 
     /**
      * 获取 Map List, 并转换字典值
-     * @param jsonArray  - 数据
-     * @param dict       - 字典
+     *
+     * @param jsonArray - 数据
+     * @param dict      - 字典
      * @return
      */
     private List<Map<String, Object>> getRowsMapList(JSONArray jsonArray, Map<String, Map<String, String>> dict) {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (int i = 0; i < jsonArray.size(); i++) {
-            Map<String, Object> innerMap = jsonArray.getJSONObject(i).getInnerMap();
-            // 根据字典转换
-            list.add(handleExcelDictionary(innerMap, dict));
+        if (jsonArray != null) {
+            for (int i = 0; i < jsonArray.size(); i++) {
+                Map<String, Object> innerMap = jsonArray.getJSONObject(i).getInnerMap();
+                // 根据字典转换
+                list.add(handleExcelDictionary(innerMap, dict));
+            }
         }
         return list;
     }
 
     /**
      * 处理字典数据转换
+     *
      * @param recordMap - 行数据
      * @param dict      - 字典
      */
     private Map<String, Object> handleExcelDictionary(Map<String, Object> recordMap,
-                                       Map<String, Map<String, String>> dict) {
+                                                      Map<String, Map<String, String>> dict) {
         recordMap.forEach((key, value) -> {
             Map<String, String> convertMap = dict.get(key);
             if (!CollectionUtil.isEmpty(convertMap)) {
