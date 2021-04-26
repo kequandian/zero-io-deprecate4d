@@ -18,7 +18,7 @@ target/
 *.iml
 *.ipr
 *.log
-
+*.src
 ### NetBeans ###
 nbproject/private/
 build/
@@ -30,4 +30,6 @@ nbdist/
 ###
 fonts/
 node_modules/
+
+
 
