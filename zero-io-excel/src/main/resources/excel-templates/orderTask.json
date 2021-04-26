@@ -1,0 +1,10 @@
+﻿{
+    "status": {
+        "TO_BE_DELIVER": "待下发",
+        "DELIVERED": "已下发",
+        "TO_BE_VERIFY": "待结案",
+        "VERIFIED": "已结案",
+        "FINISHED": "已完成",
+        "ABOLISHED": "已作废"
+    }
+}

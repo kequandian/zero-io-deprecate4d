@@ -1,0 +1,17 @@
+{
+    "duplicate": 0,      
+    "header": 1,         
+    "level": 1,          
+    "overwrite": 1,      
+    "relationOnly": 0,   
+    "target": [         
+      {
+        "fields": [		 
+          "name",
+        ],
+        "table": "ca_cinema_line",	
+        "valueConverterMap": {},
+        "values": []
+      }
+    ]
+  }

@@ -1,0 +1,15 @@
+[INFO] Scanning for projects...
+[ERROR] [ERROR] Some problems were encountered while processing the POMs:
+[FATAL] Non-resolvable parent POM for com.jfeat:zero-io-pdf:1.1.0: Failure to find com.jfeat:zero-io-pom:pom:1.0.0 in http://120.79.49.72:8081/repository/internal was cached in the local repository, resolution will not be reattempted until the update interval of archiva-internal has elapsed or updates are forced and 'parent.relativePath' points at no local POM @ line 12, column 13
+ @ 
+[ERROR] The build could not read 1 project -> [Help 1]
+[ERROR]   
+[ERROR]   The project com.jfeat:zero-io-pdf:1.1.0 (G:\a_kqd\zero-io\zero-io-pdf\pom.xml) has 1 error
+[ERROR]     Non-resolvable parent POM for com.jfeat:zero-io-pdf:1.1.0: Failure to find com.jfeat:zero-io-pom:pom:1.0.0 in http://120.79.49.72:8081/repository/internal was cached in the local repository, resolution will not be reattempted until the update interval of archiva-internal has elapsed or updates are forced and 'parent.relativePath' points at no local POM @ line 12, column 13 -> [Help 2]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/ProjectBuildingException
+[ERROR] [Help 2] http://cwiki.apache.org/confluence/display/MAVEN/UnresolvableModelException

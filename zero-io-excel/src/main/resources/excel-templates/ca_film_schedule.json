@@ -1,0 +1,21 @@
+{
+    "duplicate": 0,      
+    "header": 1,         
+    "level": 1,          
+    "overwrite": 1,      
+    "relationOnly": 0,   
+    "target": [         
+      {
+        "fields": [		 
+          "film_name",
+          "film_start_time",
+          "film_end_time",
+          "manufacture_areas",
+          "producer"
+        ],
+        "table": "ca_film_schedule",	
+        "valueConverterMap": {},
+        "values": []
+      }
+    ]
+  }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfeat.am.module.cinema.services.domain.dao.QueryAdvertiserOperateLogDao">
+                                                                                                                                                                                                <sql id="Base_Column_List">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ca_advertiser_operate_log.id, ca_advertiser_operate_log.note, ca_advertiser_operate_log.advertiser_id AS advertiserId, ca_advertiser_operate_log.status AS status, ca_advertiser_operate_log.create_time AS createTime
+    </sql>
+
+    
+    <select id="queryMasterModel" resultType="AdvertiserOperateLogModel">
+       SELECT ca_advertiser_operate_log.*
+       FROM ca_advertiser_operate_log
+       WHERE ca_advertiser_operate_log.id=#{id}
+       GROUP BY ca_advertiser_operate_log.id
+    </select>
+
+
+                    
+    <select id="findAdvertiserOperateLogPage" resultType="AdvertiserOperateLogRecord" parameterType="AdvertiserOperateLogRecord">
+            SELECT <include refid="Base_Column_List"/>
+
+        FROM ca_advertiser_operate_log
+                WHERE 1=1
+                                                                            <if test="record.id != null and record.id>0 ">
+                                    AND ca_advertiser_operate_log.id LIKE CONCAT('%',#{record.id},'%')
+                            </if>
+                                                                    <if test="record.note != null and record.note!= ''">
+                                    AND ca_advertiser_operate_log.note LIKE CONCAT('%',#{record.note},'%')
+                            </if>
+                                                                    
+                                                                                        <if test="record.advertiserId != null and record.advertiserId>0 ">
+                                    AND ca_advertiser_operate_log.advertiser_id LIKE CONCAT('%',#{record.advertiserId},'%')
+                            </if>
+                                                                    
+                                                                                        <if test="record.status != null and record.status!= ''">
+                                    AND ca_advertiser_operate_log.to_status LIKE CONCAT('%',#{record.status},'%')
+                            </if>
+                                                                    
+                                                                                        <if test="record.createTime != null and record.createTime>0 ">
+                                    AND ca_advertiser_operate_log.create_time LIKE CONCAT('%',#{record.createTime},'%')
+                            </if>
+                <if test="startTime != null">
+            <![CDATA[AND ca_advertiser_operate_log.start_time >= DATE(#{startTime})]]>
+        </if>
+        <if test="endTime != null">
+            <![CDATA[AND ca_advertiser_operate_log.end_time <= DATE(#{endTime}]]>
+        </if>
+            <!--
+        <if test="search != null and search != ''">
+            OR ca_advertiser_operate_log.name LIKE CONCAT('%',#{search},'%')
+        </if>
+        -->
+                                    </select>
+</mapper>

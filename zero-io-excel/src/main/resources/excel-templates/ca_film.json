@@ -1,0 +1,19 @@
+{
+    "duplicate": 0,      
+    "header": 1,         
+    "level": 1,          
+    "overwrite": 1,      
+    "relationOnly": 0,   
+    "target": [         
+      {
+        "fields": [		 
+          "name",
+          "manufacture_areas",
+          "producer"
+        ],
+        "table": "ca_film",	
+        "valueConverterMap": {},
+        "values": []
+      }
+    ]
+  }

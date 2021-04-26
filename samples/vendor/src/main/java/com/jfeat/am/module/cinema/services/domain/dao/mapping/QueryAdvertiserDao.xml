@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfeat.am.module.cinema.services.domain.dao.QueryAdvertiserDao">
+
+
+    <sql id="userTypeThree">
+        (SELECT
+        t_sys_user.id
+        FROM
+        t_sys_user
+        where t_sys_user.org_id in
+        (
+        select chi.id from t_sys_org as fa LEFT JOIN t_sys_org as chi
+        on fa.left_num &lt; chi.left_num and fa.right_num> chi.right_num
+        where fa.id=#{record.orgId}
+        ) or t_sys_user.org_id =#{record.orgId})
+    </sql>
+
+    <select id="queryMasterModel" resultType="AdvertiserModel">
+       SELECT ca_advertiser.*
+       FROM ca_advertiser
+       WHERE ca_advertiser.id=#{id}
+       GROUP BY ca_advertiser.id
+    </select>
+
+
+    <select id="findDetail" resultType="AdvertiserRecord" parameterType="AdvertiserRecord">
+    SELECT
+        ca_advertiser.*,t_sys_user.name as assistantName
+        FROM ca_advertiser left join t_sys_user  on t_sys_user.id = ca_advertiser.assistant_id
+        where ca_advertiser.id = #{id}
+    </select>
+
+
+
+    <select id="findAdvertiserPage" resultType="AdvertiserRecord" parameterType="AdvertiserRecord">
+        SELECT
+        ca_advertiser.*
+        ,t_sys_org.org_code as orgCode
+        ,COUNT(ca_adverting_plan.id) as countHistoryOrder
+        ,t_sys_user.name as assistantName
+        FROM ca_advertiser left join t_sys_org on t_sys_org.id = ca_advertiser.org_id
+        LEFT JOIN ca_adverting_plan on ca_adverting_plan.advertiser_id = ca_advertiser.id
+        left join t_sys_user  on t_sys_user.id = ca_advertiser.assistant_id
+
+        WHERE 1=1
+
+        <if test="record.id != null and record.id>0 ">
+            AND ca_advertiser.id LIKE CONCAT('%',#{record.id},'%')
+        </if>
+
+        <if test="record.companyName != null and record.companyName!= ''">
+            AND ca_advertiser.company_name LIKE CONCAT('%',#{record.companyName},'%')
+        </if>
+
+        <if test="record.contactName != null and record.contactName!= ''">
+            AND ca_advertiser.contact_name LIKE CONCAT('%',#{record.contactName},'%')
+        </if>
+
+        <if test="record.contactPhone != null and record.contactPhone!= ''">
+            AND ca_advertiser.contact_phone LIKE CONCAT('%',#{record.contactPhone},'%')
+        </if>
+
+        <if test="record.contactId != null and record.contactId>0 ">
+            AND ca_advertiser.contact_id LIKE CONCAT('%',#{record.contactId},'%')
+        </if>
+        <if test="record.balance != null and record.balance>0 ">
+            AND ca_advertiser.balance LIKE CONCAT('%',#{record.balance},'%')
+        </if>
+
+        <if test="record.comeFrom != null and record.comeFrom>0 ">
+            AND ca_advertiser.come_from LIKE CONCAT('%',#{record.comeFrom},'%')
+        </if>
+        <if test="record.status != null and record.status!= ''">
+            AND ca_advertiser.status LIKE CONCAT('%',#{record.status},'%')
+        </if>
+        <if test="record.address != null and record.address!= ''">
+            AND ca_advertiser.address LIKE CONCAT('%',#{record.address},'%')
+        </if>
+
+        <if test="record.assistantId != null and record.assistantId>0 ">
+            AND ca_advertiser.assistant_id LIKE CONCAT('%',#{record.assistantId},'%')
+        </if>
+
+        <if test="record.loginTime != null and record.loginTime>0 ">
+            AND ca_advertiser.login_time LIKE CONCAT('%',#{record.loginTime},'%')
+        </if>
+
+        <if test="record.createTime != null and record.createTime>0 ">
+            AND ca_advertiser.create_time LIKE CONCAT('%',#{record.createTime},'%')
+        </if>
+
+        <if test="record.updateTime != null and record.updateTime>0 ">
+            AND ca_advertiser.update_time LIKE CONCAT('%',#{record.updateTime},'%')
+        </if>
+        <if test="record.note != null and record.note!= ''">
+            AND ca_advertiser.note LIKE CONCAT('%',#{record.note},'%')
+        </if>
+        <if test="startTime != null">
+            <![CDATA[AND ca_advertiser.start_time >= DATE(#{startTime})]]>
+        </if>
+        <if test="endTime != null">
+            <![CDATA[AND ca_advertiser.end_time <= DATE(#{endTime)]]>
+        </if>
+        <if test="search != null and search != ''">
+            AND (
+            ca_advertiser.company_name LIKE CONCAT('%',#{search},'%')
+            or ca_advertiser.address LIKE CONCAT('%',#{search},'%')
+            or ca_advertiser.contact_name LIKE CONCAT('%',#{search},'%')
+            or ca_advertiser.contact_phone LIKE CONCAT('%',#{search},'%')
+            )
+        </if>
+        <!--  2 个人用户 -->
+        <if test="userType != null and userType == 2"  >
+            and (ca_advertiser.assistant_id = #{userId})
+        </if>
+        <!--  3 个人组织用户 -->
+        <if test="userType != null and userType == 3"  >
+            and ( ca_advertiser.assistant_id in  <include refid="userTypeThree"/>
+                    or ca_advertiser.assistant_id = 0 )
+        </if>
+        group by ca_advertiser.id
+        ORDER BY ca_advertiser.create_time DESC
+    </select>
+</mapper>

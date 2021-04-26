@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfeat.am.module.pdf.services.gen.persistence.dao.PdfTableMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.jfeat.pdf.services.gen.persistence.model.PdfTable">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="editable" property="editable" />
+		<result column="type" property="type" />
+		<result column="api" property="api" />
+		<result column="header_field" property="headerField" />
+		<result column="field" property="field" />
+		<result column="template_content" property="templateContent" />
+		<result column="origin_config" property="originConfig"/>
+		<result column="sub_apis" property="subApis"/>
+		<result column="template_type" property="templateType"/>
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		id, name, editable, type, api, header_field AS headerField, api_field AS apiField, api_list As apiList, field, template_content AS templateContent,
+		origin_config As originConfig
+	</sql>
+
+</mapper>

@@ -1,0 +1,8 @@
+﻿{
+        "status": {
+            "TO_BE_REVIEWED": "待审核",
+            "REVIEW_APPROVED": "已审核",
+            "ORDER_PLACED": "已下单",
+            "ABOLISHED": "已作废"
+        }
+}

@@ -1,0 +1,11 @@
+﻿{
+    "status": {
+        "PASS": "使用中",
+        "PENDING_APPROVAL": "待审核",
+        "REFUSE": "已拒绝"
+    },
+    "comeFrom":{
+        "0": "系统创建",
+        "1": "用户注册"
+    }
+}

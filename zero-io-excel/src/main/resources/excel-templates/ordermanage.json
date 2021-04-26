@@ -1,0 +1,9 @@
+﻿{
+    "status": {
+        "EXECUTING": "执行中",
+        "TO_BE_CONFIRM": "待确认",
+        "VERIFIED": "已结案",
+        "FINISHED": "已结算",
+        "ABOLISHED": "已作废"
+    }
+}
