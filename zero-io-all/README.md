@@ -31,7 +31,7 @@ spring:
       filters: log4j,wall,mergeStat
       sql-script-encoding: UTF-8
       schema: classpath*:sql/*-schema.sql
-      data: classpath*:sql/*-data.sql
+      data: classpath*:sql/*-cinema-data.sql
       initialize: false
 ---
 io:
