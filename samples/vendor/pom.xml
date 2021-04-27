@@ -19,7 +19,7 @@
     </parent>
 
     <properties>
-        <skipStandalone>true</skipStandalone>
+        <skipStandalone>false</skipStandalone>
         <!---CRUD, scope provided-->
         <crud-plus.version>0.1.0</crud-plus.version>
         <crud-core.version>0.0.5</crud-core.version>
