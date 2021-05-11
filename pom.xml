@@ -33,6 +33,7 @@
         <module>zero-io-fs</module>
         <module>zero-io-common</module>
         <module>zero-io-all</module>
+        <module>zero-io-aliyun</module>
 
     </modules>
 
