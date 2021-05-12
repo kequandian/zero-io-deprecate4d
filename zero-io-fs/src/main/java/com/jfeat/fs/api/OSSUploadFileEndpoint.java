@@ -64,7 +64,7 @@ public class OSSUploadFileEndpoint {
         String extensionName = FilenameUtils.getExtension(originalFileName);
         Long fileSize = file.getSize();
 
-        String targetFileName = UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(file.getOriginalFilename());
+        String targetFileName = UUID.randomUUID() + "." + FilenameUtils.getExtension(file.getOriginalFilename());
         OSSUtil util = OSSUtil.build(endpoint, accessKeyId, accessKeySecret);
         util.upload(bucketName, targetFileName, file.getInputStream());
         return SuccessTip.create(FileInfo.create(accessUrl, targetFileName, extensionName, originalFileName, fileSize));

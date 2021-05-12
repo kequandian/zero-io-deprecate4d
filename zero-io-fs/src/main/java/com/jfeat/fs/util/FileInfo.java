@@ -3,9 +3,16 @@ package com.jfeat.fs.util;
 
 import com.jfeat.crud.base.util.StrKit;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
 /**
  * Created by jackyhuang on 2017/7/4.
  */
+@Data
+@NoArgsConstructor
+@Accessors(chain = true)
 public class FileInfo {
     private String name;
     private String host;
@@ -75,77 +82,5 @@ public class FileInfo {
         if (StrKit.notBlank(host) && host.endsWith("/")) {
             this.blurryUrl = host + blurryName;
         }
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public String getBlurryName() {
-        return blurryName;
-    }
-
-    public void setBlurryName(String blurryName) {
-        this.blurryName = blurryName;
-    }
-
-    public String getBlurryUrl() {
-        return blurryUrl;
-    }
-
-    public void setBlurryUrl(String blurryUrl) {
-        this.blurryUrl = blurryUrl;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public String getOriginalFileName() {
-        return originalFileName;
-    }
-
-    public void setOriginalFileName(String originalFileName) {
-        this.originalFileName = originalFileName;
-    }
-
-    public String getExtensionName() {
-        return extensionName;
-    }
-
-    public void setExtensionName(String extensionName) {
-        this.extensionName = extensionName;
-    }
-
-    public Long getSize() {
-        return size;
-    }
-
-    public void setSize(Long size) {
-        this.size = size;
     }
 }
