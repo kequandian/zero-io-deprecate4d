@@ -1,19 +1,19 @@
 package com.jfeat.fs.api;
 
 
-
 import com.jfeat.crud.base.exception.BusinessCode;
 import com.jfeat.crud.base.exception.BusinessException;
+import com.jfeat.crud.base.tips.ErrorTip;
 import com.jfeat.crud.base.tips.SuccessTip;
 import com.jfeat.crud.base.tips.Tip;
 import com.jfeat.crud.base.util.StrKit;
+import com.jfeat.fs.Bucket;
+import com.jfeat.fs.properties.BucketProperties;
 import com.jfeat.fs.properties.FSProperties;
 import com.jfeat.fs.service.LoadFileCodeService;
 import com.jfeat.fs.util.FileInfo;
 import com.jfeat.fs.util.ImageUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -22,21 +22,48 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.util.Base64Utils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.HeadlessException;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.Transparency;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import javax.swing.ImageIcon;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 /**
  * Created by jackyhuang on 2017/7/4.
@@ -53,6 +80,35 @@ public class FileServiceEndpoint {
 
     @Autowired
     LoadFileCodeService loadFileCodeService;
+
+    @Autowired
+    private BucketProperties bucketProperties;
+
+    @ApiOperation(value = "创建存储桶", response = String.class, notes = "根据Token中的APPID创建对应的存储桶")
+    @ApiParam(name = "name", value = "存储桶名称")
+    @PostMapping("/api/fs/buckets")
+    public Tip generateBucket(@RequestHeader("authorization") String token,
+                              @RequestBody Bucket bucket) {
+        // TODO: fetch and verify app-id from token if EXIST
+        if (Objects.nonNull(bucket)) {
+            // 校验APP-ID / APP-KEY
+            if (!bucketProperties.getAppId().equals(bucket.getAppId()) || !bucketProperties.getAppKey().equals(bucket.getAppKey())) {
+                return ErrorTip.create(BusinessCode.AuthorizationError);
+            }
+            // 获取APP-ID用于创建对应的APP目录
+            Long appId = bucketProperties.getAppId();
+            // 获取常规保存路径
+            String savePath = getFileUploadPath();
+            if (!StringUtils.isEmpty(bucket.getName())) {
+                // 创建Bucket路径
+                File dir = new File((savePath + File.separator +appId +File.separator + bucket.getName()));
+                if (dir.exists() || (!dir.exists() && dir.mkdirs())) {
+                    return SuccessTip.create(bucket);
+                }
+            }
+        }
+        return ErrorTip.create(BusinessCode.BadRequest);
+    }
 
     @ApiOperation(value = "获取下载码", response = String.class, notes = "登陆后自动生成的一个下载码")
     @ApiParam(name = "name", value = "文件名称")
@@ -172,35 +228,35 @@ public class FileServiceEndpoint {
 
     @ApiOperation(value = "上传文件", response = FileInfo.class)
     @PostMapping("/api/fs/uploadfile")
-    @ResponseBody
-    public Tip FileUpload(@RequestHeader("authorization") String token,
-                          @RequestPart("file") MultipartFile file) throws IOException {
+    public Tip fileUpload(@RequestHeader("authorization") String token,
+                          @RequestPart("file") MultipartFile file) {
         if (file.isEmpty()) {
             throw new RuntimeException("file is empty");
         }
         String originalFileName = file.getOriginalFilename();
         String extensionName = getExtensionName(originalFileName);
+        String fileHost = getFileHost();
         Long fileSize = file.getSize();
-        String fileName = UUID.randomUUID().toString() + "." + extensionName;
-        String path = null;
+        String fileName = UUID.randomUUID() + "." + extensionName;
+        String path;
         try {
             String fileSavePath = getFileUploadPath();
             File target = new File(fileSavePath + fileName);
             path = target.getCanonicalPath();
-            target.setReadable(true);
+            boolean readable = target.setReadable(true);
             FileUtils.copyInputStreamToFile(file.getInputStream(), target);
             logger.info("file uploaded to: {}", target.getAbsolutePath());
         } catch (Exception e) {
             throw new BusinessException(BusinessCode.UploadFileError);
         }
-        return SuccessTip.create(FileInfo.create(getFileHost(), fileName, extensionName, originalFileName, fileSize, path));
+        return SuccessTip.create(FileInfo.create(fileHost, fileName, extensionName, originalFileName, fileSize, path));
     }
 
     // @ApiOperation(value = "下载文件")
     @GetMapping("/api/pub/fs/loadfile")
     @ResponseBody
-    public void loadFile(@RequestParam(required = true) String name,
-                         @RequestParam(required = true) String code, HttpServletResponse response) throws IOException {
+    public void loadFile(@RequestParam String name,
+                         @RequestParam String code, HttpServletResponse response) throws IOException {
         if (loadFileCodeService.checkCode(code) == false) {
             throw new BusinessException(BusinessCode.BadRequest);
         }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>com.jfeat</groupId>
         <artifactId>sb-parent</artifactId>
@@ -9,15 +9,15 @@
         <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.jfeat</groupId>
-    <artifactId>zero-io-fs</artifactId>
-    <version>1.0.0</version>
-    <packaging>jar</packaging>
+
+    <artifactId>zero-io-aliyun</artifactId>
 
     <properties>
         <skipStandalone>true</skipStandalone>
         <crud-dev.version>0.0.2</crud-dev.version>
         <crud-base.version>0.0.2</crud-base.version>
+        <aliyun-sdk-oss.version>3.4.0</aliyun-sdk-oss.version>
+        <aliyun-java-sdk-core.version>4.5.3</aliyun-java-sdk-core.version>
     </properties>
 
     <dependencies>
@@ -26,6 +26,12 @@
             <artifactId>crud-dev</artifactId>
             <version>${crud-dev.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
         </dependency>
 
         <dependency>
@@ -44,7 +50,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
 
         <dependency>
             <groupId>com.jfeat</groupId>
@@ -70,15 +75,26 @@
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>${aliyun-sdk-oss.version}</version>
+        </dependency>
+
+        <!-- 阿里云短信SDK -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>${aliyun-java-sdk-core.version}</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.jhlabs/filters -->
-        <!-- 高斯模糊  -->
         <dependency>
             <groupId>com.jhlabs</groupId>
             <artifactId>filters</artifactId>
             <version>2.0.235-1</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -88,11 +104,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.aliyun.oss</groupId>
-            <artifactId>aliyun-sdk-oss</artifactId>
-            <version>3.4.0</version>
         </dependency>
 
     </dependencies>
@@ -111,6 +122,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.4.4</version>
                 <configuration>
                     <skip>${skipStandalone}</skip>
                 </configuration>
@@ -179,6 +191,4 @@
             </resource>
         </resources>
     </build>
-
-
 </project>

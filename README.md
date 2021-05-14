@@ -23,4 +23,5 @@ You may obtain a copy of the License at
 |    [zero-io-all](./zero-io-all)    | excel和pdf合并api |
 | [zero-io-common](./zero-io-common) |     公共模块      |
 |   [zero-io-core](./zero-io-core)   |     核心模块      |
-
+|   [zero-io-fs](./zero-io-fs)       |     OSS存储模块   |
+|  [zero-io-aliyun](./zero-io-aliyun)|   阿里云接口模块   |
