@@ -7,38 +7,33 @@ POST `/api/io/excel/export/{exportName}`
 ###  API方式
 > 需要同时配置下述数据字典转换模板，以及easypoi定义的excel文件类型(*.xlsx)导出模板
 >
-advertisers表单数据字典转换模板:
+>需要配置对应的模板，实例如下
+>
+>url:获取数据源的api
 ```json
 {
-    "status": {
-        "PASS": "使用中",
-        "PENDING_APPROVAL": "待审核",
-        "REFUSE": "已拒绝"
-    },
-    "comeFrom":{
-        "0": "系统创建",
-        "1": "用户注册"
-    }
+  "api": {
+    "url": "/api/crud/advertiser/advertisers"
+  },
+  "status": {
+    "PASS": "使用中",
+    "PENDING_APPROVAL": "待审核",
+    "REFUSE": "已拒绝"
+  },
+  "comeFrom": {
+    "0": "系统创建",
+    "1": "用户注册"
+  }
 }
-
 ```
 
 advertisers表单excel文件类型(*.xlsx)导出模板：就是excel-templates文件夹下面的advertisers.xlsx文件
 >上述的数据字典转模板以及对应的excel文件模板都在excel-templates文件夹里了
 
-**项目启动后访问swagger-ui后找到相应的api，api需要两个参数一个是exportName,另外一个是body。**
+**项目启动后访问swagger-ui后找到相应的api，api需要一个参数一个是exportName**
 >api:`/api/io/excel/export/{advertisers}`，advertisers要和模板文件名对应
 >
->body：
-```json
-{
-  "api": "http://localhost:8081/api/crud/advertiser/advertisers",
-  "dict": {},
-  "search": {},
-  "type": "API"
-}
-```
-
+>访问后就可以了
 ### SQL方式
 **sql文件和对应的json配置放在excel-templates文件夹里了**
 >sql方式的exportName输入advertiserReport，advertiserReport要和模板文件名对应

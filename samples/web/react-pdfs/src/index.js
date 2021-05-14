@@ -27,11 +27,16 @@ function Export() {
     useEffect(async () => {
             const update = await axios.post(
                 'http://localhost:8081/api/io/excel/export/advertisers',
+                // {
+                //     "api": "http://localhost:8081/api/crud/advertiser/advertisers",
+                //     "dict": {},
+                //     "search": {},
+                //     "type": "API"
+                // },
                 {
                     "api": "http://localhost:8081/api/crud/advertiser/advertisers",
                     "dict": {},
                     "search": {},
-                    "type": "API"
                 },
             );
 

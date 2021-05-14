@@ -3,6 +3,7 @@ package com.jfeat.excel.services;
 import com.jfeat.excel.model.ExportParam;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -17,14 +18,14 @@ public interface ExcelExportService {
      * @param exportParam
      * @return
      */
-    ByteArrayInputStream export(String exportName, ExportParam exportParam);
+    ByteArrayInputStream export(String exportName) throws IOException;
 
     /**
      * 导出Excel, api 方式, 处理字节流数据
      * @param   - 导出参数
      * @return
      */
-    ByteArrayInputStream exportByApi(String exportName, String api, Map<String, String> search);
+    ByteArrayInputStream exportByApi(String exportName, String api);
 
     /**
      * 导出 Excel, sql 方式, 处理字节流数据

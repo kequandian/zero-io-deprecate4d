@@ -2,9 +2,7 @@ package com.jfeat.am.module.cinema.api;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jfeat.am.common.annotation.Permission;
 import com.jfeat.am.core.jwt.JWTKit;
-import com.jfeat.am.module.cinema.api.permission.AdvertiserVendorPermission;
 import com.jfeat.am.module.cinema.services.domain.dao.QueryAdvertiserDao;
 import com.jfeat.am.module.cinema.services.domain.model.AdvertiserRecord;
 import com.jfeat.crud.base.exception.BusinessCode;
@@ -16,8 +14,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+//import org.apache.xmlbeans.impl.common.IOUtil;
+import org.mockito.internal.util.io.IOUtil;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -41,7 +44,7 @@ public class AdvertiserVendorEndpoint {
     @Resource
     QueryAdvertiserDao queryAdvertiserDao;
 
-/*    @Permission(AdvertiserVendorPermission.ADVERTISER_VIEW)*/
+    /*    @Permission(AdvertiserVendorPermission.ADVERTISER_VIEW)*/
     @ApiOperation(value = "Advertiser 列表信息", response = AdvertiserRecord.class)
     @GetMapping
     @ApiImplicitParams({
@@ -124,12 +127,10 @@ public class AdvertiserVendorEndpoint {
         record.setNote(note);
         Integer userType = JWTKit.getUserType();
         Long userId = JWTKit.getUserId();
-        page.setRecords(queryAdvertiserDao.findAdvertiserPage(page, record, search, orderBy, null, null,userType,userId));
+        page.setRecords(queryAdvertiserDao.findAdvertiserPage(page, record, search, orderBy, null, null, userType, userId));
 
         return SuccessTip.create(page);
     }
-
-
 
 
 }

@@ -11,7 +11,6 @@ import com.alibaba.fastjson.TypeReference;
 import com.jfeat.common.HttpUtil;
 import com.jfeat.common.ResourceUtil;
 import com.jfeat.excel.constant.ExcelConstant;
-import com.jfeat.excel.model.ExportParam;
 import com.jfeat.excel.properties.ExcelProperties;
 import com.jfeat.excel.services.ExcelExportService;
 import com.jfeat.poi.api.PoiAgentExporterApiUtil;
@@ -27,10 +26,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.InputStream;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -52,26 +48,47 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     DataSource dataSource;
 
     @Override
-    public ByteArrayInputStream export(String exportName, ExportParam exportParam) {
+    public ByteArrayInputStream export(String exportName) throws IOException {
         //String exportName = exportParam.getExportName();
-        String type = exportParam.getType();
+        //String type = exportParam.getType();
 
-        if (ExcelConstant.API_EXPORT.equals(type)) {
+        String templateDirectory = excelProperties.getExcelTemplateDir();
+        // 获取api
+        String dictName = exportName + ExcelConstant.EXPORT_DICT_SUFFIX;
+        String dictPath = templateDirectory + File.separator + dictName;
+        JSONObject jsonStr = JSONObject.parseObject(ResourceUtil.getDefaultResourceFileContent(dictPath));
+
+//        JSONObject apiString = jsonStr.getJSONObject("api");
+        JSONObject api = jsonStr.getJSONObject("api");
+        String url=api.getString("url");
+
+
+        JSONObject search = jsonStr.getJSONObject("search");
+
+        HashMap<String, String> searchMap = new HashMap<>();
+        if (search!=null){
+            for (String key : search.keySet()) {
+                searchMap.put(key, search.getString(key));
+            }
+        }
+
+        //String apiString2 = exportParam.getApi();
+        if (!url.isEmpty()) {
             // api
             //api中带参数 则直接缺取api不取参数   参数从exportParam的Search中获取
-            String[] split = exportParam.getApi().split("\\?");
-            String api = split[0];
-            return exportByApi(exportName, api, exportParam.getSearch());
-        } else if (ExcelConstant.SQL_EXPORT.equals(type)) {
+//            String[] split = exportParam.getApi().split("\\?");
+//            String api = split[0];
+            return exportByApi(exportName, url);
+        } else {
             // sql
-            return exportBySql(exportName, exportParam.getSearch());
+            return exportBySql(exportName, searchMap);
         }
-        throw new RuntimeException("错误的导出模式!");
+        //throw new RuntimeException("错误的导出模式!");
     }
 
     @Override
     @SneakyThrows
-    public ByteArrayInputStream exportByApi(String exportName, String api, Map<String, String> search) {
+    public ByteArrayInputStream exportByApi(String exportName, String api) {
         // Authorization
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         HttpServletRequest httpRequest = ((ServletRequestAttributes) requestAttributes).getRequest();
@@ -91,20 +108,21 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         } else {
             log.warn("invalid api: " + api);
         }
-        // 处理API的分页和搜索
-        log.info("search parameter : {}", search);
+
+        Map<String, String> search = api.contains("?") ? new HashMap<String, String>() : null;
 
 
-        if (search == null) {
-            search = new HashMap<String, String>();
-        }
         //设置最大 导出行数
         Integer excelExportMaxRows = excelProperties.getExcelExportMaxRows();
         if (excelExportMaxRows == null) {
             excelExportMaxRows = ExcelConstant.DEFAULT_EXCEL_EXPORT_MAX_ROWS;
         }
         log.info("excelExportMaxRows : {}", excelExportMaxRows);
-        search.put("pageSize", excelExportMaxRows.toString());
+
+        if (search!=null) {
+            search.put("pageSize", excelExportMaxRows.toString());
+        }
+
 
         apiPath = HttpUtil.setQueryParams(apiPath, search);
         log.info("api search Path: {}", apiPath);

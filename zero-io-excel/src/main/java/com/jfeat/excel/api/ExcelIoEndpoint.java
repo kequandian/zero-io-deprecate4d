@@ -44,7 +44,7 @@ public class ExcelIoEndpoint {
     //modelName 用于权限控制
     @UrlPermission
     @PostMapping("/export/{exportName}")
-    public void exportExcel(@PathVariable String exportName, @Valid @RequestBody ExportParam exportParam, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void exportExcel(@PathVariable String exportName, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, String[]> parameterMap = request.getParameterMap();
         logger.info("parameterMap --> {}", toPrintMap(parameterMap));
 
@@ -53,7 +53,7 @@ public class ExcelIoEndpoint {
         response.setContentType("application/octet-stream");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s.xlsx", exportName));
         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
-        response.getOutputStream().write(excelExportService.export(exportName, exportParam).readAllBytes());
+        response.getOutputStream().write(excelExportService.export(exportName).readAllBytes());
     }
 
     @UrlPermission
