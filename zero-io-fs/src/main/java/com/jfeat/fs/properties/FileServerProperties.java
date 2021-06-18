@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 @ConfigurationProperties(prefix = "io")
-public class FSProperties {
+public class FileServerProperties {
 
     private String fileUploadPath;
 

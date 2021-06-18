@@ -9,7 +9,7 @@ import com.jfeat.crud.base.tips.Tip;
 import com.jfeat.crud.base.util.StrKit;
 import com.jfeat.fs.Bucket;
 import com.jfeat.fs.properties.BucketProperties;
-import com.jfeat.fs.properties.FSProperties;
+import com.jfeat.fs.properties.FileServerProperties;
 import com.jfeat.fs.service.LoadFileCodeService;
 import com.jfeat.fs.util.FileInfo;
 import com.jfeat.fs.util.ImageUtil;
@@ -76,7 +76,7 @@ public class FileServiceEndpoint {
     protected final static Logger logger = LoggerFactory.getLogger(FileServiceEndpoint.class);
 
     @Autowired
-    FSProperties FSProperties;
+    FileServerProperties fileServerProperties;
 
     @Autowired
     LoadFileCodeService loadFileCodeService;
@@ -298,7 +298,7 @@ public class FileServiceEndpoint {
     }
 
     private String getFileHost() {
-        String fileHost = FSProperties.getFileHost();
+        String fileHost = fileServerProperties.getFileHost();
         String host = fileHost;
 //        String tenant = JWTKit.getTenantId(getHttpServletRequest()) + "";
         // TODO 租户
@@ -312,7 +312,7 @@ public class FileServiceEndpoint {
     }
 
     private String getFileUploadPath() {
-        String fileSavePath = FSProperties.getFileUploadPath();
+        String fileSavePath = fileServerProperties.getFileUploadPath();
         String uploadPath = fileSavePath;
 //        String tenant = JWTKit.getTenantId(getHttpServletRequest()) + "";
         // TODO 租户
