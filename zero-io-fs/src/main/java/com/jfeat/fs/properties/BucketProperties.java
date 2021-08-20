@@ -20,10 +20,10 @@ public class BucketProperties {
     /**
      * 应用ID
      */
-    Long appId;
+    String appId;
 
     /**
      * 应用密钥
      */
-    String appKey;
+    String appSecret;
 }

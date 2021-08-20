@@ -1,0 +1,14 @@
+@endpoint=http://localhost:8080
+
+### 测试文件上传
+POST {{endpoint}}/api/fs/uploadfile
+Authorization: 
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryAFRaG58f2nIb0mPB
+
+------WebKitFormBoundaryAFRaG58f2nIb0mPB
+Content-Disposition: form-data; name="file"; filename="logo_128x128.png"
+Content-Type: image/png
+
+< ./logo_128x128.png
+------WebKitFormBoundaryAFRaG58f2nIb0mPB--
+

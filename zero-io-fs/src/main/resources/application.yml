@@ -14,5 +14,5 @@ io:
   fileHost: "/attachments"
 
 bucket:
-  appId: 32791238237612378123
-  appKey: "EF8WnIPlnDFYPEIt"
+  appId:  "32791238237612378123"
+  appSecret: "EF8WnIPlnDFYPEIt"

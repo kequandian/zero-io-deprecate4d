@@ -92,11 +92,11 @@ public class FileServiceEndpoint {
         // TODO: fetch and verify app-id from token if EXIST
         if (Objects.nonNull(bucket)) {
             // 校验APP-ID / APP-KEY
-            if (!bucketProperties.getAppId().equals(bucket.getAppId()) || !bucketProperties.getAppKey().equals(bucket.getAppKey())) {
+            if (!bucketProperties.getAppId().equals(bucket.getAppId()) || !bucketProperties.getAppSecret().equals(bucket.getAppSecret())) {
                 return ErrorTip.create(BusinessCode.AuthorizationError);
             }
             // 获取APP-ID用于创建对应的APP目录
-            Long appId = bucketProperties.getAppId();
+            String appId = bucketProperties.getAppId();
             // 获取常规保存路径
             String savePath = getFileUploadPath();
             if (!StringUtils.isEmpty(bucket.getName())) {
@@ -231,7 +231,7 @@ public class FileServiceEndpoint {
     public Tip fileUpload(@RequestHeader("authorization") String token,
                           @RequestPart("file") MultipartFile file) {
         if (file.isEmpty()) {
-            throw new RuntimeException("file is empty");
+            throw new BusinessException(BusinessCode.BadRequest,  "file is empty");
         }
         String originalFileName = file.getOriginalFilename();
         String extensionName = getExtensionName(originalFileName);
@@ -244,8 +244,13 @@ public class FileServiceEndpoint {
             File target = new File(fileSavePath + fileName);
             path = target.getCanonicalPath();
             boolean readable = target.setReadable(true);
-            FileUtils.copyInputStreamToFile(file.getInputStream(), target);
-            logger.info("file uploaded to: {}", target.getAbsolutePath());
+            if(readable){
+                logger.info("file uploading to: {}", path);
+                FileUtils.copyInputStreamToFile(file.getInputStream(), target);
+                logger.info("file uploaded to: {}", target.getAbsolutePath());
+            }else{
+                throw new BusinessException(BusinessCode.UploadFileError, "file is not readable");
+            }
         } catch (Exception e) {
             throw new BusinessException(BusinessCode.UploadFileError);
         }

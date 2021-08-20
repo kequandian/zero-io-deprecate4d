@@ -25,5 +25,5 @@ public class Bucket {
     /**
      * 应用密钥
      */
-    private String appKey;
+    private String appSecret;
 }
