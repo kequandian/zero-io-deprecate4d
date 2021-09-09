@@ -34,4 +34,6 @@ public interface ExcelExportService {
      * @return
      */
     ByteArrayInputStream exportBySql(String exportName, Map<String, String> search);
+
+    ByteArrayInputStream autoExport(String field);
 }

@@ -13,6 +13,7 @@ import com.jfeat.common.ResourceUtil;
 import com.jfeat.excel.constant.ExcelConstant;
 import com.jfeat.excel.properties.ExcelProperties;
 import com.jfeat.excel.services.ExcelExportService;
+import com.jfeat.poi.agent.PoiAgentExporter;
 import com.jfeat.poi.api.PoiAgentExporterApiUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +47,9 @@ public class ExcelExportServiceImpl implements ExcelExportService {
 
     @Autowired
     DataSource dataSource;
+
+
+
 
     @Override
     public ByteArrayInputStream export(String exportName) throws IOException {
@@ -260,5 +264,85 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         });
         return recordMap;
     }
+
+
+    //自动报表专用
+
+    @Override
+    public ByteArrayInputStream autoExport(String field) {
+
+        // Authorization
+        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest httpRequest = ((ServletRequestAttributes) requestAttributes).getRequest();
+        String authorization = httpRequest.getHeader("Authorization");
+        // api
+        String apiPath = getApiPath(httpRequest, field);
+        // process search
+        apiPath = processSearch(apiPath, httpRequest);
+        // process page size
+        apiPath = processPageSize(apiPath, authorization);
+
+        // 访问api 获取数据
+        JSONObject data = HttpUtil.getResponse(apiPath, authorization).getJSONObject("data");
+        // header
+        List<String> header = data.getJSONArray("header").toJavaList(String.class);
+        // rows jsonArray
+        JSONArray rows = data.getJSONArray("rows");
+        // rows map
+        List<Map<String, String>> rowsMapList = getRowsMapList(rows);
+
+        // export
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PoiAgentExporter.exportExcel(rowsMapList, header, header, baos);
+        return new ByteArrayInputStream(baos.toByteArray());
+    }
+
+
+
+
+
+
+    //自动报表
+
+    private List<Map<String, String>> getRowsMapList(JSONArray rows) {
+        List<Map<String, String>> rowsMapList = new ArrayList<>();
+
+        for (int i = 0; i < rows.size(); i++) {
+            JSONObject obj = rows.getJSONObject(i);
+            Map<String, String> rowMap = new HashMap<>();
+            // 循环转换
+            Iterator it = obj.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<String, Object> entry = (Map.Entry<String, Object>) it.next();
+                String value = String.valueOf(entry.getValue());
+                rowMap.put(entry.getKey(), value.equals("null")?"":value);
+            }
+            rowsMapList.add(rowMap);
+        }
+        return rowsMapList;
+    }
+
+    private String getApiPath(HttpServletRequest httpRequest, String field) {
+        String requestURI = httpRequest.getRequestURI();
+        StringBuffer requestURL = httpRequest.getRequestURL();
+        // String requestURL = "http://cloud.biliya.cn/api/io/excel/xxxx";
+        // String requestURI = "/api/io/excel/xxxx";
+        int index = requestURL.indexOf(requestURI);
+        return requestURL.substring(0, index) + API_PREFIX + "/" + field;
+    }
+
+    private String processSearch(String apiPath, HttpServletRequest request) {
+        String queryString = request.getQueryString();
+        return HttpUtil.setQueryParams(apiPath, queryString);
+    }
+
+    private String processPageSize(String apiPath, String authorization) {
+        JSONObject data = HttpUtil.getResponse(apiPath, authorization).getJSONObject("data");
+        String total = data.getString("total");
+        // apiPath = HttpUtil.setQueryParam(apiPath,"pageNum", "1");
+        return HttpUtil.setQueryParam(apiPath, "pageSize", total);
+    }
+
+
 
 }
