@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.jfeat.AmApplication;
 import com.jfeat.common.HttpUtil;
 import com.jfeat.common.ResourceUtil;
 import com.jfeat.excel.constant.ExcelConstant;
@@ -19,6 +20,8 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.mockito.internal.util.io.IOUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestAttributes;
@@ -39,6 +42,9 @@ import java.util.*;
 @Service
 @Slf4j
 public class ExcelExportServiceImpl implements ExcelExportService {
+
+    protected final static Logger logger = LoggerFactory.getLogger(ExcelExportServiceImpl.class);
+
 
     private static final String API_PREFIX = "/api/adm/stat/meta";
 
@@ -279,8 +285,12 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         String apiPath = getApiPath(httpRequest, field);
         // process search
         apiPath = processSearch(apiPath, httpRequest);
+        //访问前打印数据
+        logger.info("ready to getResponse");
+        logger.info("apiPath:  {}",apiPath);
         // process page size
         apiPath = processPageSize(apiPath, authorization);
+
 
         // 访问api 获取数据
         JSONObject data = HttpUtil.getResponse(apiPath, authorization).getJSONObject("data");
@@ -325,6 +335,19 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     private String getApiPath(HttpServletRequest httpRequest, String field) {
         String requestURI = httpRequest.getRequestURI();
         StringBuffer requestURL = httpRequest.getRequestURL();
+        logger.info("requestInfo :");
+        logger.info("requestURI = {}",requestURI);
+        logger.info("requestURL = {}",requestURL);
+
+        //域名为https开头，根据配置替换
+        if(excelProperties.getHttps()){
+            logger.info("开启https");
+            int httpIndex = requestURL.indexOf(":");
+            logger.info("':'Index {}",httpIndex);
+            requestURL.replace(0,httpIndex,"https");
+            logger.info("requestURL = {}",requestURL);
+        }
+
         // String requestURL = "http://cloud.biliya.cn/api/io/excel/xxxx";
         // String requestURI = "/api/io/excel/xxxx";
         int index = requestURL.indexOf(requestURI);

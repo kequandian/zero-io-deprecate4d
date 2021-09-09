@@ -18,6 +18,8 @@ import org.springframework.context.annotation.Configuration;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ExcelProperties {
 
+    Boolean https = false;
+
     /**
      * 模版文件目录
      */
