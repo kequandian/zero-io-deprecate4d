@@ -233,6 +233,8 @@ public class FileServiceEndpoint {
         if (file.isEmpty()) {
             throw new BusinessException(BusinessCode.BadRequest,  "file is empty");
         }
+        logger.info("===========================================");
+        logger.info("============== upload start ===============");
         String originalFileName = file.getOriginalFilename();
         String extensionName = getExtensionName(originalFileName);
         String fileHost = getFileHost();
@@ -241,17 +243,27 @@ public class FileServiceEndpoint {
         String path;
         try {
             String fileSavePath = getFileUploadPath();
+            logger.info("============== fileSavePath : {} ===============",fileSavePath);
+            logger.info("============== fileSavePath + fileName : {} ===============",fileSavePath + fileName);
             File target = new File(fileSavePath + fileName);
+            logger.info("============== target.exists() : {} ===============",target.exists());
             path = target.getCanonicalPath();
-            boolean readable = target.setReadable(true);
-            if(readable){
+            logger.info("============== path : {} ===============",path);
+            //boolean readable = target.setReadable(true);
+            //logger.info("============== readable : {} ===============",readable);
+
+            //if(readable){
                 logger.info("file uploading to: {}", path);
                 FileUtils.copyInputStreamToFile(file.getInputStream(), target);
                 logger.info("file uploaded to: {}", target.getAbsolutePath());
-            }else{
+            /*}else{
                 throw new BusinessException(BusinessCode.UploadFileError, "file is not readable");
-            }
+            }*/
         } catch (Exception e) {
+            logger.info("============== exception {} ===============");
+            logger.info(e.getMessage());
+            logger.info(e.getLocalizedMessage());
+            logger.info(e.toString());
             throw new BusinessException(BusinessCode.UploadFileError);
         }
         return SuccessTip.create(FileInfo.create(fileHost, fileName, extensionName, originalFileName, fileSize, path));
@@ -319,6 +331,10 @@ public class FileServiceEndpoint {
     private String getFileUploadPath() {
         String fileSavePath = FSProperties.getFileUploadPath();
         String uploadPath = fileSavePath;
+
+        logger.info("fileSavePath:{}",fileSavePath);
+        logger.info("uploadPath:{}",uploadPath);
+
 //        String tenant = JWTKit.getTenantId(getHttpServletRequest()) + "";
         // TODO 租户
         /*String tenant = "TODO";
@@ -336,6 +352,9 @@ public class FileServiceEndpoint {
         if (!file.exists()) {
             file.mkdirs();
         }
+
+        logger.info("final uploadPath:{}",uploadPath);
+
         return uploadPath;
     }
 
