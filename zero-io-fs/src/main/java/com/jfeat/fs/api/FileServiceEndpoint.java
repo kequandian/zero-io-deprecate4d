@@ -87,7 +87,7 @@ public class FileServiceEndpoint {
     @ApiOperation(value = "创建存储桶", response = String.class, notes = "根据Token中的APPID创建对应的存储桶")
     @ApiParam(name = "name", value = "存储桶名称")
     @PostMapping("/api/fs/buckets")
-    public Tip generateBucket(@RequestHeader("authorization") String token,
+    public Tip generateBucket(@RequestHeader(value = "authorization", required = false) String token,
                               @RequestBody Bucket bucket) {
         // TODO: fetch and verify app-id from token if EXIST
         if (Objects.nonNull(bucket)) {
@@ -127,7 +127,7 @@ public class FileServiceEndpoint {
     @ApiOperation(value = "multipart方式上传图片", response = FileInfo.class)
     @PostMapping("/api/fs/uploadx")
     @ResponseBody
-    public Tip formUpload(@RequestHeader("authorization") String token,
+    public Tip formUpload(@RequestHeader(value = "authorization", required = false) String token,
                           @RequestParam(name = "blur", defaultValue = "false") Boolean blur,
                           @RequestPart("file") MultipartFile picture) {
         String originalFileName = picture.getOriginalFilename();
@@ -164,7 +164,7 @@ public class FileServiceEndpoint {
     @ApiOperation(value = "Base64格式上传图片", response = FileInfo.class)
     @PostMapping("/api/fs/upload64")
     @ResponseBody
-    public Tip base64Upload(@RequestHeader("authorization") String token,
+    public Tip base64Upload(@RequestHeader(value = "authorization", required = false) String token,
                             @RequestParam(name = "blur", defaultValue = "false") Boolean blur, HttpServletRequest request) throws IOException {
         String base64Data = IOUtils.toString(request.getInputStream(), "UTF-8");
         if (StrKit.isBlank(base64Data)) {
@@ -228,7 +228,7 @@ public class FileServiceEndpoint {
 
     @ApiOperation(value = "上传文件", response = FileInfo.class)
     @PostMapping("/api/fs/uploadfile")
-    public Tip fileUpload(@RequestHeader("authorization") String token,
+    public Tip fileUpload(@RequestHeader(value = "authorization", required = false) String token,
                           @RequestPart("file") MultipartFile file) {
         if (file.isEmpty()) {
             throw new BusinessException(BusinessCode.BadRequest,  "file is empty");
@@ -316,46 +316,38 @@ public class FileServiceEndpoint {
 
     private String getFileHost() {
         String fileHost = FSProperties.getFileHost();
-        String host = fileHost;
-//        String tenant = JWTKit.getTenantId(getHttpServletRequest()) + "";
+
         // TODO 租户
-        /*String tenant = "TODO";
+        /*String tenant = String tenant = JWTKit.getTenantId(getHttpServletRequest()) + "";;
         if (!fileHost.endsWith("/")) {
             host = host + "/" + tenant;
         } else {
             host = host + tenant;
         }*/
-        return host;
+        return fileHost;
     }
 
     private String getFileUploadPath() {
         String fileSavePath = FSProperties.getFileUploadPath();
-        String uploadPath = fileSavePath;
+        //String uploadPath = fileSavePath;
 
         logger.info("fileSavePath:{}",fileSavePath);
-        logger.info("uploadPath:{}",uploadPath);
+        //logger.info("uploadPath:{}",uploadPath);
 
-//        String tenant = JWTKit.getTenantId(getHttpServletRequest()) + "";
         // TODO 租户
-        /*String tenant = "TODO";
+        /*String tenant = JWTKit.getTenantId(getHttpServletRequest()) + "";
         if (!fileSavePath.endsWith(File.separator)) {
             uploadPath = uploadPath + File.separator + tenant + File.separator;
         } else {
             uploadPath = uploadPath + tenant + File.separator;
         }*/
 
-        if (!fileSavePath.endsWith((File.separator))) {
-            uploadPath = uploadPath + File.separator;
-        }
-
-        File file = new File(uploadPath);
+        File file = new File(fileSavePath);
         if (!file.exists()) {
             file.mkdirs();
         }
 
-        logger.info("final uploadPath:{}",uploadPath);
-
-        return uploadPath;
+        return fileSavePath;
     }
 
     public static String getExtensionName(String filename) {

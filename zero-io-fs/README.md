@@ -1,12 +1,36 @@
 ## 专用于aliyun的服务对接
 
-#### application.yml 配置文件
+#### `application.yml` 配置文件
 
 ```yaml
 io:
    file-upload-path: /images
    file-host: images
 ```
+
+#### `docker-compose.yml` 配置文件
+> 相对路径`./images`映射为容器内的绝对路径 `/images`, 即与`file-upload-path:` 配置一致
+```yaml
+version: "3.4"
+services:
+  fs:
+    image: adoptopenjdk:11-jdk-hotspot
+    volumes: 
+      - /etc/localtime:/etc/localtime:ro
+	  - ./api/zero-io-fs-1.0.0-standalone.jar:/webapps/app.jar
+      - ./images:/images
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"	  
+	working_dir: /webapps
+	commands:
+	  - /bin/sh
+	  - -c 
+	  - |
+	    java -jar app.jar --spring.profiles.active=dev --server.port=8080
+```
+
 
 ## 文件上传可能触发的 **跨域问题** 解决方案
 
