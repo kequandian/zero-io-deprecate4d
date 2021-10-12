@@ -7,7 +7,7 @@ import com.jfeat.crud.base.tips.ErrorTip;
 import com.jfeat.crud.base.tips.SuccessTip;
 import com.jfeat.crud.base.tips.Tip;
 import com.jfeat.crud.base.util.StrKit;
-import com.jfeat.fs.Bucket;
+import com.jfeat.fs.model.Bucket;
 import com.jfeat.fs.properties.BucketProperties;
 import com.jfeat.fs.properties.FSProperties;
 import com.jfeat.fs.service.LoadFileCodeService;
@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.util.Assert;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -89,19 +90,20 @@ public class FileServiceEndpoint {
     @PostMapping("/api/fs/buckets")
     public Tip generateBucket(@RequestHeader(value = "authorization", required = false) String token,
                               @RequestBody Bucket bucket) {
-        // TODO: fetch and verify app-id from token if EXIST
         if (Objects.nonNull(bucket)) {
             // 校验APP-ID / APP-KEY
             if (!bucketProperties.getAppId().equals(bucket.getAppId()) || !bucketProperties.getAppSecret().equals(bucket.getAppSecret())) {
                 return ErrorTip.create(BusinessCode.AuthorizationError);
             }
+
             // 获取APP-ID用于创建对应的APP目录
             String appId = bucketProperties.getAppId();
             // 获取常规保存路径
             String savePath = getFileUploadPath();
-            if (!StringUtils.isEmpty(bucket.getName())) {
+
+            if (!StringUtils.isEmpty(bucket.getBucket())) {
                 // 创建Bucket路径
-                File dir = new File((savePath + File.separator +appId +File.separator + bucket.getName()));
+                File dir = new File(String.join(File.separator, savePath, appId, bucket.getBucket()));
                 if (dir.exists() || (!dir.exists() && dir.mkdirs())) {
                     return SuccessTip.create(bucket);
                 }
@@ -229,36 +231,40 @@ public class FileServiceEndpoint {
     @ApiOperation(value = "上传文件", response = FileInfo.class)
     @PostMapping("/api/fs/uploadfile")
     public Tip fileUpload(@RequestHeader(value = "authorization", required = false) String token,
+                          @ApiParam("上传文件至不同的分组") @RequestHeader(value = "X-FS-BUCKET", required = false) String bucket,
                           @RequestPart("file") MultipartFile file) {
         if (file.isEmpty()) {
             throw new BusinessException(BusinessCode.BadRequest,  "file is empty");
         }
-        logger.info("===========================================");
         logger.info("============== upload start ===============");
         String originalFileName = file.getOriginalFilename();
         String extensionName = getExtensionName(originalFileName);
         String fileHost = getFileHost();
         Long fileSize = file.getSize();
         String fileName = UUID.randomUUID() + "." + extensionName;
-        String path;
+
         try {
             String fileSavePath = getFileUploadPath();
-            logger.info("============== fileSavePath : {} ===============",fileSavePath);
-            logger.info("============== fileSavePath + fileName : {} ===============",fileSavePath + fileName);
-            File target = new File(fileSavePath + fileName);
-            logger.info("============== target.exists() : {} ===============",target.exists());
-            path = target.getCanonicalPath();
-            logger.info("============== path : {} ===============",path);
-            //boolean readable = target.setReadable(true);
-            //logger.info("============== readable : {} ===============",readable);
 
+            // check bucket exists
+            if(!StringUtils.isEmpty(bucket)){
+                File bucketFile = new File(String.join(File.separator, fileSavePath, bucket));
+                Assert.isTrue(bucketFile.exists(), "bucket (X-FS-BUCKET) not exists: " + bucketFile.getPath() );
+            }
+
+            File targetFile = new File(String.join(File.separator, fileSavePath, bucket, fileName));
+
+            //boolean readable = target.setReadable(true);
             //if(readable){
-                logger.info("file uploading to: {}", path);
-                FileUtils.copyInputStreamToFile(file.getInputStream(), target);
-                logger.info("file uploaded to: {}", target.getAbsolutePath());
+                logger.info("file uploading to: {}", targetFile.getAbsolutePath());
+                FileUtils.copyInputStreamToFile(file.getInputStream(), targetFile);
+                logger.info("file uploaded to: {}", targetFile.getAbsolutePath());
             /*}else{
                 throw new BusinessException(BusinessCode.UploadFileError, "file is not readable");
             }*/
+
+            return SuccessTip.create(FileInfo.create(fileHost, fileName, extensionName, originalFileName, fileSize, targetFile.getAbsolutePath()));
+
         } catch (Exception e) {
             logger.info("============== exception {} ===============");
             logger.info(e.getMessage());
@@ -266,7 +272,6 @@ public class FileServiceEndpoint {
             logger.info(e.toString());
             throw new BusinessException(BusinessCode.UploadFileError);
         }
-        return SuccessTip.create(FileInfo.create(fileHost, fileName, extensionName, originalFileName, fileSize, path));
     }
 
     // @ApiOperation(value = "下载文件")

@@ -1,4 +1,4 @@
-package com.jfeat.fs;
+package com.jfeat.fs.model;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -15,7 +15,7 @@ public class Bucket {
     /**
      * 存储桶名称
      */
-    private String name;
+    private String bucket;
 
     /**
      * 应用ID

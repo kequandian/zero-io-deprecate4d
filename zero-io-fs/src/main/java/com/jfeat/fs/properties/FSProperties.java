@@ -18,6 +18,6 @@ public class FSProperties {
     // 文件上传的保存相对路径
     private String fileUploadPath;
 
-    // 外网访问的相对路径，相当于 fileDownloadPath
+    // 外网访问的相对路径(基于网关nginx)，相当于 fileDownloadPath
     private String fileHost;
 }

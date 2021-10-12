@@ -38,11 +38,11 @@ services:
 
 ```yml
 spring:
-   profiles: prod
    http:
      multipart:
-        max-file-size: 80MB
-        max-request-size: 80MB
+       file-size-threshold: 2KB
+       max-file-size: 80MB
+       max-request-size: 80MB
 ```
 
 
