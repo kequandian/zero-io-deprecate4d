@@ -112,12 +112,51 @@ public class FileServiceEndpoint {
         return ErrorTip.create(BusinessCode.BadRequest);
     }
 
-    @ApiOperation(value = "获取下载码", response = String.class, notes = "登陆后自动生成的一个下载码")
-    @ApiParam(name = "name", value = "文件名称")
-    @GetMapping("/api/fs/dlcode")
-    public Tip getCode(@RequestParam String name) {
-        String code = loadFileCodeService.genAndGetCode(name);
-        return SuccessTip.create(code);
+    @ApiOperation(value = "上传文件", response = FileInfo.class)
+    @PostMapping("/api/fs/uploadfile")
+    public Tip fileUpload(@RequestHeader(value = "authorization", required = false) String token,
+                          @ApiParam("上传文件至不同的分组") @RequestHeader(value = "X-FS-BUCKET", required = false) String bucket,
+                          @RequestPart("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            throw new BusinessException(BusinessCode.BadRequest,  "file is empty");
+        }
+        if(bucket==null) bucket="";
+        logger.info("============== upload start ===============");
+        String originalFileName = file.getOriginalFilename();
+        String extensionName = getExtensionName(originalFileName);
+        String fileHost = getFileHost();
+        Long fileSize = file.getSize();
+        String fileName = UUID.randomUUID() + "." + extensionName;
+
+        try {
+            String fileSavePath = getFileUploadPath();
+
+            // check bucket exists
+            if(!StringUtils.isEmpty(bucket)){
+                File bucketFile = new File(String.join(File.separator, fileSavePath, bucket));
+                Assert.isTrue(bucketFile.exists(), "bucket (X-FS-BUCKET) not exists: " + bucketFile.getPath() );
+            }
+
+            File targetFile = new File(String.join(File.separator, fileSavePath, bucket, fileName));
+
+            //boolean readable = target.setReadable(true);
+            //if(readable){
+            logger.info("file uploading to: {}", targetFile.getAbsolutePath());
+            FileUtils.copyInputStreamToFile(file.getInputStream(), targetFile);
+            logger.info("file uploaded to: {}", targetFile.getAbsolutePath());
+            /*}else{
+                throw new BusinessException(BusinessCode.UploadFileError, "file is not readable");
+            }*/
+
+            return SuccessTip.create(FileInfo.create(fileHost, fileName, extensionName, originalFileName, fileSize, targetFile.getAbsolutePath()));
+
+        } catch (Exception e) {
+            logger.info("============== exception {} ===============");
+            logger.info(e.getMessage());
+            logger.info(e.getLocalizedMessage());
+            logger.info(e.toString());
+            throw new BusinessException(BusinessCode.UploadFileError);
+        }
     }
 
     /**
@@ -228,50 +267,13 @@ public class FileServiceEndpoint {
         return SuccessTip.create(FileInfo.create(getFileHost(), pictureName, blurryName));
     }
 
-    @ApiOperation(value = "上传文件", response = FileInfo.class)
-    @PostMapping("/api/fs/uploadfile")
-    public Tip fileUpload(@RequestHeader(value = "authorization", required = false) String token,
-                          @ApiParam("上传文件至不同的分组") @RequestHeader(value = "X-FS-BUCKET", required = false) String bucket,
-                          @RequestPart("file") MultipartFile file) {
-        if (file.isEmpty()) {
-            throw new BusinessException(BusinessCode.BadRequest,  "file is empty");
-        }
-        logger.info("============== upload start ===============");
-        String originalFileName = file.getOriginalFilename();
-        String extensionName = getExtensionName(originalFileName);
-        String fileHost = getFileHost();
-        Long fileSize = file.getSize();
-        String fileName = UUID.randomUUID() + "." + extensionName;
 
-        try {
-            String fileSavePath = getFileUploadPath();
-
-            // check bucket exists
-            if(!StringUtils.isEmpty(bucket)){
-                File bucketFile = new File(String.join(File.separator, fileSavePath, bucket));
-                Assert.isTrue(bucketFile.exists(), "bucket (X-FS-BUCKET) not exists: " + bucketFile.getPath() );
-            }
-
-            File targetFile = new File(String.join(File.separator, fileSavePath, bucket, fileName));
-
-            //boolean readable = target.setReadable(true);
-            //if(readable){
-                logger.info("file uploading to: {}", targetFile.getAbsolutePath());
-                FileUtils.copyInputStreamToFile(file.getInputStream(), targetFile);
-                logger.info("file uploaded to: {}", targetFile.getAbsolutePath());
-            /*}else{
-                throw new BusinessException(BusinessCode.UploadFileError, "file is not readable");
-            }*/
-
-            return SuccessTip.create(FileInfo.create(fileHost, fileName, extensionName, originalFileName, fileSize, targetFile.getAbsolutePath()));
-
-        } catch (Exception e) {
-            logger.info("============== exception {} ===============");
-            logger.info(e.getMessage());
-            logger.info(e.getLocalizedMessage());
-            logger.info(e.toString());
-            throw new BusinessException(BusinessCode.UploadFileError);
-        }
+    @ApiOperation(value = "获取下载码", response = String.class, notes = "登陆后自动生成的一个下载码")
+    @ApiParam(name = "name", value = "文件名称")
+    @GetMapping("/api/fs/dlcode")
+    public Tip getCode(@RequestParam String name) {
+        String code = loadFileCodeService.genAndGetCode(name);
+        return SuccessTip.create(code);
     }
 
     // @ApiOperation(value = "下载文件")
