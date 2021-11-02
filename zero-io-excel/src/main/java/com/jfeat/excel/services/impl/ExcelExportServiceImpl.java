@@ -335,12 +335,14 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     private String getApiPath(HttpServletRequest httpRequest, String field) {
         String requestURI = httpRequest.getRequestURI();
         StringBuffer requestURL = httpRequest.getRequestURL();
-        logger.info("requestInfo :");
+        String schema = httpRequest.getScheme();
         logger.info("requestURI = {}",requestURI);
         logger.info("requestURL = {}",requestURL);
+        logger.info("schema = {}",schema);
 
         //域名为https开头，根据配置替换
-        if(excelProperties.getHttps()){
+        //if(excelProperties.getHttps()){
+        if("https".equals(schema)){
             logger.info("开启https");
             int httpIndex = requestURL.indexOf(":");
             logger.info("':'Index {}",httpIndex);
@@ -350,8 +352,10 @@ public class ExcelExportServiceImpl implements ExcelExportService {
 
         // String requestURL = "http://cloud.biliya.cn/api/io/excel/xxxx";
         // String requestURI = "/api/io/excel/xxxx";
-        int index = requestURL.indexOf(requestURI);
-        return requestURL.substring(0, index) + API_PREFIX + "/" + field;
+        // https fix
+        //int index = requestURL.indexOf(requestURI);
+        //return requestURL.substring(0, index) + API_PREFIX + "/" + field;
+        return String.join("", schema, "://", API_PREFIX, "/", field);
     }
 
     private String processSearch(String apiPath, HttpServletRequest request) {
