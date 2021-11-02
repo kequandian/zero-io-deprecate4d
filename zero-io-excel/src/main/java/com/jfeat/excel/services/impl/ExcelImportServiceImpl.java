@@ -2,7 +2,6 @@ package com.jfeat.excel.services.impl;
 
 import cn.hutool.core.io.IoUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.jfeat.common.FileUtil;
 import com.jfeat.common.ResourceUtil;
 import com.jfeat.excel.constant.ExcelConstant;
 import com.jfeat.excel.properties.ExcelProperties;
@@ -11,14 +10,11 @@ import com.jfeat.poi.agent.im.PoiAgentImporterUtil;
 import com.jfeat.poi.agent.im.request.PoiAgentImporterRequest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.mockito.internal.util.io.IOUtil;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.io.*;
-import java.util.Collection;
 
 /**
  * Created on 2020/8/4.

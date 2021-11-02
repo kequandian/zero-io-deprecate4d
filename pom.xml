@@ -13,7 +13,7 @@
 
     <parent>
         <groupId>com.jfeat</groupId>
-        <artifactId>sb-parent</artifactId>
+        <artifactId>pom-parent</artifactId>
         <version>1.0.0</version>
         <relativePath/>
     </parent>
@@ -27,17 +27,12 @@
     </dependencies>
 
     <modules>
-        <module>zero-io-core</module>
+        <module>zero-io-common</module>
+        <module>zero-io-fs</module>
         <module>zero-io-excel</module>
         <module>zero-io-pdf</module>
-        <module>zero-io-fs</module>
-        <module>zero-io-common</module>
         <module>zero-io-all</module>
         <module>zero-io-aliyun</module>
-
     </modules>
-
-
-
 
 </project>

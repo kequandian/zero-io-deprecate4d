@@ -5,6 +5,7 @@ package com.jfeat.pdf.print.simple.base;
  *
  * @author Wen Hao
  */
+@Deprecated
 public class BorderDefinition {
 
     /// border style

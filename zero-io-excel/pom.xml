@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>com.jfeat</groupId>
-        <artifactId>sb-parent</artifactId>
+        <artifactId>pom-parent</artifactId>
         <version>1.0.0</version>
         <relativePath/>
     </parent>
@@ -12,34 +12,28 @@
 
     <groupId>com.jfeat</groupId>
     <artifactId>zero-io-excel</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
+
+    <!--  upgrade history
+    1.2.0: when 2021-11-02
+           remove zero-io-core
+
+  -->
 
     <properties>
         <skipStandalone>true</skipStandalone>
-        <crud-dev.version>0.0.2</crud-dev.version>
-        <zero-io-core.version>0.0.4</zero-io-core.version>
-        <crud-plus.version>0.1.0</crud-plus.version>
-        <crud-core.version>0.0.5</crud-core.version>
         <lombok.version>1.18.12</lombok.version>
+        <poi-ooxml.version>4.1.0</poi-ooxml.version>
+        <zero-io-common.version>1.0.0</zero-io-common.version>
     </properties>
 
     <dependencies>
-
-
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.jfeat</groupId>
-            <artifactId>crud-dev</artifactId>
-            <version>${crud-dev.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
         <dependency>
             <groupId>com.jfeat</groupId>
             <artifactId>crud-core</artifactId>
@@ -50,11 +44,22 @@
             <artifactId>crud-plus</artifactId>
             <version>${crud-plus.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.jfeat</groupId>
+            <artifactId>jwt-core</artifactId>
+            <version>${jwt-core.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.jfeat</groupId>
-            <artifactId>zero-io-core</artifactId>
-            <version>${zero-io-core.version}</version>
+            <artifactId>zero-io-common</artifactId>
+            <version>${zero-io-common.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi-ooxml.version}</version>
         </dependency>
 
         <dependency>
@@ -80,21 +85,12 @@
         </dependency>
 
         <!--引用报表模块-->
-        <dependency>
+        <!--<dependency>
             <groupId>com.jfeat</groupId>
             <artifactId>statistic</artifactId>
             <version>1.0.1</version>
             <scope>provided</scope>
-        </dependency>
-
-        <!--引用广告主模块-->
-     <!--   <dependency>
-            <groupId>com.jfeat</groupId>
-            <artifactId>gmic-cad-users</artifactId>
-            <version>1.0.0</version>
-            <scope>provided</scope>
-        </dependency>
--->
+        </dependency>-->
     </dependencies>
 
     <build>

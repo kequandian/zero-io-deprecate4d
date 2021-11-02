@@ -4,30 +4,24 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>com.jfeat</groupId>
-        <artifactId>sb-parent</artifactId>
+        <artifactId>pom-parent</artifactId>
         <version>1.0.0</version>
         <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>zero-io-aliyun</artifactId>
+    <groupId>com.jfeat</groupId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
 
     <properties>
         <skipStandalone>true</skipStandalone>
-        <crud-dev.version>0.0.2</crud-dev.version>
-        <crud-base.version>0.0.2</crud-base.version>
         <aliyun-sdk-oss.version>3.4.0</aliyun-sdk-oss.version>
         <aliyun-java-sdk-core.version>4.5.3</aliyun-java-sdk-core.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.jfeat</groupId>
-            <artifactId>crud-dev</artifactId>
-            <version>${crud-dev.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>

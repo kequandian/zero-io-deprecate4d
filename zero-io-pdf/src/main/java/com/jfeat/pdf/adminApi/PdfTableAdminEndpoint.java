@@ -1,7 +1,6 @@
 package com.jfeat.pdf.adminApi;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jfeat.am.module.log.annotation.BusinessLog;
 import com.jfeat.crud.base.exception.BusinessCode;
 import com.jfeat.crud.base.exception.BusinessException;
 import com.jfeat.crud.base.tips.SuccessTip;
@@ -40,7 +39,7 @@ public class PdfTableAdminEndpoint {
     @Resource
     QueryPdfTableDao queryPdfTableDao;
 
-    @BusinessLog(name = "PdfTable", value = "create PdfTable")
+//    @BusinessLog(name = "PdfTable", value = "create PdfTable")
     @PostMapping
     @ApiOperation(value = "新建 PdfTable", response = PdfTable.class)
     public Tip createPdfTable(@RequestBody PdfTable entity) {
@@ -56,14 +55,14 @@ public class PdfTableAdminEndpoint {
         return SuccessTip.create(affected);
     }
 
-    @BusinessLog(name = "PdfTable", value = "查看 PdfTable")
+//    @BusinessLog(name = "PdfTable", value = "查看 PdfTable")
     @GetMapping("/{id}")
     @ApiOperation(value = "查看 PdfTable", response = PdfTable.class)
     public Tip getPdfTable(@PathVariable Long id) {
         return SuccessTip.create(pdfTableService.retrieveMaster(id));
     }
 
-    @BusinessLog(name = "PdfTable", value = "update PdfTable")
+//    @BusinessLog(name = "PdfTable", value = "update PdfTable")
     @PutMapping("/{id}")
     @ApiOperation(value = "修改 PdfTable", response = PdfTable.class)
     public Tip updatePdfTable(@PathVariable Long id, @RequestBody PdfTable entity) {
@@ -71,14 +70,14 @@ public class PdfTableAdminEndpoint {
         return SuccessTip.create(pdfTableService.updateMaster(entity));
     }
 
-    @BusinessLog(name = "PdfTable", value = "delete PdfTable")
+//    @BusinessLog(name = "PdfTable", value = "delete PdfTable")
     @DeleteMapping("/{id}")
     @ApiOperation("删除 PdfTable")
     public Tip deletePdfTable(@PathVariable Long id) {
         return SuccessTip.create(pdfTableService.deleteMaster(id));
     }
 
-    @BusinessLog(name = "PdfTable", value = "查询列表 PdfTable")
+//    @BusinessLog(name = "PdfTable", value = "查询列表 PdfTable")
     @ApiOperation(value = "PdfTable 列表信息", response = PdfTableRecord.class)
     @GetMapping
     @ApiImplicitParams({

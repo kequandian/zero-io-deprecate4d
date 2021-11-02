@@ -6,7 +6,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.jfeat.pdf.print.base.BorderDefinition;
-import com.jfeat.pdf.print.base.ColorDefinition;
+import com.jfeat.pdf.print.simple.base.ColorDefinition;
 import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.element.FlowLayout;
 import com.jfeat.pdf.print.flow.BarCodes;
@@ -319,7 +319,7 @@ public class PdfPrintingFlowUtil {
             RectangleFlowData flowData = (RectangleFlowData) flow.getElement();
             Float width = flowData.getWidth();
             Float height = flowData.getHeight();
-            BaseColor baseColor = com.jfeat.pdf.print.simple.base.ColorDefinition.getBaseColor(flowData.getColor());
+            BaseColor baseColor = ColorDefinition.getBaseColor(flowData.getColor());
 
             PdfPTable rect = new PdfPTable(1);
             rect.setSpacingAfter(2);
