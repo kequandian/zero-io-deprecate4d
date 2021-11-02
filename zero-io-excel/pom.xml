@@ -166,6 +166,9 @@
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>**/h2/*</exclude>
+                </excludes>
             </resource>
             <resource>
                 <directory>src/main/java</directory>
