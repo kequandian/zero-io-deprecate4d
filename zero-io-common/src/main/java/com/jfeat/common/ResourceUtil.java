@@ -1,6 +1,5 @@
 package com.jfeat.common;
 
-import cn.hutool.core.io.IoUtil;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.ResourceUtils;
 
@@ -38,9 +37,13 @@ public class ResourceUtil {
             }
 
             // fix deployed  *-standalone.jar
-            ClassPathResource resource = new ClassPathResource(resourcePath);
-            InputStream inputStream = resource.getInputStream();
-            content = IOUtils.toString(inputStream, Charset.forName("UTF-8"));
+            try {
+                ClassPathResource resource = new ClassPathResource(resourcePath);
+                InputStream inputStream = resource.getInputStream();
+                content = IOUtils.toString(inputStream, Charset.forName("UTF-8"));
+            }catch (IOException e){
+
+            }
         }
 
         return content;

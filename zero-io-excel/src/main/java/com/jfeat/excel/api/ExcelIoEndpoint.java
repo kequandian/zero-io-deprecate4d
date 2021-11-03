@@ -1,6 +1,7 @@
 package com.jfeat.excel.api;
 
 import com.jfeat.am.common.annotation.UrlPermission;
+import com.jfeat.am.module.statistics.services.crud.ExtendedStatistics;
 import com.jfeat.crud.base.tips.SuccessTip;
 import com.jfeat.crud.base.tips.Tip;
 import com.jfeat.excel.services.ExcelExportService;
@@ -27,8 +28,7 @@ import java.util.*;
 public class ExcelIoEndpoint {
 
     protected final static Logger logger = LoggerFactory.getLogger(ExcelIoEndpoint.class);
-
-    private static final String API_PREFIX = "/api/adm/stat/meta";
+//    private static final String API_PREFIX = "/api/adm/stat/meta";
 
     @Resource
     ExcelExportService excelExportService;
@@ -41,9 +41,11 @@ public class ExcelIoEndpoint {
     public void exportExcelFile(@PathVariable String field, HttpServletRequest request, HttpServletResponse response) throws IOException, IOException {
         Map<String, String[]> parameterMap = request.getParameterMap();
         logger.info("parameterMap --> {}", toPrintMap(parameterMap));
+
         response.setContentType("application/octet-stream");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s.xlsx", field));
         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
+
         response.getOutputStream().write(excelExportService.autoExport(field).readAllBytes());
     }
 
@@ -55,13 +57,12 @@ public class ExcelIoEndpoint {
         Map<String, String[]> parameterMap = request.getParameterMap();
         logger.info("parameterMap --> {}", toPrintMap(parameterMap));
 
-        //exportName = exportParam.getExportName();
-        //logger.info("[exportName] : {}", exportName);
         response.setContentType("application/octet-stream");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s.xlsx", exportName));
         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
         response.getOutputStream().write(excelExportService.export(exportName).readAllBytes());
     }
+
 
     @UrlPermission
     @PostMapping("/import/{importName}")
