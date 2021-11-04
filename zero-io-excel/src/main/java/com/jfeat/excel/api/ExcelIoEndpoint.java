@@ -1,7 +1,6 @@
 package com.jfeat.excel.api;
 
 import com.jfeat.am.common.annotation.UrlPermission;
-import com.jfeat.am.module.statistics.services.crud.ExtendedStatistics;
 import com.jfeat.crud.base.tips.SuccessTip;
 import com.jfeat.crud.base.tips.Tip;
 import com.jfeat.excel.services.ExcelExportService;

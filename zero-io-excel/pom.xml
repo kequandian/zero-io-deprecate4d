@@ -91,11 +91,11 @@
         </dependency>
 
         <!--引用报表模块-->
-        <dependency>
+        <!--<dependency>
             <groupId>com.jfeat</groupId>
             <artifactId>statistic</artifactId>
             <version>1.3.0</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
     <build>

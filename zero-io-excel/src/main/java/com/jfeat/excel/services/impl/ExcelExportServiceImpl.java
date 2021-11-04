@@ -15,6 +15,7 @@ import com.jfeat.excel.properties.ExcelProperties;
 import com.jfeat.excel.services.ExcelExportService;
 import com.jfeat.poi.agent.PoiAgentExporter;
 import com.jfeat.poi.api.PoiAgentExporterApiUtil;
+import io.jsonwebtoken.lang.Assert;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -58,23 +59,17 @@ public class ExcelExportServiceImpl implements ExcelExportService {
 
     @Override
     public ByteArrayInputStream export(String exportName) throws IOException {
-        //String exportName = exportParam.getExportName();
-        //String type = exportParam.getType();
-
         String templateDirectory = excelProperties.getExcelTemplateDir();
-        // 获取api
+
+        // 获取 .json, 解释
         String dictName = exportName + ExcelConstant.EXPORT_DICT_SUFFIX;
         String dictPath = String.join(File.separator, templateDirectory, dictName);
 
         String dictJsonContent = ResourceUtil.getDefaultResourceFileContent(dictPath);
-        if(dictJsonContent==null){
-            dictJsonContent = "{\"type\":\"SQL\"}";
+        if(StringUtils.isEmpty(dictJsonContent)){
+            dictJsonContent="{}";
         }
         JSONObject sqlJson = JSONObject.parseObject(dictJsonContent);
-
-
-        JSONObject api = sqlJson.getJSONObject("api");
-        String url = api!=null?api.getString("url") : null;
 
         JSONObject search = sqlJson.getJSONObject("search");
         HashMap<String, String> searchMap = new HashMap<>();
@@ -84,6 +79,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
             }
         }
 
+        String url = sqlJson.getJSONObject("api")!=null?sqlJson.getJSONObject("api").getString("url") : null;
         if (!StringUtils.isEmpty(url)) {
             return exportByApi(exportName, url);
         } else {
@@ -186,11 +182,15 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         String sqlTemplateName = exportName + ExcelConstant.EXPORT_SQL_SUFFIX;
         String templateFilePath = String.join(File.separator,templateDirectory, sqlTemplateName);
 
+        //first get file from file-system
+        File templateFile = new File(templateFilePath);
+        log.info("template path: {}", templateFile.getAbsolutePath());
+        InputStream sqlStream = templateFile.exists() ? new FileInputStream(templateFile) :
+                ResourceUtil.getDefaultResourceFileAsStream(templateFilePath);
+        Assert.isTrue(sqlStream!=null);
+
         // 逐行读取 sql文件
-        // enhance:
-        InputStream sqlStream = ResourceUtil.getDefaultResourceFileAsStream(templateFilePath);
         Collection<String> sqlLines = IOUtil.readLines(sqlStream);
-        //List<String> sqlLines = FileUtil.readLine(templateFilePath);
         // end enhance
 
         // 替换注释并构建 sql
