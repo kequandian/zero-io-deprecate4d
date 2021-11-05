@@ -5,7 +5,10 @@
 //</excludes>
 @endpoint=http://localhost:8080
 
-
-### Export Excel
+### Export SQL 
 POST {{endpoint}}/api/io/excel/export/exportTest
+
+
+### Auto Export Excel
+GET {{endpoint}}/api/io/excel/productReport
 

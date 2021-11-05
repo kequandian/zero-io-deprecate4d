@@ -172,8 +172,9 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <excludes>
-                    <exclude>**/h2/*</exclude>
                     <exclude>**/excel-templates/*</exclude>
+                    <exclude>**/h2/*</exclude>
+                    <exclude>**/meta/*</exclude>
                 </excludes>
             </resource>
             <resource>
