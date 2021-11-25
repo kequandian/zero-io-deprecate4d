@@ -21,9 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.util.Assert;
-import org.springframework.util.Base64Utils;
-import org.springframework.util.StringUtils;
+import org.springframework.util.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,11 +49,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -72,9 +66,9 @@ import io.swagger.annotations.ApiParam;
 @Api(value = "Service")
 @RestController
 public class FileServiceEndpoint {
-
-
     protected final static Logger logger = LoggerFactory.getLogger(FileServiceEndpoint.class);
+
+    private final static List<String> PERMITTED_FILE_TYPE = List.of("mp4", "mp3", "mov", "mkv", "avi", "jpeg", "jpg", "png");
 
     @Autowired
     FSProperties FSProperties;
@@ -118,23 +112,29 @@ public class FileServiceEndpoint {
                           @ApiParam("上传文件至不同的分组") @RequestHeader(value = "X-FS-BUCKET", required = false) String bucket,
                           @RequestPart("file") MultipartFile file) {
         if (file.isEmpty()) {
-            throw new BusinessException(BusinessCode.BadRequest,  "file is empty");
+            throw new BusinessException(BusinessCode.BadRequest, "file is empty");
         }
-        if(bucket==null) bucket="";
-        logger.info("============== upload start ===============");
+        if (bucket == null) bucket = "";
+
         String originalFileName = file.getOriginalFilename();
         String extensionName = getExtensionName(originalFileName);
+
+        if (!isPermittedFileType(extensionName)) {
+            throw new BusinessException(BusinessCode.BadRequest, "NOT SUPPORTED file type");
+        }
+
         String fileHost = getFileHost();
         Long fileSize = file.getSize();
         String fileName = UUID.randomUUID() + "." + extensionName;
 
+        logger.info("============== upload start ===============");
         try {
             String fileSavePath = getFileUploadPath();
 
             // check bucket exists
-            if(!StringUtils.isEmpty(bucket)){
+            if (!StringUtils.isEmpty(bucket)) {
                 File bucketFile = new File(String.join(File.separator, fileSavePath, bucket));
-                Assert.isTrue(bucketFile.exists(), "bucket (X-FS-BUCKET) not exists: " + bucketFile.getPath() );
+                Assert.isTrue(bucketFile.exists(), "bucket (X-FS-BUCKET) not exists: " + bucketFile.getPath());
             }
 
             File targetFile = new File(String.join(File.separator, fileSavePath, bucket, fileName));
@@ -338,7 +338,7 @@ public class FileServiceEndpoint {
         String fileSavePath = FSProperties.getFileUploadPath();
         //String uploadPath = fileSavePath;
 
-        logger.info("fileSavePath:{}",fileSavePath);
+        logger.info("fileSavePath:{}", fileSavePath);
         //logger.info("uploadPath:{}",uploadPath);
 
         // TODO 租户
@@ -358,7 +358,7 @@ public class FileServiceEndpoint {
     }
 
     public static String getExtensionName(String filename) {
-        if ((filename != null) && (filename.length() > 0)) {
+        if (!StringUtils.isEmpty(filename)) {
             int dot = filename.lastIndexOf('.');
             if ((dot > -1) && (dot < (filename.length() - 1))) {
                 return filename.substring(dot + 1);
@@ -367,6 +367,9 @@ public class FileServiceEndpoint {
         return filename;
     }
 
+    private boolean isPermittedFileType(String fileType) {
+        return PERMITTED_FILE_TYPE.contains(fileType.toLowerCase(Locale.ROOT));
+    }
 
     public static File thumb(File sourceFile) throws IOException {
         int width, height;
