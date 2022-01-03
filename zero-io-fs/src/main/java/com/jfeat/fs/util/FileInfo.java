@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.File;
+
 /**
  * Created by jackyhuang on 2017/7/4.
  */
@@ -15,6 +17,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class FileInfo {
     private String name;
+    private String bucket;
     private String host;
     private String url;
     private String blurryName;
@@ -32,47 +35,20 @@ public class FileInfo {
         return new FileInfo(host, name, blurryName);
     }
 
-    public static FileInfo create(String host, String name, String extensionName, String originalFileName, Long size) {
-        return new FileInfo(host, name, extensionName, originalFileName, size);
-    }
-
     public static FileInfo create(String host, String name, String extensionName, String originalFileName, Long size, String path) {
-        return new FileInfo(host, name, extensionName, originalFileName, size, path);
+        return new FileInfo(host, null, name, extensionName, originalFileName, size, path);
     }
 
+    public static FileInfo create(String host, String bucket, String name, String extensionName, String originalFileName, Long size, String path) {
+        return new FileInfo(host, bucket, name, extensionName, originalFileName, size, path);
+    }
+
+    /**
+     * Construction
+     */
 
     public FileInfo(String host, String name) {
-        this.name = name;
-        this.host = host;
-        this.url = host + "/" + name;
-        if (StrKit.notBlank(host) && host.endsWith("/")) {
-            this.url = host + name;
-        }
-    }
-
-    public FileInfo(String host, String name, String extensionName, String originalFileName, Long size) {
-        this.name = name;
-        this.host = host;
-        this.originalFileName = originalFileName;
-        this.extensionName = extensionName;
-        this.size = size;
-        this.url = host + "/" + name;
-        if (StrKit.notBlank(host) && host.endsWith("/")) {
-            this.url = host + name;
-        }
-    }
-
-    public FileInfo(String host, String name, String extensionName, String originalFileName, Long size, String path) {
-        this.name = name;
-        this.host = host;
-        this.originalFileName = originalFileName;
-        this.extensionName = extensionName;
-        this.size = size;
-        this.url = host + "/" + name;
-        this.path = path;
-        if (StrKit.notBlank(host) && host.endsWith("/")) {
-            this.url = host + name;
-        }
+        this(host, null, name, null, null, 0L, null);
     }
 
     public FileInfo(String host, String name, String blurryName) {
@@ -83,4 +59,33 @@ public class FileInfo {
             this.blurryUrl = host + blurryName;
         }
     }
+
+    public FileInfo(String host, String name, String extensionName, String originalFileName, Long size, String path) {
+        this(host, null, name, extensionName, originalFileName, size, path);
+    }
+
+    public FileInfo(String host, String bucket, String name, String extensionName, String originalFileName, Long size, String path) {
+        this.name = name;
+        this.host = host;
+        this.originalFileName = originalFileName;
+        this.extensionName = extensionName;
+        this.size = size;
+        this.url = String.join(File.separator, host, bucket, name);
+        this.path = path;
+    }
+
+
+    /**
+     * Deprecated
+     */
+    @Deprecated
+    public static FileInfo create(String host, String name, String extensionName, String originalFileName, Long size) {
+        return new FileInfo(host, name, extensionName, originalFileName, size);
+    }
+
+    @Deprecated
+    public FileInfo(String host, String name, String extensionName, String originalFileName, Long size) {
+        this(host, null, name, extensionName, originalFileName, size, null);
+    }
+
 }

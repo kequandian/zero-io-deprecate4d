@@ -20,7 +20,7 @@ public class Bucket {
     /**
      * 应用ID
      */
-    private Long appId;
+    private String appId;
 
     /**
      * 应用密钥

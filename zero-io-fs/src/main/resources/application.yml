@@ -10,9 +10,7 @@ spring:
   profiles: dev
 
 io:
-  fileUploadPath: "/attachments"
-  fileHost: "/attachments"
-
-bucket:
-  appId:  "32791238237612378123"
-  appSecret: "EF8WnIPlnDFYPEIt"
+  file-upload-path: "attachments"
+  file-host: "attachments"
+  bucket-app-id:  "32791238237612378123"
+  bucket-app-secret: "EF8WnIPlnDFYPEIt"

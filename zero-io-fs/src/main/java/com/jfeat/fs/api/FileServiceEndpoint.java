@@ -8,7 +8,6 @@ import com.jfeat.crud.base.tips.SuccessTip;
 import com.jfeat.crud.base.tips.Tip;
 import com.jfeat.crud.base.util.StrKit;
 import com.jfeat.fs.model.Bucket;
-import com.jfeat.fs.properties.BucketProperties;
 import com.jfeat.fs.properties.FSProperties;
 import com.jfeat.fs.service.LoadFileCodeService;
 import com.jfeat.fs.util.FileInfo;
@@ -82,30 +81,29 @@ public class FileServiceEndpoint {
     @Autowired
     LoadFileCodeService loadFileCodeService;
 
-    @Autowired
-    private BucketProperties bucketProperties;
-
     @ApiOperation(value = "创建存储桶", response = String.class, notes = "根据Token中的APPID创建对应的存储桶")
     @ApiParam(name = "name", value = "存储桶名称")
     @PostMapping("/api/fs/buckets")
-    public Tip generateBucket(@RequestHeader(value = "authorization", required = false) String token,
-                              @RequestBody Bucket bucket) {
+    public Tip generateBucket(@RequestBody Bucket bucket) {
         if (Objects.nonNull(bucket)) {
             // 校验APP-ID / APP-KEY
-            if (!bucketProperties.getAppId().equals(bucket.getAppId()) || !bucketProperties.getAppSecret().equals(bucket.getAppSecret())) {
+            if (!FSProperties.getBucketAppId().equals(bucket.getAppId()) || ! FSProperties.getBucketAppSecret().equals(bucket.getAppSecret())) {
                 return ErrorTip.create(BusinessCode.AuthorizationError);
             }
 
             // 获取APP-ID用于创建对应的APP目录
-            String appId = bucketProperties.getAppId();
+            String appId = FSProperties.getBucketAppId();
             // 获取常规保存路径
             String savePath = getFileUploadPath();
 
             if (!StringUtils.isEmpty(bucket.getBucket())) {
                 // 创建Bucket路径
-                File dir = new File(String.join(File.separator, savePath, appId, bucket.getBucket()));
+                File dir = new File(String.join(File.separator, savePath, bucket.getBucket()));
+
                 if (dir.exists() || (!dir.exists() && dir.mkdirs())) {
-                    return SuccessTip.create(bucket);
+                    // return relative path
+                    String relativePath = dir.getAbsolutePath().substring(new File("./").getAbsolutePath().length()-1);
+                    return SuccessTip.create(relativePath);
                 }
             }
         }
@@ -148,7 +146,9 @@ public class FileServiceEndpoint {
                 throw new BusinessException(BusinessCode.UploadFileError, "file is not readable");
             }*/
 
-            return SuccessTip.create(FileInfo.create(fileHost, fileName, extensionName, originalFileName, fileSize, targetFile.getAbsolutePath()));
+            // get relative path
+            String relativePath = targetFile.getAbsolutePath().substring(new File("./").getAbsolutePath().length()-1);
+            return SuccessTip.create(FileInfo.create(fileHost, bucket, fileName, extensionName, originalFileName, fileSize, relativePath));
 
         } catch (Exception e) {
             logger.info("============== exception {} ===============");

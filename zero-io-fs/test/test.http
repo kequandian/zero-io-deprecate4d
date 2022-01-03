@@ -10,3 +10,29 @@ Content-Type: image/png
 
 < ./logo_128x128.png
 --WebKitFormBoundaryAFRaG58f2nIb0mPB--
+
+
+### 创建仓库
+POST {{endpoint}}/api/fs/buckets
+Content-Type: application/json
+
+{
+   "bucket": "bucket",
+   "appId": "32791238237612378123",
+   "appSecret": "EF8WnIPlnDFYPEIt"
+}
+
+
+
+### 测试文件上传至仓库
+POST {{endpoint}}/api/fs/uploadfile
+Content-Type: multipart/form-data; boundary=WebKitFormBoundaryAFRaG58f2nIb0mPB
+X-FS-BUCKET: bucket
+
+--WebKitFormBoundaryAFRaG58f2nIb0mPB
+Content-Disposition: form-data; name="file"; filename="logo_128x128.png"
+Content-Type: image/png
+
+< ./logo_128x128.png
+--WebKitFormBoundaryAFRaG58f2nIb0mPB--
+
