@@ -1,6 +1,5 @@
 package com.jfeat.fs.api;
 
-
 import com.jfeat.crud.base.exception.BusinessCode;
 import com.jfeat.crud.base.exception.BusinessException;
 import com.jfeat.crud.base.tips.ErrorTip;
@@ -33,33 +32,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.HeadlessException;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.Transparency;
-import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.ImageIcon;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -71,7 +52,6 @@ import io.swagger.annotations.ApiParam;
 @Api(value = "Service")
 @RestController
 public class FileServiceEndpoint {
-
 
     protected final static Logger logger = LoggerFactory.getLogger(FileServiceEndpoint.class);
 
@@ -94,7 +74,11 @@ public class FileServiceEndpoint {
             // 获取APP-ID用于创建对应的APP目录
             String appId = FSProperties.getBucketAppId();
             // 获取常规保存路径
-            String savePath = getFileUploadPath();
+            String savePath = FSProperties.getFileUploadPath();
+            File file = new File(savePath);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
 
             if (!StringUtils.isEmpty(bucket.getBucket())) {
                 // 创建Bucket路径
@@ -121,13 +105,20 @@ public class FileServiceEndpoint {
         if(bucket==null) bucket="";
         logger.info("============== upload start ===============");
         String originalFileName = file.getOriginalFilename();
-        String extensionName = getExtensionName(originalFileName);
-        String fileHost = getFileHost();
+        String extensionName = FilenameUtils.getExtension(originalFileName);
+
+        String fileHost = FSProperties.getFileHost();
         Long fileSize = file.getSize();
         String fileName = UUID.randomUUID() + "." + extensionName;
 
         try {
-            String fileSavePath = getFileUploadPath();
+            String fileSavePath = FSProperties.getFileUploadPath();
+            {
+                File fileSaveFile = new File(fileSavePath);
+                if (!fileSaveFile.exists()) {
+                    fileSaveFile.mkdirs();
+                }
+            }
 
             // check bucket exists
             if(!StringUtils.isEmpty(bucket)){
@@ -172,11 +163,18 @@ public class FileServiceEndpoint {
                           @RequestParam(name = "blur", defaultValue = "false") Boolean blur,
                           @RequestPart("file") MultipartFile picture) {
         String originalFileName = picture.getOriginalFilename();
-        String extensionName = getExtensionName(originalFileName);
+        String extensionName = FilenameUtils.getExtension(originalFileName);
         String pictureName = UUID.randomUUID().toString() + "." + extensionName;
         String blurryName = "";
         try {
-            String fileSavePath = getFileUploadPath();
+            String fileSavePath = FSProperties.getFileUploadPath();
+            {
+                File fileSaveFile = new File(fileSavePath);
+                if (!fileSaveFile.exists()) {
+                    fileSaveFile.mkdirs();
+                }
+            }
+
             File target = new File(fileSavePath + pictureName);
             target.setReadable(true);
             FileUtils.copyInputStreamToFile(picture.getInputStream(), target);
@@ -192,7 +190,7 @@ public class FileServiceEndpoint {
         } catch (Exception e) {
             throw new BusinessException(BusinessCode.UploadFileError);
         }
-        return SuccessTip.create(FileInfo.create(getFileHost(), pictureName, blurryName));
+        return SuccessTip.create(FileInfo.create(FSProperties.getFileHost(), pictureName, blurryName));
     }
 
     /**
@@ -240,7 +238,14 @@ public class FileServiceEndpoint {
         String pictureName = UUID.randomUUID().toString() + suffix;
         String blurryName = "";
         try {
-            String fileSavePath = getFileUploadPath();
+            String fileSavePath = FSProperties.getFileUploadPath();
+            {
+                File fileSaveFile = new File(fileSavePath);
+                if (!fileSaveFile.exists()) {
+                    fileSaveFile.mkdirs();
+                }
+            }
+
             File target = new File(fileSavePath, pictureName);
             target.setReadable(true);
             FileUtils.writeByteArrayToFile(target, dataBytes);
@@ -249,7 +254,7 @@ public class FileServiceEndpoint {
             logger.info("file reduced to: {}", reducedFile.getAbsolutePath());
             pictureName = reducedFile.getName();
 
-            File thumbFile = thumb(reducedFile);
+            File thumbFile = ImageUtil.thumb(reducedFile);
             logger.info("file thumb to: {}", thumbFile.getAbsoluteFile());
 
             if (blur) {
@@ -257,14 +262,14 @@ public class FileServiceEndpoint {
                 blurryFile.setReadable(true);
                 blurryName = blurryFile.getName();
 
-                File blurryThumbFile = thumb(blurryFile);
+                File blurryThumbFile = ImageUtil.thumb(blurryFile);
                 logger.info("blurry file thumb to: {}", blurryThumbFile.getAbsoluteFile());
             }
         } catch (Exception ee) {
             throw new BusinessException(BusinessCode.UploadFileError);
         }
 
-        return SuccessTip.create(FileInfo.create(getFileHost(), pictureName, blurryName));
+        return SuccessTip.create(FileInfo.create(FSProperties.getFileHost(), pictureName, blurryName));
     }
 
 
@@ -286,7 +291,14 @@ public class FileServiceEndpoint {
         }
 
         //获得rootPath
-        String rootPath = getFileUploadPath();
+        String rootPath = FSProperties.getFileUploadPath();
+        {
+            File fileSaveFile = new File(rootPath);
+            if (!fileSaveFile.exists()) {
+                fileSaveFile.mkdirs();
+            }
+        }
+
         //拼接绝对路径(目录)
         String absolutePath = rootPath + name;
         //获得资源对象
@@ -319,136 +331,5 @@ public class FileServiceEndpoint {
                 os.close();
             }
         }
-    }
-
-    private String getFileHost() {
-        String fileHost = FSProperties.getFileHost();
-
-        // TODO 租户
-        /*String tenant = String tenant = JWTKit.getTenantId(getHttpServletRequest()) + "";;
-        if (!fileHost.endsWith("/")) {
-            host = host + "/" + tenant;
-        } else {
-            host = host + tenant;
-        }*/
-        return fileHost;
-    }
-
-    private String getFileUploadPath() {
-        String fileSavePath = FSProperties.getFileUploadPath();
-        //String uploadPath = fileSavePath;
-
-        logger.info("fileSavePath:{}",fileSavePath);
-        //logger.info("uploadPath:{}",uploadPath);
-
-        // TODO 租户
-        /*String tenant = JWTKit.getTenantId(getHttpServletRequest()) + "";
-        if (!fileSavePath.endsWith(File.separator)) {
-            uploadPath = uploadPath + File.separator + tenant + File.separator;
-        } else {
-            uploadPath = uploadPath + tenant + File.separator;
-        }*/
-
-        File file = new File(fileSavePath);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-
-        return fileSavePath;
-    }
-
-    public static String getExtensionName(String filename) {
-        if ((filename != null) && (filename.length() > 0)) {
-            int dot = filename.lastIndexOf('.');
-            if ((dot > -1) && (dot < (filename.length() - 1))) {
-                return filename.substring(dot + 1);
-            }
-        }
-        return filename;
-    }
-
-
-    public static File thumb(File sourceFile) throws IOException {
-        int width, height;
-        int[] originalSize = getImgWidth(sourceFile);
-        int originalWidth = originalSize[0];
-        int originalHeight = originalSize[1];
-        double rate1 = (double) originalWidth / (double) 160;
-        double rate2 = (double) originalHeight / (double) 160;
-        double rate = rate1 < rate2 ? rate1 : rate2;
-        width = (int) (originalWidth / rate);
-        height = (int) (originalHeight / rate);
-
-        // 开始读取文件并进行压缩
-        // https://blog.csdn.net/kobejayandy/article/details/44346809
-        // fix 图片红色问题
-        Image image = Toolkit.getDefaultToolkit().createImage(sourceFile.getPath());
-        BufferedImage src = toBufferedImage(image);
-        BufferedImage tag = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        Graphics2D reducedG = tag.createGraphics();
-        String format = "jpeg";
-        List<Integer> pngTypes = new ArrayList<>(Arrays.asList(
-                BufferedImage.TYPE_INT_ARGB, BufferedImage.TYPE_4BYTE_ABGR, BufferedImage.TYPE_4BYTE_ABGR_PRE, BufferedImage.TYPE_INT_ARGB_PRE
-        ));
-        if (pngTypes.contains(src.getType())) {
-            tag = reducedG.getDeviceConfiguration().createCompatibleImage(width, height, Transparency.TRANSLUCENT);
-            reducedG.dispose();
-            reducedG = tag.createGraphics();
-            format = "jpeg";
-        }
-        reducedG.drawImage(src.getScaledInstance(width, height, Image.SCALE_SMOOTH), 0, 0, null);
-        reducedG.dispose();
-
-        String extension = FilenameUtils.getExtension(sourceFile.getName());
-        String baseName = FilenameUtils.getBaseName(sourceFile.getName());
-        String fileName = baseName + "-thumb." + extension;
-
-        File targetFile = new File(sourceFile.getParent(), fileName);
-        ImageIO.write(tag, format, targetFile);
-        return targetFile;
-    }
-
-    private static BufferedImage toBufferedImage(Image image) {
-        if (image instanceof BufferedImage) {
-            return (BufferedImage) image;
-        }
-        // This code ensures that all the pixels in the image are loaded
-        image = new ImageIcon(image).getImage();
-        BufferedImage bimage = null;
-        GraphicsEnvironment ge = GraphicsEnvironment
-                .getLocalGraphicsEnvironment();
-        try {
-            int transparency = Transparency.OPAQUE;
-            GraphicsDevice gs = ge.getDefaultScreenDevice();
-            GraphicsConfiguration gc = gs.getDefaultConfiguration();
-            bimage = gc.createCompatibleImage(image.getWidth(null),
-                    image.getHeight(null), transparency);
-        } catch (HeadlessException e) {
-            // The system does not have a screen
-        }
-        if (bimage == null) {
-            // Create a buffered image using the default color model
-            int type = BufferedImage.TYPE_INT_RGB;
-            bimage = new BufferedImage(image.getWidth(null),
-                    image.getHeight(null), type);
-        }
-        // Copy image to buffered image
-        Graphics g = bimage.createGraphics();
-        // Paint the image onto the buffered image
-        g.drawImage(image, 0, 0, null);
-        g.dispose();
-        return bimage;
-    }
-
-    public static int[] getImgWidth(File file) throws IOException {
-        InputStream is = null;
-        BufferedImage src = null;
-        int[] result = new int[]{0, 0};
-        is = new FileInputStream(file);
-        src = ImageIO.read(is);
-        result[0] = src.getWidth((ImageObserver) null);
-        result[1] = src.getHeight((ImageObserver) null);
-        is.close();
-        return result;
     }
 }
