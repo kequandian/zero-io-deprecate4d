@@ -239,9 +239,9 @@ public class FlowReportRequest {
      * format request
      */
     public static class FormatRequest{
-        private RowFormatRequest header;
-        private RowFormatRequest rows;
-        private GroupFormatRequest groups;
+        private RowFormatRequest header = new RowFormatRequest();
+        private RowFormatRequest rows = new RowFormatRequest();
+        private GroupFormatRequest groups = new GroupFormatRequest();
 
         public RowFormatRequest getHeader() {
             return header;
@@ -279,8 +279,8 @@ public class FlowReportRequest {
      */
     public static class LayoutRequest{
 
-        private RowLayout header;
-        private RowLayout rows;
+        private RowLayout header = new RowLayout();
+        private RowLayout rows = new RowLayout();
 
         public RowLayout getHeader() {
             return header;

@@ -177,12 +177,13 @@ public class FlowReportBuilder{
         if(headerFormat==null){
             headerFormat = new RowFormat();
         }
-        headerFormat.setTitle(title);
-        headerFormat.setSubtitle(subtitle);
-        headerFormat.setHint(hint);
-        headerFormat.setValue(value);
+        if(title!=null) headerFormat.setTitle(title);
+        if(subtitle!=null) headerFormat.setSubtitle(subtitle);
+        if(hint!=null) headerFormat.setHint(hint);
+        if(value!=null) headerFormat.setValue(value);
         return this;
     }
+
     public FlowReportBuilder headerSpacing(float spacing, float indent, int alignment){
         if(headerFormat==null){
             headerFormat = new RowFormat();

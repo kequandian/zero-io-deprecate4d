@@ -423,7 +423,9 @@ public class PdfPrintingFlowUtil {
 
                 for (Map.Entry<String, FontDefinition> entry : request.getDefinitions().getFonts().entrySet()) {
                     FontDefinition fontDefinition = entry.getValue();
-                    fonts.put(entry.getKey(), FontDefinition.getFont(fontDefinition));
+                    if(fontDefinition!=null) {
+                        fonts.put(entry.getKey(), FontDefinition.getFont(fontDefinition));
+                    }
                 }
             }
 

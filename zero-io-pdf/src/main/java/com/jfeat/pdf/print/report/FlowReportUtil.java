@@ -50,11 +50,11 @@ public class FlowReportUtil{
         {
             String LEFT = new Definitions().getTitleAlignments()[1];
 
-            if(LEFT.compareTo(headerFormat.getTitleAlignment())==0){
+            if(headerFormat==null || LEFT.compareTo(headerFormat.getTitleAlignment())==0){
                 headerTitleAlignment = Element.ALIGN_LEFT;
             }
 
-            if (LEFT.compareTo(rowsFormat.getTitleAlignment()) == 0) {
+            if (rowsFormat==null || LEFT.compareTo(rowsFormat.getTitleAlignment()) == 0) {
                 rowsTitleAlignment = Element.ALIGN_LEFT;
             }
         }
@@ -208,8 +208,8 @@ public class FlowReportUtil{
                 .setLayout(new FlowReportRequest.LayoutRequest())
                 .setHeaderData(new RowData())
                 .setRowsData(new ArrayList());
-        request.getHeaderData().setIconUrl("./zero-io-pdf/images/1.png").setTitle("test");
-        request.initRowsData("./zero-io-pdf/images");
+//        request.getHeaderData().setIconUrl("./zero-io-pdf/images/1.png").setTitle("test");
+        request.initRowsData("./images");
 
          new FlowReportUtil()
                 .data(request)
