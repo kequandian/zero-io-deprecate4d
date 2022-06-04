@@ -7,15 +7,19 @@ import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.report.builder.FlowReportBuilder;
+import com.jfeat.pdf.print.report.builder.RowData;
 import com.jfeat.pdf.print.report.builder.RowLayout;
 import com.jfeat.pdf.print.report.reports.HeaderFlowReport;
 import com.jfeat.pdf.print.report.request.Definitions;
 import com.jfeat.pdf.print.report.request.FlowReportRequest;
 import com.jfeat.pdf.print.report.request.GroupFormatRequest;
 import com.jfeat.pdf.print.report.request.RowFormatRequest;
+import com.jfeat.pdf.print.report.row.FlowListRow;
+import com.jfeat.pdf.print.report.row.StackFlowListRow;
 import com.jfeat.pdf.print.util.PageUtil;
 
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * Created by vincenthuang on 22/03/2018.
@@ -94,8 +98,8 @@ public class FlowReportUtil{
                         )
 
                 // data
-                .headerData(request.getHeader())
-                .rowData(request.getRows())
+                .headerData(request.getHeaderData())
+                .rowData(request.getRowsData())
         ;
 
 
@@ -197,8 +201,15 @@ public class FlowReportUtil{
     }
 
     public static void main(String[] args) throws Exception{
-
-        FlowReportRequest request = new FlowReportRequest();
+        FlowReportRequest request = new FlowReportRequest()
+                .setColumns(3)
+                .setRowOption(StackFlowListRow.ID)
+                .setFormat(new FlowReportRequest.FormatRequest())
+                .setLayout(new FlowReportRequest.LayoutRequest())
+                .setHeaderData(new RowData())
+                .setRowsData(new ArrayList());
+        request.getHeaderData().setIconUrl("./zero-io-pdf/images/1.png").setTitle("test");
+        request.initRowsData("./zero-io-pdf/images");
 
          new FlowReportUtil()
                 .data(request)

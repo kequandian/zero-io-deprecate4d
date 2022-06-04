@@ -6,9 +6,9 @@ package com.jfeat.pdf.print.report.builder;
 public class RowLayout {
 
     private float height;
-    private float paddingLeft, paddingRight, paddingTop, paddingBottom;
-    private float borderLeft, borderRight, borderTop, borderBottom;
-    private int borderColorRed,borderColorGreen,borderColorBlue;
+    private float paddingLeft = 0, paddingRight = 0, paddingTop = 0, paddingBottom = 0;
+    private float borderLeft = 0, borderRight = 0, borderTop = 0, borderBottom = 0;
+    private int borderColorRed = 0,borderColorGreen = 0,borderColorBlue = 0;
 
     public RowLayout(){
         borderLeft = -1;

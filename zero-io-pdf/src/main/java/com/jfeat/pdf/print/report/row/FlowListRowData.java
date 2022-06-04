@@ -8,6 +8,7 @@ import com.jfeat.pdf.print.base.PaddingListRow;
 
 /**
  * Created by vincenthuang on 19/03/2018.
+ * FlowListRow 的数据定义
  */
 public class FlowListRowData extends PaddingListRow {
     private String iconUrl;

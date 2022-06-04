@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * Created by vincent on 2018/3/19.
- * 数据流报表，按列平均分布，通常用于商口展示
+ * 流报表基类，按列平均分布，通常用于商口展示
  */
 public abstract class FlowReport implements FlowElement {
     public static final int FLOW_LTR = 0;   //从左到右 Left to Right

@@ -44,8 +44,9 @@ public class RowData {
         return iconUrl;
     }
 
-    public void setIconUrl(String iconUrl) {
+    public RowData setIconUrl(String iconUrl) {
         this.iconUrl = iconUrl;
+        return this;
     }
 
     public String getNextUrl() {
@@ -60,8 +61,9 @@ public class RowData {
         return title;
     }
 
-    public void setTitle(String title) {
+    public RowData setTitle(String title) {
         this.title = title;
+        return this;
     }
 
     public String getSubtitle() {

@@ -10,13 +10,33 @@ public class PageUtil {
         return getContentSize(pageSize, margin, margin, margin, margin);
     }
 
-    public static Rectangle getContentSize(Rectangle pageSize, float marginLeft, float marginRight, float marginTop, float marginBottom){
+    /**
+     * 获取pdf内容大小
+     * @param pageSize
+     * @param marginLeft
+     * @param marginRight
+     * @param marginTop
+     * @param marginBottom
+     * @return
+     */
+    public static Rectangle getContentSize(Rectangle pageSize,
+                                           float marginLeft,
+                                           float marginRight,
+                                           float marginTop,
+                                           float marginBottom){
         return new Rectangle(  pageSize.getLeft(marginLeft),
                 pageSize.getBottom(marginBottom),
                 pageSize.getRight(marginRight),
                 pageSize.getTop(marginTop));
     }
 
+    /**
+     * 计算行数
+     * @param totalHeight
+     * @param headerHeight
+     * @param rowHeight
+     * @return
+     */
     public static int calcRows(float totalHeight, float headerHeight, float rowHeight){
         if(totalHeight<=0){
             return 0;

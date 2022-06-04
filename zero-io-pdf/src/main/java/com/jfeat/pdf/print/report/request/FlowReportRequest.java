@@ -1,12 +1,21 @@
 package com.jfeat.pdf.print.report.request;
 
+import com.baomidou.mybatisplus.extension.api.R;
 import com.jfeat.pdf.print.base.ColorDefinition;
 import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.report.builder.RowData;
 import com.jfeat.pdf.print.report.builder.RowLayout;
 import com.jfeat.pdf.print.report.row.FlowListRow;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.util.Assert;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
+import java.io.StreamCorruptedException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Created by vincenthuang on 22/03/2018.
@@ -17,7 +26,7 @@ public class FlowReportRequest {
     public static final String UTD = "UTD";
 
     private int columns;
-    private String flowDirection;   // LTR, UTD
+    private String flowDirection = LTR;   // LTR, UTD
     private String rowOption = FlowListRow.ID;   /// select different row layout style {FlowListRow,StackFlowListRow}}
     // border
     private float borderWidth;
@@ -33,24 +42,27 @@ public class FlowReportRequest {
         return columns;
     }
 
-    public void setColumns(int columns) {
+    public FlowReportRequest setColumns(int columns) {
         this.columns = columns;
+        return this;
     }
 
     public String getFlowDirection() {
         return flowDirection;
     }
 
-    public void setFlowDirection(String flowDirection) {
+    public FlowReportRequest setFlowDirection(String flowDirection) {
         this.flowDirection = flowDirection;
+        return this;
     }
 
     public String getRowOption() {
         return rowOption;
     }
 
-    public void setRowOption(String rowOption) {
+    public FlowReportRequest setRowOption(String rowOption) {
         this.rowOption = rowOption;
+        return this;
     }
 
     public float getBorderWidth() {
@@ -123,32 +135,60 @@ public class FlowReportRequest {
     /**
      * data
      */
-    private RowData header;
+    private RowData headerData;
 
-    private List<RowData> rows;
+    private List<RowData> rowsData;
 
-    public RowData getHeader() {
-        return header;
+    public RowData getHeaderData() {
+        return headerData;
     }
 
-    public void setHeader(RowData header) {
-        this.header = header;
+    public FlowReportRequest setHeaderData(RowData headerData) {
+        this.headerData = headerData;
+        return this;
     }
 
-    public List<RowData> getRows() {
-        return rows;
+    public List<RowData> getRowsData() {
+        return rowsData;
     }
 
-    public void setRows(List<RowData> rows) {
+    public FlowReportRequest setRowsData(List<RowData> rows) {
         if(flowDirection == LTR) {
             if (rows.size() % 2 == 1) {
                 rows.add(RowData.EMPTY);
             }
         }
-        this.rows = rows;
+        this.rowsData = rowsData;
+        return this;
+    }
+
+    public FlowReportRequest initRowsData(String imageDir){
+        this.rowsData = new ArrayList<>();
+        File dirRoot = new File(imageDir);
+        Assert.isTrue(dirRoot.exists() && dirRoot.isDirectory(), dirRoot + " not exists!");
+
+        String[] imageUrls = dirRoot.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.endsWith(".png") ||
+                        name.endsWith(".jpeg") ||
+                        name.endsWith(".jpg");
+            }
+        });
+
+        for(String url : imageUrls){
+            RowData row = new RowData();
+            row.setIconUrl(url);
+            row.setTitle(FilenameUtils.getName(url));
+
+            this.rowsData.add(row);
+        }
+
+        return this;
     }
 
     /**
+     * 定义表头与行打印格式
      * format
      */
     private FormatRequest format;
@@ -157,11 +197,13 @@ public class FlowReportRequest {
         return format;
     }
 
-    public void setFormat(FormatRequest format) {
+    public FlowReportRequest setFormat(FormatRequest format) {
         this.format = format;
+        return this;
     }
 
     /**
+     * 定义表头与行的打印布局
      * layout
      */
     private LayoutRequest layout;
@@ -170,8 +212,9 @@ public class FlowReportRequest {
         return layout;
     }
 
-    public void setLayout(LayoutRequest layout) {
+    public FlowReportRequest setLayout(LayoutRequest layout) {
         this.layout = layout;
+        return this;
     }
 
 
@@ -231,6 +274,7 @@ public class FlowReportRequest {
 
 
     /**
+     * 定义表头与行布局
      * layout request
      */
     public static class LayoutRequest{

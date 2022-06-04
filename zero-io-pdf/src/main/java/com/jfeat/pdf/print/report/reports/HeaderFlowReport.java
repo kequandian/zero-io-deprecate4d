@@ -14,6 +14,7 @@ import java.io.IOException;
 
 /**
  * Created by vincent on 2018/3/19.
+ * 自动支持所有已定义的行格式，转换DataFlowReport为实体report
  */
 public class HeaderFlowReport extends DataFlowReport {
 
@@ -27,7 +28,7 @@ public class HeaderFlowReport extends DataFlowReport {
 
             String rowId = data.rowId();
 
-            if(rowId.equals(TextBox.ID)){
+            if (rowId.equals(TextBox.ID)) {
                 TextBox box = new TextBox();
 
                 TextBoxData info = (TextBoxData) data;
