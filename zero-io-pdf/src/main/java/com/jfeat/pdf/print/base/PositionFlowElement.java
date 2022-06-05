@@ -7,6 +7,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 
 /**
  * Created by vincenthuang on 27/09/2018.
+ * 指定位置的流元素位置
  */
 public abstract class PositionFlowElement implements FlowElement {
 

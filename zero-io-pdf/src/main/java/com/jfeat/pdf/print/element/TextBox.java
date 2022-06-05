@@ -26,7 +26,6 @@ public class TextBox extends Rectangle implements ListRow {
     private String content;
     private Font font;
     private int horizontalAlignment = Element.ALIGN_CENTER;
-
     private int verticalAlignment = Element.ALIGN_MIDDLE;
 
     /**

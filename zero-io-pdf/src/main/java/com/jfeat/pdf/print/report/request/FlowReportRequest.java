@@ -1,21 +1,16 @@
 package com.jfeat.pdf.print.report.request;
 
-import com.baomidou.mybatisplus.extension.api.R;
 import com.jfeat.pdf.print.base.ColorDefinition;
-import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.report.builder.RowData;
-import com.jfeat.pdf.print.report.builder.RowLayout;
-import com.jfeat.pdf.print.report.row.FlowListRow;
+import com.jfeat.pdf.print.base.RowLayout;
+import com.jfeat.pdf.print.element.RelativeRow;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.util.Assert;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FilenameFilter;
-import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Created by vincenthuang on 22/03/2018.
@@ -27,12 +22,13 @@ public class FlowReportRequest {
 
     private int columns;
     private String flowDirection = LTR;   // LTR, UTD
-    private String rowOption = FlowListRow.ID;   /// select different row layout style {FlowListRow,StackFlowListRow}}
+    private String rowOption = RelativeRow.ID;   /// select different row layout style {FlowListRow,StackFlowListRow}}
+
     // border
     private float borderWidth;
     private ColorDefinition borderColor;
 
-    // rows margins
+    // rows margin
     private float rowsMarginLeft;
     private float rowsMarginTop;
     private float rowsMarginRight;
@@ -163,7 +159,10 @@ public class FlowReportRequest {
     }
 
     public FlowReportRequest initRowsData(String imageDir){
-        this.rowsData = new ArrayList<>();
+        if(this.rowsData==null) {
+            this.rowsData = new ArrayList<>();
+        }
+
         File dirRoot = new File(imageDir);
         Assert.isTrue(dirRoot.exists() && dirRoot.isDirectory(), dirRoot + " not exists!");
 
@@ -191,16 +190,16 @@ public class FlowReportRequest {
      * 定义表头与行打印格式
      * format
      */
-    private FormatRequest format;
-
-    public FormatRequest getFormat() {
-        return format;
-    }
-
-    public FlowReportRequest setFormat(FormatRequest format) {
-        this.format = format;
-        return this;
-    }
+//    private FormatRequest format;
+//
+//    public FormatRequest getFormat() {
+//        return format;
+//    }
+//
+//    public FlowReportRequest setFormat(FormatRequest format) {
+//        this.format = format;
+//        return this;
+//    }
 
     /**
      * 定义表头与行的打印布局
@@ -208,7 +207,7 @@ public class FlowReportRequest {
      */
     private LayoutRequest layout;
 
-    public LayoutRequest getLayout() {
+    public LayoutRequest getLayout () {
         return layout;
     }
 
@@ -235,42 +234,42 @@ public class FlowReportRequest {
     }
 
 
-    /**
-     * format request
-     */
-    public static class FormatRequest{
-        private RowFormatRequest header = new RowFormatRequest();
-        private RowFormatRequest rows = new RowFormatRequest();
-        private GroupFormatRequest groups = new GroupFormatRequest();
-
-        public RowFormatRequest getHeader() {
-            return header;
-        }
-
-        public void setHeader(RowFormatRequest header) {
-            this.header = header;
-        }
-
-        public RowFormatRequest getRows() {
-            return rows;
-        }
-
-        public void setRows(RowFormatRequest rows) {
-            this.rows = rows;
-        }
-
-        public GroupFormatRequest getGroups() {
-            return groups;
-        }
-
-        public void setGroups(GroupFormatRequest groups) {
-            this.groups = groups;
-        }
-
-        public void setGroups(FontDefinition font, ColorDefinition backgroundColor) {
-            this.groups = new GroupFormatRequest(font, backgroundColor);
-        }
-    }
+//    /**
+//     * format request
+//     */
+//    public static class FormatRequest{
+//        private RelativeRowFormatRequest header = new RelativeRowFormatRequest();
+//        private RelativeRowFormatRequest rows = new RelativeRowFormatRequest();
+//        private GroupFormatRequest groups = new GroupFormatRequest();
+//
+//        public RelativeRowFormatRequest getHeader() {
+//            return header;
+//        }
+//
+//        public void setHeader(RelativeRowFormatRequest header) {
+//            this.header = header;
+//        }
+//
+//        public RelativeRowFormatRequest getRows() {
+//            return rows;
+//        }
+//
+//        public void setRows(RelativeRowFormatRequest rows) {
+//            this.rows = rows;
+//        }
+//
+//        public GroupFormatRequest getGroups() {
+//            return groups;
+//        }
+//
+//        public void setGroups(GroupFormatRequest groups) {
+//            this.groups = groups;
+//        }
+//
+//        public void setGroups(FontDefinition font, ColorDefinition backgroundColor) {
+//            this.groups = new GroupFormatRequest(font, backgroundColor);
+//        }
+//    }
 
 
     /**

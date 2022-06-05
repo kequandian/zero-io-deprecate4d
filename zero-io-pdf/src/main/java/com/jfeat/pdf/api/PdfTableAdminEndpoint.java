@@ -1,4 +1,4 @@
-package com.jfeat.pdf.adminApi;
+package com.jfeat.pdf.api;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jfeat.crud.base.exception.BusinessCode;

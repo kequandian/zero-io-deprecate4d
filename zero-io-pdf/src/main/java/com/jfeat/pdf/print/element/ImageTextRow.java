@@ -1,4 +1,4 @@
-package com.jfeat.pdf.print.report.row;
+package com.jfeat.pdf.print.element;
 
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Phrase;
@@ -6,20 +6,21 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.jfeat.pdf.print.base.ListRow;
+import com.jfeat.pdf.print.element.RelativeRow;
 
 /**
  * Created by vincent on 2018/3/16.
  * 上下布局图文框 [上方图片，下方标题]
  */
-public class StackFlowListRow extends FlowListRow implements ListRow {
+public class ImageTextRow extends RelativeRow implements ListRow {
 
-    public static String ID = "StackFlowListRow";
+    public static String ID = "ImageTextRow";
 
-    public StackFlowListRow(Rectangle position) {
+    public ImageTextRow(Rectangle position) {
         super(position);
     }
 
-    public StackFlowListRow(){
+    public ImageTextRow(){
         super();
     }
 

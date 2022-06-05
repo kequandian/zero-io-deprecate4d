@@ -1,4 +1,4 @@
-package com.jfeat.pdf.print.report.builder;
+package com.jfeat.pdf.print.base;
 
 /**
  * Created by vincenthuang on 23/03/2018.

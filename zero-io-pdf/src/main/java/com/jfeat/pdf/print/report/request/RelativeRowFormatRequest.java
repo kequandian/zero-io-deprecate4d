@@ -5,7 +5,7 @@ import com.jfeat.pdf.print.base.FontDefinition;
 /**
  * Created by vincenthuang on 22/03/2018.
  */
-public class RowFormatRequest {
+public class RelativeRowFormatRequest {
 
     private FontDefinition title;
     private FontDefinition subtitle;
@@ -17,27 +17,27 @@ public class RowFormatRequest {
 
     private String titleAlignment = "ALIGN_BASELINE";   //ALIGN_BASELINE-左上角，ALIGN_LEFT-靠左居中
 
-    public RowFormatRequest(){
+    public RelativeRowFormatRequest(){
     }
 
-    public RowFormatRequest(FontDefinition title, FontDefinition subtitle, FontDefinition hint, FontDefinition value){
+    public RelativeRowFormatRequest(FontDefinition title, FontDefinition subtitle, FontDefinition hint, FontDefinition value){
         this.title = title;
         this.subtitle = subtitle;
         this.hint = hint;
         this.value = value;
     }
 
-    public RowFormatRequest spacing(float spacing){
+    public RelativeRowFormatRequest spacing(float spacing){
         titleSpacing = spacing;
         return this;
     }
 
-    public RowFormatRequest indent(float indent){
+    public RelativeRowFormatRequest indent(float indent){
         titleIndent = indent;
         return this;
     }
 
-    public RowFormatRequest alignment(String alignment){
+    public RelativeRowFormatRequest alignment(String alignment){
         titleAlignment = alignment;
         return this;
     }

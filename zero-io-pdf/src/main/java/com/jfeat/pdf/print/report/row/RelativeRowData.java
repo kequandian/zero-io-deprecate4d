@@ -4,13 +4,14 @@ package com.jfeat.pdf.print.report.row;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
-import com.jfeat.pdf.print.base.PaddingListRow;
+import com.jfeat.pdf.print.base.PaddingRowBase;
+import com.jfeat.pdf.print.element.RelativeRow;
 
 /**
  * Created by vincenthuang on 19/03/2018.
  * FlowListRow 的数据定义
  */
-public class FlowListRowData extends PaddingListRow {
+public class RelativeRowData extends PaddingRowBase {
     private String iconUrl;
     private String nextUrl;
 
@@ -33,7 +34,7 @@ public class FlowListRowData extends PaddingListRow {
 
     @Override
     public String rowId() {
-        return FlowListRow.ID;
+        return RelativeRow.ID;
     }
 
     public String getIconUrl() {

@@ -5,7 +5,7 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPCellEvent;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.jfeat.pdf.print.base.EmptyListRow;
+import com.jfeat.pdf.print.element.EmptyListRow;
 import com.jfeat.pdf.print.base.FlowElement;
 import com.jfeat.pdf.print.base.ListRow;
 

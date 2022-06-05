@@ -5,9 +5,9 @@ import com.jfeat.pdf.print.base.ListRow;
 import com.jfeat.pdf.print.base.ListRowBase;
 import com.jfeat.pdf.print.element.TextBox;
 import com.jfeat.pdf.print.report.DataFlowReport;
-import com.jfeat.pdf.print.report.row.FlowListRow;
-import com.jfeat.pdf.print.report.row.FlowListRowData;
-import com.jfeat.pdf.print.report.row.StackFlowListRow;
+import com.jfeat.pdf.print.element.RelativeRow;
+import com.jfeat.pdf.print.report.row.RelativeRowData;
+import com.jfeat.pdf.print.element.ImageTextRow;
 import com.jfeat.pdf.print.report.row.TextBoxData;
 
 import java.io.IOException;
@@ -40,17 +40,17 @@ public class HeaderFlowReport extends DataFlowReport {
 
                 return box;
 
-            }else if(rowId.equals(FlowListRow.ID) || rowId.equals(StackFlowListRow.ID)) {
+            }else if(rowId.equals(RelativeRow.ID) || rowId.equals(ImageTextRow.ID)) {
 
-                FlowListRow row = null;
-                if(rowId.equals(FlowListRow.ID)){
-                    row = new FlowListRow();
-                }else if(rowId.equals(StackFlowListRow.ID)){
-                    row = new StackFlowListRow();
+                RelativeRow row = null;
+                if(rowId.equals(RelativeRow.ID)){
+                    row = new RelativeRow();
+                }else if(rowId.equals(ImageTextRow.ID)){
+                    row = new ImageTextRow();
                 }
 
 
-                FlowListRowData info = (FlowListRowData) data;
+                RelativeRowData info = (RelativeRowData) data;
 
                 if (info.getIconImage() != null) {
                     row.icon(info.getIconImage());

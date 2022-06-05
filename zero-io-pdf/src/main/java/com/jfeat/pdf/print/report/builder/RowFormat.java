@@ -5,6 +5,8 @@ import com.itextpdf.text.Font;
 /**
  * Created by vincenthuang on 23/03/2018.
  */
+
+@Deprecated
 public class RowFormat {
 
     private Font group;

@@ -6,40 +6,43 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.jfeat.pdf.print.base.FontDefinition;
-import com.jfeat.pdf.print.report.builder.FlowReportBuilder;
-import com.jfeat.pdf.print.report.builder.RowData;
-import com.jfeat.pdf.print.report.builder.RowLayout;
+import com.jfeat.pdf.print.element.ImageBox;
+import com.jfeat.pdf.print.base.RowLayout;
 import com.jfeat.pdf.print.report.reports.HeaderFlowReport;
 import com.jfeat.pdf.print.report.request.Definitions;
 import com.jfeat.pdf.print.report.request.FlowReportRequest;
 import com.jfeat.pdf.print.report.request.GroupFormatRequest;
-import com.jfeat.pdf.print.report.request.RowFormatRequest;
-import com.jfeat.pdf.print.report.row.FlowListRow;
-import com.jfeat.pdf.print.report.row.StackFlowListRow;
+import com.jfeat.pdf.print.report.request.RelativeRowFormatRequest;
 import com.jfeat.pdf.print.util.PageUtil;
 
 import java.io.*;
-import java.util.ArrayList;
 
 /**
  * Created by vincenthuang on 22/03/2018.
  */
 public class FlowReportUtil{
 
-    FlowReportBuilder builder;
-
     /**
-     * 输出模板文件
+     * PDF模板文件, 输出内容合并到模板上面
      */
     String template;
+    public FlowReportUtil template(String templateFile){
+        this.template = templateFile;
+        return this;
+    }
+
+    /**
+     * 通过 FlowReportRequest 构建导出数据
+     */
+    FlowReport flowReport;
 
     public FlowReportUtil data(FlowReportRequest request){
 
         RowLayout headerLayout = request.getLayout().getHeader();
-        RowFormatRequest headerFormat = request.getFormat().getHeader();
+        RelativeRowFormatRequest headerFormat = request.getFormat().getHeader();
 
         RowLayout rowsLayout = request.getLayout().getRows();
-        RowFormatRequest rowsFormat = request.getFormat().getRows();
+        RelativeRowFormatRequest rowsFormat = request.getFormat().getRows();
 
         GroupFormatRequest groupFormat = request.getFormat().getGroups();
 
@@ -59,7 +62,7 @@ public class FlowReportUtil{
             }
         }
 
-        builder = new FlowReportBuilder()
+        FlowReportBuilder builder = new FlowReportBuilder()
                 // report
                 .columns(request.getColumns())
                 .flowDirection(FlowReportRequest.getFlowDirection(request.getFlowDirection()))
@@ -106,24 +109,11 @@ public class FlowReportUtil{
         return this;
     }
 
-    public FlowReportUtil template(String templateFile){
-        this.template = templateFile;
-        return this;
-    }
-
-    public void export(OutputStream outputStream) throws DocumentException{
-        this.export(outputStream, 0);
-    }
-
-    public void export(OutputStream outputStream, float margin) throws  DocumentException{
-        this.export(outputStream, margin, margin, margin, margin);
-    }
 
     public void export(OutputStream outputStream, float marginLeft, float marginRight, float marginTop, float marginBottom) throws DocumentException{
-
         /// offset border
-        if(builder.getBorderWidth()>0){
-            float offset = builder.getBorderWidth() * 0.5f;
+        if(flowReport.getBorderWidth()>0){
+            float offset = flowReport.getBorderWidth() * 0.5f;
             marginLeft += offset;
             marginRight += offset;
         }
@@ -139,8 +129,8 @@ public class FlowReportUtil{
                 Rectangle pageSize = document.getPageSize();
                 Rectangle contentSize = PageUtil.getContentSize(pageSize, marginLeft, marginRight, marginTop, marginBottom);
 
-                builder.flowDirection(builder.getFlowDirection());
-                builder.flowHeight(contentSize.getHeight());
+                flowReport.flowDirection(flowReport.getFlowDirection());
+                flowReport.flowHeight(contentSize.getHeight());
             }
 
             PdfWriter writer = PdfWriter.getInstance(document, outputStream);
@@ -148,7 +138,7 @@ public class FlowReportUtil{
 
             PdfContentByte canvas = writer.getDirectContent();
 
-            HeaderFlowReport reporter = builder.build();
+            HeaderFlowReport reporter = flowReport.build();
             reporter.draw(canvas);
 
             document.close();
@@ -165,7 +155,7 @@ public class FlowReportUtil{
 
                     /// draw
                     PdfContentByte canvas = pdfStamper.getOverContent(1);
-                    HeaderFlowReport reporter = builder.build();
+                    HeaderFlowReport reporter = flowReport.build();
                     reporter.draw(canvas);
                     // end draw
 
@@ -183,6 +173,15 @@ public class FlowReportUtil{
                 throw new RuntimeException("BadRequest: invalid template ! file not exits:" + this.template);
             }
         }
+    }
+
+
+    public void export(OutputStream outputStream) throws DocumentException{
+        this.export(outputStream, 0);
+    }
+
+    public void export(OutputStream outputStream, float margin) throws  DocumentException{
+        this.export(outputStream, margin, margin, margin, margin);
     }
 
     @Deprecated
@@ -203,12 +202,9 @@ public class FlowReportUtil{
     public static void main(String[] args) throws Exception{
         FlowReportRequest request = new FlowReportRequest()
                 .setColumns(3)
-                .setRowOption(StackFlowListRow.ID)
-                .setFormat(new FlowReportRequest.FormatRequest())
-                .setLayout(new FlowReportRequest.LayoutRequest())
-                .setHeaderData(new RowData())
-                .setRowsData(new ArrayList());
-//        request.getHeaderData().setIconUrl("./zero-io-pdf/images/1.png").setTitle("test");
+                .setRowOption(ImageBox.ID)
+                .setLayout(new FlowReportRequest.LayoutRequest());
+
         request.initRowsData("./images");
 
          new FlowReportUtil()

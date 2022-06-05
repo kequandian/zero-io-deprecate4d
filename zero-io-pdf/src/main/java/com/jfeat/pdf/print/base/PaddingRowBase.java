@@ -1,40 +1,14 @@
 package com.jfeat.pdf.print.base;
 
-import com.itextpdf.text.Rectangle;
-
 /**
  * Created by vincent on 2018/3/19.
  * 指定 Padding 的数据行
  */
-public abstract class PaddingListRow extends Rectangle implements ListRow {
+public abstract class PaddingRowBase implements ListRowBase {
     protected float paddingLeft;
     protected float paddingRight;
     protected float paddingTop;
     protected float paddingBottom;
-
-    public PaddingListRow(float llx, float lly, float urx, float ury) {
-        super(llx, lly, urx, ury);
-    }
-
-    public PaddingListRow(float llx, float lly, float urx, float ury, int rotation) {
-        super(llx, lly, urx, ury, rotation);
-    }
-
-    public PaddingListRow(float urx, float ury) {
-        super(urx, ury);
-    }
-
-    public PaddingListRow(float urx, float ury, int rotation) {
-        super(urx, ury, rotation);
-    }
-
-    public PaddingListRow(Rectangle rect) {
-        super(rect);
-    }
-
-    public PaddingListRow(com.itextpdf.awt.geom.Rectangle rect) {
-        super(rect);
-    }
 
     public void setPadding(float left, float right, float top, float bottom){
         this.paddingLeft = left;

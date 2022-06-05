@@ -1,8 +1,9 @@
-package com.jfeat.pdf.print.base;
+package com.jfeat.pdf.print.element;
 
 import com.itextpdf.text.AccessibleElementId;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
+import com.jfeat.pdf.print.base.ListRow;
 
 /**
  * Created by vincenthuang on 26/03/2018.

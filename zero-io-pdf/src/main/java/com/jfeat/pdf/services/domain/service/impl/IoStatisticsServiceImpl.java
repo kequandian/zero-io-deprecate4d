@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfeat.crud.base.exception.BusinessCode;
 import com.jfeat.crud.base.exception.BusinessException;
-import com.jfeat.pdf.enums.MetaColumnEnum;
+import com.jfeat.pdf.api.enums.MetaColumnEnum;
 import com.jfeat.pdf.services.domain.model.IoStatisticsMeta;
 import com.jfeat.pdf.services.domain.service.IoStatisticsService;
 import org.slf4j.Logger;

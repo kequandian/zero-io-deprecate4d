@@ -2,12 +2,12 @@ package com.jfeat.pdf.print.report.row;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Font;
-import com.jfeat.pdf.print.base.PaddingListRow;
+import com.jfeat.pdf.print.base.PaddingRowBase;
 
 /**
  * Created by vincent on 2018/3/16.
  */
-public class TextBoxData extends PaddingListRow {
+public class TextBoxData extends PaddingRowBase {
     public static String ID = "TextBox";
 
     private Font font;

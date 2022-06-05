@@ -1,9 +1,13 @@
-package com.jfeat.pdf.print.report.builder;
+package com.jfeat.pdf.print.report;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Font;
 import com.jfeat.pdf.print.base.ListRowBase;
-import com.jfeat.pdf.print.report.FlowReport;
+import com.jfeat.pdf.print.element.ImageTextRow;
+import com.jfeat.pdf.print.element.RelativeRow;
+import com.jfeat.pdf.print.report.builder.RowData;
+import com.jfeat.pdf.print.report.builder.RowFormat;
+import com.jfeat.pdf.print.base.RowLayout;
 import com.jfeat.pdf.print.report.reports.HeaderContentFlowReport;
 import com.jfeat.pdf.print.report.reports.HeaderFlowReport;
 import com.jfeat.pdf.print.report.row.*;
@@ -17,6 +21,8 @@ import java.util.List;
  */
 public class FlowReportBuilder{
 
+    FlowReport flowReport;
+
     /// document
     private int columns;
     private int flowDirection;
@@ -28,7 +34,7 @@ public class FlowReportBuilder{
     private float borderWidth;
     private BaseColor borderColor;
 
-    // rows margins
+    // rows margin
     private float rowsMarginLeft;
     private float rowsMarginTop;
     private float rowsMarginRight;
@@ -46,7 +52,7 @@ public class FlowReportBuilder{
     private BaseColor groupBackgroundColor;
 
     public FlowReportBuilder(){
-        rowOption = FlowListRow.ID;
+        rowOption = RelativeRow.ID;
     }
 
     public FlowReportBuilder columns(int cols){
@@ -64,6 +70,11 @@ public class FlowReportBuilder{
         }
         return this;
     }
+
+    public float borderWidth(){
+        return this.borderWidth;
+    }
+
     public FlowReportBuilder flowHeight(float flowHeight){
         this.flowHeight = flowHeight;
         return this;
@@ -278,8 +289,14 @@ public class FlowReportBuilder{
         return this;
     }
 
+
+    /**
+     * build HeaderFlowReport
+     * @return
+     */
     public HeaderFlowReport build(){
 
+        // create report
         HeaderFlowReport report = null;
         if(rowsMarginLeft>0 || rowsMarginTop>0 || rowsMarginRight>0){
             /// rows table in double-row parent table
@@ -289,9 +306,10 @@ public class FlowReportBuilder{
         }else{
             report = new HeaderFlowReport(columns);
         }
+        // end
+
 
         report.setFlowDirection(flowDirection);
-        /// setMaxRowsPerColumn
         if(flowDirection == FlowReport.FLOW_UTD){
             if(flowHeight<=0){
                 throw new RuntimeException("Flow height is not set for FLOW_UTD direction.");
@@ -313,7 +331,7 @@ public class FlowReportBuilder{
 
 
         /// header data
-        FlowListRowData headerRowData = new FlowListRowData();
+        RelativeRowData headerRowData = new RelativeRowData();
         headerRowData.setTitle(header.getTitle(), headerFormat.getTitle());
         headerRowData.setSubtitle(header.getSubtitle(), headerFormat.getSubtitle());
         headerRowData.setHint(header.getHint(), headerFormat.getHint());
@@ -356,11 +374,11 @@ public class FlowReportBuilder{
 
             if(item.getTitle()!=null) {
 
-                FlowListRowData rowItemData = null;
-                if( FlowListRow.ID.compareTo(rowOption)==0 ){
-                    rowItemData = new FlowListRowData();
-                }else if(StackFlowListRow.ID.compareTo(rowOption)==0){
-                    rowItemData = new StackFlowListRowData();
+                RelativeRowData rowItemData = null;
+                if( RelativeRow.ID.compareTo(rowOption)==0 ){
+                    rowItemData = new RelativeRowData();
+                }else if(ImageTextRow.ID.compareTo(rowOption)==0){
+                    rowItemData = new ImageTextRowData();
                 }else {
                     throw new RuntimeException("Not support row option:"+rowOption);
                 }
@@ -392,22 +410,10 @@ public class FlowReportBuilder{
         }
 
         report.setRowHeight(rowLayout.getHeight());
-
         report.setRowData(rowDataItems);
 
         return report;
     }
 
 
-    /**
-     * getter
-     */
-
-    public float getBorderWidth(){
-        return borderWidth;
-    }
-
-    public int getFlowDirection(){
-        return this.flowDirection;
-    }
 }

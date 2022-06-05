@@ -2,7 +2,7 @@ package com.jfeat.pdf.print.report;
 
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.pdf.BarcodeQRCode;
-import com.jfeat.pdf.print.base.EmptyListRow;
+import com.jfeat.pdf.print.element.EmptyListRow;
 import com.jfeat.pdf.print.base.ListRow;
 import com.jfeat.pdf.print.base.ListRowBase;
 import com.jfeat.pdf.print.util.ImageUtil;

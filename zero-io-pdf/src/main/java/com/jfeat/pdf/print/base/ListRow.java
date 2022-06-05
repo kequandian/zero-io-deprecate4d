@@ -6,7 +6,7 @@ import com.itextpdf.text.pdf.PdfContentByte;
 
 /**
  * Created by vincent on 2018/3/19.
- * 提供内容接口
+ * 表格单元实现接口
  */
 public interface ListRow extends ListRowBase {
     void draw(PdfContentByte canvas, Rectangle position);

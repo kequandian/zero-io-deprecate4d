@@ -4,6 +4,8 @@ package com.jfeat.pdf.print.report.builder;
  * Created by vincenthuang on 23/03/2018.
  * FlowReport数据类 [POJO]
  */
+
+@Deprecated
 public class RowData {
 
     public static final RowData EMPTY = new RowData("", null, null, null);

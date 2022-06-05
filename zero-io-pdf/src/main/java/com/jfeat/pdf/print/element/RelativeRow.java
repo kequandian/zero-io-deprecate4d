@@ -1,18 +1,22 @@
-package com.jfeat.pdf.print.report.row;
+package com.jfeat.pdf.print.element;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.jfeat.pdf.print.base.ListRow;
-import com.jfeat.pdf.print.report.RelativeRow;
+import com.jfeat.pdf.print.base.RelativeListRow;
 
 /**
  * Created by vincent on 2018/3/16.
  * 标准列表布局，标题，副标题，图标
  */
-public class FlowListRow extends RelativeRow implements ListRow {
+public class RelativeRow extends RelativeListRow implements ListRow {
 
-    public static String ID = "FlowListRow";
+    public static String ID = "RelativeRow";
+    @Override
+    public String rowId() {
+        return ID;
+    }
 
     protected Image icon;
     protected Image next;     // next image
@@ -28,22 +32,16 @@ public class FlowListRow extends RelativeRow implements ListRow {
 
     private AccessibleElementId cellId;
 
-
-    public FlowListRow(Rectangle position) {
+    public RelativeRow(Rectangle position) {
         super(position);
     }
 
-    public FlowListRow(){
+    public RelativeRow(){
         super(new Rectangle(0,0,0,0));
     }
 
-    @Override
-    public String rowId() {
-        return ID;
-    }
 
-
-    public FlowListRow title(String title, String subtitle, String hint,
+    public RelativeRow title(String title, String subtitle, String hint,
                              Font font, Font subFont, Font hintFont,
                              float indent, float spacing, int alignment) {
         this.title = new Phrase(title, font);
@@ -60,7 +58,7 @@ public class FlowListRow extends RelativeRow implements ListRow {
         return this;
     }
 
-    public FlowListRow value(String value, Font font) {
+    public RelativeRow value(String value, Font font) {
         this.value = new Phrase(value, font);;
         return this;
     }
@@ -73,28 +71,28 @@ public class FlowListRow extends RelativeRow implements ListRow {
         return Element.ALIGN_LEFT;
     }
 
-    public FlowListRow icon(Image icon) {
+    public RelativeRow icon(Image icon) {
         this.icon = icon;
         this.icon.scaleAbsolute(-1, -1);
         this.icon.setAlignment(iconAlignment());
         return this;
     }
 
-    public FlowListRow icon(Image icon, float width, float height) {
+    public RelativeRow icon(Image icon, float width, float height) {
         this.icon = icon;
         this.icon.scaleAbsolute(width, height);
         this.icon.setAlignment(iconAlignment());
         return this;
     }
 
-    public FlowListRow next(Image next) {
+    public RelativeRow next(Image next) {
         this.next = next;
         this.next.scaleAbsolute(-1, -1);
         this.next.setAlignment(Element.ALIGN_RIGHT);
         return this;
     }
 
-    public FlowListRow next(Image next, float width, float height) {
+    public RelativeRow next(Image next, float width, float height) {
         this.next = next;
         this.next.scaleAbsolute(width, height);
         this.next.setAlignment(Element.ALIGN_RIGHT);

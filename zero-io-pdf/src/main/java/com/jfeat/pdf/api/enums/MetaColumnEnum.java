@@ -1,4 +1,4 @@
-package com.jfeat.pdf.enums;
+package com.jfeat.pdf.api.enums;
 
 /**
  * Created on 2020/3/16.

@@ -9,10 +9,10 @@ import com.jfeat.pdf.print.base.BorderDefinition;
 import com.jfeat.pdf.print.simple.base.ColorDefinition;
 import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.element.FlowLayout;
-import com.jfeat.pdf.print.flow.BarCodes;
 import com.jfeat.pdf.print.flow.ContentFlowBuilder;
 import com.jfeat.pdf.print.flow.TableFlow;
 import com.jfeat.pdf.print.flow.TableFlowBuilder;
+import com.jfeat.pdf.print.util.BarCodes;
 import com.jfeat.pdf.print.util.Fonts;
 import com.jfeat.pdf.print.util.ImageUtil;
 import org.slf4j.Logger;
@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.jfeat.pdf.print.PdfFlowRequest.*;
-
-// import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Created by vincent on 2018/10/8.
@@ -152,7 +150,14 @@ public class PdfPrintingFlowUtil {
         // TextFile.write("src/test/origin.json", JSONObject.toJSONString(data, SerializerFeature.DisableCircularReferenceDetect));
     }
 
+
+    /**
+     * 定义页面属性
+     */
     private Page page;
+    /**
+     * 定义打印流
+     */
     private List<Flow> flows;
 
     private Map<String, Font> fonts;
@@ -183,7 +188,6 @@ public class PdfPrintingFlowUtil {
             image.setAbsolutePosition(0, 0);
             backCanvas.addImage(image);
         }
-
 
         for(Flow flow : flows){
            if (flow.getName().equals(Flow.LINEAR_FLOW)) {
@@ -244,6 +248,7 @@ public class PdfPrintingFlowUtil {
             FlowLayout qrCodeLayout = new FlowLayout(1);
             qrCodeLayout.add(BarCodes.createBarCode39(canvas, flowData.getCode(), true));
             qrCodeLayout.add(new Phrase(flowData.getCode(), this.fonts.get(flowData.getFormatName())));
+
             element = qrCodeLayout;
         }else if(flow.getName().equals(Flow.TABLE_FLOW)) {
 

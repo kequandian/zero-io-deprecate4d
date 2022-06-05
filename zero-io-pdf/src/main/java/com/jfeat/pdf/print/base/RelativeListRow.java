@@ -1,4 +1,4 @@
-package com.jfeat.pdf.print.report;
+package com.jfeat.pdf.print.base;
 
 import com.itextpdf.awt.geom.Point;
 import com.itextpdf.text.*;
@@ -12,28 +12,12 @@ import com.jfeat.pdf.print.util.PdfFontMetrics;
  * Created by vincent on 2018/3/16.
  * 相对布局， 类似于 Android 的 RelativeLayout
  */
-public abstract class RelativeRow extends Rectangle {
+public abstract class RelativeListRow extends PaddingListRow {
 
-    private static final Logger logger = LoggerFactory.getLogger(RelativeRow.class);
+    private static final Logger logger = LoggerFactory.getLogger(RelativeListRow.class);
 
-    protected float paddingTop;
-    protected float paddingLeft;
-    protected float paddingRight;
-    protected float paddingBottom;
-
-    public RelativeRow(Rectangle position) {
-        super(position);
-    }
-
-    public void setPadding(float padding) {
-        this.setPadding(padding, padding, padding, padding);
-    }
-
-    public void setPadding(float paddingLeft, float paddingRight, float paddingTop, float paddingBottom) {
-        this.paddingLeft = paddingLeft;
-        this.paddingRight = paddingRight;
-        this.paddingTop = paddingTop;
-        this.paddingBottom = paddingBottom;
+    public RelativeListRow(Rectangle rect) {
+        super(rect);
     }
 
     protected void drawLines(PdfContentByte canvas, Rectangle position, Phrase[] lines, int alignment, float indent, float lineSpacing) {
@@ -252,6 +236,13 @@ public abstract class RelativeRow extends Rectangle {
         }
     }
 
+
+    /**
+     * get position
+     * @param position
+     * @param alignment
+     * @return
+     */
     private Point getDockPosition(Rectangle position, int alignment) {
         Point pos = new Point();
         switch (alignment) {

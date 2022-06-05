@@ -2,7 +2,7 @@ package com.jfeat.pdf.print.base;
 
 /**
  * Created by vincent on 2018/3/19.
- * 列表行数据接口，rowId()用于指定运行时行id
+ * 列表行数据接口，rowId()用于指定运行时行的类型ID
  *
  */
 public interface ListRowBase {
