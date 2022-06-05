@@ -1,10 +1,10 @@
 package com.jfeat.pdf.print.report.reports;
 
 import com.itextpdf.text.BadElementException;
+import com.jfeat.pdf.print.base.DataFlowReport;
 import com.jfeat.pdf.print.base.ListRow;
 import com.jfeat.pdf.print.base.ListRowBase;
 import com.jfeat.pdf.print.element.TextBox;
-import com.jfeat.pdf.print.report.DataFlowReport;
 import com.jfeat.pdf.print.element.RelativeRow;
 import com.jfeat.pdf.print.report.row.RelativeRowData;
 import com.jfeat.pdf.print.element.ImageTextRow;

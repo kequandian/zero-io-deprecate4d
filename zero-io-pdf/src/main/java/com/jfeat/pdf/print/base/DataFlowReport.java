@@ -1,14 +1,7 @@
-package com.jfeat.pdf.print.report;
+package com.jfeat.pdf.print.base;
 
-import com.itextpdf.text.BadElementException;
-import com.itextpdf.text.pdf.BarcodeQRCode;
 import com.jfeat.pdf.print.element.EmptyListRow;
-import com.jfeat.pdf.print.base.ListRow;
-import com.jfeat.pdf.print.base.ListRowBase;
-import com.jfeat.pdf.print.util.ImageUtil;
 
-import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,40 +86,8 @@ public abstract class DataFlowReport extends FlowReport {
                     listRows.add(EmptyListRow.EMPTY);
                 }
             }
-
         }
 
         super.setRows(listRows);
-    }
-
-
-    protected com.itextpdf.text.Image getRowImage(String url) throws IOException, BadElementException{
-        com.itextpdf.text.Image image=null;
-
-        if(isImageUrl(url)) {
-            Image img = ImageUtil.getImage(url);
-            if (img != null) {
-                image = com.itextpdf.text.Image.getInstance(img, Color.BLACK);
-            }
-        }else{
-            image = new BarcodeQRCode(url, 10, 10, null)
-                    .getImage();
-        }
-        return image;
-    }
-
-    private boolean isImageUrl(String url){
-        if(url==null) {
-            url = "";
-        }
-
-        String[] suffixes = new String[] {".jpg", "png", ".jpeg"};
-
-        for(String fix : suffixes){
-            if(url.endsWith(fix)){
-                return true;
-            }
-        }
-        return false;
     }
 }

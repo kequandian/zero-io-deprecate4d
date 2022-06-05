@@ -5,10 +5,12 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.jfeat.pdf.print.base.FlowReport;
 import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.element.ImageBox;
 import com.jfeat.pdf.print.base.RowLayout;
 import com.jfeat.pdf.print.report.reports.HeaderFlowReport;
+import com.jfeat.pdf.print.report.reports.HeaderFlowReportBuilder;
 import com.jfeat.pdf.print.report.request.Definitions;
 import com.jfeat.pdf.print.report.request.FlowReportRequest;
 import com.jfeat.pdf.print.report.request.GroupFormatRequest;
@@ -62,7 +64,7 @@ public class FlowReportUtil{
             }
         }
 
-        FlowReportBuilder builder = new FlowReportBuilder()
+        HeaderFlowReportBuilder builder = new HeaderFlowReportBuilder()
                 // report
                 .columns(request.getColumns())
                 .flowDirection(FlowReportRequest.getFlowDirection(request.getFlowDirection()))
