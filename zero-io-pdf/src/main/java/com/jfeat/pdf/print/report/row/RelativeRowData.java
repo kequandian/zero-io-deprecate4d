@@ -2,8 +2,7 @@ package com.jfeat.pdf.print.report.row;
 
 
 import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Image;
+import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.base.PaddingRowBase;
 import com.jfeat.pdf.print.element.RelativeRow;
 
@@ -12,21 +11,20 @@ import com.jfeat.pdf.print.element.RelativeRow;
  * FlowListRow 的数据定义
  */
 public class RelativeRowData extends PaddingRowBase {
-    private String iconUrl;
-    private String nextUrl;
-
-    private Image iconImage;
-    private Image nextImage;
+    private String imageUrl;
+    private String nextImageUrl;
 
     private String title;
     private String subtitle;
+    private String groupTitle;
     private String hint;
     private String value;
 
-    private Font fontTitle;
-    private Font fontSubtitle;
-    private Font fontHint;
-    private Font fontValue;
+    private FontDefinition fontTitle;
+    private FontDefinition fontSubtitle;
+    private FontDefinition fontGroupTitle;
+    private FontDefinition fontHint;
+    private FontDefinition fontValue;
 
     private float titleIndent = 0f;
     private float titleSpacing = 0f;
@@ -38,26 +36,26 @@ public class RelativeRowData extends PaddingRowBase {
     }
 
     public String getIconUrl() {
-        return iconUrl;
+        return imageUrl;
     }
 
-    public void setIconUrl(String iconUrl) {
-        this.iconUrl = iconUrl;
+    public void setIconUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public String getNextUrl() {
-        return nextUrl;
+    public String getNextImageUrl() {
+        return nextImageUrl;
     }
 
-    public void setNextUrl(String nextUrl) {
-        this.nextUrl = nextUrl;
+    public void setNextImageUrl(String nextImageUrl) {
+        this.nextImageUrl = nextImageUrl;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title, Font font) {
+    public void setTitle(String title, FontDefinition font) {
         this.title = title;
         this.fontTitle = font;
     }
@@ -66,7 +64,7 @@ public class RelativeRowData extends PaddingRowBase {
         return subtitle;
     }
 
-    public void setSubtitle(String subtitle, Font font) {
+    public void setSubtitle(String subtitle, FontDefinition font) {
         this.subtitle = subtitle;
         this.fontSubtitle = font;
     }
@@ -75,25 +73,25 @@ public class RelativeRowData extends PaddingRowBase {
         return value;
     }
 
-    public void setValue(String value, Font font) {
+    public void setValue(String value, FontDefinition font) {
         this.value = value;
         this.fontValue = font;
     }
 
-    public void setHint(String hint, Font font) {
+    public void setHint(String hint, FontDefinition font) {
         this.hint = hint;
         this.fontHint = font;
     }
 
-    public Font getFontTitle() {
+    public FontDefinition getFontTitle() {
         return fontTitle;
     }
 
-    public Font getFontSubtitle() {
+    public FontDefinition getFontSubtitle() {
         return fontSubtitle;
     }
 
-    public Font getFontValue() {
+    public FontDefinition getFontValue() {
         return fontValue;
     }
 
@@ -113,31 +111,15 @@ public class RelativeRowData extends PaddingRowBase {
         this.titleSpacing = titleSpacing;
     }
 
-    public Image getIconImage() {
-        return iconImage;
-    }
-
-    public void setIconImage(Image iconImage) {
-        this.iconImage = iconImage;
-    }
-
-    public Image getNextImage() {
-        return nextImage;
-    }
-
-    public void setNextImage(Image nextImage) {
-        this.nextImage = nextImage;
-    }
-
     public String getHint() {
         return hint;
     }
 
-    public Font getFontHint() {
+    public FontDefinition getFontHint() {
         return fontHint;
     }
 
-    public void setFontHint(Font fontHint) {
+    public void setFontHint(FontDefinition fontHint) {
         this.fontHint = fontHint;
     }
 
@@ -147,5 +129,21 @@ public class RelativeRowData extends PaddingRowBase {
 
     public void setTitleAlignment(int titleAlignment) {
         this.titleAlignment = titleAlignment;
+    }
+
+    public String getGroupTitle() {
+        return groupTitle;
+    }
+
+    public void setGroupTitle(String groupTitle) {
+        this.groupTitle = groupTitle;
+    }
+
+    public FontDefinition getFontGroupTitle() {
+        return fontGroupTitle;
+    }
+
+    public void setFontGroupTitle(FontDefinition fontGroupTitle) {
+        this.fontGroupTitle = fontGroupTitle;
     }
 }

@@ -15,18 +15,19 @@ public class BorderDefinition {
     public static final String BOX = "BOX";
 
     private String style;
-    private float width;
     private String colorname;
+
+    private float borderLeft = 0, borderRight = 0, borderTop = 0, borderBottom = 0;
     private ColorDefinition color;
 
     public BorderDefinition(String style, float width, ColorDefinition color){
         this.style = style;
-        this.width = width;
+        this.borderLeft = borderRight = borderTop = borderBottom = width;
         this.color = color;
     }
     public BorderDefinition(String style, float width, String colorname){
         this.style = style;
-        this.width = width;
+        this.borderLeft = borderRight = borderTop = borderBottom = width;
         this.colorname = colorname;
         this.color = ColorDefinition.getColor(colorname);
     }
@@ -43,12 +44,8 @@ public class BorderDefinition {
         this.color = color;
     }
 
-    public float getWidth() {
-        return width;
-    }
-
     public void setWidth(float width) {
-        this.width = width;
+        this.borderLeft = borderRight = borderTop = borderBottom = width;
     }
 
     public String getStyle() {
@@ -66,5 +63,37 @@ public class BorderDefinition {
     public void setColorname(String colorname) {
         this.colorname = colorname;
         this.color = ColorDefinition.getColor(colorname);
+    }
+
+    public float getBorderLeft() {
+        return borderLeft;
+    }
+
+    public void setBorderLeft(float borderLeft) {
+        this.borderLeft = borderLeft;
+    }
+
+    public float getBorderRight() {
+        return borderRight;
+    }
+
+    public void setBorderRight(float borderRight) {
+        this.borderRight = borderRight;
+    }
+
+    public float getBorderTop() {
+        return borderTop;
+    }
+
+    public void setBorderTop(float borderTop) {
+        this.borderTop = borderTop;
+    }
+
+    public float getBorderBottom() {
+        return borderBottom;
+    }
+
+    public void setBorderBottom(float borderBottom) {
+        this.borderBottom = borderBottom;
     }
 }

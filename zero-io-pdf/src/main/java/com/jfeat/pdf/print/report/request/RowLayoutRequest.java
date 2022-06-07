@@ -1,28 +1,37 @@
-package com.jfeat.pdf.print.base;
+package com.jfeat.pdf.print.report.request;
+
+import com.jfeat.pdf.print.base.ColorDefinition;
 
 /**
  * Created by vincenthuang on 23/03/2018.
+ * deprecated by BorderDefinition
  */
-public class RowLayout {
+public class RowLayoutRequest {
 
     private float height;
     private float paddingLeft = 0, paddingRight = 0, paddingTop = 0, paddingBottom = 0;
+
+    /// border
     private float borderLeft = 0, borderRight = 0, borderTop = 0, borderBottom = 0;
     private int borderColorRed = 0,borderColorGreen = 0,borderColorBlue = 0;
 
-    public RowLayout(){
+    // background
+    private ColorDefinition backgroundColor;
+
+
+    public RowLayoutRequest(){
         borderLeft = -1;
         borderRight = -1;
         borderTop = -1;
         borderBottom = -1;
     }
 
-    public RowLayout(float height){
+    public RowLayoutRequest(float height){
         this();
         this.height = height;
     }
 
-    public RowLayout(float height, float padding){
+    public RowLayoutRequest(float height, float padding){
         this(height);
         this.paddingLeft = padding;
         this.paddingRight = padding;
@@ -33,7 +42,7 @@ public class RowLayout {
     /**
      * padding
      */
-    public RowLayout setPadding(float left, float right, float top, float bottom){
+    public RowLayoutRequest setPadding(float left, float right, float top, float bottom){
         this.paddingLeft = left;
         this.paddingRight = right;
         this.paddingTop = top;
@@ -78,21 +87,21 @@ public class RowLayout {
     /**
      * border
      */
-    public RowLayout setBorderWidth(float left, float right, float top, float bottom){
+    public RowLayoutRequest setBorderWidth(float left, float right, float top, float bottom){
         this.borderLeft = left;
         this.borderRight = right;
         this.borderTop = top;
         this.borderBottom = bottom;
         return this;
     }
-    public RowLayout setBorderWidth(float width){
+    public RowLayoutRequest setBorderWidth(float width){
         this.borderLeft = width;
         this.borderRight = width;
         this.borderTop = width;
         this.borderBottom = width;
         return this;
     }
-    public RowLayout setBorderWidth(String width){
+    public RowLayoutRequest setBorderWidth(String width){
         if (width != null && width.length() > 0) {
             try {
                 if (width.contains(",")) {
@@ -127,14 +136,14 @@ public class RowLayout {
         return String.format("%f,%f,%f,%f", borderLeft, borderTop, borderRight, borderBottom);
     }
 
-    public RowLayout setBorderColor(int red, int green, int blue){
+    public RowLayoutRequest setBorderColor(int red, int green, int blue){
         this.borderColorRed = red;
         this.borderColorGreen = green;
         this.borderColorBlue = blue;
         return this;
     }
 
-    public RowLayout setBorderColor(String colorString){
+    public RowLayoutRequest setBorderColor(String colorString){
         if (colorString != null && colorString.length() > 0) {
             try {
                 if (colorString.contains(",")) {
@@ -262,5 +271,13 @@ public class RowLayout {
 
     public void setBorderColorBlue(int blue) {
         this.borderColorBlue = blue;
+    }
+
+    public ColorDefinition getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(ColorDefinition backgroundColor) {
+        this.backgroundColor = backgroundColor;
     }
 }

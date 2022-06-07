@@ -1,26 +1,30 @@
 package com.jfeat.pdf.print.report.request;
 
-import com.itextpdf.text.Font;
+import com.jfeat.pdf.print.base.FontDefinition;
 
 /**
  * Created by vincenthuang on 23/03/2018.
  */
 
-public class RowFormat {
+public class RowFormatRequest {
 
-    private Font title;
+    private FontDefinition titleFont;
 
     private float titleSpacing;
     private float titleIndent;
 
     private int titleAlignment;
 
-    public Font getTitle() {
-        return title;
+
+    public RowFormatRequest(){
     }
 
-    public void setTitle(Font title) {
-        this.title = title;
+    public FontDefinition getTitleFont() {
+        return titleFont;
+    }
+
+    public void setTitleFont(FontDefinition titleFont) {
+        this.titleFont = titleFont;
     }
 
     public float getTitleSpacing() {

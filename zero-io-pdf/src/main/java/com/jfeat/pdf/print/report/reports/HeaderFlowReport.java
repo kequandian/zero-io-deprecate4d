@@ -31,8 +31,8 @@ public class HeaderFlowReport extends DataFlowReport {
             TextBox box = new TextBox();
 
             TextBoxData info = (TextBoxData) data;
-            if (info.getContent() != null) {
-                box.setContent(info.getContent(), info.getFont());
+            if (info.getTitle() != null) {
+                box.setContent(info.getTitle(), info.getFont());
                 box.setBackgroundColor(info.getsolid());
                 box.setFont(info.getFont());
             }
@@ -52,8 +52,8 @@ public class HeaderFlowReport extends DataFlowReport {
             ImageTextBox box = new ImageTextBox();
 
             ImageTextBoxData info = (ImageTextBoxData) data;
-            if (info.getUrl() != null) {
-                box.setImage(ImageUtil.getImage(info.getUrl()));
+            if (info.getImageUrl() != null) {
+                box.setImage(ImageUtil.getImage(info.getImageUrl()));
             }
 
             return box;
@@ -72,8 +72,8 @@ public class HeaderFlowReport extends DataFlowReport {
 
             if (info.getNextImage() != null) {
                 row.next(info.getNextImage());
-            } else if (info.getNextUrl() != null) {
-                row.next(ImageUtil.getImage(info.getNextUrl()));
+            } else if (info.getNextImageUrl() != null) {
+                row.next(ImageUtil.getImage(info.getNextImageUrl()));
             }
 
             // draw text

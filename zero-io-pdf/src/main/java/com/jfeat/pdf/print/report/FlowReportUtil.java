@@ -5,7 +5,7 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.jfeat.pdf.print.base.FlowReport;
 import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.element.ImageBox;
-import com.jfeat.pdf.print.base.RowLayout;
+import com.jfeat.pdf.print.report.request.RowLayoutRequest;
 import com.jfeat.pdf.print.report.reports.HeaderFlowReport;
 import com.jfeat.pdf.print.report.reports.HeaderFlowReportBuilder;
 import com.jfeat.pdf.print.report.request.*;
@@ -40,11 +40,11 @@ public class FlowReportUtil{
      */
     public FlowReportUtil data(FlowReportRequest request){
 
-        RowLayout headerLayout = request.getLayout().getHeader();
-        RelativeRowFormatRequest headerFormat = request.getRowFormat().getHeader();
+        RowLayoutRequest headerLayout = request.getLayout().getHeaderLayout();
+        RowFormatRequest headerFormat = request.getFormat().getHeaderFormat();
 
-        RowLayout rowsLayout = request.getLayout().getRows();
-        RowFormatRequest rowsFormat = request.getRowFormat().getRows();
+        RowLayoutRequest rowsLayout = request.getLayout().getRowsLayout();
+        RowFormatRequest rowsFormat = request.getFormat().getRowsFormat();
 
 
         /// get alignment
@@ -78,19 +78,21 @@ public class FlowReportUtil{
                 .rowPadding(rowsLayout.getPaddingLeft(),rowsLayout.getPaddingRight(),rowsLayout.getPaddingTop(),rowsLayout.getPaddingBottom())
                 .rowBorderWidth(rowsLayout.getBorderLeft(),rowsLayout.getBorderRight(),rowsLayout.getBorderTop(),rowsLayout.getBorderBottom())
                 .rowBorderColor(rowsLayout.getBorderColorRed(),rowsLayout.getBorderColorGreen(),rowsLayout.getBorderColorBlue())
+
                 // fonts
                 .headerFonts(
-                                FontDefinition.getFont(headerFormat.getTitle()),
+                                FontDefinition.getFont(headerFormat.getTitleFont()),
                                 FontDefinition.getFont(headerFormat.getSubtitle()),
                                 FontDefinition.getFont(headerFormat.getHint()),
                                 FontDefinition.getFont(headerFormat.getValue()))
                 .rowFonts(
-                                FontDefinition.getFont(rowsFormat.getTitle()),
+                                FontDefinition.getFont(rowsFormat.getTitleFont()),
                                 FontDefinition.getFont(rowsFormat.getSubtitle()),
                                 FontDefinition.getFont(rowsFormat.getHint()),
                                 FontDefinition.getFont(rowsFormat.getValue()))
                 .groupFormat(FontDefinition.getFont(groupFormat!=null?groupFormat.getGroup():null),
-                             FontDefinition.getBaseColor(request.getFormat().getGroups()!=null?request.getFormat().getGroups().getBackgroundColor():null))
+                             FontDefinition.getBaseColor(request.getFormat().getGroupsFormat()!=null?request.getFormat().getGroupsFormat().getBackgroundColor():null))
+
                 .headerSpacing(headerFormat.getTitleSpacing(),
                         headerFormat.getTitleIndent(),
                         headerTitleAlignment

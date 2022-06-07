@@ -5,8 +5,9 @@ import com.jfeat.pdf.print.base.FlowReport;
 import com.jfeat.pdf.print.base.ListRowBase;
 import com.jfeat.pdf.print.element.ImageTextBox;
 import com.jfeat.pdf.print.element.RelativeRow;
-import com.jfeat.pdf.print.report.request.RelativeRowRequest;
-import com.jfeat.pdf.print.base.RowLayout;
+import com.jfeat.pdf.print.report.builder.RowData;
+import com.jfeat.pdf.print.report.request.RowFormatRequest;
+import com.jfeat.pdf.print.report.request.RowLayoutRequest;
 import com.jfeat.pdf.print.report.row.*;
 import com.jfeat.pdf.print.util.PageUtil;
 
@@ -20,9 +21,9 @@ import java.util.List;
 public class HeaderFlowReportBuilder{
 
     /// document
-    private int columns;
-    private int flowDirection;
-    private String rowOption;
+    private int columns;    //列数
+    private int flowDirection;  //方向
+    private String rowOption;  //流类型
 
     private float flowHeight;
 
@@ -36,13 +37,13 @@ public class HeaderFlowReportBuilder{
     private float rowsMarginRight;
     private float rowsMarginBottom;
 
-    // private RowData header;
-    // private List<RowData> flowReportRowDataList;
+     private ListRowBase header;
+     private List<ListRowBase> flowReportRowDataList;
 
-    // private RowFormat headerFormat;
-    private RowLayout headerLayout;
-    // private RowFormat rowFormat;
-    private RowLayout rowLayout;
+     private RowFormatRequest headerFormat;
+    private RowLayoutRequest headerLayout;
+     private RowFormatRequest rowFormat;
+    private RowLayoutRequest rowLayout;
 
     /// background Color only for group row
     private BaseColor groupBackgroundColor;
@@ -123,21 +124,21 @@ public class HeaderFlowReportBuilder{
 
     public HeaderFlowReportBuilder headerHeight(float height){
         if(headerLayout==null){
-            headerLayout = new RowLayout();
+            headerLayout = new RowLayoutRequest();
         }
         headerLayout.setHeight(height);
         return this;
     }
     public HeaderFlowReportBuilder headerPadding(float left, float right, float top, float bottom){
         if(headerLayout==null){
-            headerLayout = new RowLayout();
+            headerLayout = new RowLayoutRequest();
         }
         headerLayout.setPadding(left, right, top, bottom);
         return this;
     }
     public HeaderFlowReportBuilder headerPadding(float padding){
         if(headerLayout==null){
-            headerLayout = new RowLayout();
+            headerLayout = new RowLayoutRequest();
         }
         headerLayout.setPadding(padding,padding,padding,padding);
         return this;
@@ -147,7 +148,7 @@ public class HeaderFlowReportBuilder{
             // do nothing
         }else {
             if (headerLayout == null) {
-                headerLayout = new RowLayout();
+                headerLayout = new RowLayoutRequest();
             }
             headerLayout.setBorderWidth(left, right, top, bottom);
         }
@@ -158,7 +159,7 @@ public class HeaderFlowReportBuilder{
             /// do nothing
         }else {
             if (headerLayout == null) {
-                headerLayout = new RowLayout();
+                headerLayout = new RowLayoutRequest();
             }
             headerLayout.setBorderWidth(width);
         }
@@ -166,7 +167,7 @@ public class HeaderFlowReportBuilder{
     }
     public HeaderFlowReportBuilder headerBorderColor(int red, int green, int blue){
         if(headerLayout==null){
-            headerLayout = new RowLayout();
+            headerLayout = new RowLayoutRequest();
         }
 
         /// do not set color while black
@@ -205,35 +206,35 @@ public class HeaderFlowReportBuilder{
 
     public HeaderFlowReportBuilder rowHeight(float height){
         if(rowLayout==null){
-            rowLayout = new RowLayout();
+            rowLayout = new RowLayoutRequest();
         }
         rowLayout.setHeight(height);
         return this;
     }
     public HeaderFlowReportBuilder rowPadding(float left, float right, float top, float bottom){
         if(rowLayout==null){
-            rowLayout = new RowLayout();
+            rowLayout = new RowLayoutRequest();
         }
         rowLayout.setPadding(left, right, top, bottom);
         return this;
     }
     public HeaderFlowReportBuilder rowBorderWidth(float left, float right, float top, float bottom){
         if(rowLayout==null){
-            rowLayout = new RowLayout();
+            rowLayout = new RowLayoutRequest();
         }
         rowLayout.setBorderWidth(left, right, top, bottom);
         return this;
     }
     public HeaderFlowReportBuilder rowBorderWidth(float width){
         if(rowLayout==null){
-            rowLayout = new RowLayout();
+            rowLayout = new RowLayoutRequest();
         }
         rowLayout.setBorderWidth(width);
         return this;
     }
     public HeaderFlowReportBuilder rowBorderColor(int red, int green, int blue){
         if(rowLayout==null){
-            rowLayout = new RowLayout();
+            rowLayout = new RowLayoutRequest();
         }
 
         // do not set color while black
@@ -319,13 +320,13 @@ public class HeaderFlowReportBuilder{
 
 
         /// header data
-        com.jfeat.pdf.print.report.row.RelativeRowData headerRowData = new com.jfeat.pdf.print.report.row.RelativeRowData();
+        RelativeRowData headerRowData = new RelativeRowData();
         headerRowData.setTitle(header.getTitle(), headerFormat.getTitle());
         headerRowData.setSubtitle(header.getSubtitle(), headerFormat.getSubtitle());
         headerRowData.setHint(header.getHint(), headerFormat.getHint());
         headerRowData.setValue(header.getValue(), headerFormat.getValue());
         headerRowData.setIconUrl(header.getIconUrl());
-        headerRowData.setNextUrl(header.getNextUrl());
+        headerRowData.setNextImageUrl(header.getNextUrl());
 
 
         // header padding
@@ -376,7 +377,7 @@ public class HeaderFlowReportBuilder{
                 rowItemData.setHint(item.getHint(), rowFormat.getHint());
                 rowItemData.setValue(item.getValue(), rowFormat.getValue());
                 rowItemData.setIconUrl(item.getIconUrl());
-                rowItemData.setNextUrl(item.getNextUrl());
+                rowItemData.setNextImageUrl(item.getNextUrl());
 
                 rowItemData.setTitleSpacing(rowFormat.getTitleSpacing());
                 rowItemData.setTitleIndent(rowFormat.getTitleIndent());

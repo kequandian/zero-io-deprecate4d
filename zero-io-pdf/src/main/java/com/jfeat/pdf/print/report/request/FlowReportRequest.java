@@ -1,8 +1,9 @@
 package com.jfeat.pdf.print.report.request;
 
 import com.jfeat.pdf.print.base.ColorDefinition;
-import com.jfeat.pdf.print.base.RowLayout;
+import com.jfeat.pdf.print.base.ListRowBase;
 import com.jfeat.pdf.print.element.RelativeRow;
+import com.jfeat.pdf.print.report.row.ImageTextBoxData;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.util.Assert;
 
@@ -130,27 +131,27 @@ public class FlowReportRequest {
     /**
      * data
      */
-    private RelativeRowRequest headerData;
+    private ListRowBase headerData;
 
-    private List<RelativeRowRequest> rowsData;
+    private List<ListRowBase> rowsData;
 
-    public RelativeRowRequest getHeaderData() {
+    public ListRowBase getHeaderData() {
         return headerData;
     }
 
-    public FlowReportRequest setHeaderData(RelativeRowRequest headerData) {
+    public FlowReportRequest setHeaderData(ListRowBase headerData) {
         this.headerData = headerData;
         return this;
     }
 
-    public List<RelativeRowRequest> getRowsData() {
+    public List<ListRowBase> getRowsData() {
         return rowsData;
     }
 
-    public FlowReportRequest setRowsData(List<RelativeRowRequest> rows) {
+    public FlowReportRequest setRowsData(List<ImageTextBoxData> rows) {
         if(flowDirection == LTR) {
             if (rows.size() % 2 == 1) {
-                rows.add(RelativeRowRequest.EMPTY);
+                rows.add(ImageTextBoxData.EMPTY);
             }
         }
         this.rowsData = rowsData;
@@ -176,11 +177,11 @@ public class FlowReportRequest {
         });
 
         for(String url : imageUrls){
-            RelativeRowRequest row = new RelativeRowRequest();
-            row.setIconUrl(url);
-            row.setTitle(FilenameUtils.getName(url));
+            ImageTextBoxData rowData = new ImageTextBoxData();
+            rowData.setImageUrl(url);
+            rowData.setTitle(FilenameUtils.getName(url));
 
-            this.rowsData.add(row);
+            this.rowsData.add(rowData);
         }
 
         return this;
@@ -190,14 +191,14 @@ public class FlowReportRequest {
      * 定义表头与行打印格式
      * format
      */
-    private RowFormat rowFormat;
+    private FormatRequest format;
 
-    public RowFormat getRowFormat() {
-        return rowFormat;
+    public FormatRequest getFormat() {
+        return format;
     }
 
-    public FlowReportRequest setFormat(RowFormat format) {
-        this.rowFormat = format;
+    public FlowReportRequest setFormat(FormatRequest format) {
+        this.format = format;
         return this;
     }
 
@@ -217,7 +218,6 @@ public class FlowReportRequest {
     }
 
 
-
     /**
      * 数据定义，用于参考
      * @return
@@ -234,67 +234,59 @@ public class FlowReportRequest {
     }
 
 
-//    /**
-//     * format request
-//     */
-//    public static class FormatRequest{
-//        private RelativeRowFormatRequest header = new RelativeRowFormatRequest();
-//        private RelativeRowFormatRequest rows = new RelativeRowFormatRequest();
-//        private GroupFormatRequest groups = new GroupFormatRequest();
-//
-//        public RelativeRowFormatRequest getHeader() {
-//            return header;
-//        }
-//
-//        public void setHeader(RelativeRowFormatRequest header) {
-//            this.header = header;
-//        }
-//
-//        public RelativeRowFormatRequest getRows() {
-//            return rows;
-//        }
-//
-//        public void setRows(RelativeRowFormatRequest rows) {
-//            this.rows = rows;
-//        }
-//
-//        public GroupFormatRequest getGroups() {
-//            return groups;
-//        }
-//
-//        public void setGroups(GroupFormatRequest groups) {
-//            this.groups = groups;
-//        }
-//
-//        public void setGroups(FontDefinition font, ColorDefinition backgroundColor) {
-//            this.groups = new GroupFormatRequest(font, backgroundColor);
-//        }
-//    }
+    /**
+     * format request
+     */
+    public static class FormatRequest{
+        private RowFormatRequest headerFormat = new RowFormatRequest();
+        private RowFormatRequest rowsFormat = new RowFormatRequest();
+        private RowFormatRequest groupsFormat = new RowFormatRequest();
+
+        public RowFormatRequest getHeaderFormat() {
+            return headerFormat;
+        }
+
+        public void setHeaderFormat(RowFormatRequest headerFormat) {
+            this.headerFormat = headerFormat;
+        }
+
+        public RowFormatRequest getRowsFormat() {
+            return rowsFormat;
+        }
+
+        public void setRowsFormat(RowFormatRequest rowsFormat) {
+            this.rowsFormat = rowsFormat;
+        }
+
+        public RowFormatRequest getGroupsFormat() {
+            return groupsFormat;
+        }
+    }
 
 
     /**
      * 定义表头与行布局
      * layout request
      */
-    public static class LayoutRequest{
+    public static class LayoutRequest {
 
-        private RowLayout header = new RowLayout();
-        private RowLayout rows = new RowLayout();
+        private RowLayoutRequest headerLayout = new RowLayoutRequest();
+        private RowLayoutRequest rowsLayout = new RowLayoutRequest();
 
-        public RowLayout getHeader() {
-            return header;
+        public RowLayoutRequest getHeaderLayout() {
+            return headerLayout;
         }
 
-        public void setHeader(RowLayout header) {
-            this.header = header;
+        public void setHeaderLayout(RowLayoutRequest headerLayout) {
+            this.headerLayout = headerLayout;
         }
 
-        public RowLayout getRows() {
-            return rows;
+        public RowLayoutRequest getRowsLayout() {
+            return rowsLayout;
         }
 
-        public void setRows(RowLayout rows) {
-            this.rows = rows;
+        public void setRowsLayout(RowLayoutRequest rowsLayout) {
+            this.rowsLayout = rowsLayout;
         }
     }
 
