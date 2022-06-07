@@ -30,8 +30,6 @@ public class RelativeRow extends RelativeListRow implements ListRow {
     protected int titleAlignment = Element.ALIGN_BASELINE;
     // for vertical center, titleAlignment = Element.ALIGN_LEFT
 
-    private AccessibleElementId cellId;
-
     public RelativeRow(Rectangle position) {
         super(position);
     }
@@ -162,16 +160,6 @@ public class RelativeRow extends RelativeListRow implements ListRow {
         }
 
         canvas.restoreState();
-    }
-
-    @Override
-    public void setCellId(AccessibleElementId cellId) {
-        this.cellId = cellId;
-    }
-
-    @Override
-    public AccessibleElementId getCellId(){
-        return cellId;
     }
 
     public Image getIcon() {

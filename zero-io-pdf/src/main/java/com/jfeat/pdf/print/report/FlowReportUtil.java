@@ -2,20 +2,15 @@ package com.jfeat.pdf.print.report;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PdfStamper;
-import com.itextpdf.text.pdf.PdfWriter;
 import com.jfeat.pdf.print.base.FlowReport;
 import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.element.ImageBox;
 import com.jfeat.pdf.print.base.RowLayout;
 import com.jfeat.pdf.print.report.reports.HeaderFlowReport;
 import com.jfeat.pdf.print.report.reports.HeaderFlowReportBuilder;
-import com.jfeat.pdf.print.report.request.Definitions;
-import com.jfeat.pdf.print.report.request.FlowReportRequest;
-import com.jfeat.pdf.print.report.request.GroupFormatRequest;
-import com.jfeat.pdf.print.report.request.RelativeRowFormatRequest;
+import com.jfeat.pdf.print.report.request.*;
 import com.jfeat.pdf.print.util.PageUtil;
+import com.jfeat.pdf.print.util.PdfDocumentUtil;
 
 import java.io.*;
 
@@ -38,15 +33,18 @@ public class FlowReportUtil{
      */
     FlowReport flowReport;
 
+    /**
+     * 通过请求数据转换为打印数据类
+     * @param request
+     * @return
+     */
     public FlowReportUtil data(FlowReportRequest request){
 
         RowLayout headerLayout = request.getLayout().getHeader();
-        RelativeRowFormatRequest headerFormat = request.getFormat().getHeader();
+        RelativeRowFormatRequest headerFormat = request.getRowFormat().getHeader();
 
         RowLayout rowsLayout = request.getLayout().getRows();
-        RelativeRowFormatRequest rowsFormat = request.getFormat().getRows();
-
-        GroupFormatRequest groupFormat = request.getFormat().getGroups();
+        RowFormatRequest rowsFormat = request.getRowFormat().getRows();
 
 
         /// get alignment
@@ -112,92 +110,73 @@ public class FlowReportUtil{
     }
 
 
-    public void export(OutputStream outputStream, float marginLeft, float marginRight, float marginTop, float marginBottom) throws DocumentException{
+    public void export(OutputStream outputStream, float marginLeft, float marginRight, float marginTop, float marginBottom) throws IOException, DocumentException {
+
         /// offset border
-        if(flowReport.getBorderWidth()>0){
+        if (flowReport.getBorderWidth() > 0) {
             float offset = flowReport.getBorderWidth() * 0.5f;
             marginLeft += offset;
             marginRight += offset;
         }
 
-        if(this.template==null) {
-            /// 没有模板，新建文档
+        try {
+            if (this.template == null || !new File(template).exists()) {
 
-            Document document = new Document(PageSize.A4);
-            document.setMargins(marginLeft, marginRight, marginTop, marginBottom);
+                PdfDocumentUtil.writeDocument(new PdfDocumentUtil.PdfWriteListener() {
+                    @Override
+                    public void onDraw(PdfContentByte canvas) {
+                        /// calc rows
+                        {
+                            Rectangle pageSize = document.getPageSize();
+                            Rectangle contentSize = PageUtil.getContentSize(pageSize, marginLeft, marginRight, marginTop, marginBottom);
 
-            /// calc rows
-            {
-                Rectangle pageSize = document.getPageSize();
-                Rectangle contentSize = PageUtil.getContentSize(pageSize, marginLeft, marginRight, marginTop, marginBottom);
+                            flowReport.flowDirection(flowReport.getFlowDirection());
+                            flowReport.flowHeight(contentSize.getHeight());
+                        }
 
-                flowReport.flowDirection(flowReport.getFlowDirection());
-                flowReport.flowHeight(contentSize.getHeight());
+                        HeaderFlowReport reporter = flowReport.build();
+                        reporter.draw(canvas);
+
+                    }
+                }, outputStream, marginLeft, marginRight, marginTop, marginBottom);
+
+            } else {
+
+                PdfDocumentUtil.writeDocument(new PdfDocumentUtil.PdfWriteListener() {
+                    @Override
+                    public void onDraw(PdfContentByte canvas) {
+                        HeaderFlowReport reporter = flowReport.build();
+                        reporter.draw(canvas);
+                    }
+                }, outputStream, template);
+
             }
 
-            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
-            document.open();
-
-            PdfContentByte canvas = writer.getDirectContent();
-
-            HeaderFlowReport reporter = flowReport.build();
-            reporter.draw(canvas);
-
-            document.close();
-
-        }else{
-
-            if(new File(template).exists()) {
-                try {
-
-                    PdfReader pdfReader = new PdfReader(this.template);
-
-                    // 修改pdf
-                    PdfStamper pdfStamper = new PdfStamper(pdfReader, outputStream);
-
-                    /// draw
-                    PdfContentByte canvas = pdfStamper.getOverContent(1);
-                    HeaderFlowReport reporter = flowReport.build();
-                    reporter.draw(canvas);
-                    // end draw
-
-                    // 如果为false那么生成的PDF文件还能编辑，一定要设为true
-                    pdfStamper.setFormFlattening(true);
-
-                    pdfStamper.close();
-                    pdfReader.close();
-
-                }catch (IOException e){
-                    throw new RuntimeException(e.getMessage());
-                }
-
-            }else{
-                throw new RuntimeException("BadRequest: invalid template ! file not exits:" + this.template);
-            }
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
-
-    public void export(OutputStream outputStream) throws DocumentException{
+    public void export(OutputStream outputStream) throws IOException, DocumentException{
         this.export(outputStream, 0);
     }
 
-    public void export(OutputStream outputStream, float margin) throws  DocumentException{
+    public void export(OutputStream outputStream, float margin) throws IOException, DocumentException{
         this.export(outputStream, margin, margin, margin, margin);
     }
 
     @Deprecated
-    public void export(String pdfFilePath) throws FileNotFoundException, DocumentException{
+    public void export(String pdfFilePath) throws IOException, DocumentException{
         this.export(pdfFilePath, 0);
     }
 
     @Deprecated
-    public void export(String pdfFilePath, float margin) throws FileNotFoundException, DocumentException{
+    public void export(String pdfFilePath, float margin) throws IOException, DocumentException{
         this.export(pdfFilePath, margin, margin, margin, margin);
     }
 
     @Deprecated
-    public void export(String filePath, float marginLeft, float marginRight, float marginTop, float marginBottom) throws FileNotFoundException, DocumentException {
+    public void export(String filePath, float marginLeft, float marginRight, float marginTop, float marginBottom) throws IOException, DocumentException {
         export(new FileOutputStream(filePath), marginLeft, marginRight, marginTop, marginBottom);
     }
 

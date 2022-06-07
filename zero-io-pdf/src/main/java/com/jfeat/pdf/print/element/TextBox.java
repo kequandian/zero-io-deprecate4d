@@ -20,20 +20,36 @@ import java.util.List;
  * Created by vincent on 2018/3/16.
  * 文本框: 纯色框内居中显示字符
  */
-public class TextBox extends Rectangle implements ListRow {
+public class TextBox extends TableCellElement {
     public static String ID = "TextBox";
+
+    @Override
+    public String rowId() {
+        return ID;
+    }
 
     private String content;
     private Font font;
     private int horizontalAlignment = Element.ALIGN_CENTER;
     private int verticalAlignment = Element.ALIGN_MIDDLE;
 
+    public Font getFont() {
+        return font;
+    }
+
+    public void setFont(Font textFont) {
+        this.font = textFont;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+
     /**
      * 左右间距
      */
     private int horizontalPadding = 0;
-
-    private AccessibleElementId cellId;
 
     public TextBox(){
         super(0,0,0,0);
@@ -83,11 +99,6 @@ public class TextBox extends Rectangle implements ListRow {
     public void setContent(String content, Font font){
         this.content = content;
         this.font = font;
-    }
-
-    public void draw(PdfContentByte canvas, Rectangle position){
-        PdfContentByte[] canvases = new PdfContentByte[]{canvas, canvas, canvas, canvas};
-        drawCell(canvases, position);
     }
 
     public void drawCell(PdfContentByte[] canvases, Rectangle position){
@@ -293,29 +304,4 @@ public class TextBox extends Rectangle implements ListRow {
         return graphics2D;
     }
 
-    @Override
-    public void setCellId(AccessibleElementId cellId) {
-        this.cellId = cellId;
-    }
-
-    @Override
-    public AccessibleElementId getCellId(){
-        return cellId;
-    }
-
-    public String rowId() {
-        return ID;
-    }
-
-    public Font getFont() {
-        return font;
-    }
-
-    public void setFont(Font textFont) {
-        this.font = textFont;
-    }
-
-    public String getContent() {
-        return content;
-    }
 }

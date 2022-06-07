@@ -1,16 +1,21 @@
 package com.jfeat.pdf.print.base;
 
 import com.itextpdf.text.Rectangle;
+import com.jfeat.pdf.print.element.TableCellElement;
 
 /**
  * Created by vincent on 2018/3/19.
  * 指定 Padding 的数据行
  */
-public abstract class PaddingListRow extends Rectangle implements ListRow {
+public abstract class PaddingListRow extends TableCellElement implements ListRow {
     protected float paddingLeft;
     protected float paddingRight;
     protected float paddingTop;
     protected float paddingBottom;
+
+    public PaddingListRow() {
+        super(0, 0, 0, 0);
+    }
 
     public PaddingListRow(float llx, float lly, float urx, float ury) {
         super(llx, lly, urx, ury);

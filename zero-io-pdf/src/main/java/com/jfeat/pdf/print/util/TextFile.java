@@ -8,6 +8,19 @@ import java.util.TreeSet;
 
 public class TextFile extends ArrayList<String> {
 
+    // Read a file, split by any regular expression:
+    public TextFile(String fileName, String splitter) {
+      super(Arrays.asList(read(fileName).split(splitter)));
+      // Regular expression split() often leaves an empty
+      // String at the first position:
+      if(get(0).equals("")) remove(0);
+    }
+    // Normally read by lines:
+    public TextFile(String fileName) {
+      this(fileName, "\n");
+    }
+
+
   public static String read(InputStream in) {
     BufferedReader reader = new BufferedReader(new InputStreamReader(in));
     StringBuilder sb = new StringBuilder();
@@ -48,6 +61,7 @@ public class TextFile extends ArrayList<String> {
     }
     return sb.toString();
   }
+
   // Write a single file in one method call:
   public static void write(String fileName, String text) {
     try {
@@ -62,17 +76,7 @@ public class TextFile extends ArrayList<String> {
       throw new RuntimeException(e);
     }
   }
-  // Read a file, split by any regular expression:
-  public TextFile(String fileName, String splitter) {
-    super(Arrays.asList(read(fileName).split(splitter)));
-    // Regular expression split() often leaves an empty
-    // String at the first position:
-    if(get(0).equals("")) remove(0);
-  }
-  // Normally read by lines:
-  public TextFile(String fileName) {
-    this(fileName, "\n");
-  }
+
   public void write(String fileName) {
     try {
       PrintWriter out = new PrintWriter(
@@ -87,6 +91,8 @@ public class TextFile extends ArrayList<String> {
       throw new RuntimeException(e);
     }
   }
+
+
   // Simple test:
   public static void main(String[] args) {
     String file = read("TextFile.java");

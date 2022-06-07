@@ -16,7 +16,6 @@ public class ImageBoxData extends PaddingRowBase {
     }
 
     private String imageUrl;
-    private int corner = 0;
 
     public String getImageUrl() {
         return imageUrl;
@@ -25,6 +24,12 @@ public class ImageBoxData extends PaddingRowBase {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+
+    /**
+     * not support yet by Rectangle
+     */
+    private int corner = 0;
 
     public int getCorner() {
         return corner;

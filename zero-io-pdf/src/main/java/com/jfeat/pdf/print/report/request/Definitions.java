@@ -15,7 +15,8 @@ public class Definitions {
 
     private String[] titleAlignments = new String[]{"ALIGN_BASELINE", "ALIGN_LEFT"};
 
-    private String[] rowOptions = new String[]{"FlowListRow", "StackFlowListRow"};
+    private String[] rowOptions = new String[]{"TextBox", "ImageBox", "ImageTextBox", "RelativeRow", "FlowLayout", "EmptyListRow"};
+
 
     public String[] getFlowDirections() {
         return flowDirections;

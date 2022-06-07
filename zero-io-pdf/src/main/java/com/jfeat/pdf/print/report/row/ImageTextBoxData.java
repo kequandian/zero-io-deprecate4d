@@ -1,21 +1,20 @@
 package com.jfeat.pdf.print.report.row;
 
 
-import com.itextpdf.text.Image;
-import com.jfeat.pdf.print.element.ImageTextRow;
+import com.jfeat.pdf.print.element.ImageTextBox;
 
 /**
  * Created by vincenthuang on 19/03/2018.
  *  上下布局图文框 [上方图片，下方标题] 数据
  */
-public class ImageTextRowData extends RelativeRowData {
+public class ImageTextBoxData extends RelativeRowData {
 
     private String url;
     private String text;
 
     @Override
     public String rowId() {
-        return ImageTextRow.ID;
+        return ImageTextBox.ID;
     }
 
     public String getUrl() {

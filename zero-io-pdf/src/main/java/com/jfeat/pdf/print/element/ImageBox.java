@@ -19,7 +19,7 @@ import java.util.List;
  * Created by vincent on 2018/3/16.
  * 图像框: 图像排列
  */
-public class ImageBox extends Rectangle implements ListRow {
+public class ImageBox extends TableCellElement implements ListRow {
     protected final static Logger logger = LoggerFactory.getLogger(ImageBox.class);
 
     public static String ID = "ImageBox";
@@ -30,8 +30,6 @@ public class ImageBox extends Rectangle implements ListRow {
 
     private String url;
 
-    private AccessibleElementId cellId;
-
     public String getUrl(){
         return this.url;
     }
@@ -41,11 +39,6 @@ public class ImageBox extends Rectangle implements ListRow {
 
     public ImageBox(){
         super(0,0,0,0);
-    }
-
-    public void draw(PdfContentByte canvas, Rectangle position){
-        PdfContentByte[] canvases = new PdfContentByte[]{canvas, canvas, canvas, canvas};
-        drawCell(canvases, position);
     }
 
     public void drawCell(PdfContentByte[] canvases, Rectangle position){
@@ -83,16 +76,6 @@ public class ImageBox extends Rectangle implements ListRow {
 
 
         canvas.restoreState();
-    }
-
-    @Override
-    public void setCellId(AccessibleElementId cellId) {
-        this.cellId = cellId;
-    }
-
-    @Override
-    public AccessibleElementId getCellId(){
-        return cellId;
     }
 
 }

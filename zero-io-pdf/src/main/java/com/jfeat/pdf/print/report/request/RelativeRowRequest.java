@@ -1,14 +1,13 @@
-package com.jfeat.pdf.print.report.builder;
+package com.jfeat.pdf.print.report.request;
 
 /**
  * Created by vincenthuang on 23/03/2018.
  * FlowReport数据类 [POJO]
  */
 
-@Deprecated
-public class RowData {
+public class RelativeRowRequest {
 
-    public static final RowData EMPTY = new RowData("", null, null, null);
+    public static final RelativeRowRequest EMPTY = new RelativeRowRequest("", null, null, null);
 
     private String group;
 
@@ -20,14 +19,14 @@ public class RowData {
     private String hint;
     private String value;
 
-    public RowData(){
+    public RelativeRowRequest(){
     }
 
-    public RowData(String group){
+    public RelativeRowRequest(String group){
         this.group = group;
     }
 
-    public RowData(String iconUrl, String title, String subtitle, String hint, String value, String nextUrl){
+    public RelativeRowRequest(String iconUrl, String title, String subtitle, String hint, String value, String nextUrl){
         this.iconUrl = iconUrl;
         this.title =  title;
         this.subtitle = subtitle;
@@ -35,7 +34,7 @@ public class RowData {
         this.value = value;
         this.nextUrl = nextUrl;
     }
-    public RowData(String title, String subtitle, String hint, String value){
+    public RelativeRowRequest(String title, String subtitle, String hint, String value){
         this.title =  title;
         this.subtitle = subtitle;
         this.hint = hint;
@@ -46,7 +45,7 @@ public class RowData {
         return iconUrl;
     }
 
-    public RowData setIconUrl(String iconUrl) {
+    public RelativeRowRequest setIconUrl(String iconUrl) {
         this.iconUrl = iconUrl;
         return this;
     }
@@ -63,7 +62,7 @@ public class RowData {
         return title;
     }
 
-    public RowData setTitle(String title) {
+    public RelativeRowRequest setTitle(String title) {
         this.title = title;
         return this;
     }

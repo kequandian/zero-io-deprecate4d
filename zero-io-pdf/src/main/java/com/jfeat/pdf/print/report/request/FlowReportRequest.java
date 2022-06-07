@@ -1,7 +1,6 @@
 package com.jfeat.pdf.print.report.request;
 
 import com.jfeat.pdf.print.base.ColorDefinition;
-import com.jfeat.pdf.print.report.builder.RowData;
 import com.jfeat.pdf.print.base.RowLayout;
 import com.jfeat.pdf.print.element.RelativeRow;
 import org.apache.commons.io.FilenameUtils;
@@ -131,32 +130,33 @@ public class FlowReportRequest {
     /**
      * data
      */
-    private RowData headerData;
+    private RelativeRowRequest headerData;
 
-    private List<RowData> rowsData;
+    private List<RelativeRowRequest> rowsData;
 
-    public RowData getHeaderData() {
+    public RelativeRowRequest getHeaderData() {
         return headerData;
     }
 
-    public FlowReportRequest setHeaderData(RowData headerData) {
+    public FlowReportRequest setHeaderData(RelativeRowRequest headerData) {
         this.headerData = headerData;
         return this;
     }
 
-    public List<RowData> getRowsData() {
+    public List<RelativeRowRequest> getRowsData() {
         return rowsData;
     }
 
-    public FlowReportRequest setRowsData(List<RowData> rows) {
+    public FlowReportRequest setRowsData(List<RelativeRowRequest> rows) {
         if(flowDirection == LTR) {
             if (rows.size() % 2 == 1) {
-                rows.add(RowData.EMPTY);
+                rows.add(RelativeRowRequest.EMPTY);
             }
         }
         this.rowsData = rowsData;
         return this;
     }
+
 
     public FlowReportRequest initRowsData(String imageDir){
         if(this.rowsData==null) {
@@ -176,7 +176,7 @@ public class FlowReportRequest {
         });
 
         for(String url : imageUrls){
-            RowData row = new RowData();
+            RelativeRowRequest row = new RelativeRowRequest();
             row.setIconUrl(url);
             row.setTitle(FilenameUtils.getName(url));
 
@@ -190,16 +190,16 @@ public class FlowReportRequest {
      * 定义表头与行打印格式
      * format
      */
-//    private FormatRequest format;
-//
-//    public FormatRequest getFormat() {
-//        return format;
-//    }
-//
-//    public FlowReportRequest setFormat(FormatRequest format) {
-//        this.format = format;
-//        return this;
-//    }
+    private RowFormat rowFormat;
+
+    public RowFormat getRowFormat() {
+        return rowFormat;
+    }
+
+    public FlowReportRequest setFormat(RowFormat format) {
+        this.rowFormat = format;
+        return this;
+    }
 
     /**
      * 定义表头与行的打印布局

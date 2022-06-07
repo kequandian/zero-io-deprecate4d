@@ -1,13 +1,11 @@
 package com.jfeat.pdf.print.report.reports;
 
 import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Font;
 import com.jfeat.pdf.print.base.FlowReport;
 import com.jfeat.pdf.print.base.ListRowBase;
-import com.jfeat.pdf.print.element.ImageTextRow;
+import com.jfeat.pdf.print.element.ImageTextBox;
 import com.jfeat.pdf.print.element.RelativeRow;
-import com.jfeat.pdf.print.report.builder.RowData;
-import com.jfeat.pdf.print.report.builder.RowFormat;
+import com.jfeat.pdf.print.report.request.RelativeRowRequest;
 import com.jfeat.pdf.print.base.RowLayout;
 import com.jfeat.pdf.print.report.row.*;
 import com.jfeat.pdf.print.util.PageUtil;
@@ -321,7 +319,7 @@ public class HeaderFlowReportBuilder{
 
 
         /// header data
-        RelativeRowData headerRowData = new RelativeRowData();
+        com.jfeat.pdf.print.report.row.RelativeRowData headerRowData = new com.jfeat.pdf.print.report.row.RelativeRowData();
         headerRowData.setTitle(header.getTitle(), headerFormat.getTitle());
         headerRowData.setSubtitle(header.getSubtitle(), headerFormat.getSubtitle());
         headerRowData.setHint(header.getHint(), headerFormat.getHint());
@@ -360,15 +358,15 @@ public class HeaderFlowReportBuilder{
 
         /// rows
         List<ListRowBase> rowDataItems = new ArrayList<>();
-        for(RowData item : flowReportRowDataList) {
+        for(RelativeRowRequest item : flowReportRowDataList) {
 
             if(item.getTitle()!=null) {
 
-                RelativeRowData rowItemData = null;
+                com.jfeat.pdf.print.report.row.RelativeRowData rowItemData = null;
                 if( RelativeRow.ID.compareTo(rowOption)==0 ){
-                    rowItemData = new RelativeRowData();
-                }else if(ImageTextRow.ID.compareTo(rowOption)==0){
-                    rowItemData = new ImageTextRowData();
+                    rowItemData = new com.jfeat.pdf.print.report.row.RelativeRowData();
+                }else if(ImageTextBox.ID.compareTo(rowOption)==0){
+                    rowItemData = new ImageTextBoxData();
                 }else {
                     throw new RuntimeException("Not support row option:"+rowOption);
                 }
