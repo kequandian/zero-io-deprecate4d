@@ -1,5 +1,7 @@
 package com.jfeat.pdf.print.base;
 
+import com.itextpdf.text.BaseColor;
+
 /**
  * Created by vincenthuang on 25/03/2018.
  */
@@ -15,6 +17,13 @@ public class ColorDefinition {
     public static ColorDefinition RED = new ColorDefinition(255,0,0);
     public static ColorDefinition BLUE = new ColorDefinition(0,0,255);
     public static ColorDefinition GREEN = new ColorDefinition(0,255,0);
+
+    public static BaseColor getBaseColor(ColorDefinition color){
+        if(color!=null) {
+            return new BaseColor(color.getRed(), color.getGreen(), color.getBlue());
+        }
+        return null;
+    }
 
     public static ColorDefinition getColor(String colorname) {
         if(CN_BLACK.equals(colorname)){

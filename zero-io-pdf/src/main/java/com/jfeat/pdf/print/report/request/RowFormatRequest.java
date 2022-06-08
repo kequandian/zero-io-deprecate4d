@@ -1,5 +1,6 @@
 package com.jfeat.pdf.print.report.request;
 
+import com.itextpdf.text.Element;
 import com.jfeat.pdf.print.base.FontDefinition;
 
 /**
@@ -8,12 +9,26 @@ import com.jfeat.pdf.print.base.FontDefinition;
 
 public class RowFormatRequest {
 
+    /**
+     * 标题字体
+     */
     private FontDefinition titleFont;
 
+    /**
+     * 标题间隙
+     */
     private float titleSpacing;
+
+    /**
+     * 标题缩进
+     */
     private float titleIndent;
 
-    private int titleAlignment;
+    /**
+     * 标题对齐方式 (定义为字符串符号，转换为序号）
+     */
+    private String titleAlignment = "ALIGN_CENTER";
+    private String titleVerticalAlignment = "ALIGN_MIDDLE";
 
 
     public RowFormatRequest(){
@@ -43,11 +58,19 @@ public class RowFormatRequest {
         this.titleIndent = titleIndent;
     }
 
-    public int getTitleAlignment() {
+    public String getTitleVerticalAlignment() {
+        return this.titleVerticalAlignment;
+    }
+
+    public void setTitleVerticalAlignment(String verticalAlignment) {
+        this.titleVerticalAlignment = verticalAlignment;
+    }
+
+    public String getTitleAlignment() {
         return titleAlignment;
     }
 
-    public void setTitleAlignment(int titleAlignment) {
+    public void setTitleAlignment(String titleAlignment) {
         this.titleAlignment = titleAlignment;
     }
 }

@@ -21,7 +21,7 @@ import java.util.List;
 public class HeaderFlowReportBuilder{
 
     /// document
-    private int columns;    //列数
+    private int columns;        //列数
     private int flowDirection;  //方向
     private String rowOption;  //流类型
 
@@ -37,8 +37,8 @@ public class HeaderFlowReportBuilder{
     private float rowsMarginRight;
     private float rowsMarginBottom;
 
-     private ListRowBase header;
-     private List<ListRowBase> flowReportRowDataList;
+     private ListRowBase headerData;
+     private List<ListRowBase> rowsData;
 
      private RowFormatRequest headerFormat;
     private RowLayoutRequest headerLayout;
@@ -103,24 +103,6 @@ public class HeaderFlowReportBuilder{
         }
         return this;
     }
-
-    // public FlowReportBuilder headerData(RowData data){
-    //     this.header = data;
-    //     return this;
-    // }
-
-    // public FlowReportBuilder headerData(String iconUrl, String title, String subtitle, String hint, String value, String nextUrl){
-    //     if(header ==null){
-    //         header = new RowData();
-    //     }
-    //     header.setTitle(title);
-    //     header.setSubtitle(subtitle);
-    //     header.setHint(hint);
-    //     header.setValue(value);
-    //     header.setIconUrl(iconUrl);
-    //     header.setNextUrl(nextUrl);
-    //     return this;
-    // }
 
     public HeaderFlowReportBuilder headerHeight(float height){
         if(headerLayout==null){
@@ -197,7 +179,6 @@ public class HeaderFlowReportBuilder{
     //     headerFormat.setTitleAlignment(alignment);
     //     return this;
     // }
-
 
     // public FlowReportBuilder rowData(List<RowData> rows){
     //     this.flowReportRowDataList = rows;

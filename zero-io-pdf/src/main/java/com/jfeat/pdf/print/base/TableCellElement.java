@@ -1,4 +1,4 @@
-package com.jfeat.pdf.print.element;
+package com.jfeat.pdf.print.base;
 
 import com.itextpdf.text.AccessibleElementId;
 import com.itextpdf.text.Rectangle;

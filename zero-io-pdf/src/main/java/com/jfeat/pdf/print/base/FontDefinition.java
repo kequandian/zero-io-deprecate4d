@@ -40,19 +40,11 @@ public class FontDefinition {
         return com.itextpdf.text.Font.NORMAL;
     }
 
-    // reserved for #ff0000 conversation
-    public static BaseColor getBaseColor(ColorDefinition color){
-        if(color!=null) {
-            return new BaseColor(color.getRed(), color.getGreen(), color.getBlue());
-        }
-        return null;
-    }
-
     public static com.itextpdf.text.Font getFont(FontDefinition font){
         return new ChineseFont(font.getFamilyname(),
                 font.getSize(),
                 getStyle(font.getStyle()),
-                getBaseColor(font.color));
+                ColorDefinition.getBaseColor(font.color));
     }
 
 

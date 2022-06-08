@@ -35,11 +35,11 @@ public class RelativeRowData extends PaddingRowBase {
         return RelativeRow.ID;
     }
 
-    public String getIconUrl() {
+    public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setIconUrl(String imageUrl) {
+    public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 

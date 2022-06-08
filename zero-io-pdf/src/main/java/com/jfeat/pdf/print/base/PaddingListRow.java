@@ -1,7 +1,6 @@
 package com.jfeat.pdf.print.base;
 
 import com.itextpdf.text.Rectangle;
-import com.jfeat.pdf.print.element.TableCellElement;
 
 /**
  * Created by vincent on 2018/3/19.

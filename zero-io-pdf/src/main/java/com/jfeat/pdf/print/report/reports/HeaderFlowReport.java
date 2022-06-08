@@ -1,16 +1,13 @@
 package com.jfeat.pdf.print.report.reports;
 
-import com.jfeat.pdf.print.base.DataFlowReport;
-import com.jfeat.pdf.print.base.ListRow;
-import com.jfeat.pdf.print.base.ListRowBase;
+import com.jfeat.pdf.print.base.*;
 import com.jfeat.pdf.print.element.ImageBox;
 import com.jfeat.pdf.print.element.TextBox;
 import com.jfeat.pdf.print.element.RelativeRow;
-import com.jfeat.pdf.print.report.row.ImageBoxData;
+import com.jfeat.pdf.print.report.request.RowFormatRequest;
 import com.jfeat.pdf.print.report.row.ImageTextBoxData;
 import com.jfeat.pdf.print.report.row.RelativeRowData;
 import com.jfeat.pdf.print.element.ImageTextBox;
-import com.jfeat.pdf.print.report.row.TextBoxData;
 import com.jfeat.pdf.print.util.ImageUtil;
 
 /**
@@ -30,30 +27,58 @@ public class HeaderFlowReport extends DataFlowReport {
         if (rowId.equals(TextBox.ID)) {
             TextBox box = new TextBox();
 
-            TextBoxData info = (TextBoxData) data;
+            ImageTextBoxData info = (ImageTextBoxData) data;
+            if(info.getBackgroundColor()!=null) {
+                box.setBackgroundColor(ColorDefinition.getBaseColor(info.getBackgroundColor()));
+            }
+            // title
             if (info.getTitle() != null) {
-                box.setContent(info.getTitle(), info.getFont());
-                box.setBackgroundColor(info.getsolid());
-                box.setFont(info.getFont());
+                box.setContent(info.getTitle());
+            }
+            if(info.getTitleFormat()!=null){
+                if(info.getTitleFormat().getTitleFont()!=null) {
+                    box.setFont(FontDefinition.getFont(info.getTitleFormat().getTitleFont()));
+                }
             }
             return box;
 
         }else if(rowId.equals(ImageBox.ID)) {
             ImageBox box = new ImageBox();
 
-            ImageBoxData info = (ImageBoxData) data;
-            if (info.getImageUrl() != null) {
-                box.setUrl(info.getImageUrl());
+            ImageTextBoxData info = (ImageTextBoxData) data;
+            if(info.getBackgroundColor()!=null) {
+                box.setBackgroundColor(ColorDefinition.getBaseColor(info.getBackgroundColor()));
             }
-
+            // image
+            if (info.getImageUrl() != null) {
+                box.setImage(ImageUtil.getImage(info.getImageUrl()));
+            }
             return box;
 
         }else if(rowId.equals(ImageTextBox.ID)){
             ImageTextBox box = new ImageTextBox();
 
             ImageTextBoxData info = (ImageTextBoxData) data;
+            if(info.getBackgroundColor()!=null) {
+                box.setBackgroundColor(ColorDefinition.getBaseColor(info.getBackgroundColor()));
+            }
+            // image
             if (info.getImageUrl() != null) {
                 box.setImage(ImageUtil.getImage(info.getImageUrl()));
+            }
+            // text
+            if (info.getTitle() != null) {
+                box.setContent(info.getTitle());
+            }
+            if(info.getTitleFormat()!=null){
+                RowFormatRequest request = info.getTitleFormat();
+                if(request.getTitleFont()!=null) {
+                    box.setFont(FontDefinition.getFont(request.getTitleFont()));
+                }
+                box.setIndent(request.getTitleIndent());
+                box.setSpacing(request.getTitleSpacing());
+                box.setAlignment(request.getTitleAlignment());
+                box.setVerticalAlignment(request.getTitleVerticalAlignment());
             }
 
             return box;
@@ -64,27 +89,27 @@ public class HeaderFlowReport extends DataFlowReport {
 
             RelativeRowData info = (RelativeRowData) data;
 
-            if (info.getIconImage() != null) {
-                row.icon(info.getIconImage());
-            } else if (info.getIconUrl() != null) {
-                row.icon(ImageUtil.getImage(info.getIconUrl()));
+            if (info.getImageUrl() != null) {
+                row.setIcon(ImageUtil.getImage(info.getImageUrl()));
+            } else if (info.getNextImageUrl() != null) {
+                row.setNext(ImageUtil.getImage(info.getImageUrl()));
             }
 
-            if (info.getNextImage() != null) {
-                row.next(info.getNextImage());
+            if (info.getNextImageUrl() != null) {
+                row.setNext(ImageUtil.getImage(info.getNextImageUrl()));
             } else if (info.getNextImageUrl() != null) {
-                row.next(ImageUtil.getImage(info.getNextImageUrl()));
+                row.setNext(ImageUtil.getImage(info.getNextImageUrl()));
             }
 
             // draw text
             if (info.getTitle() != null) {
                 row.title(info.getTitle(), info.getSubtitle(), info.getHint(),
-                        info.getFontTitle(), info.getFontSubtitle(),info.getFontHint(),
+                        FontDefinition.getFont(info.getFontTitle()), FontDefinition.getFont(info.getFontSubtitle()), FontDefinition.getFont(info.getFontHint()),
                         info.getTitleIndent(), info.getTitleSpacing(), info.getTitleAlignment());
             }
 
             if (info.getValue() != null) {
-                row.value(info.getValue(), info.getFontValue());
+                row.value(info.getValue(), FontDefinition.getFont(info.getFontValue()));
             }
 
             /// padding

@@ -12,28 +12,28 @@ import com.jfeat.pdf.print.util.TableCellDrawUtil;
  * Created by vincent on 2018/3/16.
  * 上下布局图文框 [上方图片，下方标题]
  */
-public class ImageTextBox extends PaddingListRow implements ListRow {
+public class ImageTextBox extends TextBox implements ListRow {
 
     public static String ID = "ImageTextRow";
-
     @Override
     public String rowId() {
         return ID;
     }
 
     private Image image;
-    private Phrase content;
-
-    private float titleSpacing = 0f;
-    private float titleIndent = 0f;
-    private int titleAlignment = Element.ALIGN_BASELINE;
 
     public ImageTextBox() {
+        super();
     }
 
-    public ImageTextBox(Rectangle position) {
-        super(position);
+    public Image getImage() {
+        return image;
     }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
 
     @Override
     public void drawCell(PdfContentByte[] canvases, Rectangle position) {
@@ -51,10 +51,10 @@ public class ImageTextBox extends PaddingListRow implements ListRow {
 
         bgcanvas.restoreState();
 
+
         /**
          * draw text
          */
-
         PdfContentByte canvas = canvases[PdfPTable.TEXTCANVAS];
         canvas.saveState();
 
@@ -66,27 +66,12 @@ public class ImageTextBox extends PaddingListRow implements ListRow {
                 linesPosition.setTop(position.getTop() - image.getScaledHeight());
             }
 
-            TableCellDrawUtil.drawLines(canvas, linesPosition, new Phrase[]{content},
+            TableCellDrawUtil.drawLines(canvas, linesPosition, new Phrase[]{new Phrase(content)},
                     paddingLeft, paddingTop,paddingTop, paddingBottom,
-                    titleAlignment, titleIndent, titleSpacing);
+                    alignment, indent, spacing);
         }
 
         canvas.restoreState();
     }
 
-    public Image getImage() {
-        return image;
-    }
-
-    public void setImage(Image image) {
-        this.image = image;
-    }
-
-    public Phrase getContent() {
-        return content;
-    }
-
-    public void setContent(Phrase content) {
-        this.content = content;
-    }
 }

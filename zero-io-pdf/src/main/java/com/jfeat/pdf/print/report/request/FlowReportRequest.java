@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by vincenthuang on 22/03/2018.
  */
-public class FlowReportRequest {
+public class FlowReportRequest<T extends ListRowBase> {
 
     public static final String LTR = "LTR";
     public static final String UTD = "UTD";
@@ -131,20 +131,20 @@ public class FlowReportRequest {
     /**
      * data
      */
-    private ListRowBase headerData;
+    private T headerData;
 
-    private List<ListRowBase> rowsData;
+    private List<T> rowsData;
 
     public ListRowBase getHeaderData() {
         return headerData;
     }
 
-    public FlowReportRequest setHeaderData(ListRowBase headerData) {
+    public FlowReportRequest setHeaderData(T headerData) {
         this.headerData = headerData;
         return this;
     }
 
-    public List<ListRowBase> getRowsData() {
+    public List<T> getRowsData() {
         return rowsData;
     }
 
@@ -159,10 +159,16 @@ public class FlowReportRequest {
     }
 
 
-    public FlowReportRequest initRowsData(String imageDir){
-        if(this.rowsData==null) {
-            this.rowsData = new ArrayList<>();
-        }
+    /**
+     * 初始化图像目录数据
+     * @param imageDir
+     * @return
+     */
+    public static List<ImageTextBoxData> initImageRowsData(String imageDir){
+//        if(this.rowsData==null) {
+//            this.rowsData = new ArrayList<T>();
+//        }
+        List<ImageTextBoxData> rowsData = new ArrayList<>();
 
         File dirRoot = new File(imageDir);
         Assert.isTrue(dirRoot.exists() && dirRoot.isDirectory(), dirRoot + " not exists!");
@@ -181,11 +187,12 @@ public class FlowReportRequest {
             rowData.setImageUrl(url);
             rowData.setTitle(FilenameUtils.getName(url));
 
-            this.rowsData.add(rowData);
+            rowsData.add(rowData);
         }
 
-        return this;
+        return  rowsData;
     }
+
 
     /**
      * 定义表头与行打印格式

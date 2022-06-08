@@ -13,6 +13,7 @@ import com.jfeat.pdf.print.flow.ContentFlowBuilder;
 import com.jfeat.pdf.print.flow.TableFlow;
 import com.jfeat.pdf.print.flow.TableFlowBuilder;
 import com.jfeat.pdf.print.util.BarCodes;
+import com.jfeat.pdf.print.util.FileBinaryUtil;
 import com.jfeat.pdf.print.util.Fonts;
 import com.jfeat.pdf.print.util.ImageUtil;
 import org.slf4j.Logger;
@@ -139,7 +140,7 @@ public class PdfPrintingFlowUtil {
         flows.add(new Flow(Flow.SEPARATOR_FLOW));
         flows.add(new TitleFlowData("分页测试", "title", FlowElement.ALIGN_CENTER).flow());
         // 插入图片
-        flows.add(new ImageFlowData(ImageUtil.getBytes("test.png")).flow());
+        flows.add(new ImageFlowData(FileBinaryUtil.getBytes("test.png")).flow());
 
         // 打印
         PdfPrintingFlowUtil util = new PdfPrintingFlowUtil();

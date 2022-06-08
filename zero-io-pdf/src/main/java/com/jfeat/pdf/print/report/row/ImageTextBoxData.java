@@ -2,6 +2,7 @@ package com.jfeat.pdf.print.report.row;
 
 
 import com.jfeat.pdf.print.base.BorderDefinition;
+import com.jfeat.pdf.print.base.ColorDefinition;
 import com.jfeat.pdf.print.base.PaddingRowBase;
 import com.jfeat.pdf.print.element.ImageTextBox;
 import com.jfeat.pdf.print.report.request.RowFormatRequest;
@@ -18,7 +19,8 @@ public class ImageTextBoxData extends PaddingRowBase {
     private String title;
 
     private RowFormatRequest titleFormat;
-    private BorderDefinition borderStyle;
+    private BorderDefinition borderFormat;
+    private ColorDefinition backgroundColor;
 
     @Override
     public String rowId() {
@@ -49,11 +51,19 @@ public class ImageTextBoxData extends PaddingRowBase {
         this.titleFormat = titleFormat;
     }
 
-    public BorderDefinition getBorderStyle() {
-        return borderStyle;
+    public BorderDefinition getBorderFormat() {
+        return borderFormat;
     }
 
-    public void setBorderStyle(BorderDefinition borderStyle) {
-        this.borderStyle = borderStyle;
+    public void setBorderFormat(BorderDefinition borderFormat) {
+        this.borderFormat = borderFormat;
+    }
+
+    public ColorDefinition getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(ColorDefinition backgroundColor) {
+        this.backgroundColor = backgroundColor;
     }
 }

@@ -9,6 +9,7 @@ import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.jfeat.pdf.print.base.ListRow;
+import com.jfeat.pdf.print.base.PaddingListRow;
 import com.jfeat.pdf.print.util.PdfFontMetrics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,7 @@ import java.util.List;
  * Created by vincent on 2018/3/16.
  * 文本框: 纯色框内居中显示字符
  */
-public class TextBox extends TableCellElement {
+public class TextBox extends PaddingListRow implements ListRow {
     public static String ID = "TextBox";
 
     @Override
@@ -28,10 +29,14 @@ public class TextBox extends TableCellElement {
         return ID;
     }
 
-    private String content;
-    private Font font;
-    private int horizontalAlignment = Element.ALIGN_CENTER;
-    private int verticalAlignment = Element.ALIGN_MIDDLE;
+    protected String content;
+    protected Font font;
+
+    protected float spacing = 0f;
+    protected float indent = 0f;
+    protected int alignment = Element.ALIGN_CENTER;
+
+    protected int verticalAlignment = Element.ALIGN_MIDDLE;
 
     public Font getFont() {
         return font;
@@ -45,31 +50,21 @@ public class TextBox extends TableCellElement {
         return content;
     }
 
-
     /**
      * 左右间距
      */
-    private int horizontalPadding = 0;
-
     public TextBox(){
         super(0,0,0,0);
     }
 
     public TextBox(int horizontalAlignment){
         super(0,0,0,0);
-        this.horizontalAlignment = horizontalAlignment;
-    }
-
-    public TextBox(int horizontalAlignment, int verticalAlignment, int horizontalPadding) {
-        super(0, 0, 0, 0);
-        this.horizontalPadding = horizontalPadding;
-        this.horizontalAlignment = horizontalAlignment;
-        this.verticalAlignment = verticalAlignment;
+        this.alignment = horizontalAlignment;
     }
 
     public TextBox(int horizontalAlignment, int verticalAlignment) {
         super(0, 0, 0, 0);
-        this.horizontalAlignment = horizontalAlignment;
+        this.alignment = horizontalAlignment;
         this.verticalAlignment = verticalAlignment;
     }
 
@@ -79,11 +74,12 @@ public class TextBox extends TableCellElement {
         this.font = font;
     }
 
-    public TextBox(String content, Font font, int horizontalAlignment){
+    public TextBox(String content, Font font, int horizontalAlignment, int verticalAlignment){
         super(0,0,0,0);
         this.content = content;
         this.font = font;
-        this.horizontalAlignment = horizontalAlignment;
+        this.alignment = horizontalAlignment;
+        this.verticalAlignment = verticalAlignment;
     }
 
     public TextBox(Rectangle position, String content, Font font){
@@ -154,7 +150,7 @@ public class TextBox extends TableCellElement {
         canvas.saveState();
 
         float tx;
-        switch (horizontalAlignment) {
+        switch (alignment) {
             case Element.ALIGN_LEFT:
                 tx = getLeft();
                 break;
@@ -167,13 +163,13 @@ public class TextBox extends TableCellElement {
                 break;
         }
 
-        tx += horizontalPadding;
+        tx += (paddingLeft + paddingRight);
 
         // int contentLen = (int)(stringWidth / getWidth()) + (stringWidth%getWidth()>0?1:0);
         final int stringYOffset = 4;
 
         // get text array
-        List<String> lines = alignUpPosition(metrics, content, this, horizontalPadding);
+        List<String> lines = alignUpPosition(metrics, content, this, paddingLeft, paddingRight);
 
         int contentLen = lines.size();
         //String[] lines = new String[] {content.substring(0,5), content.substring(6,content.length())};
@@ -210,7 +206,7 @@ public class TextBox extends TableCellElement {
 
             //float ty_old = (getTop() + getBottom()) * 0.5f - stringHeight * 0.5f;
 
-            ColumnText.showTextAligned(canvas, horizontalAlignment, new Phrase(text, font), tx, ty, 0);
+            ColumnText.showTextAligned(canvas, alignment, new Phrase(text, font), tx, ty, 0);
         }
 
         canvas.restoreState();
@@ -224,9 +220,9 @@ public class TextBox extends TableCellElement {
      * @param position  矩形位置
      * @return
      */
-    public static List<String> alignUpPosition(PdfFontMetrics metrics, String content, Rectangle position, int padding){
+    public static List<String> alignUpPosition(PdfFontMetrics metrics, String content, Rectangle position, float paddingLeft, float paddingRight){
 
-        float totalWidth = position.getWidth() - padding * 2;
+        float totalWidth = position.getWidth() - paddingLeft +  paddingRight;
         float totalHeight = position.getHeight();
         logger.info("totalWidth : {}, totalHeight : {}", totalWidth, totalHeight);
         // 垂直间距
@@ -304,4 +300,35 @@ public class TextBox extends TableCellElement {
         return graphics2D;
     }
 
+    public float getSpacing() {
+        return spacing;
+    }
+
+    public void setSpacing(float spacing) {
+        this.spacing = spacing;
+    }
+
+    public float getIndent() {
+        return indent;
+    }
+
+    public void setIndent(float indent) {
+        this.indent = indent;
+    }
+
+    public int getAlignment() {
+        return alignment;
+    }
+
+    public void setAlignment(int alignment) {
+        this.alignment = alignment;
+    }
+
+    public int getVerticalAlignment() {
+        return verticalAlignment;
+    }
+
+    public void setVerticalAlignment(int alignment) {
+        this.verticalAlignment = alignment;
+    }
 }

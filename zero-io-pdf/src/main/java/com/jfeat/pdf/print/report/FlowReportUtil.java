@@ -9,6 +9,7 @@ import com.jfeat.pdf.print.report.request.RowLayoutRequest;
 import com.jfeat.pdf.print.report.reports.HeaderFlowReport;
 import com.jfeat.pdf.print.report.reports.HeaderFlowReportBuilder;
 import com.jfeat.pdf.print.report.request.*;
+import com.jfeat.pdf.print.report.row.ImageTextBoxData;
 import com.jfeat.pdf.print.util.PageUtil;
 import com.jfeat.pdf.print.util.PdfDocumentUtil;
 
@@ -183,12 +184,13 @@ public class FlowReportUtil{
     }
 
     public static void main(String[] args) throws Exception{
-        FlowReportRequest request = new FlowReportRequest()
+        FlowReportRequest<ImageTextBoxData> request = new FlowReportRequest()
                 .setColumns(3)
                 .setRowOption(ImageBox.ID)
                 .setLayout(new FlowReportRequest.LayoutRequest());
 
-        request.initRowsData("./images");
+        java.util.List<ImageTextBoxData> imageRows = FlowReportRequest.initImageRowsData("./images");
+        request.setRowsData(imageRows);
 
          new FlowReportUtil()
                 .data(request)
