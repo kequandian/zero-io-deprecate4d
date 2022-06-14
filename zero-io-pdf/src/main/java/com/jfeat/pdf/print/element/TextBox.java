@@ -35,8 +35,8 @@ public class TextBox extends PaddingListRow implements ListRow {
     protected float spacing = 0f;
     protected float indent = 0f;
     protected int alignment = Element.ALIGN_CENTER;
-
     protected int verticalAlignment = Element.ALIGN_MIDDLE;
+
 
     public Font getFont() {
         return font;

@@ -2,8 +2,7 @@ package com.jfeat.pdf.print.report;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfContentByte;
-import com.jfeat.pdf.print.base.FlowReport;
-import com.jfeat.pdf.print.base.FontDefinition;
+import com.jfeat.pdf.print.base.ColorDefinition;
 import com.jfeat.pdf.print.element.ImageBox;
 import com.jfeat.pdf.print.report.request.RowLayoutRequest;
 import com.jfeat.pdf.print.report.reports.HeaderFlowReport;
@@ -32,7 +31,7 @@ public class FlowReportUtil{
     /**
      * 通过 FlowReportRequest 构建导出数据
      */
-    FlowReport flowReport;
+    HeaderFlowReport flowReport;
 
     /**
      * 通过请求数据转换为打印数据类
@@ -54,60 +53,39 @@ public class FlowReportUtil{
         {
             String LEFT = new Definitions().getTitleAlignments()[1];
 
-            if(headerFormat==null || LEFT.compareTo(headerFormat.getTitleAlignment())==0){
+            if(headerFormat==null || LEFT.compareTo(headerFormat.getAlignment())==0){
                 headerTitleAlignment = Element.ALIGN_LEFT;
             }
 
-            if (rowsFormat==null || LEFT.compareTo(rowsFormat.getTitleAlignment()) == 0) {
+            if (rowsFormat==null || LEFT.compareTo(rowsFormat.getAlignment()) == 0) {
                 rowsTitleAlignment = Element.ALIGN_LEFT;
             }
         }
 
-        HeaderFlowReportBuilder builder = new HeaderFlowReportBuilder()
+        HeaderFlowReport report = new HeaderFlowReportBuilder()
                 // report
                 .columns(request.getColumns())
                 .flowDirection(FlowReportRequest.getFlowDirection(request.getFlowDirection()))
                 .rowOption(request.getRowOption())
                 .rowsMargin(request.getRowsMarginLeft(),request.getRowsMarginTop(),request.getRowsMarginRight(),request.getRowsMarginBottom())
                 .borderWidth(request.getBorderWidth())
-                .borderColor(FontDefinition.getBaseColor(request.getBorderColor()))
+                .borderColor(ColorDefinition.getBaseColor(request.getBorderColor()))
                 .headerHeight(headerLayout.getHeight())
                 .rowHeight(rowsLayout.getHeight())
+                // header format
                 .headerPadding(headerLayout.getPaddingLeft(),headerLayout.getPaddingRight(),headerLayout.getPaddingTop(),headerLayout.getPaddingBottom())
                 .headerBorderWidth(headerLayout.getBorderLeft(),headerLayout.getBorderRight(),headerLayout.getBorderTop(),headerLayout.getBorderBottom())
                 .headerBorderColor(headerLayout.getBorderColorRed(),headerLayout.getBorderColorGreen(),headerLayout.getBorderColorBlue())
+                // row format
                 .rowPadding(rowsLayout.getPaddingLeft(),rowsLayout.getPaddingRight(),rowsLayout.getPaddingTop(),rowsLayout.getPaddingBottom())
                 .rowBorderWidth(rowsLayout.getBorderLeft(),rowsLayout.getBorderRight(),rowsLayout.getBorderTop(),rowsLayout.getBorderBottom())
                 .rowBorderColor(rowsLayout.getBorderColorRed(),rowsLayout.getBorderColorGreen(),rowsLayout.getBorderColorBlue())
-
-                // fonts
-                .headerFonts(
-                                FontDefinition.getFont(headerFormat.getTitleFont()),
-                                FontDefinition.getFont(headerFormat.getSubtitle()),
-                                FontDefinition.getFont(headerFormat.getHint()),
-                                FontDefinition.getFont(headerFormat.getValue()))
-                .rowFonts(
-                                FontDefinition.getFont(rowsFormat.getTitleFont()),
-                                FontDefinition.getFont(rowsFormat.getSubtitle()),
-                                FontDefinition.getFont(rowsFormat.getHint()),
-                                FontDefinition.getFont(rowsFormat.getValue()))
-                .groupFormat(FontDefinition.getFont(groupFormat!=null?groupFormat.getGroup():null),
-                             FontDefinition.getBaseColor(request.getFormat().getGroupsFormat()!=null?request.getFormat().getGroupsFormat().getBackgroundColor():null))
-
-                .headerSpacing(headerFormat.getTitleSpacing(),
-                        headerFormat.getTitleIndent(),
-                        headerTitleAlignment
-                        )
-                .rowSpacing(rowsFormat.getTitleSpacing(),
-                        rowsFormat.getTitleIndent(),
-                        rowsTitleAlignment
-                        )
-
                 // data
                 .headerData(request.getHeaderData())
-                .rowData(request.getRowsData())
+                .rowsData(request.getRowsData())
+                .build()
         ;
-
+        this.flowReport = report;
 
         return this;
     }
@@ -116,30 +94,26 @@ public class FlowReportUtil{
     public void export(OutputStream outputStream, float marginLeft, float marginRight, float marginTop, float marginBottom) throws IOException, DocumentException {
 
         /// offset border
-        if (flowReport.getBorderWidth() > 0) {
-            float offset = flowReport.getBorderWidth() * 0.5f;
-            marginLeft += offset;
-            marginRight += offset;
-        }
+//        if (flowReport.getBorderWidth() > 0) {
+//            float offset = flowReport.getBorderWidth() * 0.5f;
+//            marginLeft += offset;
+//            marginRight += offset;
+//        }
 
         try {
             if (this.template == null || !new File(template).exists()) {
 
                 PdfDocumentUtil.writeDocument(new PdfDocumentUtil.PdfWriteListener() {
                     @Override
-                    public void onDraw(PdfContentByte canvas) {
+                    public void onDraw(Document document, PdfContentByte canvas) {
                         /// calc rows
-                        {
+                        if(document!=null) {
                             Rectangle pageSize = document.getPageSize();
                             Rectangle contentSize = PageUtil.getContentSize(pageSize, marginLeft, marginRight, marginTop, marginBottom);
+                            flowReport.setFlowHeight(contentSize.getHeight());
 
-                            flowReport.flowDirection(flowReport.getFlowDirection());
-                            flowReport.flowHeight(contentSize.getHeight());
+                            flowReport.draw(canvas);
                         }
-
-                        HeaderFlowReport reporter = flowReport.build();
-                        reporter.draw(canvas);
-
                     }
                 }, outputStream, marginLeft, marginRight, marginTop, marginBottom);
 
@@ -147,9 +121,8 @@ public class FlowReportUtil{
 
                 PdfDocumentUtil.writeDocument(new PdfDocumentUtil.PdfWriteListener() {
                     @Override
-                    public void onDraw(PdfContentByte canvas) {
-                        HeaderFlowReport reporter = flowReport.build();
-                        reporter.draw(canvas);
+                    public void onDraw(Document document, PdfContentByte canvas) {
+                        flowReport.draw(canvas);
                     }
                 }, outputStream, template);
 

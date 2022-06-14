@@ -5,7 +5,6 @@ import com.jfeat.pdf.print.base.FlowReport;
 import com.jfeat.pdf.print.base.ListRowBase;
 import com.jfeat.pdf.print.element.ImageTextBox;
 import com.jfeat.pdf.print.element.RelativeRow;
-import com.jfeat.pdf.print.report.builder.RowData;
 import com.jfeat.pdf.print.report.request.RowFormatRequest;
 import com.jfeat.pdf.print.report.request.RowLayoutRequest;
 import com.jfeat.pdf.print.report.row.*;
@@ -17,7 +16,6 @@ import java.util.List;
 /**
  * Created by vincenthuang on 22/03/2018.
  */
-@Deprecated
 public class HeaderFlowReportBuilder{
 
     /// document
@@ -37,12 +35,12 @@ public class HeaderFlowReportBuilder{
     private float rowsMarginRight;
     private float rowsMarginBottom;
 
-     private ListRowBase headerData;
-     private List<ListRowBase> rowsData;
+    private ListRowBase headerData;
+    private List<ListRowBase> rowsData;
 
-     private RowFormatRequest headerFormat;
+    private RowFormatRequest headerFormat;
     private RowLayoutRequest headerLayout;
-     private RowFormatRequest rowFormat;
+    private RowFormatRequest rowFormat;
     private RowLayoutRequest rowLayout;
 
     /// background Color only for group row
@@ -101,6 +99,16 @@ public class HeaderFlowReportBuilder{
                 rowBorderColor(color.getRed(), color.getGreen(), color.getBlue());
             }
         }
+        return this;
+    }
+
+    public HeaderFlowReportBuilder headerFormat(RowFormatRequest format) {
+        this.headerFormat = format;
+        return this;
+    }
+
+    public HeaderFlowReportBuilder rowFormat(RowFormatRequest format) {
+        this.rowFormat = format;
         return this;
     }
 
@@ -259,6 +267,16 @@ public class HeaderFlowReportBuilder{
     //     return this;
     // }
 
+    public HeaderFlowReportBuilder headerData(ListRowBase data){
+        this.headerData = data;
+        return this;
+    }
+
+    public HeaderFlowReportBuilder rowsData(List<ListRowBase> data){
+        this.rowsData = data;
+        return this;
+    }
+
 
     /**
      * build HeaderFlowReport
@@ -301,14 +319,7 @@ public class HeaderFlowReportBuilder{
 
 
         /// header data
-        RelativeRowData headerRowData = new RelativeRowData();
-        headerRowData.setTitle(header.getTitle(), headerFormat.getTitle());
-        headerRowData.setSubtitle(header.getSubtitle(), headerFormat.getSubtitle());
-        headerRowData.setHint(header.getHint(), headerFormat.getHint());
-        headerRowData.setValue(header.getValue(), headerFormat.getValue());
-        headerRowData.setIconUrl(header.getIconUrl());
-        headerRowData.setNextImageUrl(header.getNextUrl());
-
+        ImageTextBoxData headerRowData = new ImageTextBoxData();
 
         // header padding
         headerRowData.setPadding(
@@ -322,13 +333,14 @@ public class HeaderFlowReportBuilder{
                 );
         report.setHeaderBorderColor(new BaseColor(headerLayout.getBorderColorRed(), headerLayout.getBorderColorGreen(), headerLayout.getBorderColorBlue()));
 
-        if(headerFormat.getTitleSpacing()>0) {
-            headerRowData.setTitleSpacing(headerFormat.getTitleSpacing());
+        if(headerFormat.getSpacing()>0) {
+            headerRowData.setPadding(headerFormat.getSpacing());
         }
-        if(headerFormat.getTitleIndent()>0){
-            headerRowData.setTitleIndent(headerFormat.getTitleIndent());
+        if(headerFormat.getIndent()>0){
+            headerRowData.setIndent(headerFormat.getIndent());
         }
-        headerRowData.setTitleAlignment(headerFormat.getTitleAlignment());
+        headerRowData.setAlignment(headerFormat.getAlignment());
+        headerRowData.setVerticalAlignment(headerFormat.getVerticalAlignment());
 
 
         report.setHeaderData(headerRowData);
@@ -340,42 +352,42 @@ public class HeaderFlowReportBuilder{
 
         /// rows
         List<ListRowBase> rowDataItems = new ArrayList<>();
-        for(RelativeRowRequest item : flowReportRowDataList) {
+        for(ListRowBase it : this.rowsData) {
 
-            if(item.getTitle()!=null) {
+            if( RelativeRow.ID.compareTo(rowOption)==0 ) {
+                RelativeRowData item = (RelativeRowData)it;
 
-                com.jfeat.pdf.print.report.row.RelativeRowData rowItemData = null;
-                if( RelativeRow.ID.compareTo(rowOption)==0 ){
-                    rowItemData = new com.jfeat.pdf.print.report.row.RelativeRowData();
-                }else if(ImageTextBox.ID.compareTo(rowOption)==0){
-                    rowItemData = new ImageTextBoxData();
-                }else {
-                    throw new RuntimeException("Not support row option:"+rowOption);
-                }
+                RelativeRowData rowItemData =new RelativeRowData();
 
-                rowItemData.setTitle(item.getTitle(), rowFormat.getTitle());
-                rowItemData.setSubtitle(item.getSubtitle(), rowFormat.getSubtitle());
-                rowItemData.setHint(item.getHint(), rowFormat.getHint());
-                rowItemData.setValue(item.getValue(), rowFormat.getValue());
-                rowItemData.setIconUrl(item.getIconUrl());
-                rowItemData.setNextImageUrl(item.getNextUrl());
-
-                rowItemData.setTitleSpacing(rowFormat.getTitleSpacing());
-                rowItemData.setTitleIndent(rowFormat.getTitleIndent());
-                rowItemData.setTitleAlignment(rowFormat.getTitleAlignment());
+                rowItemData.setTitle(item.getTitle(), rowFormat.getFont());
+                rowItemData.setSubtitle(item.getSubtitle());
+                rowItemData.setHint(item.getHint());
+                rowItemData.setValue(item.getValue());
+                rowItemData.setImageUrl(item.getImageUrl());
+                rowItemData.setNextImageUrl(item.getNextImageUrl());
 
                 // row padding
                 rowItemData.setPadding(rowLayout.getPaddingLeft(), rowLayout.getPaddingRight(), rowLayout.getPaddingTop(), rowLayout.getPaddingBottom());
 
                 rowDataItems.add(rowItemData);
 
-            }else if(item.getGroup()!=null){
-                TextBoxData textBoxData  = new TextBoxData();
-                textBoxData.setContent(item.getGroup(), rowFormat.getGroup());
-                textBoxData.setFont(rowFormat.getGroup());
-                textBoxData.setSolid(groupBackgroundColor);
+            }else if(ImageTextBox.ID.compareTo(rowOption)==0) {
+                ImageTextBoxData item = (ImageTextBoxData)it;
 
-                rowDataItems.add(textBoxData);
+                ImageTextBoxData rowItemData = new ImageTextBoxData();
+                rowItemData.setTitle(item.getTitle());
+                rowItemData.setTitleFont(rowFormat.getFont());
+
+                rowItemData.setSpacing(rowFormat.getSpacing());
+                rowItemData.setIndent(rowFormat.getIndent());
+                rowItemData.setAlignment(rowFormat.getAlignment());
+                rowItemData.setVerticalAlignment(rowFormat.getVerticalAlignment());
+
+
+                // row padding
+                rowItemData.setPadding(rowLayout.getPaddingLeft(), rowLayout.getPaddingRight(), rowLayout.getPaddingTop(), rowLayout.getPaddingBottom());
+
+                rowDataItems.add(rowItemData);
             }
         }
 
@@ -384,6 +396,4 @@ public class HeaderFlowReportBuilder{
 
         return report;
     }
-
-
 }

@@ -21,14 +21,17 @@ public abstract class FlowReport implements FlowElement {
     protected List<? extends ListRow> rows;
     protected int maxRowsPerColumn;         //报表最多允许行高, only for UTD
 
-    protected int flowDirection;
     protected int columns;
+    protected int flowDirection;
+    protected float flowHeight;   //报表总高度
 
     protected float headerHeight;
     protected float rowHeight;
 
     /// border
     protected float headerBorderWidthLeft, headerBorderWidthRight, headerBorderWidthTop, headerBorderWidthBottom;
+    protected float headerBorderWidth;
+
     protected BaseColor headerBorderColor;
     protected float rowBorderWidthLeft, rowBorderWidthRight, rowBorderWidthTop, rowBorderWidthBottom;
     protected BaseColor rowBorderColor;
@@ -162,6 +165,14 @@ public abstract class FlowReport implements FlowElement {
 
     public void setFlowDirection(int flowDirection) {
         this.flowDirection = flowDirection;
+    }
+
+    public float getFlowHeight() {
+        return flowHeight;
+    }
+
+    public void setFlowHeight(float height) {
+        this.flowHeight = height;
     }
 
     public int getMaxRowsPerColumn() {

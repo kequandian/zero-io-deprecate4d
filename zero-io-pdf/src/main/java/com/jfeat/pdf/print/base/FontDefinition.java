@@ -106,7 +106,7 @@ public class FontDefinition {
         this.color = ColorDefinition.getColor(colorname);
     }
 
-    public ColorDefinition getBaseColor() {
+    public ColorDefinition getColor() {
         return color;
     }
 

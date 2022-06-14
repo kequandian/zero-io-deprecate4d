@@ -19,7 +19,7 @@ import static com.itextpdf.text.Font.NORMAL;
 /**
  * Created by vincent on 2018/9/27.
  * 创建内容列表的 TableFlow, 没有边框，仅有文字，
- * 有指定title，TableFlow分两列， 没有指定title, TableFlow仅有一列
+ * 有指定 title，TableFlow分两列， 没有指定title, TableFlow仅有一列
  */
 public class ContentFlowBuilder {
 
@@ -121,7 +121,7 @@ public class ContentFlowBuilder {
             // 标题右对齐则需要增加水平间隔
             int horizontalPadding = (Element.ALIGN_RIGHT == horizontalAlign) ? 20 : 0;
             // 内容始终左对齐
-            TextBox lineRow = new TextBox(Element.ALIGN_LEFT, verticalAlign, horizontalPadding);
+            TextBox lineRow = new TextBox();
             if(numberFormat != null && line.matches("^\\d+$")) {
                 lineRow.setContent(line, numberFormat);
             }else{

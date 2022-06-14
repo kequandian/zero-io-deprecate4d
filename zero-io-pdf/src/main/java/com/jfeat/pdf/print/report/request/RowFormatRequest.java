@@ -1,6 +1,5 @@
 package com.jfeat.pdf.print.report.request;
 
-import com.itextpdf.text.Element;
 import com.jfeat.pdf.print.base.FontDefinition;
 
 /**
@@ -12,65 +11,65 @@ public class RowFormatRequest {
     /**
      * 标题字体
      */
-    private FontDefinition titleFont;
+    private FontDefinition font;
 
     /**
      * 标题间隙
      */
-    private float titleSpacing;
+    private float spacing;
 
     /**
      * 标题缩进
      */
-    private float titleIndent;
+    private float indent;
 
     /**
      * 标题对齐方式 (定义为字符串符号，转换为序号）
      */
-    private String titleAlignment = "ALIGN_CENTER";
-    private String titleVerticalAlignment = "ALIGN_MIDDLE";
+    private String alignment = "ALIGN_CENTER";
+    private String verticalAlignment = "ALIGN_MIDDLE";
 
 
     public RowFormatRequest(){
     }
 
-    public FontDefinition getTitleFont() {
-        return titleFont;
+    public FontDefinition getFont() {
+        return font;
     }
 
-    public void setTitleFont(FontDefinition titleFont) {
-        this.titleFont = titleFont;
+    public void setFont(FontDefinition font) {
+        this.font = font;
     }
 
-    public float getTitleSpacing() {
-        return titleSpacing;
+    public float getSpacing() {
+        return spacing;
     }
 
-    public void setTitleSpacing(float titleSpacing) {
-        this.titleSpacing = titleSpacing;
+    public void setSpacing(float spacing) {
+        this.spacing = spacing;
     }
 
-    public float getTitleIndent() {
-        return titleIndent;
+    public float getIndent() {
+        return indent;
     }
 
-    public void setTitleIndent(float titleIndent) {
-        this.titleIndent = titleIndent;
+    public void setIndent(float indent) {
+        this.indent = indent;
     }
 
-    public String getTitleVerticalAlignment() {
-        return this.titleVerticalAlignment;
+    public String getVerticalAlignment() {
+        return this.verticalAlignment;
     }
 
-    public void setTitleVerticalAlignment(String verticalAlignment) {
-        this.titleVerticalAlignment = verticalAlignment;
+    public void setVerticalAlignment(String verticalAlignment) {
+        this.verticalAlignment = verticalAlignment;
     }
 
-    public String getTitleAlignment() {
-        return titleAlignment;
+    public String getAlignment() {
+        return alignment;
     }
 
-    public void setTitleAlignment(String titleAlignment) {
-        this.titleAlignment = titleAlignment;
+    public void setAlignment(String alignment) {
+        this.alignment = alignment;
     }
 }

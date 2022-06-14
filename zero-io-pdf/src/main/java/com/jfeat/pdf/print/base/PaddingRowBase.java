@@ -17,6 +17,13 @@ public abstract class PaddingRowBase implements ListRowBase {
         this.paddingBottom = bottom;
     }
 
+    public void setPadding(float padding){
+        this.paddingLeft = padding;
+        this.paddingRight = padding;
+        this.paddingTop = padding;
+        this.paddingBottom = padding;
+    }
+
     public float getPaddingLeft() {
         return paddingLeft;
     }

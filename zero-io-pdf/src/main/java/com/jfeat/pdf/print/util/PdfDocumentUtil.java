@@ -22,7 +22,7 @@ public class PdfDocumentUtil {
      * document draw interface
      */
     public interface PdfWriteListener {
-        void onDraw(PdfContentByte canvas);
+        void onDraw(Document document, PdfContentByte canvas);
     }
 
 
@@ -63,7 +63,7 @@ public class PdfDocumentUtil {
         PdfStamper pdfStamper = new PdfStamper(pdfReader, outputStream);
 
         PdfContentByte canvas = pdfStamper.getOverContent(1);
-        writer.onDraw(canvas);
+        writer.onDraw(null, canvas);
 
         // 如果为false那么生成的PDF文件还能编辑，一定要设为true
         pdfStamper.setFormFlattening(true);
@@ -91,7 +91,7 @@ public class PdfDocumentUtil {
         document.open();
 
         PdfContentByte canvas = pdfWriter.getDirectContent();
-        writer.onDraw(canvas);
+        writer.onDraw(document, canvas);
 
         document.close();
     }

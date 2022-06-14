@@ -3,6 +3,7 @@ package com.jfeat.pdf.print.report.row;
 
 import com.jfeat.pdf.print.base.BorderDefinition;
 import com.jfeat.pdf.print.base.ColorDefinition;
+import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.base.PaddingRowBase;
 import com.jfeat.pdf.print.element.ImageTextBox;
 import com.jfeat.pdf.print.report.request.RowFormatRequest;
@@ -18,9 +19,10 @@ public class ImageTextBoxData extends PaddingRowBase {
     private String imageUrl;
     private String title;
 
-    private RowFormatRequest titleFormat;
-    private BorderDefinition borderFormat;
-    private ColorDefinition backgroundColor;
+    private RowFormatRequest titleFormat;   //字体格式
+    private BorderDefinition borderFormat;  //边界格式
+    private ColorDefinition backgroundColor;//背景格式
+
 
     @Override
     public String rowId() {
@@ -50,6 +52,38 @@ public class ImageTextBoxData extends PaddingRowBase {
     public void setTitleFormat(RowFormatRequest titleFormat) {
         this.titleFormat = titleFormat;
     }
+    public void setTitleFont(FontDefinition font) {
+        if(this.titleFormat==null){
+            this.titleFormat = new RowFormatRequest();
+        }
+        this.titleFormat.setFont(font);
+    }
+
+    public void setSpacing(float spacing) {
+        if(this.titleFormat == null) {
+            this.titleFormat = new RowFormatRequest();
+        }
+        this.titleFormat.setSpacing(spacing);
+    }
+    public void setIndent(float indent) {
+        if(this.titleFormat == null) {
+            this.titleFormat = new RowFormatRequest();
+        }
+        this.titleFormat.setIndent(indent);
+    }
+    public void setAlignment(String alignment) {
+        if(this.titleFormat == null) {
+            this.titleFormat = new RowFormatRequest();
+        }
+        this.titleFormat.setAlignment(alignment);
+    }
+    public void setVerticalAlignment(String alignment) {
+        if(this.titleFormat == null) {
+            this.titleFormat = new RowFormatRequest();
+        }
+        this.titleFormat.setVerticalAlignment(alignment);
+    }
+
 
     public BorderDefinition getBorderFormat() {
         return borderFormat;

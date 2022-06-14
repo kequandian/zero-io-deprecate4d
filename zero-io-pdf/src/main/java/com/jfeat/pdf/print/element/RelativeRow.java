@@ -40,19 +40,15 @@ public class RelativeRow extends RelativeListRow implements ListRow {
 
 
     public RelativeRow title(String title, String subtitle, String hint,
-                             Font font, Font subFont, Font hintFont,
-                             float indent, float spacing, int alignment) {
+                             Font font, Font subFont, Font hintFont) {
         this.title = new Phrase(title, font);
         if(subtitle!=null) {
             this.subtitle = new Phrase(subtitle, subFont);
-            this.titleSpacing = spacing;
         }
         if(hint!=null) {
             this.hint = new Phrase(hint, hintFont);
         }
 
-        this.titleIndent = indent;
-        this.titleAlignment = alignment;
         return this;
     }
 

@@ -13,6 +13,7 @@ import java.util.Map;
 
 /**
  * Created by vincent on 2018/10/8.
+ * 流文档请求体
  */
 public class PdfFlowRequest {
 

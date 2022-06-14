@@ -1,5 +1,6 @@
 package com.jfeat.pdf.print.report.reports;
 
+import com.jfeat.pdf.print.PdfFlowRequest;
 import com.jfeat.pdf.print.base.*;
 import com.jfeat.pdf.print.element.ImageBox;
 import com.jfeat.pdf.print.element.TextBox;
@@ -36,8 +37,8 @@ public class HeaderFlowReport extends DataFlowReport {
                 box.setContent(info.getTitle());
             }
             if(info.getTitleFormat()!=null){
-                if(info.getTitleFormat().getTitleFont()!=null) {
-                    box.setFont(FontDefinition.getFont(info.getTitleFormat().getTitleFont()));
+                if(info.getTitleFormat().getFont()!=null) {
+                    box.setFont(FontDefinition.getFont(info.getTitleFormat().getFont()));
                 }
             }
             return box;
@@ -72,13 +73,13 @@ public class HeaderFlowReport extends DataFlowReport {
             }
             if(info.getTitleFormat()!=null){
                 RowFormatRequest request = info.getTitleFormat();
-                if(request.getTitleFont()!=null) {
-                    box.setFont(FontDefinition.getFont(request.getTitleFont()));
+                if(request.getFont()!=null) {
+                    box.setFont(FontDefinition.getFont(request.getFont()));
                 }
-                box.setIndent(request.getTitleIndent());
-                box.setSpacing(request.getTitleSpacing());
-                box.setAlignment(request.getTitleAlignment());
-                box.setVerticalAlignment(request.getTitleVerticalAlignment());
+                box.setIndent(request.getIndent());
+                box.setSpacing(request.getSpacing());
+                box.setAlignment(PdfFlowRequest.FlowElement.getAlignment(request.getAlignment()));
+                box.setVerticalAlignment(PdfFlowRequest.FlowElement.getAlignment(request.getVerticalAlignment()));
             }
 
             return box;
@@ -103,9 +104,12 @@ public class HeaderFlowReport extends DataFlowReport {
 
             // draw text
             if (info.getTitle() != null) {
-                row.title(info.getTitle(), info.getSubtitle(), info.getHint(),
-                        FontDefinition.getFont(info.getFontTitle()), FontDefinition.getFont(info.getFontSubtitle()), FontDefinition.getFont(info.getFontHint()),
-                        info.getTitleIndent(), info.getTitleSpacing(), info.getTitleAlignment());
+                row.title(info.getTitle(),
+                        info.getSubtitle(),
+                        info.getHint(),
+                        FontDefinition.getFont(info.getFontTitle()),
+                        FontDefinition.getFont(info.getFontSubtitle()),
+                        FontDefinition.getFont(info.getFontHint()));
             }
 
             if (info.getValue() != null) {
@@ -114,10 +118,6 @@ public class HeaderFlowReport extends DataFlowReport {
 
             /// padding
             row.setPadding(info.getPaddingLeft(), info.getPaddingRight(), info.getPaddingTop(), info.getPaddingBottom());
-
-            // spacing
-            row.setTitleSpacing(info.getTitleSpacing());
-            row.setTitleIndent(info.getTitleIndent());
 
             return row;
         }

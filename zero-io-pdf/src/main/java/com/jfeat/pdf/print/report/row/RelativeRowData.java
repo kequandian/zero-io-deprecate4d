@@ -5,6 +5,7 @@ import com.itextpdf.text.Element;
 import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.base.PaddingRowBase;
 import com.jfeat.pdf.print.element.RelativeRow;
+import com.jfeat.pdf.print.report.request.RowFormatRequest;
 
 /**
  * Created by vincenthuang on 19/03/2018.
@@ -26,9 +27,9 @@ public class RelativeRowData extends PaddingRowBase {
     private FontDefinition fontHint;
     private FontDefinition fontValue;
 
-    private float titleIndent = 0f;
-    private float titleSpacing = 0f;
-    private int titleAlignment = Element.ALIGN_BASELINE;
+    private RowFormatRequest titleFormat;
+    private RowFormatRequest subtitleFormat;
+    private RowFormatRequest groupTitleFormat;
 
     @Override
     public String rowId() {
@@ -68,6 +69,9 @@ public class RelativeRowData extends PaddingRowBase {
         this.subtitle = subtitle;
         this.fontSubtitle = font;
     }
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
 
     public String getValue() {
         return value;
@@ -77,10 +81,16 @@ public class RelativeRowData extends PaddingRowBase {
         this.value = value;
         this.fontValue = font;
     }
+    public void setValue(String value) {
+        this.value = value;
+    }
 
     public void setHint(String hint, FontDefinition font) {
         this.hint = hint;
         this.fontHint = font;
+    }
+    public void setHint(String hint) {
+        this.hint = hint;
     }
 
     public FontDefinition getFontTitle() {
@@ -95,22 +105,6 @@ public class RelativeRowData extends PaddingRowBase {
         return fontValue;
     }
 
-    public float getTitleIndent() {
-        return titleIndent;
-    }
-
-    public void setTitleIndent(float titleIndent) {
-        this.titleIndent = titleIndent;
-    }
-
-    public float getTitleSpacing() {
-        return titleSpacing;
-    }
-
-    public void setTitleSpacing(float titleSpacing) {
-        this.titleSpacing = titleSpacing;
-    }
-
     public String getHint() {
         return hint;
     }
@@ -121,14 +115,6 @@ public class RelativeRowData extends PaddingRowBase {
 
     public void setFontHint(FontDefinition fontHint) {
         this.fontHint = fontHint;
-    }
-
-    public int getTitleAlignment() {
-        return titleAlignment;
-    }
-
-    public void setTitleAlignment(int titleAlignment) {
-        this.titleAlignment = titleAlignment;
     }
 
     public String getGroupTitle() {
@@ -145,5 +131,29 @@ public class RelativeRowData extends PaddingRowBase {
 
     public void setFontGroupTitle(FontDefinition fontGroupTitle) {
         this.fontGroupTitle = fontGroupTitle;
+    }
+
+    public RowFormatRequest getTitleFormat() {
+        return titleFormat;
+    }
+
+    public void setTitleFormat(RowFormatRequest titleFormat) {
+        this.titleFormat = titleFormat;
+    }
+
+    public RowFormatRequest getSubtitleFormat() {
+        return subtitleFormat;
+    }
+
+    public void setSubtitleFormat(RowFormatRequest subtitleFormat) {
+        this.subtitleFormat = subtitleFormat;
+    }
+
+    public RowFormatRequest getGroupTitleFormat() {
+        return groupTitleFormat;
+    }
+
+    public void setGroupTitleFormat(RowFormatRequest groupTitleFormat) {
+        this.groupTitleFormat = groupTitleFormat;
     }
 }
