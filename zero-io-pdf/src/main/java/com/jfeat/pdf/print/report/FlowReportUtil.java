@@ -73,10 +73,16 @@ public class FlowReportUtil{
                 .headerHeight(headerLayout.getHeight())
                 .rowHeight(rowsLayout.getHeight())
                 // header format
+                .headerFont(headerFormat.getFont())
+                .headerSpacing(headerFormat.getSpacing(), headerFormat.getIndent(), headerFormat.getAlignment(), headerFormat.getVerticalAlignment())
+                // header layout
                 .headerPadding(headerLayout.getPaddingLeft(),headerLayout.getPaddingRight(),headerLayout.getPaddingTop(),headerLayout.getPaddingBottom())
                 .headerBorderWidth(headerLayout.getBorderLeft(),headerLayout.getBorderRight(),headerLayout.getBorderTop(),headerLayout.getBorderBottom())
                 .headerBorderColor(headerLayout.getBorderColorRed(),headerLayout.getBorderColorGreen(),headerLayout.getBorderColorBlue())
                 // row format
+                .rowFont(headerFormat.getFont())
+                .rowSpacing(headerFormat.getSpacing(), headerFormat.getIndent(), headerFormat.getAlignment(), headerFormat.getVerticalAlignment())
+                // row layout
                 .rowPadding(rowsLayout.getPaddingLeft(),rowsLayout.getPaddingRight(),rowsLayout.getPaddingTop(),rowsLayout.getPaddingBottom())
                 .rowBorderWidth(rowsLayout.getBorderLeft(),rowsLayout.getBorderRight(),rowsLayout.getBorderTop(),rowsLayout.getBorderBottom())
                 .rowBorderColor(rowsLayout.getBorderColorRed(),rowsLayout.getBorderColorGreen(),rowsLayout.getBorderColorBlue())
@@ -101,32 +107,19 @@ public class FlowReportUtil{
 //        }
 
         try {
-            if (this.template == null || !new File(template).exists()) {
+            PdfDocumentUtil.writeDocument(new PdfDocumentUtil.PdfWriteListener() {
+                @Override
+                public void onDraw(Document document, PdfContentByte canvas) {
 
-                PdfDocumentUtil.writeDocument(new PdfDocumentUtil.PdfWriteListener() {
-                    @Override
-                    public void onDraw(Document document, PdfContentByte canvas) {
-                        /// calc rows
-                        if(document!=null) {
-                            Rectangle pageSize = document.getPageSize();
-                            Rectangle contentSize = PageUtil.getContentSize(pageSize, marginLeft, marginRight, marginTop, marginBottom);
-                            flowReport.setFlowHeight(contentSize.getHeight());
-
-                            flowReport.draw(canvas);
-                        }
+                    if(document!=null) {
+                        Rectangle pageSize = document.getPageSize();
+                        Rectangle contentSize = PageUtil.getContentSize(pageSize, marginLeft, marginRight, marginTop, marginBottom);
+                        flowReport.setFlowHeight(contentSize.getHeight());
                     }
-                }, outputStream, marginLeft, marginRight, marginTop, marginBottom);
 
-            } else {
-
-                PdfDocumentUtil.writeDocument(new PdfDocumentUtil.PdfWriteListener() {
-                    @Override
-                    public void onDraw(Document document, PdfContentByte canvas) {
-                        flowReport.draw(canvas);
-                    }
-                }, outputStream, template);
-
-            }
+                    flowReport.draw(canvas);
+                }
+            }, outputStream, template, marginLeft, marginRight, marginTop, marginBottom);
 
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
@@ -157,7 +150,7 @@ public class FlowReportUtil{
     }
 
     public static void main(String[] args) throws Exception{
-        FlowReportRequest<ImageTextBoxData> request = new FlowReportRequest()
+        FlowReportRequest request = new FlowReportRequest()
                 .setColumns(3)
                 .setRowOption(ImageBox.ID)
                 .setLayout(new FlowReportRequest.LayoutRequest());

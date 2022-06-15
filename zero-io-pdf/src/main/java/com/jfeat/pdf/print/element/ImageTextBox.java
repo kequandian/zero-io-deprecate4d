@@ -7,6 +7,7 @@ import com.jfeat.pdf.print.base.ListRow;
 import com.jfeat.pdf.print.base.PaddingListRow;
 import com.jfeat.pdf.print.element.RelativeRow;
 import com.jfeat.pdf.print.util.TableCellDrawUtil;
+import org.springframework.util.Assert;
 
 /**
  * Created by vincent on 2018/3/16.
@@ -37,6 +38,8 @@ public class ImageTextBox extends TextBox implements ListRow {
 
     @Override
     public void drawCell(PdfContentByte[] canvases, Rectangle position) {
+        Assert.isTrue(image!=null, "image is not set !");
+
         PdfContentByte bgcanvas = canvases[PdfPTable.BACKGROUNDCANVAS];
 
         // draw cell stroke

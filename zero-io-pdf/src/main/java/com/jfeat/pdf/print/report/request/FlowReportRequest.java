@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by vincenthuang on 22/03/2018.
  */
-public class FlowReportRequest<T extends ListRowBase> {
+public class FlowReportRequest {
 
     public static final String LTR = "LTR";
     public static final String UTD = "UTD";
@@ -131,20 +131,20 @@ public class FlowReportRequest<T extends ListRowBase> {
     /**
      * data
      */
-    private T headerData;
+    private ListRowBase headerData;
 
-    private List<T> rowsData;
+    private List<ListRowBase> rowsData;
 
     public ListRowBase getHeaderData() {
         return headerData;
     }
 
-    public FlowReportRequest setHeaderData(T headerData) {
+    public FlowReportRequest setHeaderData(ListRowBase headerData) {
         this.headerData = headerData;
         return this;
     }
 
-    public List<T> getRowsData() {
+    public List<ListRowBase> getRowsData() {
         return rowsData;
     }
 
@@ -154,7 +154,9 @@ public class FlowReportRequest<T extends ListRowBase> {
                 rows.add(ImageTextBoxData.EMPTY);
             }
         }
-        this.rowsData = rowsData;
+        this.rowsData = new ArrayList<>();
+        this.rowsData.addAll(rows);
+
         return this;
     }
 
@@ -183,8 +185,9 @@ public class FlowReportRequest<T extends ListRowBase> {
         });
 
         for(String url : imageUrls){
+
             ImageTextBoxData rowData = new ImageTextBoxData();
-            rowData.setImageUrl(url);
+            rowData.setImageUrl(String.join(File.separator, imageDir, url));
             rowData.setTitle(FilenameUtils.getName(url));
 
             rowsData.add(rowData);
@@ -198,7 +201,7 @@ public class FlowReportRequest<T extends ListRowBase> {
      * 定义表头与行打印格式
      * format
      */
-    private FormatRequest format;
+    private FormatRequest format = new FormatRequest();
 
     public FormatRequest getFormat() {
         return format;
@@ -213,7 +216,7 @@ public class FlowReportRequest<T extends ListRowBase> {
      * 定义表头与行的打印布局
      * layout
      */
-    private LayoutRequest layout;
+    private LayoutRequest layout = new LayoutRequest();
 
     public LayoutRequest getLayout () {
         return layout;

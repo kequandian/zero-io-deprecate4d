@@ -6,9 +6,11 @@ import com.jfeat.pdf.print.element.ImageBox;
 import com.jfeat.pdf.print.element.TextBox;
 import com.jfeat.pdf.print.element.RelativeRow;
 import com.jfeat.pdf.print.report.request.RowFormatRequest;
+import com.jfeat.pdf.print.report.row.ImageBoxData;
 import com.jfeat.pdf.print.report.row.ImageTextBoxData;
 import com.jfeat.pdf.print.report.row.RelativeRowData;
 import com.jfeat.pdf.print.element.ImageTextBox;
+import com.jfeat.pdf.print.report.row.TextBoxData;
 import com.jfeat.pdf.print.util.ImageUtil;
 
 /**
@@ -28,17 +30,17 @@ public class HeaderFlowReport extends DataFlowReport {
         if (rowId.equals(TextBox.ID)) {
             TextBox box = new TextBox();
 
-            ImageTextBoxData info = (ImageTextBoxData) data;
+            TextBoxData info = (TextBoxData) data;
             if(info.getBackgroundColor()!=null) {
                 box.setBackgroundColor(ColorDefinition.getBaseColor(info.getBackgroundColor()));
             }
             // title
-            if (info.getTitle() != null) {
-                box.setContent(info.getTitle());
+            if (info.getText() != null) {
+                box.setContent(info.getText());
             }
-            if(info.getTitleFormat()!=null){
-                if(info.getTitleFormat().getFont()!=null) {
-                    box.setFont(FontDefinition.getFont(info.getTitleFormat().getFont()));
+            if(info.getTextFormat()!=null){
+                if(info.getTextFormat().getFont()!=null) {
+                    box.setFont(FontDefinition.getFont(info.getTextFormat().getFont()));
                 }
             }
             return box;
@@ -46,10 +48,10 @@ public class HeaderFlowReport extends DataFlowReport {
         }else if(rowId.equals(ImageBox.ID)) {
             ImageBox box = new ImageBox();
 
-            ImageTextBoxData info = (ImageTextBoxData) data;
-            if(info.getBackgroundColor()!=null) {
-                box.setBackgroundColor(ColorDefinition.getBaseColor(info.getBackgroundColor()));
-            }
+            ImageBoxData info = (ImageBoxData) data;
+//            if(info.getBackgroundColor()!=null) {
+//                box.setBackgroundColor(ColorDefinition.getBaseColor(info.getBackgroundColor()));
+//            }
             // image
             if (info.getImageUrl() != null) {
                 box.setImage(ImageUtil.getImage(info.getImageUrl()));

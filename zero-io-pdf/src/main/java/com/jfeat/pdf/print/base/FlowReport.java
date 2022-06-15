@@ -17,9 +17,9 @@ public abstract class FlowReport implements FlowElement {
     public static final int FLOW_LTR = 0;   //从左到右 Left to Right
     public static final int FLOW_UTD = 1;   //右上至下 Up to Down
 
-    protected ListRow header;
-    protected List<? extends ListRow> rows;
-    protected int maxRowsPerColumn;         //报表最多允许行高, only for UTD
+    protected ListRow header;               // 头部
+    protected List<? extends ListRow> rows; // 报表行
+    protected int maxRowsPerColumn;         // 报表最多允许行高, only for UTD
 
     protected int columns;
     protected int flowDirection;
@@ -30,8 +30,6 @@ public abstract class FlowReport implements FlowElement {
 
     /// border
     protected float headerBorderWidthLeft, headerBorderWidthRight, headerBorderWidthTop, headerBorderWidthBottom;
-    protected float headerBorderWidth;
-
     protected BaseColor headerBorderColor;
     protected float rowBorderWidthLeft, rowBorderWidthRight, rowBorderWidthTop, rowBorderWidthBottom;
     protected BaseColor rowBorderColor;
@@ -56,41 +54,43 @@ public abstract class FlowReport implements FlowElement {
         //table.getDefaultCell().setBorder(Rectangle.BOX);
         //table.getDefaultCell().setBorderWidth(1);
 
-        /// 表头，占满一行
-        PdfPCell headerCell = new PdfPCell();
-        headerCell.setColspan(columns);
-        headerCell.setBorderWidthLeft(headerBorderWidthLeft);
-        headerCell.setBorderWidthRight(headerBorderWidthRight);
-        headerCell.setBorderWidthTop(headerBorderWidthTop);
-        headerCell.setBorderWidthBottom(headerBorderWidthBottom);
+        if(this.header!=null) {
+            /// 表头，占满一行
 
-        if(headerHeight>0) {
-            headerCell.setFixedHeight(headerHeight);
-        }
-        headerCell.setCellEvent(new PdfPCellEvent() {
-            @Override
-            public void cellLayout(PdfPCell cell, Rectangle position,
-                                   PdfContentByte[] canvases) {
-                if(header!=null) {
-                    header.drawCell(canvases, position);
-                }
-            }
-        });
-
-
-        /// add empty cells
-        if(checkNoBorder(0)) {
-            headerCell.setBorder(Rectangle.NO_BORDER);
-        }else{
-            headerCell.setBorder(Rectangle.BOX);
+            PdfPCell headerCell = new PdfPCell();
+            headerCell.setColspan(columns);
             headerCell.setBorderWidthLeft(headerBorderWidthLeft);
             headerCell.setBorderWidthRight(headerBorderWidthRight);
             headerCell.setBorderWidthTop(headerBorderWidthTop);
             headerCell.setBorderWidthBottom(headerBorderWidthBottom);
-            headerCell.setBorderColor(headerBorderColor);
-        }
 
-        table.addCell(headerCell);
+            if (headerHeight > 0) {
+                headerCell.setFixedHeight(headerHeight);
+            }
+            headerCell.setCellEvent(new PdfPCellEvent() {
+                @Override
+                public void cellLayout(PdfPCell cell, Rectangle position,
+                                       PdfContentByte[] canvases) {
+                    if (header != null) {
+                        header.drawCell(canvases, position);
+                    }
+                }
+            });
+
+            /// add empty cells
+            if (checkNoBorder(0)) {
+                headerCell.setBorder(Rectangle.NO_BORDER);
+            } else {
+                headerCell.setBorder(Rectangle.BOX);
+                headerCell.setBorderWidthLeft(headerBorderWidthLeft);
+                headerCell.setBorderWidthRight(headerBorderWidthRight);
+                headerCell.setBorderWidthTop(headerBorderWidthTop);
+                headerCell.setBorderWidthBottom(headerBorderWidthBottom);
+                headerCell.setBorderColor(headerBorderColor);
+            }
+
+            table.addCell(headerCell);
+        }
 
 
         /**

@@ -1,10 +1,14 @@
 package com.jfeat.pdf.print.report.reports;
 
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Font;
 import com.jfeat.pdf.print.base.FlowReport;
+import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.base.ListRowBase;
+import com.jfeat.pdf.print.element.ImageBox;
 import com.jfeat.pdf.print.element.ImageTextBox;
 import com.jfeat.pdf.print.element.RelativeRow;
+import com.jfeat.pdf.print.element.TextBox;
 import com.jfeat.pdf.print.report.request.RowFormatRequest;
 import com.jfeat.pdf.print.report.request.RowLayoutRequest;
 import com.jfeat.pdf.print.report.row.*;
@@ -21,7 +25,7 @@ public class HeaderFlowReportBuilder{
     /// document
     private int columns;        //列数
     private int flowDirection;  //方向
-    private String rowOption;  //流类型
+    private String rowOption;  //流实体类型
 
     private float flowHeight;
 
@@ -47,7 +51,7 @@ public class HeaderFlowReportBuilder{
     private BaseColor groupBackgroundColor;
 
     public HeaderFlowReportBuilder(){
-        rowOption = RelativeRow.ID;
+        rowOption = ImageTextBox.ID;
     }
 
     public HeaderFlowReportBuilder columns(int cols){
@@ -66,10 +70,6 @@ public class HeaderFlowReportBuilder{
         return this;
     }
 
-    public float borderWidth(){
-        return this.borderWidth;
-    }
-
     public HeaderFlowReportBuilder flowHeight(float flowHeight){
         this.flowHeight = flowHeight;
         return this;
@@ -84,6 +84,11 @@ public class HeaderFlowReportBuilder{
 
     public HeaderFlowReportBuilder borderWidth(float width){
         this.borderWidth = width;
+
+        if(rowLayout==null){
+            this.rowLayout = new RowLayoutRequest();
+        }
+        this.rowLayout.setBorderWidth(width);
         return this;
     }
 
@@ -167,31 +172,24 @@ public class HeaderFlowReportBuilder{
         return this;
     }
 
-    // public FlowReportBuilder headerFonts(Font title, Font subtitle, Font hint, Font value){
-    //     if(headerFormat==null){
-    //         headerFormat = new RowFormat();
-    //     }
-    //     if(title!=null) headerFormat.setTitle(title);
-    //     if(subtitle!=null) headerFormat.setSubtitle(subtitle);
-    //     if(hint!=null) headerFormat.setHint(hint);
-    //     if(value!=null) headerFormat.setValue(value);
-    //     return this;
-    // }
+     public HeaderFlowReportBuilder headerFont(FontDefinition font){
+         if(headerFormat==null){
+             headerFormat = new RowFormatRequest();
+         }
+         headerFormat.setFont(font);
+         return this;
+     }
 
-    // public FlowReportBuilder headerSpacing(float spacing, float indent, int alignment){
-    //     if(headerFormat==null){
-    //         headerFormat = new RowFormat();
-    //     }
-    //     headerFormat.setTitleSpacing(spacing);
-    //     headerFormat.setTitleIndent(indent);
-    //     headerFormat.setTitleAlignment(alignment);
-    //     return this;
-    // }
-
-    // public FlowReportBuilder rowData(List<RowData> rows){
-    //     this.flowReportRowDataList = rows;
-    //     return this;
-    // }
+     public HeaderFlowReportBuilder headerSpacing(float spacing, float indent, String alignment, String verticalAlignment){
+         if(headerFormat==null){
+             headerFormat = new RowFormatRequest();
+         }
+         headerFormat.setSpacing(spacing);
+         headerFormat.setIndent(indent);
+         headerFormat.setAlignment(alignment);
+         headerFormat.setVerticalAlignment(verticalAlignment);
+         return this;
+     }
 
     public HeaderFlowReportBuilder rowHeight(float height){
         if(rowLayout==null){
@@ -233,16 +231,23 @@ public class HeaderFlowReportBuilder{
         return this;
     }
 
-    // public FlowReportBuilder rowFonts(Font title, Font subtitle, Font hint, Font value){
-    //     if(rowFormat==null){
-    //         rowFormat = new RowFormat();
-    //     }
-    //     rowFormat.setTitle(title);
-    //     rowFormat.setSubtitle(subtitle);
-    //     rowFormat.setHint(hint);
-    //     rowFormat.setValue(value);
-    //     return this;
-    // }
+     public HeaderFlowReportBuilder rowFont(FontDefinition font){
+         if(rowFormat==null){
+             rowFormat = new RowFormatRequest();
+         }
+         rowFormat.setFont(font);
+         return this;
+     }
+     public HeaderFlowReportBuilder rowSpacing(float spacing, float indent, String alignment, String verticalAlignment){
+         if(rowFormat==null){
+             rowFormat = new RowFormatRequest();
+         }
+         rowFormat.setSpacing(spacing);
+         rowFormat.setIndent(indent);
+         rowFormat.setAlignment(alignment);
+         rowFormat.setVerticalAlignment(verticalAlignment);
+         return this;
+     }
 
     // public FlowReportBuilder groupFormat(Font group, BaseColor backgroundColor){
     //     if(group!=null) {
@@ -255,15 +260,6 @@ public class HeaderFlowReportBuilder{
     //     if(backgroundColor!=null) {
     //         this.groupBackgroundColor = backgroundColor;
     //     }
-    //     return this;
-    // }
-    // public FlowReportBuilder rowSpacing(float spacing, float indent, int alignment){
-    //     if(rowFormat==null){
-    //         rowFormat = new RowFormat();
-    //     }
-    //     rowFormat.setTitleSpacing(spacing);
-    //     rowFormat.setTitleIndent(indent);
-    //     rowFormat.setTitleAlignment(alignment);
     //     return this;
     // }
 
@@ -294,8 +290,6 @@ public class HeaderFlowReportBuilder{
         }else{
             report = new HeaderFlowReport(columns);
         }
-        // end
-
 
         report.setFlowDirection(flowDirection);
         if(flowDirection == FlowReport.FLOW_UTD){
@@ -308,46 +302,41 @@ public class HeaderFlowReportBuilder{
             report.setMaxRowsPerColumn(maxRowsPerColumn);
         }
 
-        if(borderWidth<0) {
-            // do nothing
-        }else{
+
+        // header
+
+        if(this.headerData!=null) {
             report.setHeaderBorderWidth(borderWidth);
-            report.setRowBorderWidth(borderWidth);
+            report.setHeaderBorderColor(borderColor);
+
+            /// header data
+            ImageTextBoxData headerRowData = new ImageTextBoxData();
+
+            // header padding
+            headerRowData.setPadding(
+                    headerLayout.getPaddingLeft(),
+                    headerLayout.getPaddingRight(),
+                    headerLayout.getPaddingTop(),
+                    headerLayout.getPaddingBottom());
+
+            report.setHeaderBorderWidth(headerLayout.getBorderLeft(), headerLayout.getBorderTop(),
+                    headerLayout.getBorderRight(), headerLayout.getBorderBottom()
+            );
+            report.setHeaderBorderColor(new BaseColor(headerLayout.getBorderColorRed(), headerLayout.getBorderColorGreen(), headerLayout.getBorderColorBlue()));
+
+            if (headerFormat.getSpacing() > 0) {
+                headerRowData.setPadding(headerFormat.getSpacing());
+            }
+            if (headerFormat.getIndent() > 0) {
+                headerRowData.setIndent(headerFormat.getIndent());
+            }
+            headerRowData.setAlignment(headerFormat.getAlignment());
+            headerRowData.setVerticalAlignment(headerFormat.getVerticalAlignment());
+
+
+            report.setHeaderData(headerRowData);
+            report.setHeaderHeight(headerLayout.getHeight());
         }
-        report.setHeaderBorderColor(borderColor);
-        report.setRowBorderColor(borderColor);
-
-
-        /// header data
-        ImageTextBoxData headerRowData = new ImageTextBoxData();
-
-        // header padding
-        headerRowData.setPadding(
-                headerLayout.getPaddingLeft(),
-                headerLayout.getPaddingRight(),
-                headerLayout.getPaddingTop(),
-                headerLayout.getPaddingBottom());
-
-        report.setHeaderBorderWidth(headerLayout.getBorderLeft(),headerLayout.getBorderTop(),
-                headerLayout.getBorderRight(), headerLayout.getBorderBottom()
-                );
-        report.setHeaderBorderColor(new BaseColor(headerLayout.getBorderColorRed(), headerLayout.getBorderColorGreen(), headerLayout.getBorderColorBlue()));
-
-        if(headerFormat.getSpacing()>0) {
-            headerRowData.setPadding(headerFormat.getSpacing());
-        }
-        if(headerFormat.getIndent()>0){
-            headerRowData.setIndent(headerFormat.getIndent());
-        }
-        headerRowData.setAlignment(headerFormat.getAlignment());
-        headerRowData.setVerticalAlignment(headerFormat.getVerticalAlignment());
-
-
-        report.setHeaderData(headerRowData);
-        report.setHeaderHeight(headerLayout.getHeight());
-
-        report.setRowBorderWidth(rowLayout.getBorderLeft(), rowLayout.getBorderTop(), rowLayout.getBorderRight(), rowLayout.getBorderBottom());
-        report.setRowBorderColor(new BaseColor(rowLayout.getBorderColorRed(), rowLayout.getBorderColorGreen(), rowLayout.getBorderColorBlue()));
 
 
         /// rows
@@ -371,26 +360,57 @@ public class HeaderFlowReportBuilder{
 
                 rowDataItems.add(rowItemData);
 
-            }else if(ImageTextBox.ID.compareTo(rowOption)==0) {
+            }else if(TextBox.ID.compareTo(rowOption)==0) {
                 ImageTextBoxData item = (ImageTextBoxData)it;
 
-                ImageTextBoxData rowItemData = new ImageTextBoxData();
-                rowItemData.setTitle(item.getTitle());
-                rowItemData.setTitleFont(rowFormat.getFont());
+                TextBoxData rowItemData = new TextBoxData();
+                rowItemData.setText(item.getTitle());
 
+                // format
+                rowItemData.setTitleFont(rowFormat.getFont());
                 rowItemData.setSpacing(rowFormat.getSpacing());
                 rowItemData.setIndent(rowFormat.getIndent());
                 rowItemData.setAlignment(rowFormat.getAlignment());
                 rowItemData.setVerticalAlignment(rowFormat.getVerticalAlignment());
-
-
-                // row padding
                 rowItemData.setPadding(rowLayout.getPaddingLeft(), rowLayout.getPaddingRight(), rowLayout.getPaddingTop(), rowLayout.getPaddingBottom());
 
                 rowDataItems.add(rowItemData);
             }
+            else if(ImageTextBox.ID.compareTo(rowOption)==0) {
+                ImageTextBoxData item = (ImageTextBoxData)it;
+
+                ImageTextBoxData rowItemData = new ImageTextBoxData();
+
+                rowItemData.setImageUrl(item.getImageUrl());
+                rowItemData.setTitle(item.getTitle());
+
+                // format
+                rowItemData.setTitleFont(rowFormat.getFont());
+                rowItemData.setSpacing(rowFormat.getSpacing());
+                rowItemData.setIndent(rowFormat.getIndent());
+                rowItemData.setAlignment(rowFormat.getAlignment());
+                rowItemData.setVerticalAlignment(rowFormat.getVerticalAlignment());
+                rowItemData.setPadding(rowLayout.getPaddingLeft(), rowLayout.getPaddingRight(), rowLayout.getPaddingTop(), rowLayout.getPaddingBottom());
+
+                rowDataItems.add(rowItemData);
+
+            }else if(ImageBox.ID.compareTo(rowOption)==0) {
+                ImageTextBoxData item = (ImageTextBoxData)it;
+
+                ImageBoxData rowItemData = new ImageBoxData();
+
+                rowItemData.setImageUrl(item.getImageUrl());
+                rowItemData.setPadding(rowLayout.getPaddingLeft(), rowLayout.getPaddingRight(), rowLayout.getPaddingTop(), rowLayout.getPaddingBottom());
+
+                rowDataItems.add(rowItemData);
+            }
+
         }
 
+        report.setRowBorderWidth(borderWidth);
+        report.setRowBorderColor(borderColor);
+        report.setRowBorderWidth(rowLayout.getBorderLeft(), rowLayout.getBorderTop(), rowLayout.getBorderRight(), rowLayout.getBorderBottom());
+        report.setRowBorderColor(new BaseColor(rowLayout.getBorderColorRed(), rowLayout.getBorderColorGreen(), rowLayout.getBorderColorBlue()));
         report.setRowHeight(rowLayout.getHeight());
         report.setRowData(rowDataItems);
 

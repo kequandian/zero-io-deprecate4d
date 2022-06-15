@@ -20,9 +20,12 @@ public class PdfFontMetrics {
 
 
     public static float getFontHeight(BaseFont baseFont, float fontSize){
-        float descent = baseFont.getFontDescriptor(BaseFont.DESCENT, fontSize);
-        float ascent = baseFont.getFontDescriptor(BaseFont.ASCENT, fontSize);
-        return ascent - descent;
+        if(baseFont!=null) {
+            float descent = baseFont.getFontDescriptor(BaseFont.DESCENT, fontSize);
+            float ascent = baseFont.getFontDescriptor(BaseFont.ASCENT, fontSize);
+            return ascent - descent;
+        }
+        return fontSize;
     }
 
     private FontMetrics fontMetrics;
