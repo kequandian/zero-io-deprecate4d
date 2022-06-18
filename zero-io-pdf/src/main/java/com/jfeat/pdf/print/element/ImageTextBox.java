@@ -4,9 +4,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.jfeat.pdf.print.base.ListRow;
-import com.jfeat.pdf.print.base.PaddingListRow;
-import com.jfeat.pdf.print.element.RelativeRow;
-import com.jfeat.pdf.print.util.TableCellDrawUtil;
+import com.jfeat.pdf.print.util.ElementDrawUtil;
 import org.springframework.util.Assert;
 
 /**
@@ -49,7 +47,7 @@ public class ImageTextBox extends TextBox implements ListRow {
         bgcanvas.saveState();
 
         /// draw images, its layout determine by icon alignment
-        TableCellDrawUtil.drawImage(bgcanvas, position, paddingLeft, paddingTop, paddingRight, paddingBottom, image);
+        ElementDrawUtil.drawImage(bgcanvas, position, paddingLeft, paddingTop, paddingRight, paddingBottom, image);
         //drawIcon(bgcanvas, position, next);
 
         bgcanvas.restoreState();
@@ -69,7 +67,7 @@ public class ImageTextBox extends TextBox implements ListRow {
                 linesPosition.setTop(position.getTop() - image.getScaledHeight());
             }
 
-            TableCellDrawUtil.drawLines(canvas, linesPosition, new Phrase[]{new Phrase(content)},
+            ElementDrawUtil.drawLines(canvas, linesPosition, new Phrase[]{new Phrase(content)},
                     paddingLeft, paddingTop,paddingTop, paddingBottom,
                     alignment, indent, spacing);
         }

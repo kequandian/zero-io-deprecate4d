@@ -31,12 +31,12 @@ public abstract class DataFlowReport extends FlowReport {
     }
 
     public void setRowData(List<? extends ListRowBase> rowDataList) {
-        if(rowDataList==null || rowDataList.size()==0){
-            return;
-        }
-
         List<ListRow> listRows = new ArrayList<>();
 
+        if(rowDataList==null || rowDataList.size()==0){
+            super.setRows(listRows);
+            return;
+        }
         if(flowDirection == FlowReport.FLOW_LTR) {
 
             for (ListRowBase item : rowDataList) {

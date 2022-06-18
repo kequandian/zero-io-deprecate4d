@@ -1,6 +1,7 @@
 package com.jfeat.pdf.print.report;
 
 import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.jfeat.pdf.print.base.ColorDefinition;
 import com.jfeat.pdf.print.element.ImageBox;
@@ -11,6 +12,7 @@ import com.jfeat.pdf.print.report.request.*;
 import com.jfeat.pdf.print.report.row.ImageTextBoxData;
 import com.jfeat.pdf.print.util.PageUtil;
 import com.jfeat.pdf.print.util.PdfDocumentUtil;
+import com.jfeat.pdf.print.util.ElementDrawUtil;
 
 import java.io.*;
 
@@ -117,7 +119,13 @@ public class FlowReportUtil{
                         flowReport.setFlowHeight(contentSize.getHeight());
                     }
 
-                    flowReport.draw(canvas);
+                    if(flowReport.getHeader()!=null || (flowReport.getRows()!=null && flowReport.getRows().size()>0) ){
+                        flowReport.draw(canvas);
+                    }else{
+                        // no content, just write text
+                        ElementDrawUtil.drawText(canvas, "No content");
+                    }
+
                 }
             }, outputStream, template, marginLeft, marginRight, marginTop, marginBottom);
 
@@ -155,7 +163,7 @@ public class FlowReportUtil{
                 .setRowOption(ImageBox.ID)
                 .setLayout(new FlowReportRequest.LayoutRequest());
 
-        java.util.List<ImageTextBoxData> imageRows = FlowReportRequest.initImageRowsData("./images");
+        java.util.List<ImageTextBoxData> imageRows = FlowReportRequest.initImageRowsData("./images2");
         request.setRowsData(imageRows);
 
          new FlowReportUtil()

@@ -9,8 +9,8 @@ import com.itextpdf.text.pdf.*;
 import static com.jfeat.pdf.print.base.RelativeBoxBounding.getDockPosition;
 import static com.jfeat.pdf.print.base.RelativeBoxBounding.getInternalWidth;
 
-public class TableCellDrawUtil {
-    private static final Logger logger = LoggerFactory.getLogger(TableCellDrawUtil.class);
+public class ElementDrawUtil {
+    private static final Logger logger = LoggerFactory.getLogger(ElementDrawUtil.class);
 
     public static  void drawLines(PdfContentByte canvas, Rectangle position, Phrase[] lines,
                              float paddingLeft, float paddingTop, float paddingRight, float paddingBottom,
@@ -91,6 +91,20 @@ public class TableCellDrawUtil {
 
         }catch (Exception e){
             throw new RuntimeException(e);
+        }
+    }
+
+    public static  void drawText(PdfContentByte canvas, String text) {
+        if(text!=null) {
+            drawText(canvas, new Rectangle(0,0,0,0), new Phrase(text),
+                    20, 20, 20, 20, Rectangle.ALIGN_BASELINE);
+        }
+    }
+
+    public static  void drawText(PdfContentByte canvas, Rectangle position, String text) {
+        if(text!=null) {
+            drawText(canvas, position, new Phrase(text),
+                    0, 0, 0, 0, 0);
         }
     }
 
@@ -175,7 +189,8 @@ public class TableCellDrawUtil {
                             newWidth = newHeight * scaled;
                         }
 
-                        image.scaleAbsolute(newWidth, newHeight);
+                        image.scaleToFit(newWidth, newHeight);
+//                        image.scaleAbsolute(newWidth, newHeight);
                     }
 
                     /// draw icon
@@ -211,7 +226,8 @@ public class TableCellDrawUtil {
                             newHeight = newWidth * scaled;
                         }
 
-                        image.scaleAbsolute(newWidth, newHeight);
+                        image.scaleToFit(newWidth, newHeight);
+//                        image.scaleAbsolute(newWidth, newHeight);
                     }
 
                     /// draw icon

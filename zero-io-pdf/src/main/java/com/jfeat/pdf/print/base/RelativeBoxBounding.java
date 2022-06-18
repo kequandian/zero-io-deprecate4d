@@ -67,7 +67,7 @@ public class RelativeBoxBounding {
     }
 
     public static  float getRowTop(Rectangle position, float paddingTop) {
-        return position.getTop() - paddingTop;
+        return position.getTop() > paddingTop ? (position.getTop() - paddingTop) : paddingTop;
     }
     public static  float getRowBottom(Rectangle position, float paddingBottom) {
         return position.getBottom() + paddingBottom;
@@ -77,7 +77,7 @@ public class RelativeBoxBounding {
     }
 
     public static  float getRowEnd(Rectangle position, float paddingRight) {
-        return position.getRight() - paddingRight;
+        return position.getRight() > paddingRight ? (position.getRight() - paddingRight) : paddingRight;
     }
 
     public static  float getInternalWidth(Rectangle position, float paddingLeft, float paddingRight){

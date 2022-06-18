@@ -5,7 +5,7 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.jfeat.pdf.print.base.ListRow;
 import com.jfeat.pdf.print.base.PaddingListRow;
-import com.jfeat.pdf.print.util.TableCellDrawUtil;
+import com.jfeat.pdf.print.util.ElementDrawUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +68,7 @@ public class ImageBox extends PaddingListRow implements ListRow {
         bgcanvas.saveState();
 
         /// draw images, its layout determine by icon alignment
-        TableCellDrawUtil.drawImage(bgcanvas, position, paddingLeft, paddingTop, paddingRight, paddingBottom, image);
+        ElementDrawUtil.drawImage(bgcanvas, position, paddingLeft, paddingTop, paddingRight, paddingBottom, image);
         //drawIcon(bgcanvas, position, next);
 
         bgcanvas.restoreState();
