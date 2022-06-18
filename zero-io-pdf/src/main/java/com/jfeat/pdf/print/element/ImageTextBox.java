@@ -47,7 +47,7 @@ public class ImageTextBox extends TextBox implements ListRow {
         bgcanvas.saveState();
 
         /// draw images, its layout determine by icon alignment
-        ElementDrawUtil.drawImage(bgcanvas, position, paddingLeft, paddingTop, paddingRight, paddingBottom, image);
+        ElementDrawUtil.drawImage(bgcanvas, image, position, paddingLeft, paddingTop, paddingRight, paddingBottom);
         //drawIcon(bgcanvas, position, next);
 
         bgcanvas.restoreState();

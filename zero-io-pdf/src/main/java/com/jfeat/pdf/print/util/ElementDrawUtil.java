@@ -164,9 +164,17 @@ public class ElementDrawUtil {
         }
     }
 
-    public static void drawImage(PdfContentByte canvas, Rectangle position,
-                                 float paddingLeft, float paddingTop, float paddingRight, float paddingBottom,
-                                 Image image) {
+    public static void drawImage(PdfContentByte canvas, String imageUrl, Rectangle position, int alignment,
+                                 float paddingLeft, float paddingTop, float paddingRight, float paddingBottom){
+        Image image = Image.getInstance(ImageUtil.getImage(imageUrl));
+        image.setAlignment(alignment);
+        image.scaleToFit(-1, -1);
+
+        drawImage(canvas, image, position, paddingLeft, paddingTop, paddingRight, paddingBottom);
+    }   
+
+    public static void drawImage(PdfContentByte canvas, Image image, Rectangle position,
+                                 float paddingLeft, float paddingTop, float paddingRight, float paddingBottom) {
         if (image != null) {
             try {
                 int alignment = image.getAlignment();
@@ -191,6 +199,10 @@ public class ElementDrawUtil {
 
                         image.scaleToFit(newWidth, newHeight);
 //                        image.scaleAbsolute(newWidth, newHeight);
+
+                    }else if(image.getScaledWidth() > position.getWidth() ||
+                             image.getScaledHeight() > position.getHeight()){
+                        image.scaleToFit(position.getWidth(), position.getHeight());
                     }
 
                     /// draw icon
@@ -228,6 +240,10 @@ public class ElementDrawUtil {
 
                         image.scaleToFit(newWidth, newHeight);
 //                        image.scaleAbsolute(newWidth, newHeight);
+
+                    }else if(image.getScaledWidth() > position.getWidth() ||
+                            image.getScaledHeight() > position.getHeight()) {
+                        image.scaleToFit(position.getWidth(), position.getHeight());
                     }
 
                     /// draw icon

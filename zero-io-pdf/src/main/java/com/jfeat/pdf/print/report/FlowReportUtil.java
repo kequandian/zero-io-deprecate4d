@@ -158,12 +158,32 @@ public class FlowReportUtil{
     }
 
     public static void main(String[] args) throws Exception{
+        try {
+            PdfDocumentUtil.writeDocument(new PdfDocumentUtil.PdfWriteListener() {
+                @Override
+                public void onDraw(Document document, PdfContentByte canvas) {
+
+                    Rectangle rect = new Rectangle( 20, 20,400,500);
+
+                    ElementDrawUtil.drawImage(canvas, "./images/IMG_20220402_143412.jpg",
+                    rect, Element.ALIGN_LEFT,20, 20, 20, 20);
+                }
+
+            }, new FileOutputStream("test.pdf"), 0, 0, 0, 0);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+
+    public static void main2(String[] args) throws Exception{
         FlowReportRequest request = new FlowReportRequest()
                 .setColumns(3)
                 .setRowOption(ImageBox.ID)
                 .setLayout(new FlowReportRequest.LayoutRequest());
 
-        java.util.List<ImageTextBoxData> imageRows = FlowReportRequest.initImageRowsData("./images2");
+        java.util.List<ImageTextBoxData> imageRows = FlowReportRequest.initImageRowsData("./images");
         request.setRowsData(imageRows);
 
          new FlowReportUtil()
