@@ -2,6 +2,8 @@ package com.jfeat.pdf.print.report.reports;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Rectangle;
 import com.jfeat.pdf.print.base.FlowReport;
 import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.base.ListRowBase;
@@ -28,6 +30,11 @@ public class HeaderFlowReportBuilder{
     private String rowOption;  //流实体类型
 
     private float flowHeight;
+    private Rectangle pageSize = PageSize.A4;
+    private float pageMarginLeft;
+    private float pageMarginTop;
+    private float pageMarginRight;
+    private float pageMarginBottom;
 
     // table border
     private float borderWidth;
@@ -58,6 +65,21 @@ public class HeaderFlowReportBuilder{
         this.columns = cols;
         return this;
     }
+    public HeaderFlowReportBuilder pageSize(float w, float h) {
+        this.pageSize = new Rectangle(w, h);
+        return this;
+    }
+    public HeaderFlowReportBuilder pageMargin(float margin){
+        this.pageMarginLeft = this.pageMarginTop = this.pageMarginRight  = this.pageMarginBottom = margin;
+        return this;
+    }
+    public HeaderFlowReportBuilder pageMargin(float l, float t, float r, float b){
+        this.pageMarginLeft = l;
+        this.pageMarginTop = t;
+        this.pageMarginRight = r;
+        this.pageMarginBottom = b;
+        return this;
+    }
 
     public HeaderFlowReportBuilder flowDirection(int flowDirection){
         this.flowDirection = flowDirection;
@@ -74,6 +96,7 @@ public class HeaderFlowReportBuilder{
         this.flowHeight = flowHeight;
         return this;
     }
+
     public HeaderFlowReportBuilder rowsMargin(float left, float top, float right, float bottom){
         this.rowsMarginLeft =  left;
         this.rowsMarginTop =  top;
@@ -281,14 +304,18 @@ public class HeaderFlowReportBuilder{
     public HeaderFlowReport build(){
 
         // create report
-        HeaderFlowReport report = null;
+        HeaderFlowReport report = new HeaderContentFlowReport(columns);
         if(rowsMarginLeft>0 || rowsMarginTop>0 || rowsMarginRight>0){
             /// rows table in double-row parent table
-            report = new HeaderContentFlowReport(columns);
             report.setRowsMargin(rowsMarginLeft, rowsMarginTop, rowsMarginRight, rowsMarginBottom);
-
+        }
+        if(this.rowLayout.getHeight()>0) {
+            report.setRowHeight(this.rowLayout.getHeight());
         }else{
-            report = new HeaderFlowReport(columns);
+            // equals to columns width
+            float calcRowHeight = (pageSize.getWidth() - pageMarginLeft - pageMarginRight) / columns
+                    - rowsMarginLeft - rowsMarginRight;
+            report.setRowHeight(calcRowHeight);
         }
 
         report.setFlowDirection(flowDirection);
@@ -332,7 +359,6 @@ public class HeaderFlowReportBuilder{
             }
             headerRowData.setAlignment(headerFormat.getAlignment());
             headerRowData.setVerticalAlignment(headerFormat.getVerticalAlignment());
-
 
             report.setHeaderData(headerRowData);
             report.setHeaderHeight(headerLayout.getHeight());
@@ -404,14 +430,12 @@ public class HeaderFlowReportBuilder{
 
                 rowDataItems.add(rowItemData);
             }
-
         }
 
         report.setRowBorderWidth(borderWidth);
         report.setRowBorderColor(borderColor);
         report.setRowBorderWidth(rowLayout.getBorderLeft(), rowLayout.getBorderTop(), rowLayout.getBorderRight(), rowLayout.getBorderBottom());
         report.setRowBorderColor(new BaseColor(rowLayout.getBorderColorRed(), rowLayout.getBorderColorGreen(), rowLayout.getBorderColorBlue()));
-        report.setRowHeight(rowLayout.getHeight());
         report.setRowData(rowDataItems);
 
         return report;

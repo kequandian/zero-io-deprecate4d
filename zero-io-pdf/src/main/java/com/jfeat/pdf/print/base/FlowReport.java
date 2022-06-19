@@ -56,7 +56,6 @@ public abstract class FlowReport implements FlowElement {
 
         if(this.header!=null) {
             /// 表头，占满一行
-
             PdfPCell headerCell = new PdfPCell();
             headerCell.setColspan(columns);
             headerCell.setBorderWidthLeft(headerBorderWidthLeft);

@@ -1,7 +1,10 @@
 package com.jfeat.pdf.print.report.request;
 
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Rectangle;
 import com.jfeat.pdf.print.base.ColorDefinition;
 import com.jfeat.pdf.print.base.ListRowBase;
+import com.jfeat.pdf.print.element.ImageTextBox;
 import com.jfeat.pdf.print.element.RelativeRow;
 import com.jfeat.pdf.print.report.row.ImageTextBoxData;
 import org.apache.commons.io.FilenameUtils;
@@ -17,12 +20,17 @@ import java.util.List;
  */
 public class FlowReportRequest {
 
-    public static final String LTR = "LTR";
-    public static final String UTD = "UTD";
+    public static final String LTR = "LTR";  // 从左至右
+    public static final String UTD = "UTD";  // 从上至下
 
     private int columns;
     private String flowDirection = LTR;   // LTR, UTD
-    private String rowOption = RelativeRow.ID;   /// select different row layout style {FlowListRow,StackFlowListRow}}
+    private String rowOption = ImageTextBox.ID;   /// select different row layout style {FlowListRow,StackFlowListRow}}
+    private PageSizeRequest pageSize;
+    private float pageMarginLeft;
+    private float pageMarginTop;
+    private float pageMarginRight;
+    private float pageMarginBottom;
 
     // border
     private float borderWidth;
@@ -58,6 +66,14 @@ public class FlowReportRequest {
 
     public FlowReportRequest setRowOption(String rowOption) {
         this.rowOption = rowOption;
+        return this;
+    }
+
+    public FlowReportRequest setPageMargin(float margin){
+        this.pageMarginLeft =
+                this.pageMarginRight =
+                        this.pageMarginTop =
+                                this.pageMarginBottom = margin;
         return this;
     }
 
@@ -226,6 +242,16 @@ public class FlowReportRequest {
         this.layout = layout;
         return this;
     }
+    public float getRowHeight(){
+        return this.layout.getRowsLayout().getHeight();
+    }
+    public FlowReportRequest setRowHeight(float height){
+        if(this.layout==null){
+            this.layout = new LayoutRequest();
+        }
+        this.layout.rowsLayout.setHeight(height);
+        return this;
+    }
 
 
     /**
@@ -243,6 +269,49 @@ public class FlowReportRequest {
                 ( flowDirection.equals(FlowReportRequest.UTD) ? 1 : -1 );
     }
 
+    public float getPageMarginLeft() {
+        return pageMarginLeft;
+    }
+
+    public void setPageMarginLeft(float pageMarginLeft) {
+        this.pageMarginLeft = pageMarginLeft;
+    }
+
+    public float getPageMarginTop() {
+        return pageMarginTop;
+    }
+
+    public void setPageMarginTop(float pageMarginTop) {
+        this.pageMarginTop = pageMarginTop;
+    }
+
+    public float getPageMarginRight() {
+        return pageMarginRight;
+    }
+
+    public void setPageMarginRight(float pageMarginRight) {
+        this.pageMarginRight = pageMarginRight;
+    }
+
+    public float getPageMarginBottom() {
+        return pageMarginBottom;
+    }
+
+    public void setPageMarginBottom(float pageMarginBottom) {
+        this.pageMarginBottom = pageMarginBottom;
+    }
+
+    public PageSizeRequest getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(PageSizeRequest pageSize) {
+        this.pageSize = pageSize;
+    }
+    public void setPageSize(float w, float h){
+        this.pageSize.width = w;
+        this.pageSize.height = h;
+    }
 
     /**
      * format request
@@ -300,4 +369,24 @@ public class FlowReportRequest {
         }
     }
 
+    public static class PageSizeRequest{
+        private float width;
+        private float height;
+
+        public float getWidth() {
+            return width;
+        }
+
+        public void setWidth(float width) {
+            this.width = width;
+        }
+
+        public float getHeight() {
+            return height;
+        }
+
+        public void setHeight(float height) {
+            this.height = height;
+        }
+    }
 }
