@@ -26,6 +26,7 @@ public class FlowReportRequest {
     private int columns;
     private String flowDirection = LTR;   // LTR, UTD
     private String rowOption = ImageTextBox.ID;   /// select different row layout style {FlowListRow,StackFlowListRow}}
+    private float rowRatio = 1.0f;
     private PageSizeRequest pageSize;
     private float pageMarginLeft;
     private float pageMarginTop;
@@ -96,17 +97,29 @@ public class FlowReportRequest {
         this.borderColor = color;
     }
 
-    public void setRowsMargin(float margin){
+    public FlowReportRequest setRowsMargin(float margin){
         this.rowsMarginLeft = margin;
         this.rowsMarginRight = margin;
         this.rowsMarginTop = margin;
         this.rowsMarginBottom = margin;
+        return  this;
     }
-    public void setRowsMargin(float left, float top, float right, float bottom){
+
+    public FlowReportRequest setRowRatio(float ratio){
+        this.rowRatio = ratio;
+        return this;
+    }
+
+    public float getRowRatio(){
+        return this.rowRatio;
+    }
+
+    public FlowReportRequest setRowsMargin(float left, float right, float top, float bottom){
         this.rowsMarginLeft = left;
-        this.rowsMarginTop = top;
         this.rowsMarginRight = right;
+        this.rowsMarginTop = top;
         this.rowsMarginBottom = bottom;
+        return this;
     }
     public void setRowsMargin(String margin){
         try {
@@ -114,10 +127,10 @@ public class FlowReportRequest {
                 String[] margins = margin.split(",");
                 if (margins.length == 4) {
                     float left = Float.parseFloat(margins[0]);
-                    float top = Float.parseFloat(margins[1]);
-                    float right = Float.parseFloat(margins[2]);
+                    float right = Float.parseFloat(margins[1]);
+                    float top = Float.parseFloat(margins[2]);
                     float bottom = Float.parseFloat(margins[3]);
-                    setRowsMargin(left, top, right, bottom);
+                    setRowsMargin(left, right, top, bottom);
                 }
             } else {
                 float marginF = Float.parseFloat(margin);

@@ -16,6 +16,8 @@ import com.jfeat.pdf.print.report.request.RowLayoutRequest;
 import com.jfeat.pdf.print.report.row.*;
 import com.jfeat.pdf.print.util.PageUtil;
 
+import static org.mockito.Mockito.reset;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,7 @@ public class HeaderFlowReportBuilder{
     private int columns;        //列数
     private int flowDirection;  //方向
     private String rowOption;  //流实体类型
+    private float rowRatio;    //单元格高宽比
 
     private float flowHeight;
     private Rectangle pageSize = PageSize.A4;
@@ -80,7 +83,6 @@ public class HeaderFlowReportBuilder{
         this.pageMarginBottom = b;
         return this;
     }
-
     public HeaderFlowReportBuilder flowDirection(int flowDirection){
         this.flowDirection = flowDirection;
         return this;
@@ -91,7 +93,10 @@ public class HeaderFlowReportBuilder{
         }
         return this;
     }
-
+    public HeaderFlowReportBuilder rowRatio(float ratio){
+        this.rowRatio = ratio;
+        return this;
+    }
     public HeaderFlowReportBuilder flowHeight(float flowHeight){
         this.flowHeight = flowHeight;
         return this;
@@ -309,12 +314,21 @@ public class HeaderFlowReportBuilder{
             /// rows table in double-row parent table
             report.setRowsMargin(rowsMarginLeft, rowsMarginTop, rowsMarginRight, rowsMarginBottom);
         }
+
+        // set row height directly
         if(this.rowLayout.getHeight()>0) {
             report.setRowHeight(this.rowLayout.getHeight());
+
+        }else if( Math.abs(this.rowRatio-1.0f) > 0.001){
+            // calc row height by columns
+            float rowWidth = (pageSize.getWidth() - pageMarginLeft - pageMarginRight) / columns
+                    - (rowsMarginLeft+rowsMarginRight) * columns;
+            report.setRowHeight(rowWidth*rowRatio);
+
         }else{
             // equals to columns width
             float calcRowHeight = (pageSize.getWidth() - pageMarginLeft - pageMarginRight) / columns
-                    - rowsMarginLeft - rowsMarginRight;
+                    - (rowsMarginLeft+rowsMarginRight) * columns;
             report.setRowHeight(calcRowHeight);
         }
 

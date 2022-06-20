@@ -14,6 +14,11 @@ import java.util.regex.Pattern;
  */
 public class ImageUtil {
 
+    public static float getImageRatio(String url) throws IOException{
+        Image img = getImage(url);
+        return img.getHeight()/img.getWidth();
+    }
+
     public static Image getImage(String url){
         Image image=null;
 

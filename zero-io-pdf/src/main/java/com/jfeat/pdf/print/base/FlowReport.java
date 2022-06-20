@@ -51,17 +51,13 @@ public abstract class FlowReport implements FlowElement {
             table.getDefaultCell().setFixedHeight(rowHeight);
         }
         /// draw border
-        //table.getDefaultCell().setBorder(Rectangle.BOX);
-        //table.getDefaultCell().setBorderWidth(1);
+        // table.getDefaultCell().setBorder(Rectangle.BOX);
+        // table.getDefaultCell().setBorderWidth(1);
 
         if(this.header!=null) {
             /// 表头，占满一行
             PdfPCell headerCell = new PdfPCell();
             headerCell.setColspan(columns);
-            headerCell.setBorderWidthLeft(headerBorderWidthLeft);
-            headerCell.setBorderWidthRight(headerBorderWidthRight);
-            headerCell.setBorderWidthTop(headerBorderWidthTop);
-            headerCell.setBorderWidthBottom(headerBorderWidthBottom);
 
             if (headerHeight > 0) {
                 headerCell.setFixedHeight(headerHeight);
@@ -101,6 +97,14 @@ public abstract class FlowReport implements FlowElement {
             AccessibleElementId cellId = cell.getId();
             /// remember cell id
             row.setCellId(cellId);
+
+            // cell padding
+            cell.setPaddingLeft(this.rowsMarginLeft);
+            cell.setPaddingRight(this.rowsMarginRight);
+            cell.setPaddingTop(this.rowsMarginTop);
+            cell.setPaddingBottom(this.rowsMarginBottom);
+            System.out.println(String.format("cell rowsMarginLeft: %d", rowsMarginLeft));
+
 
             if(rowHeight>0) {
                 cell.setFixedHeight(rowHeight);

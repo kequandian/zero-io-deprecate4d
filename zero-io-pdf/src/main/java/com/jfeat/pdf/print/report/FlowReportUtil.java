@@ -1,7 +1,6 @@
 package com.jfeat.pdf.print.report;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.jfeat.pdf.print.base.ColorDefinition;
 import com.jfeat.pdf.print.element.ImageBox;
@@ -69,6 +68,7 @@ public class FlowReportUtil {
         HeaderFlowReport report = new HeaderFlowReportBuilder()
                 // report
                 .columns(request.getColumns())
+                .rowRatio(request.getRowRatio())
                 .pageMargin(request.getPageMarginLeft(), request.getPageMarginTop(), request.getPageMarginRight(), request.getPageMarginBottom())
                 .flowDirection(FlowReportRequest.getFlowDirection(request.getFlowDirection()))
                 .rowOption(request.getRowOption())
@@ -184,6 +184,8 @@ public class FlowReportUtil {
         FlowReportRequest request = new FlowReportRequest()
                 .setColumns(3)
                 .setPageMargin(20)
+                .setRowsMargin(1)
+                .setRowRatio(0.75f)
                 .setRowOption(ImageBox.ID);
 
         java.util.List<ImageTextBoxData> imageRows = FlowReportRequest.initImageRowsData("./images");
@@ -191,14 +193,14 @@ public class FlowReportUtil {
 
         new FlowReportUtil()
                 .data(request)
-                .export(new FileOutputStream("test.pdf"), 0, 0, 0, 0);
+                .export(new FileOutputStream("test.pdf"), request.getPageMarginLeft(), request.getPageMarginRight(), request.getPageMarginTop(), 0);
     }
 
     public static void main(String[] args) throws Exception {
-//        TestDrawImage(args);
-        float pw = PageSize.A4.getWidth();
-        float ph = PageSize.A4.getHeight();
+//        float ratio = ImageUtil.getImageRatio("./images/IMG_20220402_143430.jpg");
+//        System.out.println(String.format("ratio=%f", ratio));
 
+//        TestDrawImage(args);
         TestDrawImageList(args);
     }
 }
