@@ -1,9 +1,6 @@
 package com.jfeat.pdf.print.report.reports;
 
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.*;
 import com.jfeat.pdf.print.base.FlowReport;
 import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.base.ListRowBase;
@@ -100,6 +97,10 @@ public class HeaderFlowReportBuilder{
     public HeaderFlowReportBuilder flowHeight(float flowHeight){
         this.flowHeight = flowHeight;
         return this;
+    }
+    public int rowAlignment(){
+        return this.rowLayout==null? Element.ALIGN_LEFT :
+                this.rowLayout.getAlignment();
     }
 
     public HeaderFlowReportBuilder rowsMargin(float left, float top, float right, float bottom){
@@ -226,6 +227,14 @@ public class HeaderFlowReportBuilder{
         rowLayout.setHeight(height);
         return this;
     }
+    public HeaderFlowReportBuilder rowAlignment(int alignment){
+        if(rowLayout==null){
+            rowLayout = new RowLayoutRequest();
+        }
+        rowLayout.setAlignment(alignment);
+        return this;
+    }
+
     public HeaderFlowReportBuilder rowPadding(float left, float right, float top, float bottom){
         if(rowLayout==null){
             rowLayout = new RowLayoutRequest();
@@ -342,6 +351,8 @@ public class HeaderFlowReportBuilder{
                     rowLayout != null ? rowLayout.getHeight() : 0);
             report.setMaxRowsPerColumn(maxRowsPerColumn);
         }
+
+        report.setRowAlignment(this.rowAlignment());
 
 
         // header

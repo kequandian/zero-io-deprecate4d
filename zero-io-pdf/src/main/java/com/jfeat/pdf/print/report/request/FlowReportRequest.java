@@ -265,6 +265,13 @@ public class FlowReportRequest {
         this.layout.rowsLayout.setHeight(height);
         return this;
     }
+    public FlowReportRequest setRowAlignment(int alignment){
+        if(this.layout==null){
+            this.layout = new LayoutRequest();
+        }
+        this.layout.rowsLayout.setAlignment(alignment);
+        return this;
+    }
 
 
     /**

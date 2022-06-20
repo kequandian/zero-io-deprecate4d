@@ -8,6 +8,7 @@ import com.jfeat.pdf.print.base.ColorDefinition;
  */
 public class RowLayoutRequest {
 
+    private int alignment;
     private float height;
     private float paddingLeft = 0, paddingRight = 0, paddingTop = 0, paddingBottom = 0;
 
@@ -279,5 +280,13 @@ public class RowLayoutRequest {
 
     public void setBackgroundColor(ColorDefinition backgroundColor) {
         this.backgroundColor = backgroundColor;
+    }
+
+    public int getAlignment() {
+        return alignment;
+    }
+
+    public void setAlignment(int alignment) {
+        this.alignment = alignment;
     }
 }

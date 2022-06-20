@@ -33,6 +33,10 @@ public class ImageTextBox extends TextBox implements ListRow {
         this.image = image;
     }
 
+    public void setImage(Image image, int alignment){
+        this.image = image;
+        this.image.setAlignment(alignment);
+    }
 
     @Override
     public void drawCell(PdfContentByte[] canvases, Rectangle position) {

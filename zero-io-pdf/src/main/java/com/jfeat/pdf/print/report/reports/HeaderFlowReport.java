@@ -54,7 +54,7 @@ public class HeaderFlowReport extends DataFlowReport {
 //            }
             // image
             if (info.getImageUrl() != null) {
-                box.setImage(ImageUtil.getImage(info.getImageUrl()));
+                box.setImage(ImageUtil.getImage(info.getImageUrl()), super.getRowAlignment());
             }
             return box;
 
@@ -67,7 +67,7 @@ public class HeaderFlowReport extends DataFlowReport {
             }
             // image
             if (info.getImageUrl() != null) {
-                box.setImage(ImageUtil.getImage(info.getImageUrl()));
+                box.setImage(ImageUtil.getImage(info.getImageUrl()), super.getRowAlignment());
             }
             // text
             if (info.getTitle() != null) {

@@ -27,6 +27,7 @@ public abstract class FlowReport implements FlowElement {
 
     protected float headerHeight;
     protected float rowHeight;
+    protected int rowAlignment;
 
     /// border
     protected float headerBorderWidthLeft, headerBorderWidthRight, headerBorderWidthTop, headerBorderWidthBottom;
@@ -192,6 +193,14 @@ public abstract class FlowReport implements FlowElement {
 
     public void setRowHeight(float rowHeight) {
         this.rowHeight = rowHeight;
+    }
+
+    public int getRowAlignment() {
+        return rowAlignment;
+    }
+
+    public void setRowAlignment(int alignment) {
+        this.rowAlignment = alignment;
     }
 
     public float getHeaderHeight() {

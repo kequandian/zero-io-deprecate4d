@@ -78,6 +78,7 @@ public class FlowReportUtil {
                 .borderColor(ColorDefinition.getBaseColor(request.getBorderColor()))
                 .headerHeight(headerLayout.getHeight())
                 .rowHeight(rowsLayout.getHeight())
+                .rowAlignment(rowsLayout.getAlignment())
                 // header format
                 .headerFont(headerFormat.getFont())
                 .headerSpacing(headerFormat.getSpacing(), headerFormat.getIndent(), headerFormat.getAlignment(), headerFormat.getVerticalAlignment())
@@ -186,6 +187,7 @@ public class FlowReportUtil {
                 .setPageMargin(20)
                 .setRowsMargin(1)
                 .setRowRatio(0.75f)
+                .setRowAlignment(Element.ALIGN_MIDDLE)
                 .setRowOption(ImageBox.ID);
 
         java.util.List<ImageTextBoxData> imageRows = FlowReportRequest.initImageRowsData("./images");

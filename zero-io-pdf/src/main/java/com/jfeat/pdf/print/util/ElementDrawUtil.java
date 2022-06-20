@@ -222,7 +222,7 @@ public class ElementDrawUtil {
 
                     canvas.addImage(image);
 
-                }else if(alignment==Element.ALIGN_TOP){
+                }else if(alignment==Element.ALIGN_TOP) {
                     /// convert scaled width/height from -1 to extend
                     float scaledWidth = image.getScaledWidth();
                     if (scaledWidth < 0) {
@@ -241,12 +241,12 @@ public class ElementDrawUtil {
                         image.scaleToFit(newWidth, newHeight);
 //                        image.scaleAbsolute(newWidth, newHeight);
 
-                    }else if(image.getScaledWidth() > position.getWidth() ||
+                    } else if (image.getScaledWidth() > position.getWidth() ||
                             image.getScaledHeight() > position.getHeight()) {
                         image.scaleToFit(position.getWidth(), position.getHeight());
                     }
 
-                    /// draw icon
+                    /// draw image
                     Point pos = getDockPosition(position, paddingLeft, paddingTop, paddingRight, paddingBottom, Element.ALIGN_TOP);
 
                     // fix horizontal position
@@ -258,6 +258,41 @@ public class ElementDrawUtil {
 
                     canvas.addImage(image);
 
+                }else if(alignment == Element.ALIGN_CENTER || alignment == Element.ALIGN_MIDDLE) {
+                    
+                    float scaledWidth = image.getScaledWidth();
+                    if (scaledWidth < 0) {
+                        // get row height
+                        float rowWidth = position.getWidth();
+                        float newWidth = rowWidth - paddingLeft - paddingRight;
+
+                        /// get width
+                        float scaledHeight = image.getScaledHeight();
+                        float newHeight = scaledHeight;
+                        if (scaledHeight < 0) {
+                            float scaled = image.getHeight() / image.getWidth();
+                            newHeight = newWidth * scaled;
+                        }
+
+                        image.scaleToFit(newWidth, newHeight);
+//                        image.scaleAbsolute(newWidth, newHeight);
+
+                    } else if (image.getScaledWidth() > position.getWidth() ||
+                            image.getScaledHeight() > position.getHeight()) {
+                        image.scaleToFit(position.getWidth(), position.getHeight());
+                    }
+
+                    /// draw image
+                    Point pos = getDockPosition(position, paddingLeft, paddingTop, paddingRight, paddingBottom, Element.ALIGN_CENTER);
+
+                    // fix horizontal position
+                    ax = (float) (pos.getX() - (image.getScaledWidth() * 0.5f));
+                    ay = (float) pos.getY() - image.getScaledHeight();
+
+
+                    image.setAbsolutePosition(ax, ay);
+
+                    canvas.addImage(image);
                 }else {
                     throw new RuntimeException("fatal: Invalid icon alignment:" + alignment);
                 }

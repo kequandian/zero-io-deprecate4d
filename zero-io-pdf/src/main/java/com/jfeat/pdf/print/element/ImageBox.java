@@ -31,8 +31,12 @@ public class ImageBox extends PaddingListRow implements ListRow {
     public Image getImage(){
         return this.image;
     }
-    public void setImage(Image imageUrl){
-        this.image = imageUrl;
+    public void setImage(Image img){
+        this.image = img;
+    }
+    public void setImage(Image img, int alignment){
+        this.image  =img;
+        this.image.setAlignment(alignment);
     }
 
 
