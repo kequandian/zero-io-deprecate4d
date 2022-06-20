@@ -202,7 +202,8 @@ public class ElementDrawUtil {
 
                     }else if(image.getScaledWidth() > position.getWidth() ||
                              image.getScaledHeight() > position.getHeight()){
-                        image.scaleToFit(position.getWidth(), position.getHeight());
+                        image.scaleToFit(position.getWidth() - paddingLeft - paddingRight,
+                                position.getHeight() - paddingTop - paddingBottom);
                     }
 
                     /// draw icon
@@ -216,7 +217,10 @@ public class ElementDrawUtil {
                     if (alignment == Element.ALIGN_RIGHT) {
                         ax -= image.getScaledWidth();
                     }
-
+                    
+                    // correct padding
+                    ax += paddingLeft;
+                    ay -= paddingBottom;
 
                     image.setAbsolutePosition(ax, ay);
 
@@ -243,7 +247,8 @@ public class ElementDrawUtil {
 
                     } else if (image.getScaledWidth() > position.getWidth() ||
                             image.getScaledHeight() > position.getHeight()) {
-                        image.scaleToFit(position.getWidth(), position.getHeight());
+                        image.scaleToFit(position.getWidth() - paddingLeft - paddingRight,
+                                position.getHeight() - paddingTop - paddingBottom);
                     }
 
                     /// draw image
@@ -253,6 +258,9 @@ public class ElementDrawUtil {
                     ax = (float) (pos.getX() - (image.getScaledWidth() * 0.5f));
                     ay = (float) pos.getY() - image.getScaledHeight();
 
+                    // correct padding
+                    ax += paddingLeft;
+                    ay -= paddingBottom;
 
                     image.setAbsolutePosition(ax, ay);
 
@@ -279,7 +287,8 @@ public class ElementDrawUtil {
 
                     } else if (image.getScaledWidth() > position.getWidth() ||
                             image.getScaledHeight() > position.getHeight()) {
-                        image.scaleToFit(position.getWidth(), position.getHeight());
+                        image.scaleToFit(position.getWidth() - paddingLeft - paddingRight,
+                                position.getHeight() - paddingTop - paddingBottom);
                     }
 
                     /// draw image
@@ -289,6 +298,9 @@ public class ElementDrawUtil {
                     ax = (float) (pos.getX() - (image.getScaledWidth() * 0.5f));
                     ay = (float) pos.getY() - image.getScaledHeight();
 
+                    // correct padding
+                    ax += paddingLeft;
+                    ay -= paddingBottom;
 
                     image.setAbsolutePosition(ax, ay);
 

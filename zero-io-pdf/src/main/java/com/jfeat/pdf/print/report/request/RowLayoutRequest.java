@@ -51,6 +51,10 @@ public class RowLayoutRequest {
         return this;
     }
 
+    public void setPadding(float padding){
+        this.paddingLeft = this.paddingRight = this.paddingTop = this.paddingBottom = padding;
+    }
+
     public void setPadding(String padding){
         if (padding != null && padding.length() > 0) {
             try {

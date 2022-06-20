@@ -73,7 +73,7 @@ public class FlowReportUtil {
                 .flowDirection(FlowReportRequest.getFlowDirection(request.getFlowDirection()))
                 .rowOption(request.getRowOption())
 //                .rowHeight(request.getRowHeight())
-                .rowsMargin(request.getRowsMarginLeft(), request.getRowsMarginTop(), request.getRowsMarginRight(), request.getRowsMarginBottom())
+                .rowsPadding(request.getRowsPaddingLeft(), request.getRowsPaddingTop(), request.getRowsPaddingRight(), request.getRowsPaddingBottom())
                 .borderWidth(request.getBorderWidth())
                 .borderColor(ColorDefinition.getBaseColor(request.getBorderColor()))
                 .headerHeight(headerLayout.getHeight())
@@ -185,9 +185,9 @@ public class FlowReportUtil {
         FlowReportRequest request = new FlowReportRequest()
                 .setColumns(3)
                 .setPageMargin(20)
-                .setRowsMargin(1)
+                .setRowsPadding(5)
                 .setRowRatio(0.75f)
-                .setRowAlignment(Element.ALIGN_MIDDLE)
+                .setRowAlignment(Element.ALIGN_CENTER)
                 .setRowOption(ImageBox.ID);
 
         java.util.List<ImageTextBoxData> imageRows = FlowReportRequest.initImageRowsData("./images");

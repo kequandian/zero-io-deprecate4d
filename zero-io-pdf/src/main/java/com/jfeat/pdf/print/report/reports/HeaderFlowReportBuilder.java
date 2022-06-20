@@ -13,8 +13,6 @@ import com.jfeat.pdf.print.report.request.RowLayoutRequest;
 import com.jfeat.pdf.print.report.row.*;
 import com.jfeat.pdf.print.util.PageUtil;
 
-import static org.mockito.Mockito.reset;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,10 +39,10 @@ public class HeaderFlowReportBuilder{
     private BaseColor borderColor;
 
     // rows margin
-    private float rowsMarginLeft;
-    private float rowsMarginTop;
-    private float rowsMarginRight;
-    private float rowsMarginBottom;
+    private float rowsPaddingLeft;
+    private float rowsPaddingTop;
+    private float rowsPaddingRight;
+    private float rowsPaddingBottom;
 
     private ListRowBase headerData;
     private List<ListRowBase> rowsData;
@@ -103,11 +101,11 @@ public class HeaderFlowReportBuilder{
                 this.rowLayout.getAlignment();
     }
 
-    public HeaderFlowReportBuilder rowsMargin(float left, float top, float right, float bottom){
-        this.rowsMarginLeft =  left;
-        this.rowsMarginTop =  top;
-        this.rowsMarginRight =  right;
-        this.rowsMarginBottom =  bottom;
+    public HeaderFlowReportBuilder rowsPadding(float left, float top, float right, float bottom){
+        this.rowsPaddingLeft =  left;
+        this.rowsPaddingTop =  top;
+        this.rowsPaddingRight =  right;
+        this.rowsPaddingBottom =  bottom;
         return this;
     }
 
@@ -319,26 +317,26 @@ public class HeaderFlowReportBuilder{
 
         // create report
         HeaderFlowReport report = new HeaderContentFlowReport(columns);
-        if(rowsMarginLeft>0 || rowsMarginTop>0 || rowsMarginRight>0){
+        if(rowsPaddingLeft >0 || rowsPaddingTop >0 || rowsPaddingRight >0){
             /// rows table in double-row parent table
-            report.setRowsMargin(rowsMarginLeft, rowsMarginTop, rowsMarginRight, rowsMarginBottom);
+            report.setRowsPadding(rowsPaddingLeft, rowsPaddingTop, rowsPaddingRight, rowsPaddingBottom);
         }
 
         // set row height directly
         if(this.rowLayout.getHeight()>0) {
-            report.setRowHeight(this.rowLayout.getHeight());
+            report.setRowHeight(this.rowLayout.getHeight() + rowsPaddingTop + rowsPaddingBottom);
 
         }else if( Math.abs(this.rowRatio-1.0f) > 0.001){
             // calc row height by columns
             float rowWidth = (pageSize.getWidth() - pageMarginLeft - pageMarginRight) / columns
-                    - (rowsMarginLeft+rowsMarginRight) * columns;
-            report.setRowHeight(rowWidth*rowRatio);
+                    - (rowsPaddingLeft + rowsPaddingRight) * columns;
+            report.setRowHeight(rowWidth*rowRatio + rowsPaddingTop + rowsPaddingBottom);
 
         }else{
             // equals to columns width
             float calcRowHeight = (pageSize.getWidth() - pageMarginLeft - pageMarginRight) / columns
-                    - (rowsMarginLeft+rowsMarginRight) * columns;
-            report.setRowHeight(calcRowHeight);
+                    - (rowsPaddingLeft + rowsPaddingRight) * columns;
+            report.setRowHeight(calcRowHeight + rowsPaddingTop + rowsPaddingBottom);
         }
 
         report.setFlowDirection(flowDirection);

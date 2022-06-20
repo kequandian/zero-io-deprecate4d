@@ -123,10 +123,10 @@ public class HeaderContentFlowReport extends HeaderFlowReport {
         // add rows table
         PdfPCell rowsCell = new PdfPCell();
         rowsCell.setBorder(Rectangle.NO_BORDER);
-        rowsCell.setPaddingLeft(rowsMarginLeft);
-        rowsCell.setPaddingTop(rowsMarginTop);
-        rowsCell.setPaddingRight(rowsMarginRight);
-        rowsCell.setPaddingBottom(rowsMarginBottom);
+        rowsCell.setPaddingLeft(rowsPaddingLeft);
+        rowsCell.setPaddingTop(rowsPaddingTop);
+        rowsCell.setPaddingRight(rowsPaddingRight);
+        rowsCell.setPaddingBottom(rowsPaddingBottom);
 
         rowsCell.addElement(table);
         rootTable.addCell(rowsCell);

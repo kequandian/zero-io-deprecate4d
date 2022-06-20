@@ -52,6 +52,15 @@ public class RelativeBoxBounding {
             }
             break;
 
+            case Element.ALIGN_MIDDLE:
+            case Element.ALIGN_CENTER:
+                {
+                float ux = getHorizontalCenter(position, paddingLeft, paddingRight);
+                float uy = getVerticalCenter(position, paddingTop, paddingBottom);
+                pos.setLocation(ux, uy);
+            }
+            break;
+
             default:
                 throw new RuntimeException("Alignment not support: " + alignment);
         }

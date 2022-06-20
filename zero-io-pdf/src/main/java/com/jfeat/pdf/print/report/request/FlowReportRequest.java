@@ -1,11 +1,8 @@
 package com.jfeat.pdf.print.report.request;
 
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Rectangle;
 import com.jfeat.pdf.print.base.ColorDefinition;
 import com.jfeat.pdf.print.base.ListRowBase;
 import com.jfeat.pdf.print.element.ImageTextBox;
-import com.jfeat.pdf.print.element.RelativeRow;
 import com.jfeat.pdf.print.report.row.ImageTextBoxData;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.util.Assert;
@@ -37,12 +34,6 @@ public class FlowReportRequest {
     private float borderWidth;
     private ColorDefinition borderColor;
 
-    // rows margin
-    private float rowsMarginLeft;
-    private float rowsMarginTop;
-    private float rowsMarginRight;
-    private float rowsMarginBottom;
-
     public int getColumns() {
         return columns;
     }
@@ -64,10 +55,17 @@ public class FlowReportRequest {
     public String getRowOption() {
         return rowOption;
     }
-
     public FlowReportRequest setRowOption(String rowOption) {
         this.rowOption = rowOption;
         return this;
+    }
+
+    public FlowReportRequest setRowRatio(float ratio){
+        this.rowRatio = ratio;
+        return this;
+    }
+    public float getRowRatio(){
+        return this.rowRatio;
     }
 
     public FlowReportRequest setPageMargin(float margin){
@@ -97,31 +95,22 @@ public class FlowReportRequest {
         this.borderColor = color;
     }
 
-    public FlowReportRequest setRowsMargin(float margin){
-        this.rowsMarginLeft = margin;
-        this.rowsMarginRight = margin;
-        this.rowsMarginTop = margin;
-        this.rowsMarginBottom = margin;
+    public FlowReportRequest setRowsPadding(float margin){
+        this.layout.rowsLayout.setPadding(margin);
         return  this;
     }
-
-    public FlowReportRequest setRowRatio(float ratio){
-        this.rowRatio = ratio;
-        return this;
+    public FlowReportRequest setRowsPadding(float left, float right, float top, float bottom){
+        this.layout.rowsLayout.setPadding(left, right, top, bottom);
+        return  this;
     }
-
-    public float getRowRatio(){
-        return this.rowRatio;
+    public String getRowsMargin(){
+        return String.format("%f,%f,%f,%f",
+                getRowsPaddingLeft(),
+                getRowsPaddingRight(),
+                getRowsPaddingTop(),
+                getRowsPaddingBottom());
     }
-
-    public FlowReportRequest setRowsMargin(float left, float right, float top, float bottom){
-        this.rowsMarginLeft = left;
-        this.rowsMarginRight = right;
-        this.rowsMarginTop = top;
-        this.rowsMarginBottom = bottom;
-        return this;
-    }
-    public void setRowsMargin(String margin){
+    public void setRowsPadding(String margin){
         try {
             if (margin != null && margin.contains(",")) {
                 String[] margins = margin.split(",");
@@ -130,31 +119,14 @@ public class FlowReportRequest {
                     float right = Float.parseFloat(margins[1]);
                     float top = Float.parseFloat(margins[2]);
                     float bottom = Float.parseFloat(margins[3]);
-                    setRowsMargin(left, right, top, bottom);
+                    setRowsPadding(left, right, top, bottom);
                 }
             } else {
                 float marginF = Float.parseFloat(margin);
-                setRowsMargin(marginF);
+                setRowsPadding(marginF);
             }
         }catch (NumberFormatException e){
         }
-    }
-
-    public String getRowsMargin(){
-        return String.format("%f,%f,%f,%f",rowsMarginLeft,rowsMarginTop,rowsMarginRight,rowsMarginBottom);
-    }
-
-    public float getRowsMarginLeft() {
-        return rowsMarginLeft;
-    }
-    public float getRowsMarginTop() {
-        return rowsMarginTop;
-    }
-    public float getRowsMarginRight() {
-        return rowsMarginRight;
-    }
-    public float getRowsMarginBottom() {
-        return rowsMarginBottom;
     }
 
     /**
@@ -185,6 +157,13 @@ public class FlowReportRequest {
         }
         this.rowsData = new ArrayList<>();
         this.rowsData.addAll(rows);
+
+        for(ImageTextBoxData it : rows){
+            it.setPaddingLeft(getRowsPaddingLeft());
+            it.setPaddingRight(getRowsPaddingRight());
+            it.setPaddingTop(getRowsPaddingTop());
+            it.setPaddingBottom(getRowsPaddingBottom());
+        }
 
         return this;
     }
@@ -259,18 +238,24 @@ public class FlowReportRequest {
         return this.layout.getRowsLayout().getHeight();
     }
     public FlowReportRequest setRowHeight(float height){
-        if(this.layout==null){
-            this.layout = new LayoutRequest();
-        }
         this.layout.rowsLayout.setHeight(height);
         return this;
     }
     public FlowReportRequest setRowAlignment(int alignment){
-        if(this.layout==null){
-            this.layout = new LayoutRequest();
-        }
         this.layout.rowsLayout.setAlignment(alignment);
         return this;
+    }
+    public float getRowsPaddingLeft() {
+        return this.layout.rowsLayout.getPaddingLeft();
+    }
+    public float getRowsPaddingRight() {
+        return this.layout.rowsLayout.getPaddingRight();
+    }
+    public float getRowsPaddingTop() {
+        return this.layout.rowsLayout.getPaddingTop();
+    }
+    public float getRowsPaddingBottom() {
+        return this.layout.rowsLayout.getPaddingBottom();
     }
 
 

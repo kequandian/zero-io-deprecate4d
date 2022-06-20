@@ -36,7 +36,7 @@ public abstract class FlowReport implements FlowElement {
     protected BaseColor rowBorderColor;
 
     // rows margin
-    protected float rowsMarginLeft, rowsMarginRight, rowsMarginTop, rowsMarginBottom;
+    protected float rowsPaddingLeft, rowsPaddingRight, rowsPaddingTop, rowsPaddingBottom;
 
     public FlowReport(int columns){
         this.columns = columns;
@@ -100,11 +100,11 @@ public abstract class FlowReport implements FlowElement {
             row.setCellId(cellId);
 
             // cell padding
-            cell.setPaddingLeft(this.rowsMarginLeft);
-            cell.setPaddingRight(this.rowsMarginRight);
-            cell.setPaddingTop(this.rowsMarginTop);
-            cell.setPaddingBottom(this.rowsMarginBottom);
-            System.out.println(String.format("cell rowsMarginLeft: %d", rowsMarginLeft));
+//            cell.setPaddingLeft(this.rowsPaddingLeft);
+//            cell.setPaddingRight(this.rowsPaddingRight);
+//            cell.setPaddingTop(this.rowsPaddingTop);
+//            cell.setPaddingBottom(this.rowsPaddingBottom);
+//            System.out.println(String.format("cell rowsMarginLeft: %d", rowsPaddingLeft));
 
 
             if(rowHeight>0) {
@@ -278,19 +278,18 @@ public abstract class FlowReport implements FlowElement {
         return rowBorderWidthBottom;
     }
 
-    public float getRowsMarginLeft() {
-        return rowsMarginLeft;
-    }
-    public float getRowMarginRight() {
-        return rowsMarginRight;
-    }
-    public float getRowMarginTop() {
-        return rowsMarginTop;
-    }
-    public float getRowMarginBottom() {
-        return rowsMarginBottom;
-    }
-
+//    public float getRowsPaddingLeft() {
+//        return rowsPaddingLeft;
+//    }
+//    public float getRowPaddingRight() {
+//        return rowsPaddingRight;
+//    }
+//    public float getRowPaddingTop() {
+//        return rowsPaddingTop;
+//    }
+//    public float getRowPaddingBottom() {
+//        return rowsPaddingBottom;
+//    }
 
     public void setHeaderBorderWidth(float borderWidth) {
         if(borderWidth<0){
@@ -352,25 +351,25 @@ public abstract class FlowReport implements FlowElement {
         this.rowBorderColor = color;
     }
 
-    public void setRowsMargin(float margin) {
+    public void setRowsPadding(float margin) {
         if(margin<0){
             // do nothing
         }else {
-            this.rowsMarginLeft = margin;
-            this.rowsMarginTop = margin;
-            this.rowsMarginRight = margin;
-            this.rowsMarginBottom = margin;
+            this.rowsPaddingLeft = margin;
+            this.rowsPaddingTop = margin;
+            this.rowsPaddingRight = margin;
+            this.rowsPaddingBottom = margin;
         }
     }
 
-    public void setRowsMargin(float left, float top, float right, float bottom) {
+    public void setRowsPadding(float left, float top, float right, float bottom) {
         if(left<0 || top<0 || right<0 || bottom<0){
             // do nothing
         }else {
-            this.rowsMarginLeft = left;
-            this.rowsMarginTop = top;
-            this.rowsMarginRight = right;
-            this.rowsMarginBottom = bottom;
+            this.rowsPaddingLeft = left;
+            this.rowsPaddingTop = top;
+            this.rowsPaddingRight = right;
+            this.rowsPaddingBottom = bottom;
         }
     }
 }
