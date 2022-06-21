@@ -1,0 +1,29 @@
+target/
+build/
+.idea/
+.gradle/
+.svn/
+*.iml
+*.swp
+*.db
+logs/
+.DS_Store
+out/
+obsel/
+*.log
+code/
+config/
+
+# vscode
+.vscode/
+.classpath
+.project
+.settings/
+.factorypath
+
+## local
+swagger/
+output/
+node_modules/
+tag/sandbox/api/data
+tag/nodegateway/src/

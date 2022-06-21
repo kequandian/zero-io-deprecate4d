@@ -1,0 +1,54 @@
+ @endpoint = https://house.cloud.smallsaas.cn
+
+
+### 获取页面信息
+GET {{endpoint}}/data?id=66666
+
+### 提交页面信息
+POST {{endpoint}}/data/66666
+Content-Type: application/json
+
+{  
+    "version": "1",
+    "name": "allOrder",
+    "title": "订单",
+    "pageStyle": {
+    },
+    "loadApi": "",
+    "response": {
+      "data":"data"
+    },
+    "request": {
+    },
+    "moduleContainer":{
+    },
+    "modules": [
+      {
+        "type": "autolist",
+        "name":"",
+        "key":"e59992z8-bb88-a788-9922-1623488775885",
+        "container":{
+            "height":"",
+            "background":"#050E17"
+        }
+      }
+    ],
+    "moduleData": {
+         "e59992z8-bb88-a788-9922-1623488775885": {
+            "loadApi":"/api/u/order",
+            "itemNavigation": "",
+            "response":{
+                "list":"records"
+            },
+            "request":{
+                "default":{
+                },
+                "ps":"pageSize",
+                "pn":"pageNum"
+            },
+            "itemModule":{
+                "name":"orderItem"
+            }
+        }
+    }
+}
