@@ -1,7 +1,6 @@
 package com.jfeat.pdf.api;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jfeat.am.module.log.annotation.BusinessLog;
 import com.jfeat.crud.base.exception.BusinessCode;
 import com.jfeat.crud.base.exception.BusinessException;
 import com.jfeat.crud.base.tips.SuccessTip;
@@ -34,7 +33,7 @@ public class PdfTableEndpoint {
 
     // list
 
-    @BusinessLog(name = "PdfTable", value = "查询可编辑列表 PdfTable")
+//    @BusinessLog(name = "PdfTable", value = "查询可编辑列表 PdfTable")
     @ApiOperation(value = "PdfTable 可编辑列表信息", response = PdfTableRecord.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", dataType = "Integer"),

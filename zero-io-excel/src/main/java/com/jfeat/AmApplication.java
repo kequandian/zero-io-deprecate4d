@@ -17,7 +17,7 @@ public class AmApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(AmApplication.class, args);
-        logger.info("AmApplication is running success");
+        logger.info("zero-io excel app is running success");
     }
 
 }

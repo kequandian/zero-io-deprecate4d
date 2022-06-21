@@ -1,9 +1,9 @@
 server:
-  port: 8082
+  port: 8080
 
 spring:
   profiles:
-    active: dev
+    active: test
 
 ---
 spring:
@@ -19,9 +19,29 @@ spring:
     data: classpath*:sql/*-data.sql
     initialize: false
 
-
----
 io:
   excel-template-dir: "excel-templates"
   excel-export-max-rows: 1000
 
+---
+
+spring:
+  profiles: test
+  datasource:
+    url: jdbc:h2:mem:power;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    filters: log4j,wall,mergeStat
+    schema: classpath*:h2/*-schema.sql
+    data: classpath*:h2/*-data.sql
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+        trace: false
+
+io:
+  excel-template-dir: "excel-templates"
+  excel-export-max-rows: 1000

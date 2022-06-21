@@ -8,7 +8,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.jfeat.AmApplication;
 import com.jfeat.common.HttpUtil;
 import com.jfeat.common.ResourceUtil;
 import com.jfeat.excel.constant.ExcelConstant;
@@ -16,18 +15,22 @@ import com.jfeat.excel.properties.ExcelProperties;
 import com.jfeat.excel.services.ExcelExportService;
 import com.jfeat.poi.agent.PoiAgentExporter;
 import com.jfeat.poi.api.PoiAgentExporterApiUtil;
+import io.jsonwebtoken.lang.Assert;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.mockito.asm.tree.FieldInsnNode;
 import org.mockito.internal.util.io.IOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import java.io.*;
@@ -54,27 +57,21 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     @Autowired
     DataSource dataSource;
 
-
-
-
     @Override
     public ByteArrayInputStream export(String exportName) throws IOException {
-        //String exportName = exportParam.getExportName();
-        //String type = exportParam.getType();
-
         String templateDirectory = excelProperties.getExcelTemplateDir();
-        // 获取api
+
+        // 获取 .json, 解释
         String dictName = exportName + ExcelConstant.EXPORT_DICT_SUFFIX;
-        String dictPath = templateDirectory + File.separator + dictName;
-        JSONObject jsonStr = JSONObject.parseObject(ResourceUtil.getDefaultResourceFileContent(dictPath));
+        String dictPath = String.join(File.separator, templateDirectory, dictName);
 
-//        JSONObject apiString = jsonStr.getJSONObject("api");
-        JSONObject api = jsonStr.getJSONObject("api");
-        String url=api.getString("url");
+        String dictJsonContent = ResourceUtil.getDefaultResourceFileContent(dictPath);
+        if(StringUtils.isEmpty(dictJsonContent)){
+            dictJsonContent="{}";
+        }
+        JSONObject sqlJson = JSONObject.parseObject(dictJsonContent);
 
-
-        JSONObject search = jsonStr.getJSONObject("search");
-
+        JSONObject search = sqlJson.getJSONObject("search");
         HashMap<String, String> searchMap = new HashMap<>();
         if (search!=null){
             for (String key : search.keySet()) {
@@ -82,18 +79,12 @@ public class ExcelExportServiceImpl implements ExcelExportService {
             }
         }
 
-        //String apiString2 = exportParam.getApi();
-        if (!url.isEmpty()) {
-            // api
-            //api中带参数 则直接缺取api不取参数   参数从exportParam的Search中获取
-//            String[] split = exportParam.getApi().split("\\?");
-//            String api = split[0];
+        String url = sqlJson.getJSONObject("api")!=null?sqlJson.getJSONObject("api").getString("url") : null;
+        if (!StringUtils.isEmpty(url)) {
             return exportByApi(exportName, url);
         } else {
-            // sql
             return exportBySql(exportName, searchMap);
         }
-        //throw new RuntimeException("错误的导出模式!");
     }
 
     @Override
@@ -189,13 +180,17 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         String templateDirectory = excelProperties.getExcelTemplateDir();
         // sql 文件名称
         String sqlTemplateName = exportName + ExcelConstant.EXPORT_SQL_SUFFIX;
-        String templateFilePath = templateDirectory + File.separator + sqlTemplateName;
+        String templateFilePath = String.join(File.separator,templateDirectory, sqlTemplateName);
+
+        //first get file from file-system
+        File templateFile = new File(templateFilePath);
+        log.info("template path: {}", templateFile.getAbsolutePath());
+        InputStream sqlStream = templateFile.exists() ? new FileInputStream(templateFile) :
+                ResourceUtil.getDefaultResourceFileAsStream(templateFilePath);
+        Assert.isTrue(sqlStream!=null);
 
         // 逐行读取 sql文件
-        // enhance:
-        InputStream sqlStream = ResourceUtil.getDefaultResourceFileAsStream(templateFilePath);
         Collection<String> sqlLines = IOUtil.readLines(sqlStream);
-        //List<String> sqlLines = FileUtil.readLine(templateFilePath);
         // end enhance
 
         // 替换注释并构建 sql
@@ -205,7 +200,6 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         new PoiAgentExporterApiUtil().export(dataSource, sql, baos);
         return new ByteArrayInputStream(baos.toByteArray());
     }
-
 
     private String processSqlLines(Collection<String> sqlLines, Map<String, String> replaceMap) {
         StringBuilder sqlBuilder = new StringBuilder();
@@ -281,6 +275,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         HttpServletRequest httpRequest = ((ServletRequestAttributes) requestAttributes).getRequest();
         String authorization = httpRequest.getHeader("Authorization");
+
         // api
         String apiPath = getApiPath(httpRequest, field);
         // process search
@@ -291,9 +286,9 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         // process page size
         apiPath = processPageSize(apiPath, authorization);
 
-
         // 访问api 获取数据
         JSONObject data = HttpUtil.getResponse(apiPath, authorization).getJSONObject("data");
+
         // header
         List<String> header = data.getJSONArray("header").toJavaList(String.class);
         // rows jsonArray
@@ -335,12 +330,14 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     private String getApiPath(HttpServletRequest httpRequest, String field) {
         String requestURI = httpRequest.getRequestURI();
         StringBuffer requestURL = httpRequest.getRequestURL();
-        logger.info("requestInfo :");
+        String schema = httpRequest.getScheme();
         logger.info("requestURI = {}",requestURI);
         logger.info("requestURL = {}",requestURL);
+        logger.info("schema = {}",schema);
 
         //域名为https开头，根据配置替换
-        if(excelProperties.getHttps()){
+        //if(excelProperties.getHttps()){
+        if("https".equals(schema)){
             logger.info("开启https");
             int httpIndex = requestURL.indexOf(":");
             logger.info("':'Index {}",httpIndex);
@@ -350,8 +347,10 @@ public class ExcelExportServiceImpl implements ExcelExportService {
 
         // String requestURL = "http://cloud.biliya.cn/api/io/excel/xxxx";
         // String requestURI = "/api/io/excel/xxxx";
-        int index = requestURL.indexOf(requestURI);
-        return requestURL.substring(0, index) + API_PREFIX + "/" + field;
+        // https fix
+        //int index = requestURL.indexOf(requestURI);
+        //return requestURL.substring(0, index) + API_PREFIX + "/" + field;
+        return String.join("", requestURL.toString().replace(requestURI,""), API_PREFIX, "/", field);
     }
 
     private String processSearch(String apiPath, HttpServletRequest request) {
