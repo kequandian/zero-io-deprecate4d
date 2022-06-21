@@ -314,13 +314,13 @@ public class HeaderFlowReportBuilder{
             // calc row height by columns
             float rowWidth = (pageSize.getWidth() - pageMarginLeft - pageMarginRight) / columns
                     - (rowsPaddingLeft + rowsPaddingRight) * (columns - 1);
-            report.setRowHeight((float)(rowWidth*rowRatio + rowsPaddingTop + rowsPaddingBottom));
+            report.setRowHeight((float)(Math.floor(rowWidth*rowRatio + rowsPaddingTop + rowsPaddingBottom)));
 
         }else{
             // equals to columns width
             float rowWidth = (pageSize.getWidth() - pageMarginLeft - pageMarginRight) / columns
                     - (rowsPaddingLeft + rowsPaddingRight) * (columns - 1);
-            report.setRowHeight((float)(rowWidth*rowRatio + rowsPaddingTop + rowsPaddingBottom));
+            report.setRowHeight((float)(Math.floor(rowWidth*rowRatio + rowsPaddingTop + rowsPaddingBottom)));
         }
 
         report.setFlowDirection(flowDirection);

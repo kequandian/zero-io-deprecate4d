@@ -196,7 +196,7 @@ public class FlowReportUtil {
         FlowReportRequest request = new FlowReportRequest()
                 .setColumns(3)
                 .setPageMargin(10, 10, 20, 0)
-                .setRowsPadding(1)
+                .setRowsPadding(0.5f, 0.5f, 1.0f, 1.0f)
                 .setRowRatio(0.75f)
                 .setBorderWidth(0.0f)
                 .setRowAlignment(Element.ALIGN_CENTER)
