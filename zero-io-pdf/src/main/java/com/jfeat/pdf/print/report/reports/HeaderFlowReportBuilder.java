@@ -26,7 +26,7 @@ public class HeaderFlowReportBuilder{
     private int columns;        //列数
     private int flowDirection;  //方向
     private String rowOption;  //流实体类型
-    private float rowRatio;    //单元格高宽比
+    private double rowRatio;    //单元格高宽比
 
     private float flowHeight;
     private Rectangle pageSize = PageSize.A4;
@@ -313,14 +313,14 @@ public class HeaderFlowReportBuilder{
         }else if( Math.abs(this.rowRatio-1.0f) > 0.001){
             // calc row height by columns
             float rowWidth = (pageSize.getWidth() - pageMarginLeft - pageMarginRight) / columns
-                    - (rowsPaddingLeft + rowsPaddingRight) * columns;
-            report.setRowHeight(rowWidth*rowRatio + rowsPaddingTop + rowsPaddingBottom);
+                    - (rowsPaddingLeft + rowsPaddingRight) * (columns - 1);
+            report.setRowHeight((float)(rowWidth*rowRatio + rowsPaddingTop + rowsPaddingBottom));
 
         }else{
             // equals to columns width
-            float calcRowHeight = (pageSize.getWidth() - pageMarginLeft - pageMarginRight) / columns
-                    - (rowsPaddingLeft + rowsPaddingRight) * columns;
-            report.setRowHeight(calcRowHeight + rowsPaddingTop + rowsPaddingBottom);
+            float rowWidth = (pageSize.getWidth() - pageMarginLeft - pageMarginRight) / columns
+                    - (rowsPaddingLeft + rowsPaddingRight) * (columns - 1);
+            report.setRowHeight((float)(rowWidth*rowRatio + rowsPaddingTop + rowsPaddingBottom));
         }
 
         report.setFlowDirection(flowDirection);

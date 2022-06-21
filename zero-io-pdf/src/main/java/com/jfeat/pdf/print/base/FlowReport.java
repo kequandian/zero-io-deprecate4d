@@ -121,6 +121,7 @@ public abstract class FlowReport implements FlowElement {
                     ListRow row = getRowByCellId(cellId);
 
                     if(row !=null){
+                        //for debug
                         //position.setBorder(Rectangle.BOX);
                         //position.setBorderWidth(1);
                         //position.setBorderColor(BaseColor.BLUE);
@@ -277,19 +278,6 @@ public abstract class FlowReport implements FlowElement {
     public float getRowBorderWidthBottom() {
         return rowBorderWidthBottom;
     }
-
-//    public float getRowsPaddingLeft() {
-//        return rowsPaddingLeft;
-//    }
-//    public float getRowPaddingRight() {
-//        return rowsPaddingRight;
-//    }
-//    public float getRowPaddingTop() {
-//        return rowsPaddingTop;
-//    }
-//    public float getRowPaddingBottom() {
-//        return rowsPaddingBottom;
-//    }
 
     public void setHeaderBorderWidth(float borderWidth) {
         if(borderWidth<0){

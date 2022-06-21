@@ -195,7 +195,7 @@ public class FlowReportUtil {
     public static void TestDrawImageList(String[] args) throws Exception {
         FlowReportRequest request = new FlowReportRequest()
                 .setColumns(3)
-                .setPageMargin(0, 0, 0, 0)
+                .setPageMargin(10, 10, 20, 0)
                 .setRowsPadding(1)
                 .setRowRatio(0.75f)
                 .setBorderWidth(0.0f)

@@ -179,7 +179,7 @@ public class ElementDrawUtil {
             try {
                 int alignment = image.getAlignment();
 
-                float ax=0, ay=0;
+                double ax=0, ay=0;
                 if(alignment==Element.ALIGN_LEFT || alignment==Element.ALIGN_RIGHT) {
 
                     /// convert scaled width/height from -1 to extend
@@ -222,7 +222,7 @@ public class ElementDrawUtil {
 //                    ax += paddingLeft;
 //                    ay -= paddingBottom;
 
-                    image.setAbsolutePosition(ax, ay);
+                    image.setAbsolutePosition((float)ax, (float)ay);
 
                     canvas.addImage(image);
 
@@ -255,14 +255,14 @@ public class ElementDrawUtil {
                     Point pos = getDockPosition(position, paddingLeft, paddingTop, paddingRight, paddingBottom, Element.ALIGN_TOP);
 
                     // fix horizontal position
-                    ax = (float) (pos.getX() - (image.getScaledWidth() * 0.5f));
-                    ay = (float) pos.getY() - image.getScaledHeight();
+                    ax = (pos.getX() - (image.getScaledWidth() * 0.5f));
+                    ay =  pos.getY() - image.getScaledHeight();
 
 //                    // correct padding
 //                    ax += paddingLeft;
 //                    ay -= paddingBottom;
 
-                    image.setAbsolutePosition(ax, ay);
+                    image.setAbsolutePosition((float)ax, (float)ay);
 
                     canvas.addImage(image);
 
@@ -287,22 +287,18 @@ public class ElementDrawUtil {
 
                     } else if (image.getScaledWidth() > position.getWidth() ||
                             image.getScaledHeight() > position.getHeight()) {
+                        // scale to fix
                         image.scaleToFit(position.getWidth() - paddingLeft - paddingRight,
-                                position.getHeight() - paddingTop - paddingBottom);
+                                        position.getHeight() - paddingTop - paddingBottom);
                     }
 
                     /// draw image
-                    Point pos = getDockPosition(position, paddingLeft, paddingTop, paddingRight, paddingBottom, Element.ALIGN_CENTER);
+//                    Point pos = getDockPosition(position, paddingLeft, paddingTop, paddingRight, paddingBottom, Element.ALIGN_CENTER);
+                    Point pos = new Point(position.getLeft() + paddingLeft , position.getBottom() - paddingBottom);
+                    ax = pos.getX();
+                    ay = pos.getY();
 
-                    // fix horizontal position
-                    ax = (float) (pos.getX() - (image.getScaledWidth() * 0.5f));
-                    ay = (float) pos.getY() - image.getScaledHeight();
-
-                    // correct padding
-                    ax += paddingLeft;
-                    ay -= paddingBottom;
-
-                    image.setAbsolutePosition(ax, ay);
+                    image.setAbsolutePosition((float)ax, (float)ay);
 
                     canvas.addImage(image);
                 }else {
