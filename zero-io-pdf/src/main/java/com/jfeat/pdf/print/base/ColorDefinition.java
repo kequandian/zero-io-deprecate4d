@@ -41,6 +41,7 @@ public class ColorDefinition {
         }
     }
 
+
     /**
      * class ColorDefinition
      */
@@ -78,5 +79,10 @@ public class ColorDefinition {
 
     public void setBlue(int b) {
         this.b = b;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d,%d,%d", r, g, b);
     }
 }

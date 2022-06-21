@@ -10,6 +10,7 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.jfeat.pdf.print.base.ListRow;
 import com.jfeat.pdf.print.base.PaddingListRow;
+import com.jfeat.pdf.print.base.TableCellElement;
 import com.jfeat.pdf.print.util.PdfFontMetrics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,7 @@ import java.util.List;
  * Created by vincent on 2018/3/16.
  * 文本框: 纯色框内居中显示字符
  */
-public class TextBox extends PaddingListRow implements ListRow {
+public class TextBox extends TableCellElement implements ListRow {
     public static String ID = "TextBox";
 
     @Override

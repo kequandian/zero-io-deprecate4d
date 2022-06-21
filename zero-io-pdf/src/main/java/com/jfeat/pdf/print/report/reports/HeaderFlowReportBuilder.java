@@ -1,6 +1,7 @@
 package com.jfeat.pdf.print.report.reports;
 
 import com.itextpdf.text.*;
+import com.jfeat.pdf.print.base.ColorDefinition;
 import com.jfeat.pdf.print.base.FlowReport;
 import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.base.ListRowBase;
@@ -34,10 +35,6 @@ public class HeaderFlowReportBuilder{
     private float pageMarginRight;
     private float pageMarginBottom;
 
-    // table border
-    private float borderWidth;
-    private BaseColor borderColor;
-
     // rows margin
     private float rowsPaddingLeft;
     private float rowsPaddingTop;
@@ -45,12 +42,16 @@ public class HeaderFlowReportBuilder{
     private float rowsPaddingBottom;
 
     private ListRowBase headerData;
+    private ListRowBase groupingData;
     private List<ListRowBase> rowsData;
 
     private RowFormatRequest headerFormat;
     private RowLayoutRequest headerLayout;
-    private RowFormatRequest rowFormat;
-    private RowLayoutRequest rowLayout;
+    private RowFormatRequest groupingFormat;
+    private RowLayoutRequest groupingLayout;
+    private RowFormatRequest rowFormat = new RowFormatRequest();
+    private RowLayoutRequest rowLayout = new RowLayoutRequest();
+
 
     /// background Color only for group row
     private BaseColor groupBackgroundColor;
@@ -109,25 +110,29 @@ public class HeaderFlowReportBuilder{
         return this;
     }
 
-    public HeaderFlowReportBuilder borderWidth(float width){
-        this.borderWidth = width;
-
-        if(rowLayout==null){
-            this.rowLayout = new RowLayoutRequest();
-        }
-        this.rowLayout.setBorderWidth(width);
+    public HeaderFlowReportBuilder borderWidth(float l, float r, float t, float b){
+        this.rowLayout.setBorderWidth(l, r, t, b);
         return this;
     }
 
-    public HeaderFlowReportBuilder borderColor(BaseColor color){
+    public HeaderFlowReportBuilder borderColor(ColorDefinition color){
         if(color!=null) {
-            this.borderColor = color;
+            this.rowLayout.setBorderColor(color);
 
             /// set default color
             if(color.getRed()>0 || color.getGreen()>0 || color.getBlue()>9) {
+                rowBorderColor(color.getRed(), color.getGreen(), color.getBlue());
+            }
+        }
+        return this;
+    }
 
-                headerBorderColor(color.getRed(), color.getGreen(), color.getBlue());
+    public HeaderFlowReportBuilder headerBorderColor(ColorDefinition color){
+        if(color!=null) {
+            this.rowLayout.setBorderColor(color);
 
+            /// set default color
+            if(color.getRed()>0 || color.getGreen()>0 || color.getBlue()>9) {
                 rowBorderColor(color.getRed(), color.getGreen(), color.getBlue());
             }
         }
@@ -219,64 +224,43 @@ public class HeaderFlowReportBuilder{
      }
 
     public HeaderFlowReportBuilder rowHeight(float height){
-        if(rowLayout==null){
-            rowLayout = new RowLayoutRequest();
-        }
         rowLayout.setHeight(height);
         return this;
     }
     public HeaderFlowReportBuilder rowAlignment(int alignment){
-        if(rowLayout==null){
-            rowLayout = new RowLayoutRequest();
-        }
         rowLayout.setAlignment(alignment);
         return this;
     }
 
     public HeaderFlowReportBuilder rowPadding(float left, float right, float top, float bottom){
-        if(rowLayout==null){
-            rowLayout = new RowLayoutRequest();
-        }
         rowLayout.setPadding(left, right, top, bottom);
         return this;
     }
     public HeaderFlowReportBuilder rowBorderWidth(float left, float right, float top, float bottom){
-        if(rowLayout==null){
-            rowLayout = new RowLayoutRequest();
-        }
         rowLayout.setBorderWidth(left, right, top, bottom);
         return this;
     }
     public HeaderFlowReportBuilder rowBorderWidth(float width){
-        if(rowLayout==null){
-            rowLayout = new RowLayoutRequest();
-        }
         rowLayout.setBorderWidth(width);
         return this;
     }
     public HeaderFlowReportBuilder rowBorderColor(int red, int green, int blue){
-        if(rowLayout==null){
-            rowLayout = new RowLayoutRequest();
-        }
-
         // do not set color while black
         if(red>0 || green>0 || blue>0) {
             rowLayout.setBorderColor(red, green, blue);
         }
         return this;
     }
+    public HeaderFlowReportBuilder rowBorderColor(ColorDefinition colorDefinition){
+        rowLayout.setBorderColor(colorDefinition);
+        return this;
+    }
 
      public HeaderFlowReportBuilder rowFont(FontDefinition font){
-         if(rowFormat==null){
-             rowFormat = new RowFormatRequest();
-         }
          rowFormat.setFont(font);
          return this;
      }
      public HeaderFlowReportBuilder rowSpacing(float spacing, float indent, String alignment, String verticalAlignment){
-         if(rowFormat==null){
-             rowFormat = new RowFormatRequest();
-         }
          rowFormat.setSpacing(spacing);
          rowFormat.setIndent(indent);
          rowFormat.setAlignment(alignment);
@@ -354,10 +338,11 @@ public class HeaderFlowReportBuilder{
 
 
         // header
-
         if(this.headerData!=null) {
-            report.setHeaderBorderWidth(borderWidth);
-            report.setHeaderBorderColor(borderColor);
+            if(headerLayout!=null ) {
+                report.setHeaderBorderWidth(this.headerLayout.getBorderLeft(), this.headerLayout.getBorderRight(), this.headerLayout.getBorderTop(), this.headerLayout.getBorderBottom() );
+            }
+            report.setHeaderBorderColor(headerLayout==null ? null : (this.headerLayout.getBorderColor()==null ? null : ColorDefinition.getBaseColor(this.headerLayout.getBorderColor())) );
 
             /// header data
             ImageTextBoxData headerRowData = new ImageTextBoxData();
@@ -372,7 +357,6 @@ public class HeaderFlowReportBuilder{
             report.setHeaderBorderWidth(headerLayout.getBorderLeft(), headerLayout.getBorderTop(),
                     headerLayout.getBorderRight(), headerLayout.getBorderBottom()
             );
-            report.setHeaderBorderColor(new BaseColor(headerLayout.getBorderColorRed(), headerLayout.getBorderColorGreen(), headerLayout.getBorderColorBlue()));
 
             if (headerFormat.getSpacing() > 0) {
                 headerRowData.setPadding(headerFormat.getSpacing());
@@ -455,12 +439,36 @@ public class HeaderFlowReportBuilder{
             }
         }
 
-        report.setRowBorderWidth(borderWidth);
-        report.setRowBorderColor(borderColor);
+        report.setRowBorderWidth(this.rowLayout.getBorderLeft(), this.rowLayout.getBorderRight(), this.rowLayout.getBorderTop(), this.rowLayout.getBorderBottom());
+        report.setRowBorderColor(this.rowLayout.getBorderColor()==null ? null : ColorDefinition.getBaseColor(this.rowLayout.getBorderColor()));
         report.setRowBorderWidth(rowLayout.getBorderLeft(), rowLayout.getBorderTop(), rowLayout.getBorderRight(), rowLayout.getBorderBottom());
-        report.setRowBorderColor(new BaseColor(rowLayout.getBorderColorRed(), rowLayout.getBorderColorGreen(), rowLayout.getBorderColorBlue()));
+        report.setRowBorderColor(this.rowLayout.getBorderColor()==null? null : ColorDefinition.getBaseColor(this.rowLayout.getBorderColor()));
         report.setRowData(rowDataItems);
 
         return report;
+    }
+
+    public RowFormatRequest getGroupingFormat() {
+        return groupingFormat;
+    }
+
+    public void setGroupingFormat(RowFormatRequest groupingFormat) {
+        this.groupingFormat = groupingFormat;
+    }
+
+    public RowLayoutRequest getGroupingLayout() {
+        return groupingLayout;
+    }
+
+    public void setGroupingLayout(RowLayoutRequest groupingLayout) {
+        this.groupingLayout = groupingLayout;
+    }
+
+    public ListRowBase getGroupingData() {
+        return groupingData;
+    }
+
+    public void setGroupingData(ListRowBase groupingData) {
+        this.groupingData = groupingData;
     }
 }

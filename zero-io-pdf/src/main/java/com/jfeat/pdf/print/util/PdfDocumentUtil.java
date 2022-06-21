@@ -24,7 +24,7 @@ public class PdfDocumentUtil {
      * document draw interface
      */
     public interface PdfWriteListener {
-        void onDraw(Document document, PdfContentByte canvas);
+        void onDraw(Document document, PdfContentByte canvas) throws DocumentException;
     }
 
 

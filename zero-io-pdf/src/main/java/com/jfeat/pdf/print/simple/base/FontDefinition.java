@@ -12,7 +12,6 @@ import static com.itextpdf.text.pdf.BaseFont.NOT_EMBEDDED;
  *
  * @author Wen Hao
  */
-@Deprecated
 public class FontDefinition {
 
     /**

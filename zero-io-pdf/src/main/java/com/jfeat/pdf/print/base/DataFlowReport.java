@@ -41,6 +41,16 @@ public abstract class DataFlowReport extends FlowReport {
 
             for (ListRowBase item : rowDataList) {
                 ListRow r = convertRowData(item);
+
+                // set padding
+                {
+                    TableCellElement e = (TableCellElement) r;
+                    e.setPaddingLeft(this.rowsPaddingLeft);
+                    e.setPaddingRight(this.rowsPaddingRight);
+                    e.setPaddingTop(this.rowsPaddingTop);
+                    e.setPaddingBottom(this.rowsPaddingBottom);
+                }
+
                 listRows.add(r);
             }
 
@@ -65,6 +75,16 @@ public abstract class DataFlowReport extends FlowReport {
             List<ListRow> list = new ArrayList<>();
             for (ListRowBase item : rowDataList) {
                 ListRow r = convertRowData(item);
+
+                // set padding
+                {
+                    TableCellElement e = (TableCellElement) r;
+                    e.setPaddingLeft(this.rowsPaddingLeft);
+                    e.setPaddingRight(this.rowsPaddingRight);
+                    e.setPaddingTop(this.rowsPaddingTop);
+                    e.setPaddingBottom(this.rowsPaddingBottom);
+                }
+
                 list.add(r);
             }
 

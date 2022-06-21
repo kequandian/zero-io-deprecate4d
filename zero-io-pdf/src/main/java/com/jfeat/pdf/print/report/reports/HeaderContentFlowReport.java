@@ -1,15 +1,16 @@
 package com.jfeat.pdf.print.report.reports;
 
-import com.itextpdf.text.AccessibleElementId;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPCellEvent;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.jfeat.pdf.print.PdfFlowRequest;
+import com.jfeat.pdf.print.base.FontDefinition;
 import com.jfeat.pdf.print.element.EmptyListRow;
 import com.jfeat.pdf.print.base.ListRow;
+
+import static com.jfeat.pdf.print.simple.base.FontDefinition.BASE_FONT;
 
 /**
  * Created by vincent on 2018/3/19.
@@ -23,8 +24,6 @@ public class HeaderContentFlowReport extends HeaderFlowReport {
     @Override
     public void draw(PdfContentByte canvas) {
 
-        // TODO, override table write
-
         PdfPTable rootTable = new PdfPTable(1);
         rootTable.setWidthPercentage(100);
 
@@ -35,40 +34,42 @@ public class HeaderContentFlowReport extends HeaderFlowReport {
         }
 
 
-        /// 表头，占满一行
-        PdfPCell headerCell = new PdfPCell();
-        headerCell.setColspan(columns);
-        headerCell.setBorderWidthLeft(headerBorderWidthLeft);
-        headerCell.setBorderWidthRight(headerBorderWidthRight);
-        headerCell.setBorderWidthTop(headerBorderWidthTop);
-        headerCell.setBorderWidthBottom(headerBorderWidthBottom);
-
-        if(headerHeight>0) {
-            headerCell.setFixedHeight(headerHeight);
-        }
-        headerCell.setCellEvent(new PdfPCellEvent() {
-            @Override
-            public void cellLayout(PdfPCell cell, Rectangle position,
-                                   PdfContentByte[] canvases) {
-                if(header!=null) {
-                    header.drawCell(canvases, position);
-                }
-            }
-        });
-
-        /// add empty cells
-        if(checkNoBorder(0)) {
-            headerCell.setBorder(Rectangle.NO_BORDER);
-        }else{
-            headerCell.setBorder(Rectangle.BOX);
+        if(header!=null && headerHeight > 0) {
+            /// 表头，占满一行
+            PdfPCell headerCell = new PdfPCell();
+            headerCell.setColspan(columns);
             headerCell.setBorderWidthLeft(headerBorderWidthLeft);
             headerCell.setBorderWidthRight(headerBorderWidthRight);
             headerCell.setBorderWidthTop(headerBorderWidthTop);
             headerCell.setBorderWidthBottom(headerBorderWidthBottom);
-            headerCell.setBorderColor(headerBorderColor);
-        }
 
-        rootTable.addCell(headerCell);
+            if (headerHeight > 0) {
+                headerCell.setFixedHeight(headerHeight);
+            }
+            headerCell.setCellEvent(new PdfPCellEvent() {
+                @Override
+                public void cellLayout(PdfPCell cell, Rectangle position,
+                                       PdfContentByte[] canvases) {
+                    if (header != null) {
+                        header.drawCell(canvases, position);
+                    }
+                }
+            });
+
+            /// add empty cells
+            if (checkHeaderNoBorder()) {
+                headerCell.setBorder(Rectangle.NO_BORDER);
+            } else {
+                headerCell.setBorder(Rectangle.BOX);
+                headerCell.setBorderWidthLeft(headerBorderWidthLeft);
+                headerCell.setBorderWidthRight(headerBorderWidthRight);
+                headerCell.setBorderWidthTop(headerBorderWidthTop);
+                headerCell.setBorderWidthBottom(headerBorderWidthBottom);
+                headerCell.setBorderColor(headerBorderColor);
+            }
+
+            rootTable.addCell(headerCell);
+        }
 
 
 
@@ -94,18 +95,19 @@ public class HeaderContentFlowReport extends HeaderFlowReport {
                     AccessibleElementId cellId = cell.getId();
                     ListRow row = getRowByCellId(cellId);
 
-                    if(row !=null){
-                        //position.setBorder(Rectangle.BOX);
-                        //position.setBorderWidth(1);
-                        //position.setBorderColor(BaseColor.BLUE);
+                    // for debug
+                    //canvases[0].setFontAndSize(BASE_FONT, 12);
+                    //canvases[0].showTextAligned(Element.ALIGN_LEFT, "Column 1", position.getLeft(), position.getTop(), 0);
 
+                    if(row !=null){
                         row.drawCell(canvases, position);
                     }
                 }
             });
 
+            BaseColor defaultColor = cell.getBorderColor();
             /// set border
-            if(checkNoBorder(1) || row== EmptyListRow.EMPTY) {
+            if(checkNoBorder() || row== EmptyListRow.EMPTY) {
                 cell.setBorder(Rectangle.NO_BORDER);
             }else{
                 cell.setBorder(Rectangle.BOX);
@@ -120,21 +122,23 @@ public class HeaderContentFlowReport extends HeaderFlowReport {
         }
         table.setComplete(true);
 
-        // add rows table
-        PdfPCell rowsCell = new PdfPCell();
-        rowsCell.setBorder(Rectangle.NO_BORDER);
-        rowsCell.setPaddingLeft(rowsPaddingLeft);
-        rowsCell.setPaddingTop(rowsPaddingTop);
-        rowsCell.setPaddingRight(rowsPaddingRight);
-        rowsCell.setPaddingBottom(rowsPaddingBottom);
+        if(header!=null && headerHeight > 0) {
+            // add rows table
+            PdfPCell rowsCell = new PdfPCell();
+            rowsCell.setBorder(Rectangle.NO_BORDER);
+            rowsCell.setPaddingLeft(rowsPaddingLeft);
+            rowsCell.setPaddingTop(rowsPaddingTop);
+            rowsCell.setPaddingRight(rowsPaddingRight);
+            rowsCell.setPaddingBottom(rowsPaddingBottom);
 
-        rowsCell.addElement(table);
-        rootTable.addCell(rowsCell);
+            rowsCell.addElement(table);
+            rootTable.addCell(rowsCell);
+        }
 
         /// document
         try {
             Document document = canvas.getPdfDocument();
-            document.add(rootTable);
+            document.add( (header!=null && headerHeight > 0) ? rootTable : table);
 
         }catch (DocumentException e){
             throw new RuntimeException(e);

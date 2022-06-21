@@ -218,9 +218,9 @@ public class ElementDrawUtil {
                         ax -= image.getScaledWidth();
                     }
                     
-                    // correct padding
-                    ax += paddingLeft;
-                    ay -= paddingBottom;
+//                    // correct padding
+//                    ax += paddingLeft;
+//                    ay -= paddingBottom;
 
                     image.setAbsolutePosition(ax, ay);
 
@@ -258,9 +258,9 @@ public class ElementDrawUtil {
                     ax = (float) (pos.getX() - (image.getScaledWidth() * 0.5f));
                     ay = (float) pos.getY() - image.getScaledHeight();
 
-                    // correct padding
-                    ax += paddingLeft;
-                    ay -= paddingBottom;
+//                    // correct padding
+//                    ax += paddingLeft;
+//                    ay -= paddingBottom;
 
                     image.setAbsolutePosition(ax, ay);
 

@@ -5,6 +5,7 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.jfeat.pdf.print.base.ListRow;
 import com.jfeat.pdf.print.base.PaddingListRow;
+import com.jfeat.pdf.print.base.TableCellElement;
 import com.jfeat.pdf.print.util.ElementDrawUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,7 @@ import org.slf4j.LoggerFactory;
  * Created by vincent on 2018/3/16.
  * 图像框: 图像排列
  */
-public class ImageBox extends PaddingListRow implements ListRow {
+public class ImageBox extends TableCellElement implements ListRow {
     protected final static Logger logger = LoggerFactory.getLogger(ImageBox.class);
 
     public static String ID = "ImageBox";

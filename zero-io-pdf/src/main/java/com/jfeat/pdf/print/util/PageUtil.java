@@ -24,7 +24,7 @@ public class PageUtil {
                                            float marginRight,
                                            float marginTop,
                                            float marginBottom){
-        return new Rectangle(  pageSize.getLeft(marginLeft),
+        return new Rectangle( pageSize.getLeft(marginLeft),
                 pageSize.getBottom(marginBottom),
                 pageSize.getRight(marginRight),
                 pageSize.getTop(marginTop));

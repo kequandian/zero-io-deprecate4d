@@ -32,7 +32,8 @@ public abstract class FlowReport implements FlowElement {
     /// border
     protected float headerBorderWidthLeft, headerBorderWidthRight, headerBorderWidthTop, headerBorderWidthBottom;
     protected BaseColor headerBorderColor;
-    protected float rowBorderWidthLeft, rowBorderWidthRight, rowBorderWidthTop, rowBorderWidthBottom;
+
+    protected float rowBorderWidthLeft = 1, rowBorderWidthRight = 1, rowBorderWidthTop = 1, rowBorderWidthBottom = 1;
     protected BaseColor rowBorderColor;
 
     // rows margin
@@ -74,7 +75,7 @@ public abstract class FlowReport implements FlowElement {
             });
 
             /// add empty cells
-            if (checkNoBorder(0)) {
+            if (checkHeaderNoBorder()) {
                 headerCell.setBorder(Rectangle.NO_BORDER);
             } else {
                 headerCell.setBorder(Rectangle.BOX);
@@ -130,7 +131,7 @@ public abstract class FlowReport implements FlowElement {
             });
 
             /// set border
-            if(checkNoBorder(1) || row== EmptyListRow.EMPTY) {
+            if(checkNoBorder() || row== EmptyListRow.EMPTY) {
                 cell.setBorder(Rectangle.NO_BORDER);
             }else{
                 cell.setBorder(Rectangle.BOX);
@@ -154,13 +155,12 @@ public abstract class FlowReport implements FlowElement {
         }
     }
 
+    protected boolean checkHeaderNoBorder(){
+        return (headerBorderWidthLeft + headerBorderWidthRight + headerBorderWidthTop + headerBorderWidthBottom) < 0.001;
+    }
 
-    protected boolean checkNoBorder(int flag){
-        if(flag==0) {
-            return (headerBorderWidthLeft + headerBorderWidthRight + headerBorderWidthTop + headerBorderWidthBottom) == 0;
-        }else{
-            return (rowBorderWidthLeft + rowBorderWidthRight + rowBorderWidthTop + rowBorderWidthBottom) == 0;
-        }
+    protected boolean checkNoBorder(){
+         return (rowBorderWidthLeft + rowBorderWidthRight + rowBorderWidthTop + rowBorderWidthBottom) < 0.001;
     }
 
     public int getFlowDirection() {
@@ -332,13 +332,13 @@ public abstract class FlowReport implements FlowElement {
         }
     }
 
-    public void setRowBorderWidth(float left, float top, float right, float bottom) {
+    public void setRowBorderWidth(float left, float right, float top, float bottom) {
         if(left<0 || top<0 || right<0 || bottom<0){
             // do nothing
         }else {
             this.rowBorderWidthLeft = left;
-            this.rowBorderWidthTop = top;
             this.rowBorderWidthRight = right;
+            this.rowBorderWidthTop = top;
             this.rowBorderWidthBottom = bottom;
         }
     }

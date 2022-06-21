@@ -30,10 +30,6 @@ public class FlowReportRequest {
     private float pageMarginRight;
     private float pageMarginBottom;
 
-    // border
-    private float borderWidth;
-    private ColorDefinition borderColor;
-
     public int getColumns() {
         return columns;
     }
@@ -76,23 +72,24 @@ public class FlowReportRequest {
         return this;
     }
 
-    public float getBorderWidth() {
-        return borderWidth;
+    public FlowReportRequest setPageMargin(float l, float r, float t, float b){
+        this.pageMarginLeft = l;
+        this.pageMarginRight = r;
+        this.pageMarginTop = t;
+        this.pageMarginBottom = b;
+        return this;
     }
 
-    public void setBorderWidth(float borderWidth) {
-        this.borderWidth = borderWidth;
-    }
-
-    public ColorDefinition getBorderColor() {
-        return borderColor;
+    public FlowReportRequest setBorderWidth(float width){
+        this.layout.getRowsLayout().setBorderWidth(width);
+        return this;
     }
 
     public void setBorderColor(int r, int g, int b) {
-        this.borderColor = new ColorDefinition(r,g,b);
+        this.layout.getRowsLayout().setBorderColor(r,g,b);
     }
     public void setBorderColor(ColorDefinition color) {
-        this.borderColor = color;
+        this.layout.getRowsLayout().setBorderColor(color);
     }
 
     public FlowReportRequest setRowsPadding(float margin){

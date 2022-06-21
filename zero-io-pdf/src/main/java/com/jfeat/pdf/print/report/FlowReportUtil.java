@@ -2,6 +2,7 @@ package com.jfeat.pdf.print.report;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.jfeat.pdf.print.base.ColorDefinition;
 import com.jfeat.pdf.print.element.ImageBox;
 import com.jfeat.pdf.print.report.request.RowLayoutRequest;
@@ -45,25 +46,23 @@ public class FlowReportUtil {
 
         RowLayoutRequest headerLayout = request.getLayout().getHeaderLayout();
         RowFormatRequest headerFormat = request.getFormat().getHeaderFormat();
-
         RowLayoutRequest rowsLayout = request.getLayout().getRowsLayout();
         RowFormatRequest rowsFormat = request.getFormat().getRowsFormat();
 
-
-        /// get alignment
-        int headerTitleAlignment = Element.ALIGN_BASELINE;
-        int rowsTitleAlignment = Element.ALIGN_BASELINE;
-        {
-            String LEFT = new Definitions().getTitleAlignments()[1];
-
-            if (headerFormat == null || LEFT.compareTo(headerFormat.getAlignment()) == 0) {
-                headerTitleAlignment = Element.ALIGN_LEFT;
-            }
-
-            if (rowsFormat == null || LEFT.compareTo(rowsFormat.getAlignment()) == 0) {
-                rowsTitleAlignment = Element.ALIGN_LEFT;
-            }
-        }
+//        /// get alignment
+//        int headerTitleAlignment = Element.ALIGN_BASELINE;
+//        int rowsTitleAlignment = Element.ALIGN_BASELINE;
+//        {
+//            String LEFT = new Definitions().getTitleAlignments()[1];
+//
+//            if (headerFormat == null || LEFT.compareTo(headerFormat.getAlignment()) == 0) {
+//                headerTitleAlignment = Element.ALIGN_LEFT;
+//            }
+//
+//            if (rowsFormat == null || LEFT.compareTo(rowsFormat.getAlignment()) == 0) {
+//                rowsTitleAlignment = Element.ALIGN_LEFT;
+//            }
+//        }
 
         HeaderFlowReport report = new HeaderFlowReportBuilder()
                 // report
@@ -74,8 +73,8 @@ public class FlowReportUtil {
                 .rowOption(request.getRowOption())
 //                .rowHeight(request.getRowHeight())
                 .rowsPadding(request.getRowsPaddingLeft(), request.getRowsPaddingTop(), request.getRowsPaddingRight(), request.getRowsPaddingBottom())
-                .borderWidth(request.getBorderWidth())
-                .borderColor(ColorDefinition.getBaseColor(request.getBorderColor()))
+                .borderWidth(rowsLayout.getBorderLeft(), rowsLayout.getBorderRight(), rowsLayout.getBorderTop(), rowsLayout.getBorderBottom())
+                .borderColor(rowsLayout.getBorderColor())
                 .headerHeight(headerLayout.getHeight())
                 .rowHeight(rowsLayout.getHeight())
                 .rowAlignment(rowsLayout.getAlignment())
@@ -85,14 +84,14 @@ public class FlowReportUtil {
                 // header layout
                 .headerPadding(headerLayout.getPaddingLeft(), headerLayout.getPaddingRight(), headerLayout.getPaddingTop(), headerLayout.getPaddingBottom())
                 .headerBorderWidth(headerLayout.getBorderLeft(), headerLayout.getBorderRight(), headerLayout.getBorderTop(), headerLayout.getBorderBottom())
-                .headerBorderColor(headerLayout.getBorderColorRed(), headerLayout.getBorderColorGreen(), headerLayout.getBorderColorBlue())
+                .headerBorderColor(headerLayout.getBorderColor())
                 // row format
                 .rowFont(headerFormat.getFont())
                 .rowSpacing(headerFormat.getSpacing(), headerFormat.getIndent(), headerFormat.getAlignment(), headerFormat.getVerticalAlignment())
                 // row layout
                 .rowPadding(rowsLayout.getPaddingLeft(), rowsLayout.getPaddingRight(), rowsLayout.getPaddingTop(), rowsLayout.getPaddingBottom())
                 .rowBorderWidth(rowsLayout.getBorderLeft(), rowsLayout.getBorderRight(), rowsLayout.getBorderTop(), rowsLayout.getBorderBottom())
-                .rowBorderColor(rowsLayout.getBorderColorRed(), rowsLayout.getBorderColorGreen(), rowsLayout.getBorderColorBlue())
+                .rowBorderColor(rowsLayout.getBorderColor())
                 // data
                 .headerData(request.getHeaderData())
                 .rowsData(request.getRowsData())
@@ -115,7 +114,7 @@ public class FlowReportUtil {
         try {
             PdfDocumentUtil.writeDocument(new PdfDocumentUtil.PdfWriteListener() {
                 @Override
-                public void onDraw(Document document, PdfContentByte canvas) {
+                public void onDraw(Document document, PdfContentByte canvas) throws DocumentException {
 
                     if (document != null) {
                         Rectangle pageSize = document.getPageSize();
@@ -123,11 +122,23 @@ public class FlowReportUtil {
                         flowReport.setFlowHeight(contentSize.getHeight());
                     }
 
-                    if (flowReport.getHeader() != null || (flowReport.getRows() != null && flowReport.getRows().size() > 0)) {
-                        flowReport.draw(canvas);
-                    } else {
-                        // no content, just write text
-                        ElementDrawUtil.drawText(canvas, "No content");
+                    if(false){
+//                        document.add(new Phrase("Hello world"));
+                        PdfPTable table = new PdfPTable(2);
+                        table.setWidthPercentage(100);
+                        table.addCell("Column 1");
+                        table.addCell("Column 2");
+                        table.setComplete(true);
+                        document.add(table);
+
+                    }else {
+
+                        if (flowReport.getHeader() != null || (flowReport.getRows() != null && flowReport.getRows().size() > 0)) {
+                            flowReport.draw(canvas);
+                        } else {
+                            // no content, just write text
+                            ElementDrawUtil.drawText(canvas, "No content");
+                        }
                     }
 
                 }
@@ -184,9 +195,10 @@ public class FlowReportUtil {
     public static void TestDrawImageList(String[] args) throws Exception {
         FlowReportRequest request = new FlowReportRequest()
                 .setColumns(3)
-                .setPageMargin(20)
-                .setRowsPadding(5)
+                .setPageMargin(0, 0, 0, 0)
+                .setRowsPadding(1)
                 .setRowRatio(0.75f)
+                .setBorderWidth(0.0f)
                 .setRowAlignment(Element.ALIGN_CENTER)
                 .setRowOption(ImageBox.ID);
 

@@ -3,9 +3,56 @@ package com.jfeat.pdf.print.base;
 import com.itextpdf.text.AccessibleElementId;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
-import com.jfeat.pdf.print.base.ListRow;
 
 public abstract class TableCellElement extends Rectangle implements ListRow {
+
+    protected float paddingLeft;
+    protected float paddingRight;
+    protected float paddingTop;
+    protected float paddingBottom;
+
+    public void setPadding(float left, float right, float top, float bottom){
+        this.paddingLeft = left;
+        this.paddingRight = right;
+        this.paddingTop = top;
+        this.paddingBottom = bottom;
+    }
+
+    public float getPaddingLeft() {
+        return paddingLeft;
+    }
+
+    public void setPaddingLeft(float paddingLeft) {
+        this.paddingLeft = paddingLeft;
+    }
+
+    public float getPaddingRight() {
+        return paddingRight;
+    }
+
+    public void setPaddingRight(float paddingRight) {
+        this.paddingRight = paddingRight;
+    }
+
+    public float getPaddingTop() {
+        return paddingTop;
+    }
+
+    public void setPaddingTop(float paddingTop) {
+        this.paddingTop = paddingTop;
+    }
+
+    public float getPaddingBottom() {
+        return paddingBottom;
+    }
+
+    public void setPaddingBottom(float paddingBottom) {
+        this.paddingBottom = paddingBottom;
+    }
+
+    /**
+     * data member
+     */
 
     protected AccessibleElementId cellId;
 

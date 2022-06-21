@@ -12,7 +12,7 @@ import com.jfeat.pdf.print.util.PdfFontMetrics;
  * Created by vincent on 2018/3/16.
  * 相对布局， 类似于 Android 的 RelativeLayout
  */
-public abstract class RelativeListRow extends PaddingListRow {
+public abstract class RelativeListRow extends TableCellElement {
 
     private static final Logger logger = LoggerFactory.getLogger(RelativeListRow.class);
 

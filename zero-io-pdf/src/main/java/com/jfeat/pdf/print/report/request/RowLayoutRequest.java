@@ -1,6 +1,9 @@
 package com.jfeat.pdf.print.report.request;
 
+import com.itextpdf.text.BaseColor;
 import com.jfeat.pdf.print.base.ColorDefinition;
+
+import java.awt.*;
 
 /**
  * Created by vincenthuang on 23/03/2018.
@@ -14,7 +17,7 @@ public class RowLayoutRequest {
 
     /// border
     private float borderLeft = 0, borderRight = 0, borderTop = 0, borderBottom = 0;
-    private int borderColorRed = 0,borderColorGreen = 0,borderColorBlue = 0;
+    private ColorDefinition borderColor;
 
     // background
     private ColorDefinition backgroundColor;
@@ -142,9 +145,12 @@ public class RowLayoutRequest {
     }
 
     public RowLayoutRequest setBorderColor(int red, int green, int blue){
-        this.borderColorRed = red;
-        this.borderColorGreen = green;
-        this.borderColorBlue = blue;
+        this.borderColor = new ColorDefinition(red, green, blue);
+        return this;
+    }
+
+    public RowLayoutRequest setBorderColor(ColorDefinition color){
+        this.borderColor = color;
         return this;
     }
 
@@ -154,9 +160,10 @@ public class RowLayoutRequest {
                 if (colorString.contains(",")) {
                     String[] values = colorString.split(",");
                     if(values.length==3){
-                        this.borderColorRed = Integer.parseInt(values[0]);
-                        this.borderColorGreen= Integer.parseInt(values[1]);
-                        this.borderColorBlue = Integer.parseInt(values[2]);
+                        int red = Integer.parseInt(values[0]);
+                        int green = Integer.parseInt(values[1]);
+                        int blue = Integer.parseInt(values[2]);
+                        this.borderColor = new ColorDefinition(red, green, blue);
                     }
                 }
             } catch (NumberFormatException e) {
@@ -167,14 +174,21 @@ public class RowLayoutRequest {
     }
 
     public String getBorderColor(String colorString){
-        int total = (borderColorRed + borderColorGreen + borderColorBlue);
+        if(borderColor==null){
+            return "0,0,0";
+        }
+        int total = (this.borderColor.getRed() + this.borderColor.getGreen() + this.borderColor.getBlue());
         if(total%3==0) {
             int ave = total / 3;
-            if (ave == borderColorRed && ave == borderColorGreen && ave == borderColorBlue) {
+            if (ave == this.borderColor.getRed() && ave == this.borderColor.getGreen() && ave == this.borderColor.getBlue()) {
                 return String.valueOf(ave);
             }
         }
-        return String.format("%d,%d,%d", borderColorRed, borderColorGreen, borderColorBlue);
+        return borderColor.toString();
+    }
+
+    public ColorDefinition getBorderColor(){
+        return this.borderColor;
     }
 
     /**
@@ -252,30 +266,6 @@ public class RowLayoutRequest {
 
     public void setBorderBottom(float borderBottom) {
         this.borderBottom = borderBottom;
-    }
-
-    public int getBorderColorRed() {
-        return this.borderColorRed;
-    }
-
-    public void setBorderColorRed(int red) {
-        this.borderColorRed = red;
-    }
-
-    public int getBorderColorGreen() {
-        return this.borderColorGreen;
-    }
-
-    public void setBorderColorGreen(int green) {
-        this.borderColorGreen = green;
-    }
-
-    public int getBorderColorBlue() {
-        return this.borderColorBlue;
-    }
-
-    public void setBorderColorBlue(int blue) {
-        this.borderColorBlue = blue;
     }
 
     public ColorDefinition getBackgroundColor() {
