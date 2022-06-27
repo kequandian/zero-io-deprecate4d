@@ -2,24 +2,16 @@ package com.jfeat.am.module.ioJson.api;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.jfeat.crud.plus.META;
-import com.jfeat.am.core.jwt.JWTKit;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.*;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jfeat.crud.base.tips.SuccessTip;
 import com.jfeat.crud.base.tips.Tip;
-import com.jfeat.crud.base.exception.BusinessCode;
 
 import com.jfeat.am.module.ioJson.services.domain.service.*;
-import com.jfeat.am.module.ioJson.services.domain.model.MockJson;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -55,12 +47,30 @@ public class MockJsonEndpoint {
     }
 
     @GetMapping("/map")
-    @ApiOperation(value = "查看 map")
+    @ApiOperation(value = "查看 当前appId下的idmap")
     public Tip getMap() {
         Map<String, String> idMap = mockJsonService.getIdMap();
         return SuccessTip.create(idMap);
     }
 
+    @GetMapping("/appMap")
+    @ApiOperation(value = "查看 当前appId下的idmap")
+    public Tip getAppIdMap() {
+        Map<String, String> idMap = mockJsonService.getAppIdMap();
+        return SuccessTip.create(idMap);
+    }
 
+    @GetMapping("/setAppId/{id}")
+    @ApiOperation(value = "设置 appId")
+    public Tip setAppId(@PathVariable (name = "id") String id) {
+         mockJsonService.setAppId(id);
+        return SuccessTip.create(mockJsonService.getAppId());
+    }
+
+    @GetMapping("/getAppId")
+    @ApiOperation(value = "查看 当前appId")
+    public Tip getAppId() {
+        return SuccessTip.create(mockJsonService.getAppId());
+    }
 
 }

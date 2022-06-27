@@ -1,11 +1,25 @@
- @endpoint = https://house.cloud.smallsaas.cn
 
+@localHostEndpoint = http://localhost:8080
+@reEndpoint = https://house.cloud.smallsaas.cn
+@endpoint = {{localHostEndpoint}}
+
+### 获取当前appId
+GET {{endpoint}}/form/getAppId
+
+### 设置appId
+GET  {{endpoint}}/form/setAppId/test
+
+### 获取当前appId 配置信息
+GET {{endpoint}}/form/appMap
+
+### 获取当前appId 下的id配置信息
+GET {{endpoint}}/form/map
 
 ### 获取页面信息
-GET {{endpoint}}/data?id=66666
+GET {{endpoint}}/form?id=66666
 
 ### 提交页面信息
-POST {{endpoint}}/data/66666
+POST {{endpoint}}/form/66666
 Content-Type: application/json
 
 {  
@@ -52,3 +66,6 @@ Content-Type: application/json
         }
     }
 }
+
+
+
