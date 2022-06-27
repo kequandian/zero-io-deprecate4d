@@ -2,7 +2,7 @@
 @localHostEndpoint = http://localhost:8080
 @reEndpoint = https://house.cloud.smallsaas.cn
 @endpoint = {{localHostEndpoint}}
-
+### 注：在windows下测试的时候 文件大小写不敏感 导致可能出现 输入appId default 如果存在 DEFAULT的文件 则会读取DEFAULT而不是新建个default文件
 ### 获取当前appId
 GET {{endpoint}}/form/getAppId
 
