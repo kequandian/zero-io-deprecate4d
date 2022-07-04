@@ -2,21 +2,24 @@
 @localHostEndpoint = http://localhost:8080
 @reEndpoint = https://house.cloud.smallsaas.cn
 @endpoint = {{localHostEndpoint}}
-### 文件夹名字 自定义
-@dir = pathto
-### mockjson文件名字 自定义
-@mockName = mockName
-### 获取已定义文件夹列表
-GET {{endpoint}}/mock
+### 注：在windows下测试的时候 文件大小写不敏感 导致可能出现 输入appId default 如果存在 DEFAULT的文件 则会读取DEFAULT而不是新建个default文件
+### 获取当前appId
+GET {{endpoint}}/form/getAppId
 
-### 获取自定义文件夹下 的 所有已定义的mock内容
-GET  {{endpoint}}/mock/{{dir}}
+### 设置appId
+GET  {{endpoint}}/form/setAppId/test
 
-### 获取{{dir}}文件夹下名字为：{{mockName}} 的 mock数据
-GET {{endpoint}}/mock/{{dir}}/{{mockName}}
+### 获取当前appId 配置信息
+GET {{endpoint}}/form/appMap
 
-### 提交数据 自定义json格式
-POST {{endpoint}}/mock/{{dir}}/{{mockName}}
+### 获取当前appId 下的id配置信息
+GET {{endpoint}}/form/map
+
+### 获取页面信息
+GET {{endpoint}}/form?id=66666
+
+### 提交页面信息
+POST {{endpoint}}/form/66666
 Content-Type: application/json
 
 {  
