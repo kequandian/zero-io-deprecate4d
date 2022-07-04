@@ -16,8 +16,6 @@ public interface MockJsonService {
 
     Map<String, String> getIdMap();
 
-    void writeProperties(String proKey, String proValue, File file);
-
 
     String getAppId();
 

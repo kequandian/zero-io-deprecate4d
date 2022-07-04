@@ -24,9 +24,9 @@ import java.util.Map;
  */
 @RestController
 
-@Api("Supplier")
+@Api("表单用")
 @RequestMapping("/form")
-public class MockJsonEndpoint {
+public class MockJsonFormEndpoint {
 
     @Resource
     MockJsonService mockJsonService;
