@@ -53,6 +53,11 @@ public class UserEndFileServiceEndpoint {
         String originalFileName = file.getOriginalFilename();
         String extensionName = FilenameUtils.getExtension(originalFileName);
 
+        if(extensionName != null){
+            if(extensionName.equals("exe")||extensionName.equals("java")||extensionName.equals("jsp")||extensionName.equals("php")||extensionName.equals("asp")){
+                throw new BusinessException(BusinessCode.BadRequest,  "文件类型有误 不能为：" + extensionName +"类型的文件");
+            }
+        }
         String fileHost = FSProperties.getFileHost();
         Long fileSize = file.getSize();
         String fileName = UUID.randomUUID() + "." + extensionName;
