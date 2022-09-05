@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class AmApplication {
     protected final static Logger logger = LoggerFactory.getLogger(AmApplication.class);
+
     public static void main(String[] args) {
         SpringApplication.run(AmApplication.class, args);
         logger.info("Application run success!");

@@ -20,7 +20,7 @@ public class BarCodeFlow implements FlowElement {
     private boolean ignoreCode;
 
 
-    public BarCodeFlow(String formatName, String code, boolean ignoreCode){
+    public BarCodeFlow(String formatName, String code, boolean ignoreCode) {
         this.formatName = formatName;
         this.code = code;
         this.ignoreCode = ignoreCode;
@@ -29,13 +29,13 @@ public class BarCodeFlow implements FlowElement {
 
     @Override
     public void draw(PdfContentByte canvas) {
-        if(this.BC_39.equals(formatName)){
+        if (this.BC_39.equals(formatName)) {
             BarCodes.createBarCodeEAN(canvas, code);
-        }else if(this.BC_39.equals(formatName)){
+        } else if (this.BC_39.equals(formatName)) {
             BarCodes.createBarCode39(canvas, code, ignoreCode);
-        }else if(this.BC_128.equals(formatName)){
+        } else if (this.BC_128.equals(formatName)) {
             BarCodes.createBarCode128(canvas, code);
-        }else if(this.QR_CODE.equals(formatName)){
+        } else if (this.QR_CODE.equals(formatName)) {
             BarCodes.createQrCode(canvas, code);
         }
     }

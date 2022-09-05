@@ -8,12 +8,12 @@ import java.util.List;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author Code generator
  * @since 2020-10-08
  */
 public interface AdvertiserOperateLogMapper extends BaseMapper<AdvertiserOperateLog> {
-    List<AdvertiserOperateLog> selectLogList(@Param("id")Long id);
+    List<AdvertiserOperateLog> selectLogList(@Param("id") Long id);
 }

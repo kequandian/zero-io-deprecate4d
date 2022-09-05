@@ -20,19 +20,20 @@ public class BorderDefinition {
     private float borderLeft = 0, borderRight = 0, borderTop = 0, borderBottom = 0;
     private ColorDefinition color;
 
-    public BorderDefinition(String style, float width, ColorDefinition color){
+    public BorderDefinition(String style, float width, ColorDefinition color) {
         this.style = style;
         this.borderLeft = borderRight = borderTop = borderBottom = width;
         this.color = color;
     }
-    public BorderDefinition(String style, float width, String colorname){
+
+    public BorderDefinition(String style, float width, String colorname) {
         this.style = style;
         this.borderLeft = borderRight = borderTop = borderBottom = width;
         this.colorname = colorname;
         this.color = ColorDefinition.getColor(colorname);
     }
 
-    public static BaseColor getColor(ColorDefinition color){
+    public static BaseColor getColor(ColorDefinition color) {
         return new BaseColor(color.getRed(), color.getGreen(), color.getBlue());
     }
 

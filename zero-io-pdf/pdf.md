@@ -19,9 +19,8 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
 }
 ```
 
-
-
 ##### 简单模版格式例子:
+
 ```json
 {
   "flows": [
@@ -129,7 +128,7 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
 
 ![](https://github.com/kequandian/zero-io/blob/master/zero-io/simple-template.png)
 
-###  模版 flows 属性:
+### 模版 flows 属性:
 
 > > > [ ]中能够嵌入模板元素，可以设置或修改需要打印的内容
 
@@ -139,7 +138,8 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
 	...
 }
 ```
-###  模版 page 属性:
+
+### 模版 page 属性:
 
 > > > 可以设置页面整体布局，默认是竖向打印，可设置横向打印，设置页面边距时，数值越大，距离边框越远，整体内容越集中，内容与内容之间间距越小。可设置页面打印背景，输入网上的图片地址即可，如不需要设置背景图，则把"backgroundImageUrl"删除
 
@@ -155,7 +155,7 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
 }
 ```
 
-###  模版元素:
+### 模版元素:
 
 #### 文本元素：
 
@@ -168,6 +168,7 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
   "height": 10          // 高度
 },
 ```
+
 #### 详情页元素:
 
 > > > 可以设置详情页内容的布局、大小、间距、也可以修改字段展示不同的内容等，其中：
@@ -230,6 +231,7 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
   "height": "25"		// 每行高度
 },
 ```
+
 #### 表格元素：
 
 > > > 可以设置页面的表格和表格里面的内容，"columnKeyBindings"表示api返回的数据显示的字段，可根据显示的内容进行定义需要打印哪一字段，其中"columnWidth"表示列宽，数值越大，列的宽度越大。"data"表示列数据，"columnKeyBindings"就是在"data"中取的字段。"rowHeight"表示每一行的高度，数值越大，行高越高，"headerHeight"表示表头的高度，即表格开头标题一行的高度，数值越大，越高，"converts"值的转换，例如，api返回的结果是英文，但页面则显示中文，这时可以用"converts"进行值的转换，具体表格的配置如下图：
@@ -259,7 +261,8 @@ public static ByteArrayOutputStream print(JSONObject template, JSONObject reques
   "headerHeight": 40,   // 表头的高度
 },
 ```
-####  矩形元素：
+
+#### 矩形元素：
 
 > > > 可以起到占位的作用，也可以作为内容与内容显示之间的分隔，"height"表示矩形的高度，"width"表示矩形的宽度，"color"表示矩形的颜色，如不需要则可以不填该内容，注意：矩形的高度宽度会根据其他内容的高度宽度进行自动填充，且矩形默认是居中显示。
 

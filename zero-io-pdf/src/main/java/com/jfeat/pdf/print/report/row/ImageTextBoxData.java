@@ -10,7 +10,7 @@ import com.jfeat.pdf.print.report.request.RowFormatRequest;
 
 /**
  * Created by vincenthuang on 19/03/2018.
- *  上下布局图文框 [上方图片，下方标题] 数据
+ * 上下布局图文框 [上方图片，下方标题] 数据
  */
 public class ImageTextBoxData extends PaddingRowBase {
 
@@ -52,33 +52,37 @@ public class ImageTextBoxData extends PaddingRowBase {
     public void setTitleFormat(RowFormatRequest titleFormat) {
         this.titleFormat = titleFormat;
     }
+
     public void setTitleFont(FontDefinition font) {
-        if(this.titleFormat==null){
+        if (this.titleFormat == null) {
             this.titleFormat = new RowFormatRequest();
         }
         this.titleFormat.setFont(font);
     }
 
     public void setSpacing(float spacing) {
-        if(this.titleFormat == null) {
+        if (this.titleFormat == null) {
             this.titleFormat = new RowFormatRequest();
         }
         this.titleFormat.setSpacing(spacing);
     }
+
     public void setIndent(float indent) {
-        if(this.titleFormat == null) {
+        if (this.titleFormat == null) {
             this.titleFormat = new RowFormatRequest();
         }
         this.titleFormat.setIndent(indent);
     }
+
     public void setAlignment(String alignment) {
-        if(this.titleFormat == null) {
+        if (this.titleFormat == null) {
             this.titleFormat = new RowFormatRequest();
         }
         this.titleFormat.setAlignment(alignment);
     }
+
     public void setVerticalAlignment(String alignment) {
-        if(this.titleFormat == null) {
+        if (this.titleFormat == null) {
             this.titleFormat = new RowFormatRequest();
         }
         this.titleFormat.setVerticalAlignment(alignment);

@@ -122,7 +122,7 @@ public class FlowReportUtil {
                         flowReport.setFlowHeight(contentSize.getHeight());
                     }
 
-                    if(false){
+                    if (false) {
 //                        document.add(new Phrase("Hello world"));
                         PdfPTable table = new PdfPTable(2);
                         table.setWidthPercentage(100);
@@ -131,7 +131,7 @@ public class FlowReportUtil {
                         table.setComplete(true);
                         document.add(table);
 
-                    }else {
+                    } else {
 
                         if (flowReport.getHeader() != null || (flowReport.getRows() != null && flowReport.getRows().size() > 0)) {
                             flowReport.draw(canvas);

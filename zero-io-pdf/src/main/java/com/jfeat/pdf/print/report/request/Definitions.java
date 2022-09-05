@@ -3,6 +3,7 @@ package com.jfeat.pdf.print.report.request;
 /**
  * Created by vincenthuang on 22/03/2018.
  * 用于定义各种配置，包括
+ *
  * @flowDirections LTR UTD 从左至右， 从下至下
  * @fontStyles 字体风格
  * @titleAlignments 标题对齐

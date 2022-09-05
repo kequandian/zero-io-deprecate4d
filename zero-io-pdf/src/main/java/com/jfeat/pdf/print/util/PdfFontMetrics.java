@@ -19,8 +19,8 @@ import java.awt.*;
 public class PdfFontMetrics {
 
 
-    public static float getFontHeight(BaseFont baseFont, float fontSize){
-        if(baseFont!=null) {
+    public static float getFontHeight(BaseFont baseFont, float fontSize) {
+        if (baseFont != null) {
             float descent = baseFont.getFontDescriptor(BaseFont.DESCENT, fontSize);
             float ascent = baseFont.getFontDescriptor(BaseFont.ASCENT, fontSize);
             return ascent - descent;
@@ -35,7 +35,7 @@ public class PdfFontMetrics {
     protected final static Logger logger = LoggerFactory.getLogger(PdfFontMetrics.class);
 
 
-    public PdfFontMetrics(PdfContentByte canvas, Font ifont){
+    public PdfFontMetrics(PdfContentByte canvas, Font ifont) {
 
         String temp_font = "wqy-microhei";
         this.ifont = ifont;
@@ -58,7 +58,7 @@ public class PdfFontMetrics {
         graphics2D.dispose();
     }
 
-    public int getStringWidth(String content){
+    public int getStringWidth(String content) {
         return fontMetrics.stringWidth(content);
     }
 
@@ -67,7 +67,7 @@ public class PdfFontMetrics {
                 .getWidthPoint(content, ifont.getCalculatedSize()));
     }
 
-    public int getStringHeight(){
+    public int getStringHeight() {
         return fontMetrics.getAscent() - fontMetrics.getDescent();
     }
 

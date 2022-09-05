@@ -13,6 +13,7 @@ import com.jfeat.pdf.print.base.RelativeListRow;
 public class RelativeRow extends RelativeListRow implements ListRow {
 
     public static String ID = "RelativeRow";
+
     @Override
     public String rowId() {
         return ID;
@@ -34,18 +35,18 @@ public class RelativeRow extends RelativeListRow implements ListRow {
         super(position);
     }
 
-    public RelativeRow(){
-        super(new Rectangle(0,0,0,0));
+    public RelativeRow() {
+        super(new Rectangle(0, 0, 0, 0));
     }
 
 
     public RelativeRow title(String title, String subtitle, String hint,
                              Font font, Font subFont, Font hintFont) {
         this.title = new Phrase(title, font);
-        if(subtitle!=null) {
+        if (subtitle != null) {
             this.subtitle = new Phrase(subtitle, subFont);
         }
-        if(hint!=null) {
+        if (hint != null) {
             this.hint = new Phrase(hint, hintFont);
         }
 
@@ -53,15 +54,17 @@ public class RelativeRow extends RelativeListRow implements ListRow {
     }
 
     public RelativeRow value(String value, Font font) {
-        this.value = new Phrase(value, font);;
+        this.value = new Phrase(value, font);
+        ;
         return this;
     }
 
     /**
      * override by child to change iconAlignment
+     *
      * @return
      */
-    protected int iconAlignment(){
+    protected int iconAlignment() {
         return Element.ALIGN_LEFT;
     }
 
@@ -141,17 +144,17 @@ public class RelativeRow extends RelativeListRow implements ListRow {
                 linesPosition.setRight(position.getRight() - next.getScaledWidth());
             }
 
-            if(title!=null && subtitle != null && hint!=null) {
+            if (title != null && subtitle != null && hint != null) {
                 drawLines(canvas, linesPosition, new Phrase[]{title, subtitle, hint}, titleAlignment, titleIndent, titleSpacing);
-            }else if(title!=null && subtitle != null){
+            } else if (title != null && subtitle != null) {
                 drawLines(canvas, linesPosition, new Phrase[]{title, subtitle}, titleAlignment, titleIndent, titleSpacing);
-            }else if(title!=null){
-                drawLines(canvas, linesPosition, new Phrase[]{title},  titleAlignment,0, 0);
+            } else if (title != null) {
+                drawLines(canvas, linesPosition, new Phrase[]{title}, titleAlignment, 0, 0);
             }
         }
 
         /// draw value text only if no next image
-        if(next==null) {
+        if (next == null) {
             drawText(canvas, position, value, Element.ALIGN_RIGHT);
         }
 

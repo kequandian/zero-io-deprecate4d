@@ -37,7 +37,7 @@ public class PoiAgentImporterUtil implements POIAgent {
 
     @SuppressWarnings("debug only")
     @Deprecated
-    public PoiAgentImporterUtil sourceFile(File file){
+    public PoiAgentImporterUtil sourceFile(File file) {
         this.sourceFile = file;
         return this;
     }
@@ -52,12 +52,13 @@ public class PoiAgentImporterUtil implements POIAgent {
     private List<TableRelation> relation;
     private List<TableConvert> convert;
 
-    public PoiAgentImporterUtil convert(List<TableConvert> convert){
+    public PoiAgentImporterUtil convert(List<TableConvert> convert) {
         this.convert = convert;
         return this;
     }
-    public PoiAgentImporterUtil convert(TableConvert convert){
-        if(this.convert==null){
+
+    public PoiAgentImporterUtil convert(TableConvert convert) {
+        if (this.convert == null) {
             this.convert = new ArrayList<>();
         }
         this.convert.add(convert);
@@ -70,37 +71,39 @@ public class PoiAgentImporterUtil implements POIAgent {
     }
 
     public PoiAgentImporterUtil relation(TableRelation relation) {
-        if(this.relation==null){
+        if (this.relation == null) {
             this.relation = new ArrayList<>();
         }
         this.relation.add(relation);
         return this;
     }
 
-    public PoiAgentImporterUtil target(List<TableTarget> target){
+    public PoiAgentImporterUtil target(List<TableTarget> target) {
         this.target = target;
         return this;
     }
-    public PoiAgentImporterUtil target(String table, List<String> fields){
-        if(target==null) {
+
+    public PoiAgentImporterUtil target(String table, List<String> fields) {
+        if (target == null) {
             target = new ArrayList<>();
         }
-        if(!TableTarget.containsTable(target, table)) {
+        if (!TableTarget.containsTable(target, table)) {
             target.add(new TableTarget(table, fields));
-        }else{
+        } else {
             /// update fields
             TableTarget t = TableTarget.getTarget(target, table);
             t.setFields(fields);
         }
         return this;
     }
-    public PoiAgentImporterUtil target(String table, String field){
-        if(target==null) {
+
+    public PoiAgentImporterUtil target(String table, String field) {
+        if (target == null) {
             target = new ArrayList<>();
         }
-        if(!TableTarget.containsTable(target, table)) {
+        if (!TableTarget.containsTable(target, table)) {
             target.add(new TableTarget(table).addField(field));
-        }else{
+        } else {
             /// update fields
             TableTarget t = TableTarget.getTarget(target, table);
             t.addField(field);
@@ -110,25 +113,25 @@ public class PoiAgentImporterUtil implements POIAgent {
 
     public PoiAgentImporterUtil data(PoiAgentImporterRequest request) throws SQLException {
         this.level = request.getLevel();
-        this.duplicate = request.getDuplicate()==1;
-        this.overwrite = request.getOverwrite()==1;
-        this.header = request.getHeader()==1;
+        this.duplicate = request.getDuplicate() == 1;
+        this.overwrite = request.getOverwrite() == 1;
+        this.header = request.getHeader() == 1;
         this.unique = request.getUnique();
         this.notnull = request.getNotnull();
         this.target = request.getTarget();
         this.relation = request.getRelation();
         this.convert = request.getConvert();
 
-        if(this.target!=null){
-            for(TableTarget t : this.target) {
-                if(!ImporterParameters.me().canTableImported(t.getTable())){
+        if (this.target != null) {
+            for (TableTarget t : this.target) {
+                if (!ImporterParameters.me().canTableImported(t.getTable())) {
                     throw new RuntimeException("fatal: table " + t.getTable() + " is not permitted to be imported");
                 }
             }
         }
 
         /// check source file exists
-        if(sourceFile==null) {
+        if (sourceFile == null) {
             sourceFile = new File(request.getSource());
             if (!sourceFile.exists()) {
                 throw new RuntimeException("fatal: BAD_REQUEST: excel file not exists " + request.getSource());
@@ -140,18 +143,18 @@ public class PoiAgentImporterUtil implements POIAgent {
 
     public PoiAgentImporterUtil request(PoiAgentImporterRequest request) {
         this.level = request.getLevel();
-        this.duplicate = request.getDuplicate()==1;
-        this.overwrite = request.getOverwrite()==1;
-        this.header = request.getHeader()==1;
+        this.duplicate = request.getDuplicate() == 1;
+        this.overwrite = request.getOverwrite() == 1;
+        this.header = request.getHeader() == 1;
         this.unique = request.getUnique();
         this.notnull = request.getNotnull();
         this.target = request.getTarget();
         this.relation = request.getRelation();
         this.convert = request.getConvert();
 
-        if(this.target!=null){
-            for(TableTarget t : this.target) {
-                if(!ImporterParameters.me().canTableImported(t.getTable())){
+        if (this.target != null) {
+            for (TableTarget t : this.target) {
+                if (!ImporterParameters.me().canTableImported(t.getTable())) {
                     throw new RuntimeException("fatal: table " + t.getTable() + " is not permitted to be imported");
                 }
             }
@@ -162,12 +165,12 @@ public class PoiAgentImporterUtil implements POIAgent {
     public int performImport(InputStream inputStream) throws SQLException {
         this.sourceInputStream = inputStream;
         int success = 0;
-        if(target==null || target.size()==0){
+        if (target == null || target.size() == 0) {
             return 0;
         }
         Connection connection = dataSource.getConnection();
 
-        if(connection!=null) {
+        if (connection != null) {
 
             /// check unique
             if (level == 1) { //单表的情况
@@ -192,16 +195,16 @@ public class PoiAgentImporterUtil implements POIAgent {
 
     }
 
-    public int performImport() throws SQLException{
+    public int performImport() throws SQLException {
         int success = 0;
 
-        if(target==null || target.size()==0){
+        if (target == null || target.size() == 0) {
             return 0;
         }
 
         Connection connection = dataSource.getConnection();
 
-        if(connection!=null) {
+        if (connection != null) {
 
             /// check unique
             if (level == 1) { //单表的情况

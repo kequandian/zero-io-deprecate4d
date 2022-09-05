@@ -66,20 +66,20 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         String dictPath = String.join(File.separator, templateDirectory, dictName);
 
         String dictJsonContent = ResourceUtil.getDefaultResourceFileContent(dictPath);
-        if(StringUtils.isEmpty(dictJsonContent)){
-            dictJsonContent="{}";
+        if (StringUtils.isEmpty(dictJsonContent)) {
+            dictJsonContent = "{}";
         }
         JSONObject sqlJson = JSONObject.parseObject(dictJsonContent);
 
         JSONObject search = sqlJson.getJSONObject("search");
         HashMap<String, String> searchMap = new HashMap<>();
-        if (search!=null){
+        if (search != null) {
             for (String key : search.keySet()) {
                 searchMap.put(key, search.getString(key));
             }
         }
 
-        String url = sqlJson.getJSONObject("api")!=null?sqlJson.getJSONObject("api").getString("url") : null;
+        String url = sqlJson.getJSONObject("api") != null ? sqlJson.getJSONObject("api").getString("url") : null;
         if (!StringUtils.isEmpty(url)) {
             return exportByApi(exportName, url);
         } else {
@@ -120,7 +120,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         }
         log.info("excelExportMaxRows : {}", excelExportMaxRows);
 
-        if (search!=null) {
+        if (search != null) {
             search.put("pageSize", excelExportMaxRows.toString());
         }
 
@@ -180,14 +180,14 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         String templateDirectory = excelProperties.getExcelTemplateDir();
         // sql 文件名称
         String sqlTemplateName = exportName + ExcelConstant.EXPORT_SQL_SUFFIX;
-        String templateFilePath = String.join(File.separator,templateDirectory, sqlTemplateName);
+        String templateFilePath = String.join(File.separator, templateDirectory, sqlTemplateName);
 
         //first get file from file-system
         File templateFile = new File(templateFilePath);
         log.info("template path: {}", templateFile.getAbsolutePath());
         InputStream sqlStream = templateFile.exists() ? new FileInputStream(templateFile) :
                 ResourceUtil.getDefaultResourceFileAsStream(templateFilePath);
-        Assert.isTrue(sqlStream!=null);
+        Assert.isTrue(sqlStream != null);
 
         // 逐行读取 sql文件
         Collection<String> sqlLines = IOUtil.readLines(sqlStream);
@@ -282,7 +282,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         apiPath = processSearch(apiPath, httpRequest);
         //访问前打印数据
         logger.info("ready to getResponse");
-        logger.info("apiPath:  {}",apiPath);
+        logger.info("apiPath:  {}", apiPath);
         // process page size
         apiPath = processPageSize(apiPath, authorization);
 
@@ -303,10 +303,6 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     }
 
 
-
-
-
-
     //自动报表
 
     private List<Map<String, String>> getRowsMapList(JSONArray rows) {
@@ -320,7 +316,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
             while (it.hasNext()) {
                 Map.Entry<String, Object> entry = (Map.Entry<String, Object>) it.next();
                 String value = String.valueOf(entry.getValue());
-                rowMap.put(entry.getKey(), value.equals("null")?"":value);
+                rowMap.put(entry.getKey(), value.equals("null") ? "" : value);
             }
             rowsMapList.add(rowMap);
         }
@@ -331,18 +327,18 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         String requestURI = httpRequest.getRequestURI();
         StringBuffer requestURL = httpRequest.getRequestURL();
         String schema = httpRequest.getScheme();
-        logger.info("requestURI = {}",requestURI);
-        logger.info("requestURL = {}",requestURL);
-        logger.info("schema = {}",schema);
+        logger.info("requestURI = {}", requestURI);
+        logger.info("requestURL = {}", requestURL);
+        logger.info("schema = {}", schema);
 
         //域名为https开头，根据配置替换
         //if(excelProperties.getHttps()){
-        if("https".equals(schema)){
+        if ("https".equals(schema)) {
             logger.info("开启https");
             int httpIndex = requestURL.indexOf(":");
-            logger.info("':'Index {}",httpIndex);
-            requestURL.replace(0,httpIndex,"https");
-            logger.info("requestURL = {}",requestURL);
+            logger.info("':'Index {}", httpIndex);
+            requestURL.replace(0, httpIndex, "https");
+            logger.info("requestURL = {}", requestURL);
         }
 
         // String requestURL = "http://cloud.biliya.cn/api/io/excel/xxxx";
@@ -350,7 +346,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         // https fix
         //int index = requestURL.indexOf(requestURI);
         //return requestURL.substring(0, index) + API_PREFIX + "/" + field;
-        return String.join("", requestURL.toString().replace(requestURI,""), API_PREFIX, "/", field);
+        return String.join("", requestURL.toString().replace(requestURI, ""), API_PREFIX, "/", field);
     }
 
     private String processSearch(String apiPath, HttpServletRequest request) {
@@ -364,7 +360,6 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         // apiPath = HttpUtil.setQueryParam(apiPath,"pageNum", "1");
         return HttpUtil.setQueryParam(apiPath, "pageSize", total);
     }
-
 
 
 }

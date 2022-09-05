@@ -1,4 +1,5 @@
 # zero-io-sandbox 部署
+
 快速部署zero-io的导入导出功能，需要接入已有的docker容器的网络
 
 #### 准备 zero-io包
@@ -11,14 +12,16 @@ config   templates   zero-io-all-1.0.0-standalone.jar
 ```
 
 #### 准备模版文件
-> 不同业务所需模板不同
-将模版文件放入 `io-api/templates`目录。
+
+> 不同业务所需模板不同 将模版文件放入 `io-api/templates`目录。
+
 ```
 $ ls ./io-api/templates
 template.json
 ```
 
 #### 运行配置文件
+
 > `network`参数为接入的docker网络名称
 
 ```
@@ -34,9 +37,10 @@ Option:
 $ docker-compose up -d
 ```
 
-
 ## 部署常见问题
+
 > 除了部署更新代码库，需同时考虑部署
+
 * 需同时同步导入导出配置文件
 * 需同时同步数据库表
 

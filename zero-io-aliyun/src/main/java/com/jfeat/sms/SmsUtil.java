@@ -58,8 +58,8 @@ public class SmsUtil {
 
     public void sendSms(String phoneNumber, String templateCode, String templateParam) {
         if (!smsEnable) {
-            log.info(String.format("dev mode: sending message code [%s] to phone %s with parms: %s", 
-                                    templateCode, phoneNumber, templateParam));
+            log.info(String.format("dev mode: sending message code [%s] to phone %s with parms: %s",
+                    templateCode, phoneNumber, templateParam));
             return;
         }
 
@@ -134,6 +134,6 @@ public class SmsUtil {
         jsonParam.put("code", "123");
         String templateParam = jsonParam.toString();
         log.info("templateParam : {}", templateCode);
-        sendSms(phone,templateCode, templateParam);
+        sendSms(phone, templateCode, templateParam);
     }
 }

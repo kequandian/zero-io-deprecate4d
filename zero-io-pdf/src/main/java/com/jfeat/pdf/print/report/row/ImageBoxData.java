@@ -11,7 +11,7 @@ import com.jfeat.pdf.print.report.request.RowFormatRequest;
 
 /**
  * Created by vincenthuang on 19/03/2018.
- *  上下布局图文框 [上方图片，下方标题] 数据
+ * 上下布局图文框 [上方图片，下方标题] 数据
  */
 public class ImageBoxData extends PaddingRowBase {
 

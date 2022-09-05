@@ -5,14 +5,14 @@ import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 
 /**
  * Created by vincenthuang on 28/09/2018.
- *
- *
- CustomDashedLineSeparator separator = new CustomDashedLineSeparator();
-   separator.setDash(10);
-   separator.setGap(7);
-   separator.setLineWidth(3);
-   separator.setLineColor(lineColor);
-   Chunk linebreak = new Chunk(separator);
+ * <p>
+ * <p>
+ * CustomDashedLineSeparator separator = new CustomDashedLineSeparator();
+ * separator.setDash(10);
+ * separator.setGap(7);
+ * separator.setLineWidth(3);
+ * separator.setLineColor(lineColor);
+ * Chunk linebreak = new Chunk(separator);
  */
 public class DashedLineSeparator extends DottedLineSeparator {
     protected float dash = 5;

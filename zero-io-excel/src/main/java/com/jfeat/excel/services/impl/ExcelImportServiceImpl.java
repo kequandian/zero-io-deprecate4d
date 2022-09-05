@@ -72,7 +72,7 @@ public class ExcelImportServiceImpl implements ExcelImportService {
         String jsonStr = "";
         try {
             InputStream templateStream = ResourceUtil.getDefaultResourceFileAsStream(fileName);
-            Reader reader = new InputStreamReader(templateStream,"utf-8");
+            Reader reader = new InputStreamReader(templateStream, "utf-8");
             int ch = 0;
             StringBuffer sb = new StringBuffer();
             while ((ch = reader.read()) != -1) {

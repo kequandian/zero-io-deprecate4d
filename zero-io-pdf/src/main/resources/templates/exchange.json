@@ -1,0 +1,124 @@
+{
+  "flows": [
+    {
+      "name": "linear",
+      "columnWidths": [
+        1,
+        1,
+        1
+      ],
+      "elements": [
+        {
+          "name": "content",
+          "columnWidths": [
+            1,
+            2
+          ],
+          "height": 20,
+          "title": [
+            "项目名称:",
+            "备注:",
+            ""
+          ],
+          "data": [
+            "换房匹配成功记录",
+            "",
+            ""
+          ]
+        },
+        {
+          "name": "text",
+          "data": "",
+          "height": 25
+        },
+        {
+          "name": "content",
+          "columnWidths": [
+            1,
+            2
+          ],
+          "height": 20,
+          "title": [
+            "打印日期:",
+            "负责人:",
+            "确认人:"
+          ],
+          "data": [
+            "${createDate}",
+            "",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "name": "table",
+      "type": "api",
+      "columnWidths": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ],
+      "columnKeyBindings": [
+        {
+          "column": "小区",
+          "key": "ownerCommunity"
+        },
+        {
+          "column": "业主姓名",
+          "key": "ownerName"
+        },
+        {
+          "column": "业主电话",
+          "key": "ownerPhone"
+        },
+        {
+          "column": "业主楼栋",
+          "key": "ownerBuilding"
+        },
+        {
+          "column": "业主地址门牌号",
+          "key": "ownerNumber"
+        },
+        {
+          "column": "目标业主姓名",
+          "key": "matchedName"
+        },
+        {
+          "column": "目标业主电话",
+          "key": "matchedPhone"
+        },
+        {
+          "column": "目标楼栋",
+          "key": "matchedBuilding"
+        },
+        {
+          "column": "目标地址门牌号",
+          "key": "matchedNumber"
+        },
+        {
+          "column": "时间",
+          "key": "createTime"
+        }
+      ],
+      "header": [],
+      "data": "${records}",
+      "rowHeight": 90,
+      "headerHeight": 50,
+      "headerFormat": {
+        "size": "9"
+      }
+    }
+  ],
+  "page": {
+    "pageName": "A4",
+    "margin": "10"
+  }
+}

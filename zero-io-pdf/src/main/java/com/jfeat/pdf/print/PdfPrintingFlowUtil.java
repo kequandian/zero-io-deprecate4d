@@ -39,6 +39,7 @@ public class PdfPrintingFlowUtil {
 
     /**
      * 测试
+     *
      * @param args
      */
     public static void main(String[] args) throws IOException, DocumentException {
@@ -48,8 +49,8 @@ public class PdfPrintingFlowUtil {
         data.setPage(new Page("A4", 20));
 
         /// 设置定义
-        Map<String,FontDefinition> fontDefs = data.getDefinitions().getFonts();
-        Map<String,BorderDefinition> borderDefs = data.getDefinitions().getBorders();
+        Map<String, FontDefinition> fontDefs = data.getDefinitions().getFonts();
+        Map<String, BorderDefinition> borderDefs = data.getDefinitions().getBorders();
         fontDefs.put("title", new FontDefinition(Fonts.Definition.BASE.toString(), 16, FontDefinition.NORMAL, ColorDefinition.BLACK));
         fontDefs.put("table-header", new FontDefinition(Fonts.Definition.SONG.toString(), 14, FontDefinition.BOLD, ColorDefinition.BLACK));
         fontDefs.put("table-firstrow", new FontDefinition(Fonts.Definition.SONG.toString(), 12, FontDefinition.BOLD, ColorDefinition.BLACK));
@@ -86,10 +87,10 @@ public class PdfPrintingFlowUtil {
         // String[] lines = {"择阿迪达斯官方网店", "择阿迪达斯官方网店", "择阿迪达斯官方网店"};
         String[] lines = {"择阿迪达斯官方网店", "择阿迪达斯官方网店", null};
         ContentFlowData contentFlowData = ContentFlowData.build()
-                                            .setLayout(new float[]{1, 3})
-                                            .setTitle(title)
-                                            .setData(lines)
-                                            .rowFormat("default", 25);
+                .setLayout(new float[]{1, 3})
+                .setTitle(title)
+                .setData(lines)
+                .rowFormat("default", 25);
 
         /**
          * QRCode AND LinearFlowData
@@ -118,18 +119,18 @@ public class PdfPrintingFlowUtil {
                 "10", "A456456456412", "【狂疯价】adidas 阿迪达斯 三叶草", "材质:", "件", "10", "10", "100.00", "2018-11-9", "",
         };
         TableFlowData tableFlowData = TableFlowData.build()
-                                .headerFormat("table-header", 30, new BaseColor(219, 219, 219))
-                                .rowFormat("default", 60)
-                                .firstRowFormat("table-firstrow", 60, BaseColor.GRAY)
-                                .data(datas)
-                                .setHeader("Header Test")
-                                .layout(new float[]{2, 4, 5, 4, 2, 2, 2, 3, 3, 3 });
+                .headerFormat("table-header", 30, new BaseColor(219, 219, 219))
+                .rowFormat("default", 60)
+                .firstRowFormat("table-firstrow", 60, BaseColor.GRAY)
+                .data(datas)
+                .setHeader("Header Test")
+                .layout(new float[]{2, 4, 5, 4, 2, 2, 2, 3, 3, 3});
         flows.add(tableFlowData.flow());
 
         TableFlowData sumTableFlowData = TableFlowData.build()
                 .rowFormat("default", 30)
                 .data(new String[]{"合计", "1125.00", "22.00"})
-                .layout(new float[]{19, 2, 3, 3, 3 });
+                .layout(new float[]{19, 2, 3, 3, 3});
         flows.add(sumTableFlowData.flow());
 
         /**
@@ -164,9 +165,10 @@ public class PdfPrintingFlowUtil {
     private Map<String, Font> fonts;
     private Map<String, BorderDefinition> borders;
 
-    public PdfPrintingFlowUtil(){}
+    public PdfPrintingFlowUtil() {
+    }
 
-    public PdfPrintingFlowUtil export(OutputStream io) throws DocumentException{
+    public PdfPrintingFlowUtil export(OutputStream io) throws DocumentException {
         PdfExporter exporter = new PdfExporter();
 
         PdfExporter export = exporter.export(io,
@@ -190,11 +192,11 @@ public class PdfPrintingFlowUtil {
             backCanvas.addImage(image);
         }
 
-        for(Flow flow : flows){
-           if (flow.getName().equals(Flow.LINEAR_FLOW)) {
-               LinearFlowData flowData = (LinearFlowData)flow.getElement();
+        for (Flow flow : flows) {
+            if (flow.getName().equals(Flow.LINEAR_FLOW)) {
+                LinearFlowData flowData = (LinearFlowData) flow.getElement();
                 FlowLayout wrapLayout = new FlowLayout(flowData.getLayout().getColumnWidths());
-                for(Flow element : flowData.getElements()) {
+                for (Flow element : flowData.getElements()) {
 
                     /**
                      * 流式布局中允许嵌套一层单列的流式布局, 且只允许嵌套一列的
@@ -214,15 +216,15 @@ public class PdfPrintingFlowUtil {
 
                     Element innerElement = getFlowElement(element, canvas);
                     if (innerElement instanceof Image) {
-                        wrapLayout.add((Image)innerElement);
+                        wrapLayout.add((Image) innerElement);
                     } else {
                         wrapLayout.add((PdfPTable) innerElement);
                     }
                 }
                 exporter.addElement(wrapLayout);
-            }  else {
-               exporter.addElement(getFlowElement(flow, canvas));
-           }
+            } else {
+                exporter.addElement(getFlowElement(flow, canvas));
+            }
         }
         exporter.close();
 
@@ -232,8 +234,8 @@ public class PdfPrintingFlowUtil {
 
     public Element getFlowElement(Flow flow, PdfContentByte canvas) {
         Element element = null;
-        if(flow.getName().equals(Flow.TITLE_FLOW)){
-            TitleFlowData titleFlowData = (TitleFlowData)flow.getElement();
+        if (flow.getName().equals(Flow.TITLE_FLOW)) {
+            TitleFlowData titleFlowData = (TitleFlowData) flow.getElement();
 
             /// get font from definition
             Font titleFont = fonts.get(titleFlowData.getFormatName());
@@ -243,7 +245,7 @@ public class PdfPrintingFlowUtil {
             pageHint.setAlignment(alignment);
 
             element = pageHint;
-        } else if(flow.getName().equals(Flow.QRCODE_FLOW)){
+        } else if (flow.getName().equals(Flow.QRCODE_FLOW)) {
             QRCodeFlowData flowData = (QRCodeFlowData) flow.getElement();
 
             FlowLayout qrCodeLayout = new FlowLayout(1);
@@ -251,7 +253,7 @@ public class PdfPrintingFlowUtil {
             qrCodeLayout.add(new Phrase(flowData.getCode(), this.fonts.get(flowData.getFormatName())));
 
             element = qrCodeLayout;
-        }else if(flow.getName().equals(Flow.TABLE_FLOW)) {
+        } else if (flow.getName().equals(Flow.TABLE_FLOW)) {
 
             TableFlowData flowData = (TableFlowData) flow.getElement();
 
@@ -340,21 +342,21 @@ public class PdfPrintingFlowUtil {
             cell.setBackgroundColor(baseColor);
             rect.addCell(cell);
             element = rect;
-        }else if(flow.getName().equals(Flow.LAYOUT_FLOW)){
+        } else if (flow.getName().equals(Flow.LAYOUT_FLOW)) {
 
-        } else if(flow.getName().equals(Flow.CONTENT_FLOW)) {
+        } else if (flow.getName().equals(Flow.CONTENT_FLOW)) {
 
-            ContentFlowData flowData = (ContentFlowData)flow.getElement();
+            ContentFlowData flowData = (ContentFlowData) flow.getElement();
 
             ContentFlowBuilder builder = new ContentFlowBuilder();
             builder.title();
             builder.columnWidths(flowData.getLayout().getColumnWidths());
             // set format
-            if(flowData.getFormat() != null) {
+            if (flowData.getFormat() != null) {
                 // set row
-                RowFormat rowFormat =flowData.getFormat();
+                RowFormat rowFormat = flowData.getFormat();
                 builder.contentFormat(this.fonts.get(rowFormat.getFormatName()));
-                if(rowFormat.getHeight()>0) {
+                if (rowFormat.getHeight() > 0) {
                     builder.contentHeight(rowFormat.getHeight());
                 }
                 // rows()
@@ -370,14 +372,14 @@ public class PdfPrintingFlowUtil {
             element = tableFlow.getElement();
         } else if (flow.getName().equals(Flow.LINEAR_FLOW)) {
 
-        } else if(flow.getName().equals(Flow.NEW_LINE)) {
+        } else if (flow.getName().equals(Flow.NEW_LINE)) {
             element = Chunk.NEWLINE;
-        } else if(flow.getName().equals(Flow.NEW_PAGE)) {
+        } else if (flow.getName().equals(Flow.NEW_PAGE)) {
             element = Chunk.NEXTPAGE;
-        } else if(flow.getName().equals(Flow.SEPARATOR_FLOW)){
+        } else if (flow.getName().equals(Flow.SEPARATOR_FLOW)) {
             DottedLineSeparator dottedLineSeparator = new DottedLineSeparator();
             element = dottedLineSeparator;
-        } else if(flow.getName().equals(Flow.IMAGE_FLOW)) {
+        } else if (flow.getName().equals(Flow.IMAGE_FLOW)) {
             ImageFlowData imageFlowData = (ImageFlowData) flow.getElement();
             String url = imageFlowData.getUrl();
             logger.info("image url : {}", url);
@@ -405,38 +407,39 @@ public class PdfPrintingFlowUtil {
 
     /**
      * only for debug
+     *
      * @param io
      * @return
      */
     @Deprecated
-    public PdfPrintingFlowUtil export(String io) throws FileNotFoundException, DocumentException{
+    public PdfPrintingFlowUtil export(String io) throws FileNotFoundException, DocumentException {
         export(new FileOutputStream(io));
         return this;
     }
 
-    public PdfPrintingFlowUtil data(PdfFlowRequest request) throws FileNotFoundException, DocumentException{
+    public PdfPrintingFlowUtil data(PdfFlowRequest request) throws FileNotFoundException, DocumentException {
         this.page = request.getPage();
         this.flows = request.getFlows();
 
         // init fonts definitions
-        if(request.getDefinitions()!=null){
+        if (request.getDefinitions() != null) {
 
             /// init font definitions
-            if(request.getDefinitions().getFonts()!=null) {
+            if (request.getDefinitions().getFonts() != null) {
                 if (fonts == null) {
                     fonts = new HashMap<>();
                 }
 
                 for (Map.Entry<String, FontDefinition> entry : request.getDefinitions().getFonts().entrySet()) {
                     FontDefinition fontDefinition = entry.getValue();
-                    if(fontDefinition!=null) {
+                    if (fontDefinition != null) {
                         fonts.put(entry.getKey(), FontDefinition.getFont(fontDefinition));
                     }
                 }
             }
 
             // init border definitions
-            if(request.getDefinitions().getBorders()!=null) {
+            if (request.getDefinitions().getBorders() != null) {
                 if (borders == null) {
                     borders = new HashMap<>();
                 }

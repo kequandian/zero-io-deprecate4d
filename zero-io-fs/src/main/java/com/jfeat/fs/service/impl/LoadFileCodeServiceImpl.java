@@ -40,8 +40,7 @@ public class LoadFileCodeServiceImpl implements LoadFileCodeService {
             }
 
             return true;
-        }
-        catch (ExecutionException e) {
+        } catch (ExecutionException e) {
             return false;
         }
     }

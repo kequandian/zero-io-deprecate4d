@@ -2,7 +2,6 @@ package com.jfeat.poi.agent.im.request;
 
 /**
  * Created by vincenthuang on 2018/04/23.
- *
  */
 public class TableRelation {
     private static final String PRIMARY_ID = "id";
@@ -18,7 +17,7 @@ public class TableRelation {
     private String relativeTable;           // 关联表名
     private String relativeKeyField;        // 属于表 relativeTable 的关联字段 (如一对多的关联字段在 relativeTable)
     private String relativePeerKeyField;    // 如果是多对多，第三个关联表有两个关键字段，
-                                            // table.keyField & peerTable.peerKeyField
+    // table.keyField & peerTable.peerKeyField
     private String peerTable;                   // 多对多副主表
     private String peerKeyField = PRIMARY_ID;   // 副主表关联字段， 通常其关键字段是 id
 
@@ -35,10 +34,10 @@ public class TableRelation {
         this.multiLevel = multiLevel;
     }
 
-    public TableRelation(){
+    public TableRelation() {
     }
 
-    public TableRelation(String relation, String table, String keyField, String relativeTable, String relativeKeyField){
+    public TableRelation(String relation, String table, String keyField, String relativeTable, String relativeKeyField) {
         this.relation = relation;
         this.table = table;
         this.keyField = keyField;

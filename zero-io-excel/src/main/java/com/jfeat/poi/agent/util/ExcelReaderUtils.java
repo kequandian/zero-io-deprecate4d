@@ -18,22 +18,23 @@ public class ExcelReaderUtils {
     }
 
 
-    public static List<List<List<String>>> readSheets(InputStream inputStream, int sheetIndex, int startRow, int endRow ) {
+    public static List<List<List<String>>> readSheets(InputStream inputStream, int sheetIndex, int startRow, int endRow) {
         Workbook wb = readWorkBook(inputStream);
         return readSheets(wb, sheetIndex, startRow, endRow);
     }
 
     /**
      * 多sheet
+     *
      * @return
      */
-    public static List<List<List<String>>> readSheets(Workbook wb, int sheetIndex, int startRow, int endRow ) {
+    public static List<List<List<String>>> readSheets(Workbook wb, int sheetIndex, int startRow, int endRow) {
         List<List<List<String>>> result = new ArrayList<>();
 
         int startSheet = sheetIndex, endSheet = sheetIndex;
-        if(sheetIndex==-1){
+        if (sheetIndex == -1) {
             startSheet = 0;
-            endSheet = wb.getNumberOfSheets()-1;
+            endSheet = wb.getNumberOfSheets() - 1;
         }
 
         for (int i = startSheet; i <= endSheet; i++) {
@@ -46,9 +47,9 @@ public class ExcelReaderUtils {
             }
 
             // end row
-            if(endRow==-1) {
+            if (endRow == -1) {
                 endRow = rows;
-            }else if(endRow<0) {
+            } else if (endRow < 0) {
                 throw new RuntimeException("fatal: invalid endRow:" + endRow);
             }
             endRow = Math.min(endRow, rows);
@@ -60,7 +61,7 @@ public class ExcelReaderUtils {
                 Row row = sheet.getRow(rowIndex);
                 List<String> columns = new ArrayList<>();
                 int cellNum = row.getLastCellNum();
-                if (rowIndex == startRow){
+                if (rowIndex == startRow) {
                     firstCellNum = cellNum;
                 }
                 //System.out.println(row.getLastCellNum());
@@ -68,9 +69,9 @@ public class ExcelReaderUtils {
                 for (int cellIndex = row.getFirstCellNum(); cellIndex < firstCellNum; cellIndex++) {
                     Cell cell = row.getCell(cellIndex);
                     String column = "";
-                    if (cell == null){
+                    if (cell == null) {
                         column = "";
-                    }else {
+                    } else {
                         // int cellType = cell.getCellType();
                         CellType cellType = cell.getCellType();
                         switch (cellType) {
@@ -126,10 +127,11 @@ public class ExcelReaderUtils {
 
     /**
      * 只取第一个sheet
+     *
      * @param file
      * @return
      */
-    public static List<List<String>> readSheet(File file, int startRow, int endRow ) {
+    public static List<List<String>> readSheet(File file, int startRow, int endRow) {
         return readSheets(file, 0, startRow, endRow).get(0);
     }
 
@@ -143,13 +145,12 @@ public class ExcelReaderUtils {
     }
 
 
-
-    public static List<List<String>> getSubContents(List<List<String>> contents, int start, int end){
+    public static List<List<String>> getSubContents(List<List<String>> contents, int start, int end) {
         List<List<String>> subContents = new ArrayList<>();
 
-        if(start==0 && end==contents.get(0).size()){
+        if (start == 0 && end == contents.get(0).size()) {
             subContents.addAll(contents);
-        }else {
+        } else {
             for (List<String> row : contents) {
                 subContents.add(row.subList(start, end));
             }
@@ -157,11 +158,11 @@ public class ExcelReaderUtils {
         return subContents;
     }
 
-    public static List<List<String>> appendContents(List<List<String>> contents, List<String> values){
+    public static List<List<String>> appendContents(List<List<String>> contents, List<String> values) {
 
         List<List<String>> subContents = new ArrayList<>();
 
-        for(List<String> row :  contents){
+        for (List<String> row : contents) {
             List<String> newRow = new ArrayList<>();
             newRow.addAll(row);
             newRow.addAll(values);

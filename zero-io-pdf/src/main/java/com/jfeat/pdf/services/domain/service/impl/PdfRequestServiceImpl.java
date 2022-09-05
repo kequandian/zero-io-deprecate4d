@@ -41,9 +41,9 @@ public class PdfRequestServiceImpl implements PdfRequestService {
             Object o = apiData.get(key);
             if (o == null) {
                 request.put(String.format(FORMAT, key), "");
-            } else if (o instanceof JSONArray){
+            } else if (o instanceof JSONArray) {
                 request.put(String.format(FORMAT, key), o);
-            } else if (o instanceof  JSONObject) {
+            } else if (o instanceof JSONObject) {
                 request.put(String.format(FORMAT, key), o.toString());
             } else {
                 request.put(String.format(FORMAT, key), o);
@@ -74,10 +74,10 @@ public class PdfRequestServiceImpl implements PdfRequestService {
             String requestKeyName = getRequestKeyName(prefix, key);
             if (o == null) {
                 request.put(requestKeyName, "");
-            } else if (o instanceof JSONArray){
+            } else if (o instanceof JSONArray) {
                 request.put(requestKeyName, o);
                 // 递归调用
-            } else if (o instanceof  JSONObject) {
+            } else if (o instanceof JSONObject) {
                 request.put(requestKeyName, o.toString());
                 // 递归调用
                 processJsonObject(requestKeyName, request, (JSONObject) o);

@@ -41,8 +41,8 @@ public class PoiAgentExporterApiUtil implements POIAgent {
          * zy   |       |   man
          **/
         List<List<String>> data = new ArrayList<>();
-        data.add(Arrays.asList(new String[] {"name", "", "sex"}));
-        data.add(Arrays.asList(new String[] {"zy", "", "man"}));
+        data.add(Arrays.asList(new String[]{"name", "", "sex"}));
+        data.add(Arrays.asList(new String[]{"zy", "", "man"}));
         // new PoiAgentExporterApiUtil().export(data, input);
 
 
@@ -53,8 +53,8 @@ public class PoiAgentExporterApiUtil implements POIAgent {
          * 1    |   row1
          * 2    |   row2
          **/
-        List<String> headers = Arrays.asList(new String[] {"id", "name"});
-        List<String> columns = Arrays.asList(new String[] {"id", "name"});
+        List<String> headers = Arrays.asList(new String[]{"id", "name"});
+        List<String> columns = Arrays.asList(new String[]{"id", "name"});
 
         List<Map<String, String>> rows = new ArrayList<>();
         Map row1 = new HashMap();
@@ -67,7 +67,7 @@ public class PoiAgentExporterApiUtil implements POIAgent {
 
         rows.add(row1);
         rows.add(row2);
-        PoiAgentExporter.exportExcel(rows,  headers, columns, output);
+        PoiAgentExporter.exportExcel(rows, headers, columns, output);
 
 
         /**
@@ -184,7 +184,7 @@ public class PoiAgentExporterApiUtil implements POIAgent {
 
             // headers
             List<String> headers = new ArrayList<>();
-            if(headersParam != null) {
+            if (headersParam != null) {
                 for (String header : headersParam) {
                     headers.add(header);
                 }

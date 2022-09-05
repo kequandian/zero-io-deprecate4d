@@ -6,15 +6,13 @@ import java.util.*;
 
 /**
  * Created by jackyhuang on 2017/12/29.
- *
  */
 public class TableTarget {
 
-    public static final String UPDATE="UPDATE";
+    public static final String UPDATE = "UPDATE";
     public static final String POSTFIX = "POSTFIX";
-    public static final String UNIQUE_SEPARATE=":";
-    public static final String DEFAULT_POST_FIX="##{1...}";
-
+    public static final String UNIQUE_SEPARATE = ":";
+    public static final String DEFAULT_POST_FIX = "##{1...}";
 
 
     private String table;
@@ -44,20 +42,20 @@ public class TableTarget {
         this.option.type = UPDATE;
     }
 
-    public TableTarget(String table, List<String> fields, List<String> values,Option option) {
+    public TableTarget(String table, List<String> fields, List<String> values, Option option) {
         this.table = table;
         this.fields = fields;
         this.values = values;
         this.option = option;
     }
 
-    public TableTarget addField(String field){
+    public TableTarget addField(String field) {
         return addField(field, null);
     }
 
-    public TableTarget addField(String field, Object value){
+    public TableTarget addField(String field, Object value) {
         this.fields.add(field);
-        if(value!=null) {
+        if (value != null) {
             this.values.add(String.valueOf(value));
         }
         return this;
@@ -99,16 +97,17 @@ public class TableTarget {
 
 
     /**
-     *  statics table target methods
+     * statics table target methods
+     *
      * @param list
      * @param table
      * @return
      */
-    public static boolean containsTable(List<TableTarget> list, String table){
-        if(list!=null && list.size() > 0) {
+    public static boolean containsTable(List<TableTarget> list, String table) {
+        if (list != null && list.size() > 0) {
             Map<String, TableTarget> hash = new HashMap<>();
             for (TableTarget t : list) {
-                if (t != null){
+                if (t != null) {
                     hash.put(t.getTable(), t);
                 }
             }
@@ -116,13 +115,14 @@ public class TableTarget {
         }
         return false;
     }
-    public static TableTarget getTarget(List<TableTarget> list, String table){
-        if(list!=null) {
+
+    public static TableTarget getTarget(List<TableTarget> list, String table) {
+        if (list != null) {
             Map<String, TableTarget> hash = new HashMap<>();
             for (TableTarget t : list) {
                 hash.put(t.getTable(), t);
             }
-            if(hash.containsKey(table)){
+            if (hash.containsKey(table)) {
                 return hash.get(table);
             }
         }

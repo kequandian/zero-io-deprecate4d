@@ -29,7 +29,7 @@ public class TableFlowBuilder {
     private int numColumns = 0;
     private float borderWidth = 1;
     private int borderStyle = Rectangle.BOX;    // 下划线
-    private BaseColor borderColor = new BaseColor(0,0,0);
+    private BaseColor borderColor = new BaseColor(0, 0, 0);
 
     /// table header
     private boolean header = false;
@@ -48,25 +48,25 @@ public class TableFlowBuilder {
     private String[] rows;
     private BaseColor rowColor;
 
-    public TableFlowBuilder(){
+    public TableFlowBuilder() {
     }
 
-    public TableFlowBuilder columnWidths(float[] columnWidths){
+    public TableFlowBuilder columnWidths(float[] columnWidths) {
         this.columnWidths = columnWidths;
         return this;
     }
 
-    public TableFlowBuilder numColumns(int numColumns){
+    public TableFlowBuilder numColumns(int numColumns) {
         this.numColumns = numColumns;
         return this;
     }
 
-    public TableFlowBuilder totalWidth(float totalWidth){
+    public TableFlowBuilder totalWidth(float totalWidth) {
         this.totalWidth = totalWidth;
         return this;
     }
 
-    public TableFlowBuilder borderWidth(float borderWidth){
+    public TableFlowBuilder borderWidth(float borderWidth) {
         this.borderWidth = borderWidth;
         return this;
     }
@@ -76,71 +76,71 @@ public class TableFlowBuilder {
         return this;
     }
 
-    public TableFlowBuilder borderStyle(int borderStyle){
+    public TableFlowBuilder borderStyle(int borderStyle) {
         this.borderStyle = borderStyle;
         return this;
     }
 
-    public TableFlowBuilder header(){
+    public TableFlowBuilder header() {
         this.header = true;
         return this;
     }
 
-    public TableFlowBuilder row(){
+    public TableFlowBuilder row() {
         return this;
     }
 
-    public TableFlowBuilder headerTitle(String headerTitle){
-        if(!header){
+    public TableFlowBuilder headerTitle(String headerTitle) {
+        if (!header) {
             throw new RuntimeException("header must be set previously!");
         }
         this.headerTitle = headerTitle;
         return this;
     }
 
-    public TableFlowBuilder headerHeight(float headerHeight){
-        if(!header){
+    public TableFlowBuilder headerHeight(float headerHeight) {
+        if (!header) {
             throw new RuntimeException("header must be set previously!");
         }
         this.headerHeight = headerHeight;
         return this;
     }
 
-    public TableFlowBuilder headerFormat(Font headerFormat){
-        if(!header){
+    public TableFlowBuilder headerFormat(Font headerFormat) {
+        if (!header) {
             throw new RuntimeException("header must be set previously!");
         }
         this.headerFormat = headerFormat;
         return this;
     }
 
-    public TableFlowBuilder firstRow(){
+    public TableFlowBuilder firstRow() {
         this.firstRow = true;
         return this;
     }
 
-    public TableFlowBuilder firstRowHeight(float firstRowHeight){
-        if(!firstRow){
+    public TableFlowBuilder firstRowHeight(float firstRowHeight) {
+        if (!firstRow) {
             throw new RuntimeException("firstRow must be set previously!");
         }
         this.firstRowHeight = firstRowHeight;
         return this;
     }
 
-    public TableFlowBuilder firstRowFormat(Font format){
-        if(!firstRow){
+    public TableFlowBuilder firstRowFormat(Font format) {
+        if (!firstRow) {
             throw new RuntimeException("firstRow must be set previously!");
         }
         this.firstRowFormat = format;
         return this;
     }
 
-    public TableFlowBuilder rowFormat(Font format){
+    public TableFlowBuilder rowFormat(Font format) {
         this.rowFormat = format;
         return this;
     }
 
-    public TableFlowBuilder rowHeight(float rowHeight){
+    public TableFlowBuilder rowHeight(float rowHeight) {
         this.rowHeight = rowHeight;
         return this;
     }
@@ -149,33 +149,35 @@ public class TableFlowBuilder {
         this.headerColor = headerColor;
         return this;
     }
+
     public TableFlowBuilder firstRowColor(BaseColor firstRowColor) {
         this.firstRowColor = firstRowColor;
         return this;
     }
+
     public TableFlowBuilder rowColor(BaseColor rowColor) {
         this.rowColor = rowColor;
         return this;
     }
 
-    public TableFlowBuilder rows(String[] rows){
+    public TableFlowBuilder rows(String[] rows) {
         //补全列内容，单元格数据与列数目一致
-        int len = columnWidths!=null ? columnWidths.length : numColumns;
+        int len = columnWidths != null ? columnWidths.length : numColumns;
         this.rows = Strings.alignUpStringArray(rows, len);
         return this;
     }
 
 
-    public TableFlow build(){
-        if(numColumns==0 && (columnWidths==null || columnWidths.length==0)){
+    public TableFlow build() {
+        if (numColumns == 0 && (columnWidths == null || columnWidths.length == 0)) {
             throw new RuntimeException("BadRequest: columnWidths is null!");
         }
 
         TableFlow report = new TableFlow();
-        if(columnWidths!=null) {
+        if (columnWidths != null) {
             report.setColumnWidths(columnWidths);
         }
-        if(numColumns>0){
+        if (numColumns > 0) {
             report.setNumColumns(numColumns);
         }
         report.setTotalWidth(totalWidth);
@@ -185,7 +187,7 @@ public class TableFlowBuilder {
         report.setRowHeight(rowHeight);
         report.setRowColor(rowColor);
 
-        if(header){
+        if (header) {
             report.setHeaderHeight(headerHeight);
 
             TextBox header = new TextBox();
@@ -194,21 +196,21 @@ public class TableFlowBuilder {
             report.setHeaderColor(headerColor);
         }
 
-        if(firstRow){
+        if (firstRow) {
             report.setFirstRowHeight(firstRowHeight);
             report.setFirstRowColor(firstRowColor);
         }
 
         List<ListRow> listRows = new ArrayList<>();
 
-        int columns = columnWidths !=null? columnWidths.length : numColumns;
-        for (int i=0; i<rows.length; i++){
+        int columns = columnWidths != null ? columnWidths.length : numColumns;
+        for (int i = 0; i < rows.length; i++) {
             String rowTitle = rows[i];
 
             // 如果有设置 firstRow
-            if(firstRow){
-                if(i<columns){
-                    if(firstRowHeight>0){
+            if (firstRow) {
+                if (i < columns) {
+                    if (firstRowHeight > 0) {
                         TextBox firstRow = new TextBox();
                         firstRow.setContent(rowTitle, firstRowFormat);
 
@@ -229,31 +231,30 @@ public class TableFlowBuilder {
         return report;
     }
 
-    public static void main(String[] args) throws FileNotFoundException, DocumentException{
-        Font headerFormat = new ChineseFont("宋体", 18, BOLD, new BaseColor(255,0,0));
-        Font firstRowFormat = new ChineseFont("宋体", 14, NORMAL, new BaseColor(30,30,17));
-        Font rowFormat = new ChineseFont("宋体", 14, NORMAL, new BaseColor(30,30,37));
+    public static void main(String[] args) throws FileNotFoundException, DocumentException {
+        Font headerFormat = new ChineseFont("宋体", 18, BOLD, new BaseColor(255, 0, 0));
+        Font firstRowFormat = new ChineseFont("宋体", 14, NORMAL, new BaseColor(30, 30, 17));
+        Font rowFormat = new ChineseFont("宋体", 14, NORMAL, new BaseColor(30, 30, 37));
 
         String[] listRows = new String[]{
-                "序号","商品编号", "关键属性", "商品名称", "货号", "库位", "数量",
+                "序号", "商品编号", "关键属性", "商品名称", "货号", "库位", "数量",
                 "1", "2", "3", "4", "5", "6", "7", "8"};
 
         TableFlow tableFlow = new TableFlowBuilder()
-                .columnWidths(new float[]{2f, 8, 5,  10, 4, 4, 2f})
+                .columnWidths(new float[]{2f, 8, 5, 10, 4, 4, 2f})
                 .totalWidth(500)
                 .borderWidth(1)
                 .header().headerHeight(30).headerFormat(headerFormat).headerTitle("商品清单")
                 .firstRow().firstRowHeight(26).firstRowFormat(firstRowFormat)
                 .rowHeight(24).rowFormat(rowFormat)
                 .rows(listRows)
-                .build()
-                ;
+                .build();
 
         // export
         PdfExporter exporter = new PdfExporter();
 
         PdfContentByte canvas = exporter.export("table.pdf", 20).canvas();
-        Rectangle pageSize=  exporter.getPageSize();
+        Rectangle pageSize = exporter.getPageSize();
 
         tableFlow.draw(canvas);
 

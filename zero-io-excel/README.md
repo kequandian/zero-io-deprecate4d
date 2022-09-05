@@ -1,12 +1,15 @@
 # zero-io-excel
+
 > 导出EXCEL使用说明
 
 ##### 引用开源框架easypoi
+
 > 详细配置方法参考以下开源链接
+
 - [easypoi](https://gitee.com/lemur/easypoi)
 
-
 ## 导出
+
 > 支持API和SQL两种形式的Excel导出
 
 POST `/api/io/excel/export/{exportName}`
@@ -18,7 +21,8 @@ io:
   excel-template-dir: "excel-templates"
 ```
 
-###  API方式
+### API方式
+
 > 需要同时配置下述数据字典转换模板，以及easypoi定义的excel文件类型(*.xlsx)导出模板
 
 导出api参数说明：
@@ -103,7 +107,7 @@ io:
 
 sql例子：
 
-> `search`字段中的值会替换SQL中`#{}`格式的变量并取消注释,  注释的格式规定为`--`。
+> `search`字段中的值会替换SQL中`#{}`格式的变量并取消注释, 注释的格式规定为`--`。
 
 ```sql
 SELECT
@@ -121,8 +125,6 @@ WHERE 1=1
 --AND status = '#{status}'
 
 ```
-
-
 
 ## 导入
 
@@ -215,11 +217,8 @@ io:
 
 ```
 
-
-
-接收`name`参数后，通过yaml配置文件的`excel-template-dir`和 `importName` 读取到模版文件 `importName.json`，然后处理`multipartFile`中的Excel数据，从而进行**批量更新数据库**的操作。
-
-
+接收`name`参数后，通过yaml配置文件的`excel-template-dir`和 `importName` 读取到模版文件 `importName.json`，然后处理`multipartFile`中的Excel数据，从而进行**
+批量更新数据库**的操作。
 
 ## 需要注意的问题
 

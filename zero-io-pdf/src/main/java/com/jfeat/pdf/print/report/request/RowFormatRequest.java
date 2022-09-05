@@ -30,7 +30,7 @@ public class RowFormatRequest {
     private String verticalAlignment = "ALIGN_MIDDLE";
 
 
-    public RowFormatRequest(){
+    public RowFormatRequest() {
     }
 
     public FontDefinition getFont() {

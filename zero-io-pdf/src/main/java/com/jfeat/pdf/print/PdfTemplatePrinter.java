@@ -26,13 +26,19 @@ public class PdfTemplatePrinter {
 
     protected final static Logger logger = LoggerFactory.getLogger(PdfTemplatePrinter.class);
 
-    /** 用于匹配自定义字符数据的正则 */
+    /**
+     * 用于匹配自定义字符数据的正则
+     */
     private static final String CONVERT_REGEX = "\\$\\{.*\\}";
 
-    /** 用于匹配时间的标志*/
+    /**
+     * 用于匹配时间的标志
+     */
     private static final String DATE_REGEX = "${date}";
 
-    /** 用于表示在表格中使用格式化转换的标志*/
+    /**
+     * 用于表示在表格中使用格式化转换的标志
+     */
     private static final String TABLE_FORMAT_CONVERT = "{}";
 
     public static void main(String[] args) throws FileNotFoundException {
@@ -47,9 +53,10 @@ public class PdfTemplatePrinter {
     }
 
     /**
-     *  模版打印pdf
+     * 模版打印pdf
+     *
      * @param template json格式模版
-     * @param request 自定义参数
+     * @param request  自定义参数
      * @return 字节流
      */
     public static ByteArrayOutputStream print(JSONObject template, JSONObject request) {
@@ -59,8 +66,10 @@ public class PdfTemplatePrinter {
         return baos;
     }
 
-    /** 根据模版打印PDF */
-    public static void print(OutputStream output, JSONObject pdfJsonRequest){
+    /**
+     * 根据模版打印PDF
+     */
+    public static void print(OutputStream output, JSONObject pdfJsonRequest) {
         // 转换 json 为 PdfFlowRequest
         PdfFlowRequest data = convertPdfJsonRequest(pdfJsonRequest);
         // 打印
@@ -73,14 +82,18 @@ public class PdfTemplatePrinter {
         }
     }
 
-    /** 合并模版与数据 处理流布局 */
+    /**
+     * 合并模版与数据 处理流布局
+     */
     public static JSONObject processTemplate(JSONObject template, JSONObject request) {
         // 流布局
         JSONArray flows = template.getJSONArray("flows");
         // 处理流布局
         for (int i = 0; i < flows.size(); i++) {
             JSONObject flow = flows.getJSONObject(i);
-            if (flow == null) { continue; }
+            if (flow == null) {
+                continue;
+            }
             String name = flow.getString("name");
             // linear flow 嵌套特殊处理
             if (PdfFlowRequest.Flow.LINEAR_FLOW.equals(name)) {
@@ -92,7 +105,9 @@ public class PdfTemplatePrinter {
         return template;
     }
 
-    /** 处理 flow*/
+    /**
+     * 处理 flow
+     */
     public static void processFlow(JSONObject flow, JSONObject request) {
         String name = flow.getString("name");
         switch (name) {
@@ -123,7 +138,9 @@ public class PdfTemplatePrinter {
         }
     }
 
-    /** 处理TitleFlow */
+    /**
+     * 处理TitleFlow
+     */
     public static void processTitleFlow(JSONObject titleFlow, JSONObject request) {
         JSONObject element = titleFlow.getJSONObject("element");
         String title = element.getString("content");
@@ -133,7 +150,9 @@ public class PdfTemplatePrinter {
         }
     }
 
-    /** 处理QRCodeFlow */
+    /**
+     * 处理QRCodeFlow
+     */
     public static void processQRCodeFLow(JSONObject qrCodeFlow, JSONObject request) {
         JSONObject element = qrCodeFlow.getJSONObject("element");
         String code = element.getString("code");
@@ -142,7 +161,10 @@ public class PdfTemplatePrinter {
             element.put("code", request.getString(code));
         }
     }
-    /** 处理ContentFlow */
+
+    /**
+     * 处理ContentFlow
+     */
     public static void processContentFlow(JSONObject contentFlow, JSONObject request) {
         JSONObject element = contentFlow.getJSONObject("element");
         JSONObject layout = element.getJSONObject("layout");
@@ -186,7 +208,9 @@ public class PdfTemplatePrinter {
 //        }
     }
 
-    /** 处理TableFlow */
+    /**
+     * 处理TableFlow
+     */
     public static void processTableFlowOld(JSONObject tableFlow, JSONObject request) {
         JSONObject element = tableFlow.getJSONObject("element");
         JSONObject layout = element.getJSONObject("layout");
@@ -284,7 +308,7 @@ public class PdfTemplatePrinter {
 
     private static List<String> processRowsData(JSONArray rows, List<String> headerFields, JSONObject converts) {
         List<String> rowList = new ArrayList<>();
-        if (rows != null ) {
+        if (rows != null) {
             for (int i = 0; i < rows.size(); i++) {
                 JSONObject row = rows.getJSONObject(i);
                 for (int j = 0; j < headerFields.size(); j++) {
@@ -299,7 +323,9 @@ public class PdfTemplatePrinter {
         return rowList;
     }
 
-    /** 转换表格中的值 */
+    /**
+     * 转换表格中的值
+     */
     private static String convertRowsValue(String field, String value, JSONObject converts) {
         if (converts != null) {
             JSONObject convert = converts.getJSONObject(field);
@@ -319,11 +345,13 @@ public class PdfTemplatePrinter {
     private static List<String> processRowsData(JSONArray rows, List<String> headerFields) {
         return rows
                 .stream()
-                .flatMap(row -> headerFields.stream().map(((JSONObject)row)::getString))
+                .flatMap(row -> headerFields.stream().map(((JSONObject) row)::getString))
                 .collect(Collectors.toList());
     }
 
-    /** 处理LinearFlow */
+    /**
+     * 处理LinearFlow
+     */
     public static void processLinearFlow(JSONObject linearFlow, JSONObject request) {
         JSONObject element = linearFlow.getJSONObject("element");
         JSONObject layout = element.getJSONObject("layout");
@@ -335,7 +363,9 @@ public class PdfTemplatePrinter {
         JSONArray elements = element.getJSONArray("elements");
         for (int i = 0; i < elements.size(); i++) {
             JSONObject flow = elements.getJSONObject(i);
-            if (flow == null) { continue; }
+            if (flow == null) {
+                continue;
+            }
             String name = flow.getString("name");
             if (PdfFlowRequest.Flow.LINEAR_FLOW.equals(name)) {
                 if (flow.getJSONObject("layout").getJSONArray("columnWidths").size() == 1) {
@@ -348,11 +378,13 @@ public class PdfTemplatePrinter {
         }
     }
 
-    /** JSON转换成PdfFlowRequest类 */
+    /**
+     * JSON转换成PdfFlowRequest类
+     */
     public static PdfFlowRequest convertPdfJsonRequest(JSONObject pdfJsonRequest) {
         JSONArray flows = pdfJsonRequest.getJSONArray("flows");
         PdfFlowRequest data = JSONObject.parseObject(pdfJsonRequest.toJSONString(), PdfFlowRequest.class);
-        for(int i = 0; i < flows.size(); i++) {
+        for (int i = 0; i < flows.size(); i++) {
             data.getFlows().get(i).setElement(PdfConverter.handlerConvertToFlowData(flows.getJSONObject(i)));
         }
         return data;

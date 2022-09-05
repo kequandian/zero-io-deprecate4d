@@ -33,7 +33,7 @@ public class PdfTableEndpoint {
 
     // list
 
-//    @BusinessLog(name = "PdfTable", value = "查询可编辑列表 PdfTable")
+    //    @BusinessLog(name = "PdfTable", value = "查询可编辑列表 PdfTable")
     @ApiOperation(value = "PdfTable 可编辑列表信息", response = PdfTableRecord.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", dataType = "Integer"),

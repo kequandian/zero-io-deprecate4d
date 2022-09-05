@@ -17,20 +17,19 @@
     </sql>
 
     <select id="queryMasterModel" resultType="AdvertiserModel">
-       SELECT ca_advertiser.*
-       FROM ca_advertiser
-       WHERE ca_advertiser.id=#{id}
-       GROUP BY ca_advertiser.id
+        SELECT ca_advertiser.*
+        FROM ca_advertiser
+        WHERE ca_advertiser.id=#{id}
+        GROUP BY ca_advertiser.id
     </select>
 
 
     <select id="findDetail" resultType="AdvertiserRecord" parameterType="AdvertiserRecord">
-    SELECT
+        SELECT
         ca_advertiser.*,t_sys_user.name as assistantName
-        FROM ca_advertiser left join t_sys_user  on t_sys_user.id = ca_advertiser.assistant_id
+        FROM ca_advertiser left join t_sys_user on t_sys_user.id = ca_advertiser.assistant_id
         where ca_advertiser.id = #{id}
     </select>
-
 
 
     <select id="findAdvertiserPage" resultType="AdvertiserRecord" parameterType="AdvertiserRecord">
@@ -41,7 +40,7 @@
         ,t_sys_user.name as assistantName
         FROM ca_advertiser left join t_sys_org on t_sys_org.id = ca_advertiser.org_id
         LEFT JOIN ca_adverting_plan on ca_adverting_plan.advertiser_id = ca_advertiser.id
-        left join t_sys_user  on t_sys_user.id = ca_advertiser.assistant_id
+        left join t_sys_user on t_sys_user.id = ca_advertiser.assistant_id
 
         WHERE 1=1
 
@@ -111,13 +110,14 @@
             )
         </if>
         <!--  2 个人用户 -->
-        <if test="userType != null and userType == 2"  >
+        <if test="userType != null and userType == 2">
             and (ca_advertiser.assistant_id = #{userId})
         </if>
         <!--  3 个人组织用户 -->
-        <if test="userType != null and userType == 3"  >
-            and ( ca_advertiser.assistant_id in  <include refid="userTypeThree"/>
-                    or ca_advertiser.assistant_id = 0 )
+        <if test="userType != null and userType == 3">
+            and ( ca_advertiser.assistant_id in
+            <include refid="userTypeThree"/>
+            or ca_advertiser.assistant_id = 0 )
         </if>
         group by ca_advertiser.id
         ORDER BY ca_advertiser.create_time DESC

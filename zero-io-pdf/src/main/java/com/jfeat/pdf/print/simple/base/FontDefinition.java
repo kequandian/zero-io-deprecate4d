@@ -37,6 +37,7 @@ public class FontDefinition {
     public static final BaseFont SONG_FONT;
     public static final BaseFont HELVETICA_FONT;
     public static final BaseFont BASE_FONT;
+
     static {
         try {
             SONG_FONT = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", NOT_EMBEDDED);
@@ -47,7 +48,7 @@ public class FontDefinition {
         }
     }
 
-    public static BaseFont getBaseFont (String familyName) {
+    public static BaseFont getBaseFont(String familyName) {
         if (familyName.equals(SONG)) {
             return SONG_FONT;
         }

@@ -26,18 +26,19 @@
             <artifactId>validation-api</artifactId>
             <version>2.0.1.Final</version>
         </dependency>
-<!--        <dependency>
+        <!--        <dependency>
+                    <groupId>com.jfeat</groupId>
+                    <artifactId>crud-dev</artifactId>
+                    <version>${crud-dev.version}</version>
+                    <scope>provided</scope>
+                </dependency>-->
+        <dependency>
             <groupId>com.jfeat</groupId>
-            <artifactId>crud-dev</artifactId>
-            <version>${crud-dev.version}</version>
-            <scope>provided</scope>
-        </dependency>-->
+            <artifactId>front-page</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
-        
-        
-        
-        
-        
+
     </dependencies>
 
 

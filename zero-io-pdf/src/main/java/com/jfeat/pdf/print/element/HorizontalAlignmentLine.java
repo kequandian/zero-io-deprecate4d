@@ -9,7 +9,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 /**
  * Created by vincent on 2018/9/28.
  */
-public class HorizontalAlignmentLine extends PdfPTable{
+public class HorizontalAlignmentLine extends PdfPTable {
 
     /*public HorizontalAlignmentLine(String left, String right, Font font){
         Chunk glue = new Chunk(new VerticalPositionMark());
@@ -23,10 +23,10 @@ public class HorizontalAlignmentLine extends PdfPTable{
     private Font rightFont;
 
     public HorizontalAlignmentLine(String left, String center, String right, Font font) {
-        this(left,center,right,font, font, font);
+        this(left, center, right, font, font, font);
     }
 
-    public HorizontalAlignmentLine(String left, String center, String right, Font leftFont, Font centerFont, Font rightFont){
+    public HorizontalAlignmentLine(String left, String center, String right, Font leftFont, Font centerFont, Font rightFont) {
         super(3);
         setWidthPercentage(100);
 
@@ -34,35 +34,35 @@ public class HorizontalAlignmentLine extends PdfPTable{
         this.rightFont = rightFont;
         this.centerFont = centerFont;
 
-        if(left!=null && left.length()>0) {
+        if (left != null && left.length() > 0) {
             PdfPCell leftCell = new PdfPCell(new Phrase(left, leftFont));
             leftCell.setPadding(0);
             leftCell.setHorizontalAlignment(Element.ALIGN_LEFT);
             leftCell.setBorder(PdfPCell.NO_BORDER);
 
             addCell(leftCell);
-        }else {
+        } else {
             addCell("");
         }
 
-        if(center!=null && center.length()>0) {
+        if (center != null && center.length() > 0) {
             PdfPCell centerCell = new PdfPCell(new Phrase(center, centerFont));
             centerCell.setPadding(0);
             centerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
             centerCell.setBorder(PdfPCell.NO_BORDER);
             addCell(centerCell);
-        }else{
+        } else {
             addCell("");
         }
 
-        if(right!=null && right.length()>0) {
+        if (right != null && right.length() > 0) {
             PdfPCell rightCell = new PdfPCell(new Phrase(right, rightFont));
             rightCell.setPadding(0);
             rightCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             rightCell.setBorder(PdfPCell.NO_BORDER);
 
             addCell(rightCell);
-        }else{
+        } else {
             addCell("");
         }
 
@@ -92,7 +92,7 @@ public class HorizontalAlignmentLine extends PdfPTable{
         this.rightFont = rightFont;
     }
 
-    public void setFont(Font font){
+    public void setFont(Font font) {
         this.leftFont = font;
         this.centerFont = font;
         this.rightFont = font;

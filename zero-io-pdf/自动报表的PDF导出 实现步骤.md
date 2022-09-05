@@ -1,5 +1,7 @@
 # 自动报表导出
+
 ## 一.调用方法介绍：
+
 GET `/api/io/pdf/export/{field}`
 
 **  参数列表：**
@@ -11,12 +13,15 @@ GET `/api/io/pdf/export/{field}`
 <br>
 
 ## 二.自动报表PDF导出的实现步骤：
-1.在前端进行调用
-2.在io_pdf_table表中配置导出相关信息
+
+1.在前端进行调用 2.在io_pdf_table表中配置导出相关信息
 
 ### 步骤详解
-#### 步骤1-在前端进行调用 
+
+#### 步骤1-在前端进行调用
+
 > 在前端的自动报表页面 配置导出pdf的配置
+
 ``` 
 //前端框架配置 【框架自动传递滤条件】
 //前端这里的type和导出excel相同
@@ -30,6 +35,7 @@ GET `/api/io/pdf/export/{field}`
            },
          ],
 ```
+
 步骤1完成
 
 <br>
@@ -50,7 +56,6 @@ GET `/api/io/pdf/export/{field}`
 | ~~api_list~~  | api列表中的字段 暂时无用 |
 |  ~~header_field~~   | 表头字段 暂时无用 |
 
-
 ** 二.主要配置字段template_content介绍 **
 &nbsp;&nbsp;&nbsp;&nbsp;template_content为主要配置导出效果的字段，存储的是json格式的数据，以下将对这个模板的配置进行介绍
 
@@ -64,9 +69,11 @@ GET `/api/io/pdf/export/{field}`
 ```
 
 ** 1. flows介绍 **
-flows目前根据name的不同有两种配置方式目前name分为<kbd>linear</kbd>和<kbd>table</kbd> 
+flows目前根据name的不同有两种配置方式目前name分为<kbd>linear</kbd>和<kbd>table</kbd>
 table在自动报表中未用到，此处不做介绍
+
 - 当name为linear时
+
 ```
  {
       "name": "linear",
@@ -74,13 +81,15 @@ table在自动报表中未用到，此处不做介绍
       "elements": []
 }
 ```
+
 - columnWidths用于配置各个组件所占宽度比例
 - elements下有个配置：name，根据name分为<kbd>content</kbd>和<kbd>table</kbd>
-<br>
+  <br>
 
 elements下name为content时，用于显示表格头部信息 例如：打印人 打印时间 等信息
 <br>
 > 具体配置示例：
+
 ```
       "elements": [
         {
@@ -104,6 +113,7 @@ elements下name为content时，用于显示表格头部信息 例如：打印人
         }
       ]
 ```
+
 > 示例中elements里面有3个组件 最终导出每个组件占用一列
 > - height：高度
 > - title :左侧字段
@@ -114,6 +124,7 @@ elements下name为content时，用于显示表格头部信息 例如：打印人
 
 elements下name为table时 用于显示自动报表的表格信息
 > 具体配置示例：
+
 ```
       "elements": [
         {
@@ -158,11 +169,12 @@ elements下name为table时 用于显示自动报表的表格信息
         }
       ]
 ```
+
 > columnWidths:每个字段占用的宽度
 > columnKeyBindings:自动报表的字段对应打印出来的字段映射
 > data:数据源 ${rows}从rows中获得
 > converts:额外配置 key填需要配置的字段，value填映射规则
->>例如原本自动报表传1000经过  "{}": "¥ {}"配置后打印为 ¥1000
+>> 例如原本自动报表传1000经过  "{}": "¥ {}"配置后打印为 ¥1000
 
 > rowHeight:行高
 > headerHeight:表头高度

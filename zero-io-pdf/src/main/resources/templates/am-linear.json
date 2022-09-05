@@ -2,8 +2,11 @@
   "flows": [
     {
       "name": "linear",
-      "columnWidths": [2,1],
-      "elements":[
+      "columnWidths": [
+        2,
+        1
+      ],
+      "elements": [
         {
           "name": "text",
           "data": "一二",
@@ -11,11 +14,22 @@
         },
         {
           "name": "content",
-          "columnWidths": ["1", "0"],
-          "title": [ "46 Challenger Street","St Heliers","Auckland 1026"],
-          "data": ["","",""],
+          "columnWidths": [
+            "1",
+            "0"
+          ],
+          "title": [
+            "46 Challenger Street",
+            "St Heliers",
+            "Auckland 1026"
+          ],
+          "data": [
+            "",
+            "",
+            ""
+          ],
           "height": "20"
-        },
+        }
       ]
     }
   ],

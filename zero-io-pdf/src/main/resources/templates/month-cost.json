@@ -79,14 +79,21 @@
         ]
       }
     },
-
     {
       "name": "table",
       "element": {
         "layout": {
-          "columnWidths": [1,1,4]
+          "columnWidths": [
+            1,
+            1,
+            4
+          ]
         },
-        "header": ["年月", "当月总金额", "明细"],
+        "header": [
+          "年月",
+          "当月总金额",
+          "明细"
+        ],
         "rows": "${rows}",
         "format": {
           "rowFormat": {
@@ -99,7 +106,6 @@
           }
         }
       }
-
     }
   ],
   "page": {

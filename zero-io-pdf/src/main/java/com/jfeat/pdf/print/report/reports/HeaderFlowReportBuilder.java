@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by vincenthuang on 22/03/2018.
  */
-public class HeaderFlowReportBuilder{
+public class HeaderFlowReportBuilder {
 
     /// document
     private int columns;        //列数
@@ -56,83 +56,91 @@ public class HeaderFlowReportBuilder{
     /// background Color only for group row
     private BaseColor groupBackgroundColor;
 
-    public HeaderFlowReportBuilder(){
+    public HeaderFlowReportBuilder() {
         rowOption = ImageTextBox.ID;
     }
 
-    public HeaderFlowReportBuilder columns(int cols){
+    public HeaderFlowReportBuilder columns(int cols) {
         this.columns = cols;
         return this;
     }
+
     public HeaderFlowReportBuilder pageSize(float w, float h) {
         this.pageSize = new Rectangle(w, h);
         return this;
     }
-    public HeaderFlowReportBuilder pageMargin(float margin){
-        this.pageMarginLeft = this.pageMarginTop = this.pageMarginRight  = this.pageMarginBottom = margin;
+
+    public HeaderFlowReportBuilder pageMargin(float margin) {
+        this.pageMarginLeft = this.pageMarginTop = this.pageMarginRight = this.pageMarginBottom = margin;
         return this;
     }
-    public HeaderFlowReportBuilder pageMargin(float l, float t, float r, float b){
+
+    public HeaderFlowReportBuilder pageMargin(float l, float t, float r, float b) {
         this.pageMarginLeft = l;
         this.pageMarginTop = t;
         this.pageMarginRight = r;
         this.pageMarginBottom = b;
         return this;
     }
-    public HeaderFlowReportBuilder flowDirection(int flowDirection){
+
+    public HeaderFlowReportBuilder flowDirection(int flowDirection) {
         this.flowDirection = flowDirection;
         return this;
     }
-    public HeaderFlowReportBuilder rowOption(String option){
-        if(option!=null) {
+
+    public HeaderFlowReportBuilder rowOption(String option) {
+        if (option != null) {
             this.rowOption = option;
         }
         return this;
     }
-    public HeaderFlowReportBuilder rowRatio(float ratio){
+
+    public HeaderFlowReportBuilder rowRatio(float ratio) {
         this.rowRatio = ratio;
         return this;
     }
-    public HeaderFlowReportBuilder flowHeight(float flowHeight){
+
+    public HeaderFlowReportBuilder flowHeight(float flowHeight) {
         this.flowHeight = flowHeight;
         return this;
     }
-    public int rowAlignment(){
-        return this.rowLayout==null? Element.ALIGN_LEFT :
+
+    public int rowAlignment() {
+        return this.rowLayout == null ? Element.ALIGN_LEFT :
                 this.rowLayout.getAlignment();
     }
 
-    public HeaderFlowReportBuilder rowsPadding(float left, float top, float right, float bottom){
-        this.rowsPaddingLeft =  left;
-        this.rowsPaddingTop =  top;
-        this.rowsPaddingRight =  right;
-        this.rowsPaddingBottom =  bottom;
+    public HeaderFlowReportBuilder rowsPadding(float left, float top, float right, float bottom) {
+        this.rowsPaddingLeft = left;
+        this.rowsPaddingTop = top;
+        this.rowsPaddingRight = right;
+        this.rowsPaddingBottom = bottom;
         return this;
     }
 
-    public HeaderFlowReportBuilder borderWidth(float l, float r, float t, float b){
+    public HeaderFlowReportBuilder borderWidth(float l, float r, float t, float b) {
         this.rowLayout.setBorderWidth(l, r, t, b);
         return this;
     }
 
-    public HeaderFlowReportBuilder borderColor(ColorDefinition color){
-        if(color!=null) {
+    public HeaderFlowReportBuilder borderColor(ColorDefinition color) {
+        if (color != null) {
             this.rowLayout.setBorderColor(color);
 
             /// set default color
-            if(color.getRed()>0 || color.getGreen()>0 || color.getBlue()>9) {
+            if (color.getRed() > 0 || color.getGreen() > 0 || color.getBlue() > 9) {
                 rowBorderColor(color.getRed(), color.getGreen(), color.getBlue());
             }
         }
         return this;
     }
 
-    public HeaderFlowReportBuilder headerBorderColor(ColorDefinition color){
-        if(color!=null) {
+    public HeaderFlowReportBuilder headerBorderColor(ColorDefinition color) {
+        if (color != null) {
             this.rowLayout.setBorderColor(color);
 
             /// set default color
-            if(color.getRed()>0 || color.getGreen()>0 || color.getBlue()>9) {
+            if (color.getRed() > 0 || color.getGreen() > 0 || color.getBlue() > 9) {
                 rowBorderColor(color.getRed(), color.getGreen(), color.getBlue());
             }
         }
@@ -149,31 +157,34 @@ public class HeaderFlowReportBuilder{
         return this;
     }
 
-    public HeaderFlowReportBuilder headerHeight(float height){
-        if(headerLayout==null){
+    public HeaderFlowReportBuilder headerHeight(float height) {
+        if (headerLayout == null) {
             headerLayout = new RowLayoutRequest();
         }
         headerLayout.setHeight(height);
         return this;
     }
-    public HeaderFlowReportBuilder headerPadding(float left, float right, float top, float bottom){
-        if(headerLayout==null){
+
+    public HeaderFlowReportBuilder headerPadding(float left, float right, float top, float bottom) {
+        if (headerLayout == null) {
             headerLayout = new RowLayoutRequest();
         }
         headerLayout.setPadding(left, right, top, bottom);
         return this;
     }
-    public HeaderFlowReportBuilder headerPadding(float padding){
-        if(headerLayout==null){
+
+    public HeaderFlowReportBuilder headerPadding(float padding) {
+        if (headerLayout == null) {
             headerLayout = new RowLayoutRequest();
         }
-        headerLayout.setPadding(padding,padding,padding,padding);
+        headerLayout.setPadding(padding, padding, padding, padding);
         return this;
     }
-    public HeaderFlowReportBuilder headerBorderWidth(float left, float right, float top, float bottom){
-        if(left<0 || right<0 || top<0 || bottom<0){
+
+    public HeaderFlowReportBuilder headerBorderWidth(float left, float right, float top, float bottom) {
+        if (left < 0 || right < 0 || top < 0 || bottom < 0) {
             // do nothing
-        }else {
+        } else {
             if (headerLayout == null) {
                 headerLayout = new RowLayoutRequest();
             }
@@ -181,10 +192,11 @@ public class HeaderFlowReportBuilder{
         }
         return this;
     }
-    public HeaderFlowReportBuilder headerBorderWidth(float width){
-        if(width<0){
+
+    public HeaderFlowReportBuilder headerBorderWidth(float width) {
+        if (width < 0) {
             /// do nothing
-        }else {
+        } else {
             if (headerLayout == null) {
                 headerLayout = new RowLayoutRequest();
             }
@@ -192,81 +204,88 @@ public class HeaderFlowReportBuilder{
         }
         return this;
     }
-    public HeaderFlowReportBuilder headerBorderColor(int red, int green, int blue){
-        if(headerLayout==null){
+
+    public HeaderFlowReportBuilder headerBorderColor(int red, int green, int blue) {
+        if (headerLayout == null) {
             headerLayout = new RowLayoutRequest();
         }
 
         /// do not set color while black
-        if(red>0 || green>0 || blue>0) {
+        if (red > 0 || green > 0 || blue > 0) {
             headerLayout.setBorderColor(red, green, blue);
         }
         return this;
     }
 
-     public HeaderFlowReportBuilder headerFont(FontDefinition font){
-         if(headerFormat==null){
-             headerFormat = new RowFormatRequest();
-         }
-         headerFormat.setFont(font);
-         return this;
-     }
+    public HeaderFlowReportBuilder headerFont(FontDefinition font) {
+        if (headerFormat == null) {
+            headerFormat = new RowFormatRequest();
+        }
+        headerFormat.setFont(font);
+        return this;
+    }
 
-     public HeaderFlowReportBuilder headerSpacing(float spacing, float indent, String alignment, String verticalAlignment){
-         if(headerFormat==null){
-             headerFormat = new RowFormatRequest();
-         }
-         headerFormat.setSpacing(spacing);
-         headerFormat.setIndent(indent);
-         headerFormat.setAlignment(alignment);
-         headerFormat.setVerticalAlignment(verticalAlignment);
-         return this;
-     }
+    public HeaderFlowReportBuilder headerSpacing(float spacing, float indent, String alignment, String verticalAlignment) {
+        if (headerFormat == null) {
+            headerFormat = new RowFormatRequest();
+        }
+        headerFormat.setSpacing(spacing);
+        headerFormat.setIndent(indent);
+        headerFormat.setAlignment(alignment);
+        headerFormat.setVerticalAlignment(verticalAlignment);
+        return this;
+    }
 
-    public HeaderFlowReportBuilder rowHeight(float height){
+    public HeaderFlowReportBuilder rowHeight(float height) {
         rowLayout.setHeight(height);
         return this;
     }
-    public HeaderFlowReportBuilder rowAlignment(int alignment){
+
+    public HeaderFlowReportBuilder rowAlignment(int alignment) {
         rowLayout.setAlignment(alignment);
         return this;
     }
 
-    public HeaderFlowReportBuilder rowPadding(float left, float right, float top, float bottom){
+    public HeaderFlowReportBuilder rowPadding(float left, float right, float top, float bottom) {
         rowLayout.setPadding(left, right, top, bottom);
         return this;
     }
-    public HeaderFlowReportBuilder rowBorderWidth(float left, float right, float top, float bottom){
+
+    public HeaderFlowReportBuilder rowBorderWidth(float left, float right, float top, float bottom) {
         rowLayout.setBorderWidth(left, right, top, bottom);
         return this;
     }
-    public HeaderFlowReportBuilder rowBorderWidth(float width){
+
+    public HeaderFlowReportBuilder rowBorderWidth(float width) {
         rowLayout.setBorderWidth(width);
         return this;
     }
-    public HeaderFlowReportBuilder rowBorderColor(int red, int green, int blue){
+
+    public HeaderFlowReportBuilder rowBorderColor(int red, int green, int blue) {
         // do not set color while black
-        if(red>0 || green>0 || blue>0) {
+        if (red > 0 || green > 0 || blue > 0) {
             rowLayout.setBorderColor(red, green, blue);
         }
         return this;
     }
-    public HeaderFlowReportBuilder rowBorderColor(ColorDefinition colorDefinition){
+
+    public HeaderFlowReportBuilder rowBorderColor(ColorDefinition colorDefinition) {
         rowLayout.setBorderColor(colorDefinition);
         return this;
     }
 
-     public HeaderFlowReportBuilder rowFont(FontDefinition font){
-         rowFormat.setFont(font);
-         return this;
-     }
-     public HeaderFlowReportBuilder rowSpacing(float spacing, float indent, String alignment, String verticalAlignment){
-         rowFormat.setSpacing(spacing);
-         rowFormat.setIndent(indent);
-         rowFormat.setAlignment(alignment);
-         rowFormat.setVerticalAlignment(verticalAlignment);
-         return this;
-     }
+    public HeaderFlowReportBuilder rowFont(FontDefinition font) {
+        rowFormat.setFont(font);
+        return this;
+    }
+
+    public HeaderFlowReportBuilder rowSpacing(float spacing, float indent, String alignment, String verticalAlignment) {
+        rowFormat.setSpacing(spacing);
+        rowFormat.setIndent(indent);
+        rowFormat.setAlignment(alignment);
+        rowFormat.setVerticalAlignment(verticalAlignment);
+        return this;
+    }
 
     // public FlowReportBuilder groupFormat(Font group, BaseColor backgroundColor){
     //     if(group!=null) {
@@ -282,12 +301,12 @@ public class HeaderFlowReportBuilder{
     //     return this;
     // }
 
-    public HeaderFlowReportBuilder headerData(ListRowBase data){
+    public HeaderFlowReportBuilder headerData(ListRowBase data) {
         this.headerData = data;
         return this;
     }
 
-    public HeaderFlowReportBuilder rowsData(List<ListRowBase> data){
+    public HeaderFlowReportBuilder rowsData(List<ListRowBase> data) {
         this.rowsData = data;
         return this;
     }
@@ -295,37 +314,38 @@ public class HeaderFlowReportBuilder{
 
     /**
      * build HeaderFlowReport
+     *
      * @return
      */
-    public HeaderFlowReport build(){
+    public HeaderFlowReport build() {
 
         // create report
         HeaderFlowReport report = new HeaderContentFlowReport(columns);
-        if(rowsPaddingLeft >0 || rowsPaddingTop >0 || rowsPaddingRight >0){
+        if (rowsPaddingLeft > 0 || rowsPaddingTop > 0 || rowsPaddingRight > 0) {
             /// rows table in double-row parent table
             report.setRowsPadding(rowsPaddingLeft, rowsPaddingTop, rowsPaddingRight, rowsPaddingBottom);
         }
 
         // set row height directly
-        if(this.rowLayout.getHeight()>0) {
+        if (this.rowLayout.getHeight() > 0) {
             report.setRowHeight(this.rowLayout.getHeight() + rowsPaddingTop + rowsPaddingBottom);
 
-        }else if( Math.abs(this.rowRatio-1.0f) > 0.001){
+        } else if (Math.abs(this.rowRatio - 1.0f) > 0.001) {
             // calc row height by columns
             float rowWidth = (pageSize.getWidth() - pageMarginLeft - pageMarginRight) / columns
                     - (rowsPaddingLeft + rowsPaddingRight) * (columns - 1);
-            report.setRowHeight((float)(Math.floor(rowWidth*rowRatio + rowsPaddingTop + rowsPaddingBottom)));
+            report.setRowHeight((float) (Math.floor(rowWidth * rowRatio + rowsPaddingTop + rowsPaddingBottom)));
 
-        }else{
+        } else {
             // equals to columns width
             float rowWidth = (pageSize.getWidth() - pageMarginLeft - pageMarginRight) / columns
                     - (rowsPaddingLeft + rowsPaddingRight) * (columns - 1);
-            report.setRowHeight((float)(Math.floor(rowWidth*rowRatio + rowsPaddingTop + rowsPaddingBottom)));
+            report.setRowHeight((float) (Math.floor(rowWidth * rowRatio + rowsPaddingTop + rowsPaddingBottom)));
         }
 
         report.setFlowDirection(flowDirection);
-        if(flowDirection == FlowReport.FLOW_UTD){
-            if(flowHeight<=0){
+        if (flowDirection == FlowReport.FLOW_UTD) {
+            if (flowHeight <= 0) {
                 throw new RuntimeException("Flow height is not set for FLOW_UTD direction.");
             }
             int maxRowsPerColumn = PageUtil.calcRows(flowHeight,
@@ -338,11 +358,11 @@ public class HeaderFlowReportBuilder{
 
 
         // header
-        if(this.headerData!=null) {
-            if(headerLayout!=null ) {
-                report.setHeaderBorderWidth(this.headerLayout.getBorderLeft(), this.headerLayout.getBorderRight(), this.headerLayout.getBorderTop(), this.headerLayout.getBorderBottom() );
+        if (this.headerData != null) {
+            if (headerLayout != null) {
+                report.setHeaderBorderWidth(this.headerLayout.getBorderLeft(), this.headerLayout.getBorderRight(), this.headerLayout.getBorderTop(), this.headerLayout.getBorderBottom());
             }
-            report.setHeaderBorderColor(headerLayout==null ? null : (this.headerLayout.getBorderColor()==null ? null : ColorDefinition.getBaseColor(this.headerLayout.getBorderColor())) );
+            report.setHeaderBorderColor(headerLayout == null ? null : (this.headerLayout.getBorderColor() == null ? null : ColorDefinition.getBaseColor(this.headerLayout.getBorderColor())));
 
             /// header data
             ImageTextBoxData headerRowData = new ImageTextBoxData();
@@ -374,12 +394,12 @@ public class HeaderFlowReportBuilder{
 
         /// rows
         List<ListRowBase> rowDataItems = new ArrayList<>();
-        for(ListRowBase it : this.rowsData) {
+        for (ListRowBase it : this.rowsData) {
 
-            if( RelativeRow.ID.compareTo(rowOption)==0 ) {
-                RelativeRowData item = (RelativeRowData)it;
+            if (RelativeRow.ID.compareTo(rowOption) == 0) {
+                RelativeRowData item = (RelativeRowData) it;
 
-                RelativeRowData rowItemData =new RelativeRowData();
+                RelativeRowData rowItemData = new RelativeRowData();
 
                 rowItemData.setTitle(item.getTitle(), rowFormat.getFont());
                 rowItemData.setSubtitle(item.getSubtitle());
@@ -393,8 +413,8 @@ public class HeaderFlowReportBuilder{
 
                 rowDataItems.add(rowItemData);
 
-            }else if(TextBox.ID.compareTo(rowOption)==0) {
-                ImageTextBoxData item = (ImageTextBoxData)it;
+            } else if (TextBox.ID.compareTo(rowOption) == 0) {
+                ImageTextBoxData item = (ImageTextBoxData) it;
 
                 TextBoxData rowItemData = new TextBoxData();
                 rowItemData.setText(item.getTitle());
@@ -408,9 +428,8 @@ public class HeaderFlowReportBuilder{
                 rowItemData.setPadding(rowLayout.getPaddingLeft(), rowLayout.getPaddingRight(), rowLayout.getPaddingTop(), rowLayout.getPaddingBottom());
 
                 rowDataItems.add(rowItemData);
-            }
-            else if(ImageTextBox.ID.compareTo(rowOption)==0) {
-                ImageTextBoxData item = (ImageTextBoxData)it;
+            } else if (ImageTextBox.ID.compareTo(rowOption) == 0) {
+                ImageTextBoxData item = (ImageTextBoxData) it;
 
                 ImageTextBoxData rowItemData = new ImageTextBoxData();
 
@@ -427,8 +446,8 @@ public class HeaderFlowReportBuilder{
 
                 rowDataItems.add(rowItemData);
 
-            }else if(ImageBox.ID.compareTo(rowOption)==0) {
-                ImageTextBoxData item = (ImageTextBoxData)it;
+            } else if (ImageBox.ID.compareTo(rowOption) == 0) {
+                ImageTextBoxData item = (ImageTextBoxData) it;
 
                 ImageBoxData rowItemData = new ImageBoxData();
 
@@ -440,9 +459,9 @@ public class HeaderFlowReportBuilder{
         }
 
         report.setRowBorderWidth(this.rowLayout.getBorderLeft(), this.rowLayout.getBorderRight(), this.rowLayout.getBorderTop(), this.rowLayout.getBorderBottom());
-        report.setRowBorderColor(this.rowLayout.getBorderColor()==null ? null : ColorDefinition.getBaseColor(this.rowLayout.getBorderColor()));
+        report.setRowBorderColor(this.rowLayout.getBorderColor() == null ? null : ColorDefinition.getBaseColor(this.rowLayout.getBorderColor()));
         report.setRowBorderWidth(rowLayout.getBorderLeft(), rowLayout.getBorderTop(), rowLayout.getBorderRight(), rowLayout.getBorderBottom());
-        report.setRowBorderColor(this.rowLayout.getBorderColor()==null? null : ColorDefinition.getBaseColor(this.rowLayout.getBorderColor()));
+        report.setRowBorderColor(this.rowLayout.getBorderColor() == null ? null : ColorDefinition.getBaseColor(this.rowLayout.getBorderColor()));
         report.setRowData(rowDataItems);
 
         return report;

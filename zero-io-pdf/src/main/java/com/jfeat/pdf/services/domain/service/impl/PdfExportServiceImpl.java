@@ -147,7 +147,7 @@ public class PdfExportServiceImpl implements PdfExportService {
 
     public JSONObject getApiRequest(PdfTable pdfTable) {
         // api
-       // String api = pdfTable.getApi();
+        // String api = pdfTable.getApi();
         // Authorization
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         HttpServletRequest httpRequest = ((ServletRequestAttributes) requestAttributes).getRequest();
@@ -208,7 +208,7 @@ public class PdfExportServiceImpl implements PdfExportService {
         // request
         JSONObject request = pdfRequestService.getStatisticsRequest(field, template);
         logger.info("statistics request --> {}", request);
-        return  request;
+        return request;
     }
 
     private String processSearch(String api) {

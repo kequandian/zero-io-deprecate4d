@@ -32,10 +32,9 @@ public class MockEndpoint {
     MockService mockService;
 
 
-
     @GetMapping("/{dir}/{name}")
     @ApiOperation(value = "查看 指定文件夹下的mock数据")
-    public Tip getMock(@PathVariable(value = "dir") String dir,@PathVariable(value = "name")String name) {
+    public Tip getMock(@PathVariable(value = "dir") String dir, @PathVariable(value = "name") String name) {
         JSONObject jsonObject = mockService.readJsonFile(name, dir);
         return SuccessTip.create(jsonObject);
 
@@ -43,7 +42,7 @@ public class MockEndpoint {
 
     @PostMapping("/{dir}/{name}")
     @ApiOperation(value = "新增mock数据")
-    public Tip createMock(@RequestBody JSONObject json,@PathVariable(value = "dir") String dir,@PathVariable(value = "name")String name) {
+    public Tip createMock(@RequestBody JSONObject json, @PathVariable(value = "dir") String dir, @PathVariable(value = "name") String name) {
         Integer integer = mockService.saveJsonToFile(json, name, dir);
         return SuccessTip.create(integer);
 

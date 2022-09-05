@@ -26,7 +26,7 @@ getUrl:
 
 ###################  项目启动端口  ###################
 server:
-  port: 8081
+  port: 8080
   ssl:
     enabled: false
     key-store: classpath:sb.keystore
@@ -81,7 +81,7 @@ mybatis-plus:
     logic-delete-value: -1
     logic-not-delete-value: 1
     # sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
-   #  meta-object-handler: com.jfeat.crud.plus.CRUDMetaObjectHandler
+    #  meta-object-handler: com.jfeat.crud.plus.CRUDMetaObjectHandler
   configuration:
     map-underscore-to-camel-case: false
     cache-enabled: true #配置的缓存的全局开关
@@ -119,15 +119,18 @@ am:
 spring:
   profiles: dev
   datasource:
-    #      url: jdbc:mysql://120.79.77.207:3306/power?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
-    #url: jdbc:mysql://192.168.2.122:3306/smartsee?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
-    url: jdbc:mysql://127.0.0.1:3306/datax?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
+    #    url: jdbc:mysql://sh-cdb-q5vnc0iy.sql.tencentcdb.com:59449/smallsaas?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://localhost:3306/test?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+    #url: jdbc:mysql://localhost:3307/uaas-saas?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC
     username: root
-    password: 123456
+    password: root
+    #    password: zb2014@888
+    driver-class-name: com.mysql.jdbc.Driver
     filters: log4j,wall,mergeStat
+    sql-script-encoding: UTF-8
     schema: classpath*:sql/**/*-schema.sql
     data: classpath*:sql/**/*-data.sql
-    initialize: false
+    initialize: true
 
 logging:
   level: debug

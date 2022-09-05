@@ -56,13 +56,12 @@ public class PdfDocumentUtil {
     }
 
     public static void writeDocument(PdfWriteListener writer, OutputStream outputStream, String pdfFile, float marginLeft, float marginRight, float marginTop, float marginBottom) throws IOException, DocumentException {
-        Assert.isTrue(pdfFile==null || new File(pdfFile).exists(), pdfFile + " not exists !");
-        writeDocument(writer, outputStream, pdfFile!=null? new PdfReader(pdfFile) : null, PageSize.A4, marginLeft, marginRight, marginTop, marginBottom);
+        Assert.isTrue(pdfFile == null || new File(pdfFile).exists(), pdfFile + " not exists !");
+        writeDocument(writer, outputStream, pdfFile != null ? new PdfReader(pdfFile) : null, PageSize.A4, marginLeft, marginRight, marginTop, marginBottom);
     }
 
 
     /**
-     *
      * @param writer
      * @param outputStream
      * @param pdfReader
@@ -74,9 +73,9 @@ public class PdfDocumentUtil {
      * @throws DocumentException
      */
     public static void writeDocument(PdfWriteListener writer, OutputStream outputStream, PdfReader pdfReader, Rectangle pageSize, float marginLeft, float marginRight, float marginTop, float marginBottom) throws IOException, DocumentException {
-        if(pdfReader!=null) {
+        if (pdfReader != null) {
             writeDocument(writer, outputStream, pdfReader);
-        }else{
+        } else {
             writeDocument(writer, outputStream, pageSize, marginLeft, marginRight, marginTop, marginBottom);
         }
     }

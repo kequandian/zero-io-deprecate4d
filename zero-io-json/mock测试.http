@@ -1,11 +1,13 @@
-
 @localHostEndpoint = http://localhost:8080
 @reEndpoint = https://house.cloud.smallsaas.cn
 @endpoint = {{localHostEndpoint}}
+
 ### 文件夹名字 自定义
 @dir = pathto
+
 ### mockjson文件名字 自定义
 @mockName = mockName
+
 ### 获取已定义文件夹列表
 GET {{endpoint}}/mock
 

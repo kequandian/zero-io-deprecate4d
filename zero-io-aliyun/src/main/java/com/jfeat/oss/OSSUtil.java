@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * Created by zy on 2019/1/17.
  * 阿里OSS api调用封装
- *
+ * <p>
  * 开发文档
  * https://help.aliyun.com/document_detail/32008.html?spm=a2c4g.11174283.3.3.23667da2uyjWxs
  * Github
@@ -36,7 +36,8 @@ public class OSSUtil {
     private String accessKeyId;
     private String accessKeySecret;
 
-    private OSSUtil() {}
+    private OSSUtil() {
+    }
 
     /**
      * http://bucketName.endpoint/objectName
@@ -75,7 +76,7 @@ public class OSSUtil {
         /**
          * 获取bucket中文件列表
          **/
-       System.out.println(util.getFileList(bucketName));
+        System.out.println(util.getFileList(bucketName));
 
         /**
          * 获取一个小时的临时授权url
@@ -99,7 +100,6 @@ public class OSSUtil {
     }
 
     /**
-     *
      * @param bucketName
      * @return
      **/
@@ -111,8 +111,8 @@ public class OSSUtil {
         ossClient.shutdown();
         return result;
     }
+
     /**
-     *
      * @param bucketName
      * @return
      **/
@@ -125,6 +125,7 @@ public class OSSUtil {
 
     /**
      * 上传本地文件
+     *
      * @param bucketName
      * @param uploadName
      * @param localFileName
@@ -133,8 +134,10 @@ public class OSSUtil {
     public void upload(String bucketName, String uploadName, String localFileName) {
         upload(bucketName, uploadName, new File(localFileName));
     }
+
     /**
      * 上传本地文件
+     *
      * @param bucketName
      * @param uploadName
      * @param localFile
@@ -148,6 +151,7 @@ public class OSSUtil {
 
     /**
      * 通过输入流上传文件
+     *
      * @param bucketName
      * @param uploadName
      * @param inputStream
@@ -161,6 +165,7 @@ public class OSSUtil {
 
     /**
      * 分片上传本地文件
+     *
      * @param uploadFileRequest
      * @return
      **/
@@ -175,21 +180,26 @@ public class OSSUtil {
             ossClient.shutdown();
         }
     }
+
     public static class UploadRequestBuilder {
         private int taskNum = 1;
         private int partSize = 1 * 1024 * 1024;
         private boolean enableCheckPoint = true;
+
         /**
          * 并行处理任务数
-         * @param  taskNum
+         *
+         * @param taskNum
          * @return this
          **/
         public UploadRequestBuilder taskNum(int taskNum) {
             this.taskNum = taskNum;
             return this;
         }
+
         /**
          * 分片大小
+         *
          * @param partSize
          * @return this
          **/
@@ -202,6 +212,7 @@ public class OSSUtil {
             this.enableCheckPoint = enableCheckPoint;
             return this;
         }
+
         public UploadFileRequest build(String bucketName, String uploadName, String localFileName) {
             UploadFileRequest uploadFileRequest = new UploadFileRequest(bucketName, uploadName);
             uploadFileRequest.setUploadFile(localFileName);
@@ -214,6 +225,7 @@ public class OSSUtil {
 
     /**
      * 生成签名URL提供给访客进行临时访问
+     *
      * @param bucketName
      * @param targetName
      * @param expiration

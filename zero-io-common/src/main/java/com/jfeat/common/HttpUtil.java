@@ -26,7 +26,7 @@ import java.util.Map;
  */
 public class HttpUtil {
 
-    public static HttpHeaders getHttpHeaders(String authorization){
+    public static HttpHeaders getHttpHeaders(String authorization) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         headers.add("Accept", "*/*");
@@ -35,7 +35,7 @@ public class HttpUtil {
         return headers;
     }
 
-    public static JSONObject getResponse(String serverInstance, String authorization){
+    public static JSONObject getResponse(String serverInstance, String authorization) {
         RestTemplate rest = new RestTemplate();
         ResponseEntity<String> responseEntity = rest.exchange(serverInstance, HttpMethod.GET, new HttpEntity<>(getHttpHeaders(authorization)), String.class);
         String body = responseEntity.getBody();

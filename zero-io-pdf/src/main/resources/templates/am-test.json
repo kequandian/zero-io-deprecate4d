@@ -1,20 +1,38 @@
 {
   "flows": [
-
     {
       "name": "dottedLine"
     },
-
     {
       "name": "detail",
       "height": 20,
       "left": {
-        "title": ["出库单号", "录入时间", "出库时间", "状态"],
-        "data": ["${orderNumber}", "${recordTime}", "${executionTime}", "${status}"]
+        "title": [
+          "出库单号",
+          "录入时间",
+          "出库时间",
+          "状态"
+        ],
+        "data": [
+          "${orderNumber}",
+          "${recordTime}",
+          "${executionTime}",
+          "${status}"
+        ]
       },
       "right": {
-        "title": ["出库原因", "物资类型", "", ""],
-        "data": ["${cause}", "${materialType}", "", ""]
+        "title": [
+          "出库原因",
+          "物资类型",
+          "",
+          ""
+        ],
+        "data": [
+          "${cause}",
+          "${materialType}",
+          "",
+          ""
+        ]
       },
       "converts": {
         "${status}": {
@@ -27,7 +45,6 @@
         }
       }
     },
-
     {
       "name": "dottedLine"
     },
@@ -41,7 +58,6 @@
       "data": "设备列表",
       "height": 5
     },
-
     {
       "name": "table",
       "columnKeyBindings": [
@@ -85,13 +101,11 @@
         "size": "9"
       }
     },
-
     {
       "name": "text",
       "data": "",
       "height": 10
     },
-
     {
       "name": "text",
       "data": "审批历史",
@@ -151,8 +165,6 @@
         "size": "9"
       }
     }
-
-
   ],
   "page": {
     "pageName": "A4",

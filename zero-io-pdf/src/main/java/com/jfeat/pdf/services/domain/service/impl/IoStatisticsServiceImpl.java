@@ -86,7 +86,6 @@ public class IoStatisticsServiceImpl implements IoStatisticsService {
     }
 
 
-
     @Override
     public IoStatisticsMeta getStatisticsMetaByField(String field) {
         String sql = String.format("select * from %s where %s = '%s'",
@@ -110,7 +109,7 @@ public class IoStatisticsServiceImpl implements IoStatisticsService {
         JSONArray rowsJSONArray = new JSONArray();
         jdbcTemplate.query(sql, (rs, rowNum) -> {
             JSONObject row = new JSONObject();
-            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++){
+            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
                 String label = rs.getMetaData().getColumnLabel(i);
                 row.put(label, rs.getString(i));
             }
@@ -122,8 +121,9 @@ public class IoStatisticsServiceImpl implements IoStatisticsService {
     }
 
     /**
-     *  处理搜索部分的sql
-     * @param sql sql
+     * 处理搜索部分的sql
+     *
+     * @param sql           sql
      * @param columnTypeMap column type 表
      */
     private void processSearchSql(StringBuilder sql, Map<String, String> columnTypeMap) {
@@ -131,7 +131,7 @@ public class IoStatisticsServiceImpl implements IoStatisticsService {
             throw new BusinessException(BusinessCode.CRUD_QUERY_FAILURE, "名字类型映射为空");
         }
         // 无误处理sql
-        sql.insert(0,"select t.* from(");
+        sql.insert(0, "select t.* from(");
         sql.append(")t where 1=1 ");
 
         // request search parameter
@@ -175,7 +175,6 @@ public class IoStatisticsServiceImpl implements IoStatisticsService {
     }
 
 
-
     private Boolean isEmpty(List<IoStatisticsMeta> list) {
         return list == null || list.isEmpty();
     }
@@ -193,8 +192,9 @@ public class IoStatisticsServiceImpl implements IoStatisticsService {
     }
 
     /**
-     *  替换sql 为 select count(*),
-     *  快速获取一条数据，用于获取 columns 信息
+     * 替换sql 为 select count(*),
+     * 快速获取一条数据，用于获取 columns 信息
+     *
      * @param sql sql
      * @return count(*) sql
      */
@@ -204,6 +204,7 @@ public class IoStatisticsServiceImpl implements IoStatisticsService {
 
     /**
      * 删除 columnNames 数组中的 total 项
+     *
      * @param columnNames 字段名
      * @return 更新后字段名数组
      */
@@ -213,8 +214,9 @@ public class IoStatisticsServiceImpl implements IoStatisticsService {
 
     /**
      * 将字段名和类型做一个映射
+     *
      * @param columnNames 字段名数组
-     * @param types 类型数组
+     * @param types       类型数组
      * @return 映射表
      */
     private Map<String, String> zipColumnAndType(String[] columnNames, String[] types) {

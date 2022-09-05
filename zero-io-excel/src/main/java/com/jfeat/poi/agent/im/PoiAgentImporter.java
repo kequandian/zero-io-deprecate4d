@@ -99,7 +99,7 @@ public class PoiAgentImporter implements POIAgent {
             unique = new ArrayList<>();
         }
         if (!TableTarget.containsTable(unique, table)) {
-            unique.add(new TableTarget(table, fields,null,option));
+            unique.add(new TableTarget(table, fields, null, option));
         } else {
             /// update fields
             TableTarget t = TableTarget.getTarget(unique, table);
@@ -200,7 +200,8 @@ public class PoiAgentImporter implements POIAgent {
     }
 
     /**
-     *  从输入流导入
+     * 从输入流导入
+     *
      * @return
      */
     public int importExcel(Connection connection, InputStream inputStream, boolean header) throws SQLException {
@@ -289,7 +290,7 @@ public class PoiAgentImporter implements POIAgent {
                     }
                 }
 
-                success += readWrite.writeTable(connection, t.getTable(), fields, uniqueFields, overwrite, duplicate, targetTableContents, valueConverters,uniqueOption);
+                success += readWrite.writeTable(connection, t.getTable(), fields, uniqueFields, overwrite, duplicate, targetTableContents, valueConverters, uniqueOption);
             }
         }
 
@@ -368,7 +369,7 @@ public class PoiAgentImporter implements POIAgent {
                         }
                     }
                 } else if (relation.getRelation().equals(TableRelation.R_PEER)) {
-                    if(true){
+                    if (true) {
                         //TODO, not yet verify
                     }
                     //TODO option
@@ -395,11 +396,11 @@ public class PoiAgentImporter implements POIAgent {
                             List<String> unique = peerTableFields;  ///多对多表两关键字段决定唯一性
 
                             readWrite.writeTable(connection, relationTable, peerTableFields,
-                                    unique, false, false, peerContents, valueConverters,uniqueOption);
+                                    unique, false, false, peerContents, valueConverters, uniqueOption);
                         }
                     }
                 } else if (relation.getRelation().equalsIgnoreCase(TableRelation.R_GROUP)) {
-                    if(true){
+                    if (true) {
                         //TODO, not yet pass
                     }
 
@@ -454,7 +455,7 @@ public class PoiAgentImporter implements POIAgent {
             }
             Option uniqueOption = new Option();
             uniqueOption.setType(TableTarget.UPDATE);
-            readWrite.writeTable(connection, table, fields, null, overwrite, true, list, valueConverters,uniqueOption);
+            readWrite.writeTable(connection, table, fields, null, overwrite, true, list, valueConverters, uniqueOption);
             if (size != 1) {
                 Map<String, String> option = new HashMap<>();
                 option.put(field, contents.get(i));

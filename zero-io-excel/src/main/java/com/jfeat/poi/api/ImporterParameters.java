@@ -10,7 +10,7 @@ import java.util.Map;
 public class ImporterParameters {
     static ImporterParameters inst = new ImporterParameters();
 
-    public static ImporterParameters me(){
+    public static ImporterParameters me() {
         return inst;
     }
 
@@ -19,19 +19,19 @@ public class ImporterParameters {
      */
 
     /// permission
-    private Map<String,String> tables = new HashMap<>();
+    private Map<String, String> tables = new HashMap<>();
 
-    public ImporterParameters(){
+    public ImporterParameters() {
 
     }
 
-    public ImporterParameters permitTable(String table){
+    public ImporterParameters permitTable(String table) {
         tables.put(table, table);
         return this;
     }
 
-    public boolean canTableImported(String table){
-        if(table == null) {
+    public boolean canTableImported(String table) {
+        if (table == null) {
             return false;
         }
         return table.contains(table);

@@ -6,8 +6,15 @@
     {
       "name": "detail",
       "height": 20,
-      "columnWidths": [1, 0, 1],
-      "subColumnWidths": [1, 3],
+      "columnWidths": [
+        1,
+        0,
+        1
+      ],
+      "subColumnWidths": [
+        1,
+        3
+      ],
       "horizontalAlign": "RIGHTx",
       "left": {
         "title": [

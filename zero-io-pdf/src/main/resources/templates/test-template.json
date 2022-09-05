@@ -3,13 +3,12 @@
     {
       "name": "linear",
       "columnWidths": [
-            1.0,
-            1.0
-        ],
+        1.0,
+        1.0
+      ],
       "elements": [
-
       ]
-      },
+    },
     {
       "name": "table",
       "columnWidths": [

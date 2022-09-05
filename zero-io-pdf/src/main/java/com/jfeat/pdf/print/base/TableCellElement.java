@@ -11,7 +11,7 @@ public abstract class TableCellElement extends Rectangle implements ListRow {
     protected float paddingTop;
     protected float paddingBottom;
 
-    public void setPadding(float left, float right, float top, float bottom){
+    public void setPadding(float left, float right, float top, float bottom) {
         this.paddingLeft = left;
         this.paddingRight = right;
         this.paddingTop = top;
@@ -56,8 +56,8 @@ public abstract class TableCellElement extends Rectangle implements ListRow {
 
     protected AccessibleElementId cellId;
 
-    public TableCellElement(){
-        super(0,0,0,0);
+    public TableCellElement() {
+        super(0, 0, 0, 0);
     }
 
     public TableCellElement(float llx, float lly, float urx, float ury) {
@@ -91,12 +91,12 @@ public abstract class TableCellElement extends Rectangle implements ListRow {
     }
 
     @Override
-    public AccessibleElementId getCellId(){
+    public AccessibleElementId getCellId() {
         return cellId;
     }
 
     @Override
-    public void draw(PdfContentByte canvas, Rectangle position){
+    public void draw(PdfContentByte canvas, Rectangle position) {
         PdfContentByte[] canvases = new PdfContentByte[]{canvas, canvas, canvas, canvas};
         drawCell(canvases, position);
     }

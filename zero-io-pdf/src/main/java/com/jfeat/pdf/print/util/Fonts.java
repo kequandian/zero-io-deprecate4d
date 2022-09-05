@@ -30,6 +30,7 @@ public class Fonts {
     public static BaseFont SONG;
     public static BaseFont HELVETICA;
     public static BaseFont BASE;
+
     static {
         try {
             SONG = createFont("STSong-Light", "UniGB-UCS2-H", NOT_EMBEDDED);
@@ -53,22 +54,25 @@ public class Fonts {
         // Helvetica
         HELVETICA("Helvetica", Fonts.HELVETICA);
         private static final Map<String, BaseFont> cache = new HashMap<>();
+
         Definition(String name, BaseFont font) {
             this.name = name;
             this.font = font;
         }
+
         static {
-            for(Definition item : Definition.values()) {
+            for (Definition item : Definition.values()) {
                 cache.put(item.name, item.font);
             }
         }
+
         private String name;
         private BaseFont font;
 
         /**
          * 默认字体为常规
          **/
-        public static BaseFont getFont(String name){
+        public static BaseFont getFont(String name) {
             return cache.containsKey(name) ? cache.get(name) : BASE.font;
         }
 

@@ -27,21 +27,23 @@ public class PdfExporter {
     private PdfContentByte _backCanves;
 
 
-    public PdfExporter(){
+    public PdfExporter() {
 
     }
 
-    public PdfContentByte canvas(){
+    public PdfContentByte canvas() {
         return this._canvas;
     }
 
-    public PdfContentByte backCanvas() { return this._backCanves; }
+    public PdfContentByte backCanvas() {
+        return this._backCanves;
+    }
 
-    public Document document(){
+    public Document document() {
         return _document;
     }
 
-    public void addElement(Element element){
+    public void addElement(Element element) {
         try {
             _document.add(element);
 
@@ -50,30 +52,30 @@ public class PdfExporter {
         }
     }
 
-    public Rectangle getPageSize(){
+    public Rectangle getPageSize() {
         return _document.getPageSize();
     }
 
-    public void setTemplate(String template){
+    public void setTemplate(String template) {
         this.template = template;
     }
 
-    public PdfExporter close(){
+    public PdfExporter close() {
 
-        if(this.template==null) {
+        if (this.template == null) {
             _document.close();
 
-        }else{
+        } else {
 
             try {
                 _stamper.setFormFlattening(true);
                 _stamper.close();
                 _pdfReader.close();
 
-            }catch (IOException e){
+            } catch (IOException e) {
                 throw new RuntimeException(e);
 
-            }catch (DocumentException e){
+            } catch (DocumentException e) {
                 throw new RuntimeException(e);
 
             }
@@ -85,7 +87,7 @@ public class PdfExporter {
 
     public PdfExporter export(OutputStream outputStream, Rectangle pageSize, float marginLeft, float marginRight, float marginTop, float marginBottom) throws DocumentException {
 
-        if(this.template==null) {
+        if (this.template == null) {
 
             /// 没有模板，新建文档
 
@@ -102,9 +104,9 @@ public class PdfExporter {
 
             //document.close();
 
-        }else{
+        } else {
 
-            if(new File(template).exists()) {
+            if (new File(template).exists()) {
                 try {
 
                     _pdfReader = new PdfReader(this.template);
@@ -124,11 +126,11 @@ public class PdfExporter {
                     //pdfStamper.close();
                     //pdfReader.close();
 
-                }catch (IOException e){
+                } catch (IOException e) {
                     throw new RuntimeException(e.getMessage());
                 }
 
-            }else{
+            } else {
                 throw new RuntimeException("BadRequest: invalid template ! file not exits:" + this.template);
             }
         }

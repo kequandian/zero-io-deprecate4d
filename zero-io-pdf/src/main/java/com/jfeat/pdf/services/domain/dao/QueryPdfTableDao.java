@@ -23,6 +23,6 @@ public interface QueryPdfTableDao extends BaseMapper<PdfTable> {
     PdfTable findPdfTableByName(@Param("name") String name);
 
     List<PdfTableRecord> findPdfTableEditablePage(Page<PdfTableRecord> page, @Param("record") PdfTableRecord record,
-                                               @Param("search") String search, @Param("orderBy") String orderBy,
-                                               @Param("startTime") Date startTime, @Param("endTime") Date endTime);
+                                                  @Param("search") String search, @Param("orderBy") String orderBy,
+                                                  @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 }

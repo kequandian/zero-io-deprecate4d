@@ -4,12 +4,12 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.jfeat.am.module.cinema.services.gen.persistence.model.CinemaLine">
-        <id column="id" property="id" />
-        <result column="name" property="name" />
-        <result column="org_id" property="orgId" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-        <result column="note" property="note" />
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="org_id" property="orgId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="note" property="note"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->

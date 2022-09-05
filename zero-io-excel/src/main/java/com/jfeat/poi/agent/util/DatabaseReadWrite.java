@@ -41,6 +41,7 @@ public class DatabaseReadWrite {
 
     /**
      * 从数据库中读取整张表的数据行
+     *
      * @param connection
      * @param tableName
      * @return
@@ -96,6 +97,7 @@ public class DatabaseReadWrite {
 
     /**
      * 从数据库中读取查询语句返回的数据行
+     *
      * @param connection
      * @param sql
      * @return
@@ -128,11 +130,12 @@ public class DatabaseReadWrite {
 
     /**
      * 从数据库中查找 与所有导入 contents 行 重复的行
+     *
      * @param connection
      * @param tableName
-     * @param fields   指它相对应的数据库域
-     * @param unique  唯一项组合列表
-     * @param contents  从excel读取的内容行
+     * @param fields     指它相对应的数据库域
+     * @param unique     唯一项组合列表
+     * @param contents   从excel读取的内容行
      * @return
      * @throws SQLException
      */
@@ -147,11 +150,11 @@ public class DatabaseReadWrite {
         //List<String> checkFields = unique == null ? fields : unique;
         final String OP = unique == null ? " AND " : " AND ";  ///都用 AND 逻辑
         Set<String> selectSet = new HashSet<>();
-        if(unique!=null && unique.size()>0){
-            for (String filed:unique){
+        if (unique != null && unique.size() > 0) {
+            for (String filed : unique) {
                 selectSet.addAll(Arrays.asList(filed.split(TableTarget.UNIQUE_SEPARATE)));
             }
-        }else{
+        } else {
             selectSet.addAll(fields);
         }
 
@@ -171,9 +174,9 @@ public class DatabaseReadWrite {
         sqlStr.append(tableName);
         sqlStr.append(" WHERE ");
 
-        for (String filed:unique){
+        for (String filed : unique) {
             sqlStr.append("(");
-            for(String fieldChi:filed.split(TableTarget.UNIQUE_SEPARATE)){
+            for (String fieldChi : filed.split(TableTarget.UNIQUE_SEPARATE)) {
 
                 if (fieldChi != null && fieldChi.length() > 0) {
                     sqlStr.append("`");
@@ -200,19 +203,19 @@ public class DatabaseReadWrite {
 
             /// set values
             int n = 0;
-            for (String field:unique) {
-                for (String checkField:field.split(TableTarget.UNIQUE_SEPARATE)){
-                String value = null;
-                {
-                    if (checkField != null && checkField.length() > 0) {
+            for (String field : unique) {
+                for (String checkField : field.split(TableTarget.UNIQUE_SEPARATE)) {
+                    String value = null;
+                    {
+                        if (checkField != null && checkField.length() > 0) {
 
-                        int index = fields.indexOf(checkField);
-                        if (index >= 0) {
-                            value = currentRow.get(index);
+                            int index = fields.indexOf(checkField);
+                            if (index >= 0) {
+                                value = currentRow.get(index);
+                            }
+                            preparedStatement.setObject(n + 1, value);
+                            n++;
                         }
-                        preparedStatement.setObject(n + 1, value);
-                        n++;
-                      }
                     }
                 }
 
@@ -242,8 +245,6 @@ public class DatabaseReadWrite {
     }
 
 
-
-
     /**
      * @param connection      database connection
      * @param tableName       database table
@@ -257,38 +258,41 @@ public class DatabaseReadWrite {
     public int writeTable(Connection connection, String tableName, List<String> fields, List<String> uniqueList, boolean overwrite,
                           boolean duplicate,
                           List<List<String>> contents, Map<String, ValueConverter> valueConverters
-                          , Option option) {
+            , Option option) {
 
         try {
 
-                for (String uniques:uniqueList){
-                    //获取唯一键列表
-                    List<String> unique = Arrays.asList(uniques.split(":"));
-                    String type = null;
-                    if(option!=null){type=option.getType();}else{type=TableTarget.UPDATE;}
-                    if(!StringUtils.isEmpty(type)&& type.equals(TableTarget.POSTFIX)){
+            for (String uniques : uniqueList) {
+                //获取唯一键列表
+                List<String> unique = Arrays.asList(uniques.split(":"));
+                String type = null;
+                if (option != null) {
+                    type = option.getType();
+                } else {
+                    type = TableTarget.UPDATE;
+                }
+                if (!StringUtils.isEmpty(type) && type.equals(TableTarget.POSTFIX)) {
 
-                        List<List<String>> temp = postfixDuplicateContentRows(contents, fields, unique,option);
-                        contents = temp;
-                    }
-                    //重复则去掉
-                    //循环唯一键
-                    else{
+                    List<List<String>> temp = postfixDuplicateContentRows(contents, fields, unique, option);
+                    contents = temp;
+                }
+                //重复则去掉
+                //循环唯一键
+                else {
 
-                         /// below merge duplicate rows
-                         {
-                             //merge duplicate rows with unique within contents
-                             contents = mergeDuplicateContentRows(contents, fields, unique);
-                             /// merge entirely rows within contents
-                             if (!duplicate) {
-                                 contents = mergeDuplicateContentRows(contents);
-                             }
-                         }
+                    /// below merge duplicate rows
+                    {
+                        //merge duplicate rows with unique within contents
+                        contents = mergeDuplicateContentRows(contents, fields, unique);
+                        /// merge entirely rows within contents
+                        if (!duplicate) {
+                            contents = mergeDuplicateContentRows(contents);
+                        }
                     }
+                }
 
 
             }
-
 
 
             primaryKeySet = getPrimaryKey(connection, tableName);
@@ -436,15 +440,15 @@ public class DatabaseReadWrite {
                     e++;
 
                     /// check if all values are empty, then ignore the empty rows
-                    if(!field.equals(primaryKeySet[0])) {
-                        checkEmptyValues.append( value==null?"":value);
+                    if (!field.equals(primaryKeySet[0])) {
+                        checkEmptyValues.append(value == null ? "" : value);
                     }
                 }
             }
             //logger.debug("Parameters: {}", StringUtils.join(parameters, ","));
 
             /// check if all values are empty, then ignore the empty rows
-            if(checkEmptyValues.length()>0) {
+            if (checkEmptyValues.length() > 0) {
                 preparedStatement.addBatch();
             }
             //if (row % 1000 == 0) {
@@ -474,7 +478,7 @@ public class DatabaseReadWrite {
         baseSqlStr.append("` SET ");
         for (int i = 0; i < fieldSize; i++) {
             String field = fields.get(i);
-            if(field!=null && field.length()>0) {
+            if (field != null && field.length() > 0) {
                 baseSqlStr.append("`");
                 baseSqlStr.append(field);
                 baseSqlStr.append("` = ?");
@@ -485,21 +489,21 @@ public class DatabaseReadWrite {
         }
         StringBuilder sqlStr = new StringBuilder(baseSqlStr);
         sqlStr.append(" WHERE ");
-        if(unique!=null) {
-            for (String uniques : unique){
-            sqlStr.append("(");
+        if (unique != null) {
+            for (String uniques : unique) {
+                sqlStr.append("(");
                 for (String field : uniques.split(TableTarget.UNIQUE_SEPARATE)) {
                     sqlStr.append("`");
                     sqlStr.append(field);
                     sqlStr.append("` = ?");
                     sqlStr.append(" AND ");
                 }
-            sqlStr.delete(sqlStr.length() - " AND ".length(), sqlStr.length() - 1);
-            sqlStr.append(")");
-            sqlStr.append(" or ");
+                sqlStr.delete(sqlStr.length() - " AND ".length(), sqlStr.length() - 1);
+                sqlStr.append(")");
+                sqlStr.append(" or ");
             }
             sqlStr.delete(sqlStr.length() - " or ".length(), sqlStr.length() - 1);
-        }else{
+        } else {
             /*for (String field : unique) {
                 sqlStr.append(field);
                 sqlStr.append("` = ?");
@@ -520,7 +524,7 @@ public class DatabaseReadWrite {
             //List<String> parameters = new ArrayList<>();
             for (int k = 0, n = 0; k < fieldSize; k++) {
                 String field = fields.get(k);
-                if(field!=null && field.length()>0) {
+                if (field != null && field.length() > 0) {
                     ValueConverter converter = valueConverterMap != null ? valueConverterMap.get(field) : null;
                     Object value = converter == null ? preparedStatementValues[j][n] : converter.convert(preparedStatementValues[j][n]);
                     n++;
@@ -537,13 +541,13 @@ public class DatabaseReadWrite {
 
             // 设置 WHERE 字段
             List<String> row = contents.get(j);
-            for(String uni : unique){
-                for (String field:uni.split(TableTarget.UNIQUE_SEPARATE)) {
+            for (String uni : unique) {
+                for (String field : uni.split(TableTarget.UNIQUE_SEPARATE)) {
                     String value = getFieldValue(row, fields, field);
-                    if (value != null && value.length()>0) {
+                    if (value != null && value.length() > 0) {
                         preparedStatement.setObject(e + 1, value);
-                    }else{
-                        preparedStatement.setObject(e + 1, "",  JDBCType.VARCHAR);
+                    } else {
+                        preparedStatement.setObject(e + 1, "", JDBCType.VARCHAR);
                         //throw new RuntimeException("fatal: unique field value must not be empty");
                     }
                     e++;
@@ -589,7 +593,7 @@ public class DatabaseReadWrite {
         if (fieldNames != null && fieldNames.size() > 0) {
             String sqlTemp = "";
             for (String field : fieldNames) {
-                if(field!=null && field.length()>0) {
+                if (field != null && field.length() > 0) {
                     sqlTemp += "," + field;
                 }
             }
@@ -627,14 +631,14 @@ public class DatabaseReadWrite {
             int columnCount = resultSet.getMetaData().getColumnCount();
             for (int i = 1; i <= columnCount; i++) {
                 Object object = resultSet.getObject(i);
-                if(object==null){
+                if (object == null) {
                     tempList.add("");
-                }else{
+                } else {
                     /// format datetime
-                    if(object instanceof Timestamp || object instanceof Date){
+                    if (object instanceof Timestamp || object instanceof Date) {
                         String val = dateFormat.format(object);
                         tempList.add(val);
-                    }else {
+                    } else {
                         tempList.add(object.toString());
                     }
                 }
@@ -655,10 +659,10 @@ public class DatabaseReadWrite {
             if (index < updates.size()) {
                 stringBuilder.append(",");
             }
-            values.add(entry.getValue()==null?"":entry.getValue().toString());
+            values.add(entry.getValue() == null ? "" : entry.getValue().toString());
         }
 
-        if(wheres!=null) {
+        if (wheres != null) {
             stringBuilder.append(" WHERE ");
 
             for (Map.Entry<String, Object> entry : wheres.entrySet()) {
@@ -668,7 +672,7 @@ public class DatabaseReadWrite {
                 if (index < updates.size()) {
                     stringBuilder.append(",");
                 }
-                values.add(entry.getValue()==null?"":entry.getValue().toString());
+                values.add(entry.getValue() == null ? "" : entry.getValue().toString());
             }
         }
 
@@ -782,7 +786,7 @@ public class DatabaseReadWrite {
                 String columnName = fields.get(k);
                 if (columnName != null && columnName.length() > 0) {
                     String columnType = getColumnType(columnInfos, columnName);
-                    logger.debug("columnName = {},columnType= {}, value = {}", columnName,columnType, value);
+                    logger.debug("columnName = {},columnType= {}, value = {}", columnName, columnType, value);
                     try {
                         if ("INT".equals(columnType)) {
                             Integer res = value != null && !"".equals(value) ? Integer.parseInt(value) : null;
@@ -796,39 +800,38 @@ public class DatabaseReadWrite {
                         } else if ("DATE".equals(columnType) || "DATETIME".equals(columnType)) {
                             //时间类型 为空的时候进行转换为NULL
                             String res = value != null && !"".equals(value) ? value : null;
-                            logger.info("==== Data res: {}",res);
+                            logger.info("==== Data res: {}", res);
 
-                            if(!StringUtils.isEmpty(res)){
+                            if (!StringUtils.isEmpty(res)) {
 
                                 //为日期格式 yyyy-mm-dd
-                                if(isDate(res)){
+                                if (isDate(res)) {
                                     preparedStatementValues[j][n] = res;
-                                    }
-                                else {
+                                } else {
 
-                                        //为数字格式 时间戳
-                                        if(isInteger(res)){
-                                            Date date = HSSFDateUtil.getJavaDate(Double.parseDouble(res));
-                                            res = getTime(date);
-                                            preparedStatementValues[j][n] = res;
-                                        }else{
-                                            res = null;
-                                            preparedStatementValues[j][n] = res;
-                                        }
-                                     }
-                              } else {
+                                    //为数字格式 时间戳
+                                    if (isInteger(res)) {
+                                        Date date = HSSFDateUtil.getJavaDate(Double.parseDouble(res));
+                                        res = getTime(date);
+                                        preparedStatementValues[j][n] = res;
+                                    } else {
+                                        res = null;
+                                        preparedStatementValues[j][n] = res;
+                                    }
+                                }
+                            } else {
                                 preparedStatementValues[j][n] = res;
-                              }
-                        }else{
+                            }
+                        } else {
                             String res = value != null && !"".equals(value) ? value : null;
                             preparedStatementValues[j][n] = res;
                         }
 
                         n++;
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         StringBuilder message = new StringBuilder();
                         message.append(e.getMessage()).append("column={%s},row={%s},content={%s}");
-                        throw new BusinessException(BusinessCode.BadRequest.getCode(), String.format(message.toString(), j+1,n+1,value));
+                        throw new BusinessException(BusinessCode.BadRequest.getCode(), String.format(message.toString(), j + 1, n + 1, value));
                     }
 
                 }
@@ -840,12 +843,12 @@ public class DatabaseReadWrite {
     //判断是否为时间 yyyy-mm-dd
     public boolean isDate(String date) {
         //定义匹配规则
-        String path="\\d{4}-\\d{1,2}-\\d{1,2}";
+        String path = "\\d{4}-\\d{1,2}-\\d{1,2}";
         //实例化Pattern
-        Pattern p= Pattern.compile(path);
+        Pattern p = Pattern.compile(path);
         //验证字符串
-        Matcher m=p.matcher(date);
-        if(m.matches()){
+        Matcher m = p.matcher(date);
+        if (m.matches()) {
             return true;
         }
         return false;
@@ -854,12 +857,12 @@ public class DatabaseReadWrite {
     //判断是否为纯数字
     public boolean isInteger(String num) {
         //定义匹配规则
-        String path="\\d*";
+        String path = "\\d*";
         //实例化Pattern
-        Pattern p= Pattern.compile(path);
+        Pattern p = Pattern.compile(path);
         //验证字符串
-        Matcher m=p.matcher(num);
-        if(m.matches()){
+        Matcher m = p.matcher(num);
+        if (m.matches()) {
             return true;
         }
         return false;

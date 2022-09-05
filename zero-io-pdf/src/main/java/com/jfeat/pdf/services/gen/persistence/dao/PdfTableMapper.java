@@ -5,7 +5,7 @@ import com.jfeat.pdf.services.gen.persistence.model.PdfTable;
 
 /**
  * <p>
-  *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author Code Generator

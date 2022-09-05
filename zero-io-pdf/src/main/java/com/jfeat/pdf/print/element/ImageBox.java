@@ -18,6 +18,7 @@ public class ImageBox extends TableCellElement implements ListRow {
     protected final static Logger logger = LoggerFactory.getLogger(ImageBox.class);
 
     public static String ID = "ImageBox";
+
     @Override
     public String rowId() {
         return ID;
@@ -25,24 +26,26 @@ public class ImageBox extends TableCellElement implements ListRow {
 
     private Image image;
 
-    public ImageBox(){
+    public ImageBox() {
         super();
     }
 
-    public Image getImage(){
+    public Image getImage() {
         return this.image;
     }
-    public void setImage(Image img){
+
+    public void setImage(Image img) {
         this.image = img;
     }
-    public void setImage(Image img, int alignment){
-        this.image  =img;
+
+    public void setImage(Image img, int alignment) {
+        this.image = img;
         this.image.setAlignment(alignment);
     }
 
 
-    public void drawCell(PdfContentByte[] canvases, Rectangle position){
-        if(image ==null){
+    public void drawCell(PdfContentByte[] canvases, Rectangle position) {
+        if (image == null) {
             return;
         }
 
@@ -56,7 +59,7 @@ public class ImageBox extends TableCellElement implements ListRow {
         bgcanvas.saveState();
         Rectangle solid = new Rectangle(this);
         float borderWidth = solid.getBorderWidth();
-        if(borderWidth>0) {
+        if (borderWidth > 0) {
             solid.setLeft(solid.getLeft() + borderWidth);
             solid.setRight(solid.getRight() - borderWidth);
             solid.setTop(solid.getTop() - borderWidth);

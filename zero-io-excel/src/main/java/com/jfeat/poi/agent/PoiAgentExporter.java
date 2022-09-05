@@ -26,6 +26,7 @@ public class PoiAgentExporter implements POIAgent {
 
     /**
      * export rows to excel workbook
+     *
      * @param rows
      * @param headers
      * @param columns
@@ -39,7 +40,7 @@ public class PoiAgentExporter implements POIAgent {
         if (columns == null) {
             columns = new ArrayList<>();
         }
-        if(rows==null){
+        if (rows == null) {
             rows = new ArrayList<>();
         }
 
@@ -79,38 +80,38 @@ public class PoiAgentExporter implements POIAgent {
     private List<String> headers;
     private List<String> columns;
 
-    public PoiAgentExporter headers(List<String> headers){
+    public PoiAgentExporter headers(List<String> headers) {
         this.headers = headers;
         return this;
     }
 
-    public PoiAgentExporter columns(List<String> columns){
+    public PoiAgentExporter columns(List<String> columns) {
         this.columns = columns;
         return this;
     }
 
 
-    protected List<Map<String, String>> queryTable(String tableName) throws SQLException{
+    protected List<Map<String, String>> queryTable(String tableName) throws SQLException {
 
         Connection connection = dataSource.getConnection();
 
-        if(headers==null && columns!=null){
+        if (headers == null && columns != null) {
             headers = columns;
         }
-        if(headers!=null && columns!=null){
+        if (headers != null && columns != null) {
             /// must equals
-            if(headers.size() != columns.size()){
+            if (headers.size() != columns.size()) {
                 throw new RuntimeException("headers and columns must be the same quantity");
             }
         }
-        if(headers!=null && columns==null){
+        if (headers != null && columns == null) {
             throw new RuntimeException("must specify the columns and headers.");
         }
 
         /// read from database
         DatabaseReadWrite databaseReadWrite = new DatabaseReadWrite();
 
-        if(headers==null) {
+        if (headers == null) {
             headers = new ArrayList<>();
             List<DatabaseReadWrite.ColumnInfo> infos = databaseReadWrite.getColumnInfo(connection, tableName);
 
@@ -126,31 +127,31 @@ public class PoiAgentExporter implements POIAgent {
         return rows;
     }
 
-    public int exportTable(String tableName, OutputStream os) throws SQLException{
+    public int exportTable(String tableName, OutputStream os) throws SQLException {
         List<Map<String, String>> rows = queryTable(tableName);
         return exportExcel(rows, headers, columns, os);
     }
 
-    public int exportWitSql(String sql, OutputStream os) throws SQLException{
+    public int exportWitSql(String sql, OutputStream os) throws SQLException {
         List<Map<String, String>> rows = querySQL(sql);
         return exportExcel(rows, headers, columns, os);
     }
 
-    protected List<Map<String, String>> querySQL(String sql) throws SQLException{
+    protected List<Map<String, String>> querySQL(String sql) throws SQLException {
 
         Connection connection = dataSource.getConnection();
 
 
-        if(headers==null && columns!=null){
+        if (headers == null && columns != null) {
             headers = columns;
         }
-        if(headers!=null && columns!=null){
+        if (headers != null && columns != null) {
             /// must equals
-            if(headers.size() != columns.size()){
+            if (headers.size() != columns.size()) {
                 throw new RuntimeException("headers and columns must be the same quantity");
             }
         }
-        if(headers!=null && columns==null){
+        if (headers != null && columns == null) {
             throw new RuntimeException("must specify the columns and headers.");
         }
 
@@ -161,9 +162,9 @@ public class PoiAgentExporter implements POIAgent {
         List<Map<String, String>> rows = databaseReadWrite.querySQL(connection, sql);
         logger.debug("export rows = {}", JSON.toJSONString(rows));
 
-        if(headers==null) {
+        if (headers == null) {
             headers = new ArrayList<>();
-            if(rows.size()>0){
+            if (rows.size() > 0) {
                 headers.addAll(rows.get(0).keySet());
             }
         }

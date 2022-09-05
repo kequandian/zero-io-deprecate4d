@@ -3,6 +3,7 @@ package com.jfeat.pdf.print;
 /**
  * Created by vincent on 2018/9/20.
  */
+
 import javax.print.*;
 import javax.print.attribute.DocAttributeSet;
 import javax.print.attribute.HashDocAttributeSet;
@@ -16,13 +17,14 @@ import java.util.Map;
 
 /**
  * 调用打印机打印文件
- * @author 寇
  *
+ * @author 寇
  */
 public class PrintFile {
 
     /**
      * 调用打印机进行打印
+     *
      * @param printFilePath 打印文件路径
      * @param printFilePath 打印参数
      */
@@ -39,9 +41,9 @@ public class PrintFile {
             // 定位默认的打印服务
             PrintService defaultService = null;
             // 获取打印机
-            String printer = (String)map.get("printer");
+            String printer = (String) map.get("printer");
             // 判断打印机是否为空
-            if (printer==null || printer.length()==0) {
+            if (printer == null || printer.length() == 0) {
                 // 获取默认配置文件打印机
                 //printer = Global.getPrinterA4();
             }
@@ -74,7 +76,7 @@ public class PrintFile {
                 //双面打印
                 //pras.add(Sides.DUPLEX);
                 if (map.get("duplex") != null) {
-                    if ((boolean)map.get("duplex")) {
+                    if ((boolean) map.get("duplex")) {
                         pras.add(Sides.DUPLEX);
                     }
                 } else {

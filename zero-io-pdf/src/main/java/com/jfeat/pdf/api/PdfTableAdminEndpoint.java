@@ -25,7 +25,7 @@ import javax.annotation.Resource;
  * @author Wen Hao
  */
 @RestController
-@CrossOrigin(origins = "*",methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RequestMapping("/api/io/crud/pdf/pdfTables")
 public class PdfTableAdminEndpoint {
 
@@ -39,7 +39,7 @@ public class PdfTableAdminEndpoint {
     @Resource
     QueryPdfTableDao queryPdfTableDao;
 
-//    @BusinessLog(name = "PdfTable", value = "create PdfTable")
+    //    @BusinessLog(name = "PdfTable", value = "create PdfTable")
     @PostMapping
     @ApiOperation(value = "新建 PdfTable", response = PdfTable.class)
     public Tip createPdfTable(@RequestBody PdfTable entity) {
@@ -55,14 +55,14 @@ public class PdfTableAdminEndpoint {
         return SuccessTip.create(affected);
     }
 
-//    @BusinessLog(name = "PdfTable", value = "查看 PdfTable")
+    //    @BusinessLog(name = "PdfTable", value = "查看 PdfTable")
     @GetMapping("/{id}")
     @ApiOperation(value = "查看 PdfTable", response = PdfTable.class)
     public Tip getPdfTable(@PathVariable Long id) {
         return SuccessTip.create(pdfTableService.retrieveMaster(id));
     }
 
-//    @BusinessLog(name = "PdfTable", value = "update PdfTable")
+    //    @BusinessLog(name = "PdfTable", value = "update PdfTable")
     @PutMapping("/{id}")
     @ApiOperation(value = "修改 PdfTable", response = PdfTable.class)
     public Tip updatePdfTable(@PathVariable Long id, @RequestBody PdfTable entity) {
@@ -70,14 +70,14 @@ public class PdfTableAdminEndpoint {
         return SuccessTip.create(pdfTableService.updateMaster(entity));
     }
 
-//    @BusinessLog(name = "PdfTable", value = "delete PdfTable")
+    //    @BusinessLog(name = "PdfTable", value = "delete PdfTable")
     @DeleteMapping("/{id}")
     @ApiOperation("删除 PdfTable")
     public Tip deletePdfTable(@PathVariable Long id) {
         return SuccessTip.create(pdfTableService.deleteMaster(id));
     }
 
-//    @BusinessLog(name = "PdfTable", value = "查询列表 PdfTable")
+    //    @BusinessLog(name = "PdfTable", value = "查询列表 PdfTable")
     @ApiOperation(value = "PdfTable 列表信息", response = PdfTableRecord.class)
     @GetMapping
     @ApiImplicitParams({

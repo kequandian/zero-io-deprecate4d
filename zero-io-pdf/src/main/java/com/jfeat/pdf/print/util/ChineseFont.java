@@ -6,7 +6,7 @@ import com.itextpdf.text.Font;
 /**
  * Created by vincenthuang on 16/03/2018.
  */
-public class ChineseFont extends Font{
+public class ChineseFont extends Font {
 
     public ChineseFont(String familyname, float textSize, int style, BaseColor color) {
         super(Fonts.Definition.getFont(familyname), textSize, style, color);

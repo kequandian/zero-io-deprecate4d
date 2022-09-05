@@ -1,1 +1,2 @@
-SELECT * FROM ca_advertiser
+SELECT *
+FROM t_house_asset

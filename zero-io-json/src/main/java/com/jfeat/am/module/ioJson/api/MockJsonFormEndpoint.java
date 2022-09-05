@@ -1,10 +1,20 @@
 package com.jfeat.am.module.ioJson.api;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jfeat.crud.base.exception.BusinessCode;
+import com.jfeat.crud.base.exception.BusinessException;
+import com.jfeat.module.frontPage.services.domain.dao.QueryFrontPageDao;
+import com.jfeat.module.frontPage.services.domain.model.FrontPageRecord;
+import com.jfeat.module.frontPage.services.gen.persistence.dao.FrontPageMapper;
+import com.jfeat.module.frontPage.services.gen.persistence.model.FrontPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import com.jfeat.crud.base.tips.SuccessTip;
 import com.jfeat.crud.base.tips.Tip;
@@ -12,6 +22,8 @@ import com.jfeat.crud.base.tips.Tip;
 import com.jfeat.am.module.ioJson.services.domain.service.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,6 +43,11 @@ public class MockJsonFormEndpoint {
     @Resource
     MockJsonService mockJsonService;
 
+    @Resource
+    QueryFrontPageDao queryFrontPageDao;
+
+    @Resource
+    FrontPageMapper frontPageMapper;
 
 
     @GetMapping("")
@@ -42,7 +59,7 @@ public class MockJsonFormEndpoint {
     @PostMapping("/{id}")
     @ApiOperation(value = "增加Json")
     public Tip addJson(@PathVariable Long id, @RequestBody JSONObject json) {
-        Integer integer = mockJsonService.saveJsonToFile(json,id );
+        Integer integer = mockJsonService.saveJsonToFile(json, id);
         return SuccessTip.create(integer);
     }
 
@@ -62,8 +79,8 @@ public class MockJsonFormEndpoint {
 
     @GetMapping("/setAppId/{id}")
     @ApiOperation(value = "设置 appId")
-    public Tip setAppId(@PathVariable (name = "id") String id) {
-         mockJsonService.setAppId(id);
+    public Tip setAppId(@PathVariable(name = "id") String id) {
+        mockJsonService.setAppId(id);
         return SuccessTip.create(mockJsonService.getAppId());
     }
 
@@ -72,5 +89,106 @@ public class MockJsonFormEndpoint {
     public Tip getAppId() {
         return SuccessTip.create(mockJsonService.getAppId());
     }
+
+//    将json文件保存到数据库中
+    @PostMapping("/saveJsonFileToDataBase")
+    public Tip saveJsonFileToDataBase(){
+        return SuccessTip.create(mockJsonService.saveJsonFileToDataBase());
+    }
+
+    @GetMapping("/allPages")
+    public Tip getAllPages(Page<FrontPageRecord> page,
+                           @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+                           @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
+                           // for tag feature query
+                           @RequestParam(name = "tag", required = false) String tag,
+                           // end tag
+                           @RequestParam(name = "search", required = false) String search,
+
+                           @RequestParam(name = "count", required = false) String count,
+
+                           @RequestParam(name = "title", required = false) String title,
+
+                           @RequestParam(name = "pageDescrip", required = false) String pageDescrip,
+
+                           @RequestParam(name = "content", required = false) String content,
+
+                           @RequestParam(name = "appid", required = false) String appid,
+
+                           @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                           @RequestParam(name = "createTime", required = false) Date createTime,
+
+                           @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                           @RequestParam(name = "updateTime", required = false) Date updateTime,
+                           @RequestParam(name = "orderBy", required = false) String orderBy,
+                           @RequestParam(name = "sort", required = false) String sort) {
+
+        if (orderBy != null && orderBy.length() > 0) {
+            if (sort != null && sort.length() > 0) {
+                String sortPattern = "(ASC|DESC|asc|desc)";
+                if (!sort.matches(sortPattern)) {
+                    throw new BusinessException(BusinessCode.BadRequest.getCode(), "sort must be ASC or DESC");//此处异常类型根据实际情况而定
+                }
+            } else {
+                sort = "ASC";
+            }
+            orderBy = "`" + orderBy + "`" + " " + sort;
+        }
+        page.setCurrent(pageNum);
+        page.setSize(pageSize);
+
+        FrontPageRecord record = new FrontPageRecord();
+        record.setCount(count);
+        record.setTitle(title);
+        record.setPageDescrip(pageDescrip);
+        record.setContent(content);
+        record.setAppid(appid);
+        record.setCreateTime(createTime);
+        record.setUpdateTime(updateTime);
+
+
+        List<FrontPageRecord> frontPagePage = queryFrontPageDao.findFrontPagePage(page, record, tag, search, orderBy, null, null);
+
+
+        page.setRecords(frontPagePage);
+
+        return SuccessTip.create(page);
+    }
+
+    @GetMapping("/page")
+    public Tip getPage(@RequestParam("id") String id){
+        QueryWrapper<FrontPage> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(FrontPage.COUNT,id);
+        FrontPage frontPage = frontPageMapper.selectOne(queryWrapper);
+        JSON json = null;
+        if (frontPage!=null && frontPage.getContent()!=null){
+            json = (JSON) JSON.parse(frontPage.getContent());
+        }
+        return SuccessTip.create(json);
+    }
+
+    @PostMapping("/page/{id}")
+    public Tip addJsonToDataBase(@PathVariable Long id, @RequestBody JSONObject json){
+        QueryWrapper<FrontPage> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(FrontPage.COUNT,id);
+        FrontPage frontPage = frontPageMapper.selectOne(queryWrapper);
+
+        String title = "";
+        if (json!=null && json.get("title")!=null){
+            title = (String) json.get("title");
+        }
+        if (frontPage!=null){
+            frontPage.setTitle(title);
+            frontPage.setContent(json.toJSONString());
+            return SuccessTip.create(frontPageMapper.updateById(frontPage));
+        }else {
+            FrontPage record = new FrontPage();
+            record.setCount(String.valueOf(id));
+            record.setTitle(title);
+            record.setContent(json.toJSONString());
+            return SuccessTip.create(frontPageMapper.insert(record));
+        }
+    }
+
 
 }

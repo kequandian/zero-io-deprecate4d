@@ -50,7 +50,7 @@ public class PdfFlowRequest {
     /**
      * Pdf导出页面设置，大小，边框
      */
-    public static class Page{
+    public static class Page {
         private String pageName;
         private Rectangle pageSize;
         private String imageUrl;
@@ -60,9 +60,10 @@ public class PdfFlowRequest {
         private float marginRight;
         private float marginBottom;
 
-        public Page(){}
+        public Page() {
+        }
 
-        public Page(String pageName, float margin){
+        public Page(String pageName, float margin) {
             this.pageName = pageName;
             this.pageSize = getPageSize(pageName);
             setMargin(margin);
@@ -83,31 +84,31 @@ public class PdfFlowRequest {
             setMargin(margin);
         }
 
-        public Page(String pageName, float marginLeft, float marginTop, float marginRight, float marginBottom){
+        public Page(String pageName, float marginLeft, float marginTop, float marginRight, float marginBottom) {
             this.pageName = pageName;
             this.pageSize = getPageSize(pageName);
             setMargin(marginLeft, marginTop, marginRight, marginBottom);
         }
 
-        public Page(float pageWidth, float pageHeight, float margin){
-            this.pageSize = new Rectangle(0,0,pageWidth, pageHeight);
+        public Page(float pageWidth, float pageHeight, float margin) {
+            this.pageSize = new Rectangle(0, 0, pageWidth, pageHeight);
             setMargin(margin);
         }
 
-        public Page(float pageWidth, float pageHeight, float marginLeft, float marginTop, float marginRight, float marginBottom){
-            this.pageSize = new Rectangle(0,0,pageWidth, pageHeight);
+        public Page(float pageWidth, float pageHeight, float marginLeft, float marginTop, float marginRight, float marginBottom) {
+            this.pageSize = new Rectangle(0, 0, pageWidth, pageHeight);
             setMargin(marginLeft, marginTop, marginRight, marginBottom);
         }
 
-        public Rectangle getPageSize(String pageName){
+        public Rectangle getPageSize(String pageName) {
 
-            if("A5".equals(pageName)){
+            if ("A5".equals(pageName)) {
                 return PageSize.A5;
-            } else if("A4".equals(pageName)){
+            } else if ("A4".equals(pageName)) {
                 return PageSize.A4;
-            } else if("A3".equals(pageName)){
+            } else if ("A3".equals(pageName)) {
                 return PageSize.A3;
-            } else{
+            } else {
                 throw new RuntimeException("not implement, provide the page if required.");
             }
         }
@@ -125,7 +126,7 @@ public class PdfFlowRequest {
         }
 
         public void setPageName(String pageName) {
-            if(pageName==null || pageName.length()==0){
+            if (pageName == null || pageName.length() == 0) {
                 throw new RuntimeException("empty page name is not allowed");
             }
             this.pageName = pageName;
@@ -134,11 +135,11 @@ public class PdfFlowRequest {
             this.pageSize = getPageSize(pageName);
         }
 
-        public void setPageSize(Rectangle size){
+        public void setPageSize(Rectangle size) {
             this.pageSize = size;
         }
 
-        public Rectangle getPageSize(){
+        public Rectangle getPageSize() {
             return this.pageSize;
         }
 
@@ -182,13 +183,14 @@ public class PdfFlowRequest {
             this.marginBottom = marginBottom;
         }
 
-        public void setMargin(float margin){
+        public void setMargin(float margin) {
             this.marginLeft = margin;
             this.marginBottom = margin;
             this.marginRight = margin;
             this.marginTop = margin;
         }
-        public void setMargin(float marginLeft, float marginTop, float marginRight, float marginBottom){
+
+        public void setMargin(float marginLeft, float marginTop, float marginRight, float marginBottom) {
             this.marginLeft = marginLeft;
             this.marginBottom = marginTop;
             this.marginRight = marginRight;
@@ -200,7 +202,7 @@ public class PdfFlowRequest {
     /**
      * 命名的流数据
      */
-    public static class Flow{
+    public static class Flow {
         public static final String TITLE_FLOW = "title";
         public static final String SEPARATOR_FLOW = "line";
         public static final String QRCODE_FLOW = "qrcode";
@@ -214,14 +216,17 @@ public class PdfFlowRequest {
         public static final String IMAGE_FLOW = "image";
         public static final String RECTANGLE_FLOW = "rectangle";
 
-        public Flow() {}
+        public Flow() {
+        }
+
         /**
          * 用于分页、分割线的流定义
          **/
         public Flow(String name) {
             this.name = name;
         }
-        public Flow(String name, FlowElement element){
+
+        public Flow(String name, FlowElement element) {
             this.name = name;
             this.element = element;
         }
@@ -253,7 +258,7 @@ public class PdfFlowRequest {
         }
     }
 
-    public interface FlowElement{
+    public interface FlowElement {
         String ALIGN_LEFT = "ALIGN_LEFT";
         String ALIGN_CENTER = "ALIGN_CENTER";
         String ALIGN_RIGHT = "ALIGN_RIGHT";
@@ -264,35 +269,35 @@ public class PdfFlowRequest {
         String ALIGN_BASELINE = "ALIGN_BASELINE";
         String ALIGN_JUSTIFIED_ALL = "ALIGN_JUSTIFIED_ALL";
 
-        static int getAlignment(String align){
-            if(align==null || align.length()==0){
+        static int getAlignment(String align) {
+            if (align == null || align.length() == 0) {
                 return Element.ALIGN_CENTER;
             }
-            if(ALIGN_LEFT.equals(align)){
+            if (ALIGN_LEFT.equals(align)) {
                 return Element.ALIGN_LEFT;
             }
-            if(ALIGN_CENTER.equals(align)){
+            if (ALIGN_CENTER.equals(align)) {
                 return Element.ALIGN_CENTER;
             }
-            if(ALIGN_RIGHT.equals(align)){
+            if (ALIGN_RIGHT.equals(align)) {
                 return Element.ALIGN_RIGHT;
             }
-            if(ALIGN_JUSTIFIED.equals(align)){
+            if (ALIGN_JUSTIFIED.equals(align)) {
                 return Element.ALIGN_JUSTIFIED;
             }
-            if(ALIGN_TOP.equals(align)){
+            if (ALIGN_TOP.equals(align)) {
                 return Element.ALIGN_TOP;
             }
-            if(ALIGN_MIDDLE.equals(align)){
+            if (ALIGN_MIDDLE.equals(align)) {
                 return Element.ALIGN_MIDDLE;
             }
-            if(ALIGN_BOTTOM.equals(align)){
+            if (ALIGN_BOTTOM.equals(align)) {
                 return Element.ALIGN_BOTTOM;
             }
-            if(ALIGN_BASELINE.equals(align)){
+            if (ALIGN_BASELINE.equals(align)) {
                 return Element.ALIGN_BASELINE;
             }
-            if(ALIGN_JUSTIFIED_ALL.equals(align)){
+            if (ALIGN_JUSTIFIED_ALL.equals(align)) {
                 return Element.ALIGN_JUSTIFIED_ALL;
             }
 
@@ -303,46 +308,46 @@ public class PdfFlowRequest {
     }
 
     /**
-     *  rectangle 矩形流实体定义
+     * rectangle 矩形流实体定义
      */
-     public static class RectangleFlowData implements FlowElement {
+    public static class RectangleFlowData implements FlowElement {
 
-         private Float height;
+        private Float height;
 
-         private Float width;
+        private Float width;
 
-         private String color;
+        private String color;
 
-         public static RectangleFlowData build() {
-             return new RectangleFlowData();
-         }
+        public static RectangleFlowData build() {
+            return new RectangleFlowData();
+        }
 
-         public RectangleFlowData setHeight(Float height) {
-             this.height = height;
-             return this;
-         }
+        public RectangleFlowData setHeight(Float height) {
+            this.height = height;
+            return this;
+        }
 
-         public Float getHeight() {
-             return this.height;
-         }
+        public Float getHeight() {
+            return this.height;
+        }
 
-         public RectangleFlowData setWidth(Float width) {
-             this.width = width;
-             return this;
-         }
+        public RectangleFlowData setWidth(Float width) {
+            this.width = width;
+            return this;
+        }
 
-         public Float getWidth() {
-             return this.width;
-         }
+        public Float getWidth() {
+            return this.width;
+        }
 
-         public RectangleFlowData setColor(String color) {
-             this.color = color;
-             return this;
-         }
+        public RectangleFlowData setColor(String color) {
+            this.color = color;
+            return this;
+        }
 
-         public String getColor() {
-             return this.color;
-         }
+        public String getColor() {
+            return this.color;
+        }
 
         @Override
         public Flow flow() {
@@ -353,7 +358,7 @@ public class PdfFlowRequest {
     /**
      * 分隔线流实体定义
      */
-    public static class SeparatorFlowData implements FlowElement{
+    public static class SeparatorFlowData implements FlowElement {
         private String formatName;
 
         public String getFormatName() {
@@ -373,12 +378,15 @@ public class PdfFlowRequest {
     /**
      * 标题（文字）流实体定义，字体格式 及 对齐参数
      */
-    public static class TitleFlowData implements FlowElement{
+    public static class TitleFlowData implements FlowElement {
         private String content;
         private String formatName;
         private String alignment;
-        public TitleFlowData() { }
-        public TitleFlowData(String content, String formatName, String alignment){
+
+        public TitleFlowData() {
+        }
+
+        public TitleFlowData(String content, String formatName, String alignment) {
             this.content = content;
             this.formatName = formatName;
             this.alignment = alignment;
@@ -418,16 +426,18 @@ public class PdfFlowRequest {
     /**
      * 二维码流实体定义（未实现）
      */
-    public static class QRCodeFlowData implements FlowElement{
+    public static class QRCodeFlowData implements FlowElement {
         private String code;
         private String formatName;
 
-        public QRCodeFlowData() {}
+        public QRCodeFlowData() {
+        }
 
         public QRCodeFlowData(String code, String formatName) {
             this.code = code;
             this.formatName = formatName;
         }
+
         public String getFormatName() {
             return formatName;
         }
@@ -452,7 +462,7 @@ public class PdfFlowRequest {
 
     /**
      * 流实体定义
-     * */
+     */
     public static class ContentFlowData implements FlowElement {
         private Layout layout;
         private RowFormat format;
@@ -477,10 +487,12 @@ public class PdfFlowRequest {
         public static ContentFlowData build() {
             return new ContentFlowData();
         }
+
         public ContentFlowData setLayout(float[] columnsWith) {
             layout = new Layout(columnsWith);
             return this;
         }
+
         public ContentFlowData rowFormat(String formatName, float height) {
             format = new RowFormat(formatName, height);
             return this;
@@ -531,10 +543,11 @@ public class PdfFlowRequest {
             return this;
         }
     }
+
     /**
      * 表格流实体定义：包括，布局，格式以及表数据
      */
-    public static class TableFlowData implements FlowElement{
+    public static class TableFlowData implements FlowElement {
         private Layout layout;
         private TableRowFormat format;
         private String header;
@@ -545,40 +558,49 @@ public class PdfFlowRequest {
         public Flow flow() {
             return new Flow(Flow.TABLE_FLOW, this);
         }
+
         public static TableFlowData build() {
             return new TableFlowData();
         }
+
         public TableFlowData layout(float[] columnsWith) {
             layout = new Layout(columnsWith);
             return this;
         }
+
         public TableFlowData layout(Layout layout) {
             this.layout = layout;
             return this;
         }
+
         public TableFlowData borderFormat(Integer style, Integer width) {
             this.setBorderFormat(new TableBorderFormat(style, width));
             return this;
         }
+
         public TableFlowData data(String[] data) {
             this.data = data;
             return this;
         }
+
         public TableFlowData headerFormat(String formatName, float height) {
             return headerFormat(formatName, height, null);
         }
+
         public TableFlowData headerFormat(String formatName, float height, BaseColor color) {
-            if(format == null) {
+            if (format == null) {
                 format = new TableRowFormat();
             }
             format.setHeader(new RowFormat(formatName, height, color));
             return this;
         }
+
         public TableFlowData firstRowFormat(String formatName, float height) {
             return firstRowFormat(formatName, height, null);
         }
+
         public TableFlowData firstRowFormat(String formatName, float height, BaseColor color) {
-            if(format == null) {
+            if (format == null) {
                 format = new TableRowFormat();
             }
             format.setFirstRowFormat(new RowFormat(formatName, height, color));
@@ -588,8 +610,9 @@ public class PdfFlowRequest {
         public TableFlowData rowFormat(String formatName, float height) {
             return rowFormat(formatName, height, null);
         }
+
         public TableFlowData rowFormat(String formatName, float height, BaseColor color) {
-            if(format == null) {
+            if (format == null) {
                 format = new TableRowFormat();
             }
             format.setRowFormat(new RowFormat(formatName, height, color));
@@ -643,7 +666,9 @@ public class PdfFlowRequest {
             private Integer style;
             private Integer width;
 
-            public TableBorderFormat() {}
+            public TableBorderFormat() {
+            }
+
             public TableBorderFormat(Integer style, Integer width) {
                 this.style = style;
                 this.width = width;
@@ -665,6 +690,7 @@ public class PdfFlowRequest {
                 this.width = width;
             }
         }
+
         /**
          * 表格格式, 包括(表头格式，第一行格式，其他行格式)三部分格式
          * 第一行 格式包括： 行高 + 字体
@@ -704,13 +730,16 @@ public class PdfFlowRequest {
     /**
      * 流布局，至上而下(定义列数为1时)
      * 横向布局 使布局横向分配
-     *
+     * <p>
      * 支持嵌套一层列数不为1 的流式布局
      */
-    public static class LinearFlowData implements FlowElement{
+    public static class LinearFlowData implements FlowElement {
         private List<Flow> elements = new ArrayList<>();
         private Layout layout;
-        public LinearFlowData() {}
+
+        public LinearFlowData() {
+        }
+
         public LinearFlowData(float[] columnsWith) {
             layout = new Layout();
             layout.setColumnWidths(columnsWith);
@@ -720,6 +749,7 @@ public class PdfFlowRequest {
         public Flow flow() {
             return new Flow(Flow.LINEAR_FLOW, this);
         }
+
         public static LinearFlowData build() {
             return new LinearFlowData();
         }
@@ -728,6 +758,7 @@ public class PdfFlowRequest {
             elements.add(element);
             return this;
         }
+
         public List<Flow> getElements() {
             return elements;
         }
@@ -739,14 +770,17 @@ public class PdfFlowRequest {
         public Layout getLayout() {
             return layout;
         }
+
         public LinearFlowData setLayout(float[] columnsWiths) {
             this.layout = new Layout(columnsWiths);
             return this;
         }
+
         public void setLayout(Layout layout) {
             this.layout = layout;
         }
     }
+
     /**
      * 图片
      **/
@@ -755,6 +789,7 @@ public class PdfFlowRequest {
         private String url;
         private float width;
         private float height;
+
         public ImageFlowData(byte[] data) {
             this.data = data;
         }
@@ -765,7 +800,9 @@ public class PdfFlowRequest {
             this.height = height;
         }
 
-        public ImageFlowData(String url) { this.url = url; }
+        public ImageFlowData(String url) {
+            this.url = url;
+        }
 
         public ImageFlowData(String url, float width, float height) {
             this.url = url;
@@ -810,24 +847,31 @@ public class PdfFlowRequest {
             this.data = data;
         }
     }
+
     /**
      * 布局,可台定义列数（宽度平分），也可以定义不同的列宽
      */
-    public static class Layout{
+    public static class Layout {
         private int numColumns;
         private float[] columnWidths;
+
         @Deprecated
         public int getNumColumns() {
             return numColumns;
         }
+
         @Deprecated
         public void setNumColumns(int numColumns) {
             this.numColumns = numColumns;
         }
-        public Layout() {}
+
+        public Layout() {
+        }
+
         public Layout(float[] columnWidths) {
             this.columnWidths = columnWidths;
         }
+
         public float[] getColumnWidths() {
             return columnWidths;
         }
@@ -846,7 +890,9 @@ public class PdfFlowRequest {
         private String formatName;
         private BaseColor color;
 
-        public RowFormat() {}
+        public RowFormat() {
+        }
+
         public RowFormat(String formatName, float height) {
             this.height = height;
             this.formatName = formatName;
@@ -857,6 +903,7 @@ public class PdfFlowRequest {
             this.formatName = formatName;
             this.color = color;
         }
+
         public float getHeight() {
             return height;
         }
@@ -887,11 +934,12 @@ public class PdfFlowRequest {
      * 预定义格式，如字体，边界
      * 通过名称，获取具体格式参数
      */
-    public static class Definitions{
+    public static class Definitions {
 
-        public Definitions(){}
+        public Definitions() {
+        }
 
-        public Definitions(Map<String, FontDefinition> fonts, Map<String, BorderDefinition> borders){
+        public Definitions(Map<String, FontDefinition> fonts, Map<String, BorderDefinition> borders) {
             this.fonts = fonts;
             this.borders = borders;
         }

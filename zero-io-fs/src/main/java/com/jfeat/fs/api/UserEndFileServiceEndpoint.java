@@ -46,9 +46,9 @@ public class UserEndFileServiceEndpoint {
                           @ApiParam("上传文件至不同的分组") @RequestHeader(value = "X-FS-BUCKET", required = false) String bucket,
                           @RequestPart("file") MultipartFile file) {
         if (file.isEmpty()) {
-            throw new BusinessException(BusinessCode.BadRequest,  "file is empty");
+            throw new BusinessException(BusinessCode.BadRequest, "file is empty");
         }
-        if(bucket==null) bucket="";
+        if (bucket == null) bucket = "";
         logger.info("============== upload start ===============");
         String originalFileName = file.getOriginalFilename();
         String extensionName = FilenameUtils.getExtension(originalFileName);
@@ -72,9 +72,9 @@ public class UserEndFileServiceEndpoint {
             }
 
             // check bucket exists
-            if(!StringUtils.isEmpty(bucket)){
+            if (!StringUtils.isEmpty(bucket)) {
                 File bucketFile = new File(String.join(File.separator, fileSavePath, bucket));
-                Assert.isTrue(bucketFile.exists(), "bucket (X-FS-BUCKET) not exists: " + bucketFile.getPath() );
+                Assert.isTrue(bucketFile.exists(), "bucket (X-FS-BUCKET) not exists: " + bucketFile.getPath());
             }
 
             File targetFile = new File(String.join(File.separator, fileSavePath, bucket, fileName));
@@ -89,7 +89,7 @@ public class UserEndFileServiceEndpoint {
             }*/
 
             // get relative path
-            String relativePath = targetFile.getAbsolutePath().substring(new File("./").getAbsolutePath().length()-1);
+            String relativePath = targetFile.getAbsolutePath().substring(new File("./").getAbsolutePath().length() - 1);
             return SuccessTip.create(FileInfo.create(fileHost, bucket, fileName, extensionName, originalFileName, fileSize, relativePath));
 
         } catch (Exception e) {

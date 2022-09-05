@@ -51,20 +51,22 @@ public class FlowReportRequest {
     public String getRowOption() {
         return rowOption;
     }
+
     public FlowReportRequest setRowOption(String rowOption) {
         this.rowOption = rowOption;
         return this;
     }
 
-    public FlowReportRequest setRowRatio(float ratio){
+    public FlowReportRequest setRowRatio(float ratio) {
         this.rowRatio = ratio;
         return this;
     }
-    public float getRowRatio(){
+
+    public float getRowRatio() {
         return this.rowRatio;
     }
 
-    public FlowReportRequest setPageMargin(float margin){
+    public FlowReportRequest setPageMargin(float margin) {
         this.pageMarginLeft =
                 this.pageMarginRight =
                         this.pageMarginTop =
@@ -72,7 +74,7 @@ public class FlowReportRequest {
         return this;
     }
 
-    public FlowReportRequest setPageMargin(float l, float r, float t, float b){
+    public FlowReportRequest setPageMargin(float l, float r, float t, float b) {
         this.pageMarginLeft = l;
         this.pageMarginRight = r;
         this.pageMarginTop = t;
@@ -80,34 +82,38 @@ public class FlowReportRequest {
         return this;
     }
 
-    public FlowReportRequest setBorderWidth(float width){
+    public FlowReportRequest setBorderWidth(float width) {
         this.layout.getRowsLayout().setBorderWidth(width);
         return this;
     }
 
     public void setBorderColor(int r, int g, int b) {
-        this.layout.getRowsLayout().setBorderColor(r,g,b);
+        this.layout.getRowsLayout().setBorderColor(r, g, b);
     }
+
     public void setBorderColor(ColorDefinition color) {
         this.layout.getRowsLayout().setBorderColor(color);
     }
 
-    public FlowReportRequest setRowsPadding(float margin){
+    public FlowReportRequest setRowsPadding(float margin) {
         this.layout.rowsLayout.setPadding(margin);
-        return  this;
+        return this;
     }
-    public FlowReportRequest setRowsPadding(float left, float right, float top, float bottom){
+
+    public FlowReportRequest setRowsPadding(float left, float right, float top, float bottom) {
         this.layout.rowsLayout.setPadding(left, right, top, bottom);
-        return  this;
+        return this;
     }
-    public String getRowsMargin(){
+
+    public String getRowsMargin() {
         return String.format("%f,%f,%f,%f",
                 getRowsPaddingLeft(),
                 getRowsPaddingRight(),
                 getRowsPaddingTop(),
                 getRowsPaddingBottom());
     }
-    public void setRowsPadding(String margin){
+
+    public void setRowsPadding(String margin) {
         try {
             if (margin != null && margin.contains(",")) {
                 String[] margins = margin.split(",");
@@ -122,7 +128,7 @@ public class FlowReportRequest {
                 float marginF = Float.parseFloat(margin);
                 setRowsPadding(marginF);
             }
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
         }
     }
 
@@ -147,7 +153,7 @@ public class FlowReportRequest {
     }
 
     public FlowReportRequest setRowsData(List<ImageTextBoxData> rows) {
-        if(flowDirection == LTR) {
+        if (flowDirection == LTR) {
             if (rows.size() % 2 == 1) {
                 rows.add(ImageTextBoxData.EMPTY);
             }
@@ -155,7 +161,7 @@ public class FlowReportRequest {
         this.rowsData = new ArrayList<>();
         this.rowsData.addAll(rows);
 
-        for(ImageTextBoxData it : rows){
+        for (ImageTextBoxData it : rows) {
             it.setPaddingLeft(getRowsPaddingLeft());
             it.setPaddingRight(getRowsPaddingRight());
             it.setPaddingTop(getRowsPaddingTop());
@@ -168,10 +174,11 @@ public class FlowReportRequest {
 
     /**
      * 初始化图像目录数据
+     *
      * @param imageDir
      * @return
      */
-    public static List<ImageTextBoxData> initImageRowsData(String imageDir){
+    public static List<ImageTextBoxData> initImageRowsData(String imageDir) {
 //        if(this.rowsData==null) {
 //            this.rowsData = new ArrayList<T>();
 //        }
@@ -189,7 +196,7 @@ public class FlowReportRequest {
             }
         });
 
-        for(String url : imageUrls){
+        for (String url : imageUrls) {
 
             ImageTextBoxData rowData = new ImageTextBoxData();
             rowData.setImageUrl(String.join(File.separator, imageDir, url));
@@ -198,7 +205,7 @@ public class FlowReportRequest {
             rowsData.add(rowData);
         }
 
-        return  rowsData;
+        return rowsData;
     }
 
 
@@ -223,7 +230,7 @@ public class FlowReportRequest {
      */
     private LayoutRequest layout = new LayoutRequest();
 
-    public LayoutRequest getLayout () {
+    public LayoutRequest getLayout() {
         return layout;
     }
 
@@ -231,26 +238,33 @@ public class FlowReportRequest {
         this.layout = layout;
         return this;
     }
-    public float getRowHeight(){
+
+    public float getRowHeight() {
         return this.layout.getRowsLayout().getHeight();
     }
-    public FlowReportRequest setRowHeight(float height){
+
+    public FlowReportRequest setRowHeight(float height) {
         this.layout.rowsLayout.setHeight(height);
         return this;
     }
-    public FlowReportRequest setRowAlignment(int alignment){
+
+    public FlowReportRequest setRowAlignment(int alignment) {
         this.layout.rowsLayout.setAlignment(alignment);
         return this;
     }
+
     public float getRowsPaddingLeft() {
         return this.layout.rowsLayout.getPaddingLeft();
     }
+
     public float getRowsPaddingRight() {
         return this.layout.rowsLayout.getPaddingRight();
     }
+
     public float getRowsPaddingTop() {
         return this.layout.rowsLayout.getPaddingTop();
     }
+
     public float getRowsPaddingBottom() {
         return this.layout.rowsLayout.getPaddingBottom();
     }
@@ -258,6 +272,7 @@ public class FlowReportRequest {
 
     /**
      * 数据定义，用于参考
+     *
      * @return
      */
     private Definitions definitions = new Definitions();
@@ -266,9 +281,9 @@ public class FlowReportRequest {
         return definitions;
     }
 
-    public static int getFlowDirection(String flowDirection){
+    public static int getFlowDirection(String flowDirection) {
         return flowDirection.equals(FlowReportRequest.LTR) ? 0 :
-                ( flowDirection.equals(FlowReportRequest.UTD) ? 1 : -1 );
+                (flowDirection.equals(FlowReportRequest.UTD) ? 1 : -1);
     }
 
     public float getPageMarginLeft() {
@@ -310,7 +325,8 @@ public class FlowReportRequest {
     public void setPageSize(PageSizeRequest pageSize) {
         this.pageSize = pageSize;
     }
-    public void setPageSize(float w, float h){
+
+    public void setPageSize(float w, float h) {
         this.pageSize.width = w;
         this.pageSize.height = h;
     }
@@ -318,7 +334,7 @@ public class FlowReportRequest {
     /**
      * format request
      */
-    public static class FormatRequest{
+    public static class FormatRequest {
         private RowFormatRequest headerFormat = new RowFormatRequest();
         private RowFormatRequest rowsFormat = new RowFormatRequest();
         private RowFormatRequest groupsFormat = new RowFormatRequest();
@@ -371,7 +387,7 @@ public class FlowReportRequest {
         }
     }
 
-    public static class PageSizeRequest{
+    public static class PageSizeRequest {
         private float width;
         private float height;
 

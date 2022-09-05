@@ -32,11 +32,11 @@ public class CacheMapTest {
         String filename = "image.png";
 
         String result = String.join(File.separator, root, bucket, filename);
-        Assert.isTrue(result.equals("/path/to/null/image.png".replace("/",File.separator)));
+        Assert.isTrue(result.equals("/path/to/null/image.png".replace("/", File.separator)));
 
         bucket = "";
         result = String.join(File.separator, root, bucket, filename);
-        Assert.isTrue(result.equals("/path/to//image.png".replace("/",File.separator)));
+        Assert.isTrue(result.equals("/path/to//image.png".replace("/", File.separator)));
     }
 
 }

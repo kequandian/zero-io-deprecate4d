@@ -5,10 +5,11 @@ import java.util.*;
 
 public class FileUtil {
 
-    public static Map<String,String> readProperties(File file){
+    public static Map<String, String> readProperties(File file) {
         Map<String, String> map = new HashMap<String, String>();
         InputStream in = null;
-        Properties p = new Properties();;
+        Properties p = new Properties();
+        ;
         try {
             in = new BufferedInputStream(new FileInputStream(file));
             p.load(in);
@@ -24,11 +25,11 @@ public class FileUtil {
     }
 
 
-
-    public static Map<String,String> readProperties(String dir,String filePath){
+    public static Map<String, String> readProperties(String dir, String filePath) {
         Map<String, String> map = new HashMap<String, String>();
         InputStream in = null;
-        Properties p = new Properties();;
+        Properties p = new Properties();
+        ;
         try {
             File file = null;
             file = getFile(dir, filePath);
@@ -61,7 +62,7 @@ public class FileUtil {
         return file;
     }*/
 
-    public static void writeProperties(String proKey, String proValue,File file) {
+    public static void writeProperties(String proKey, String proValue, File file) {
         //Map<String, String> idMap = getIdMap();
         Map<String, String> idMap = readProperties(file);
         Properties properties = new Properties();
@@ -71,7 +72,7 @@ public class FileUtil {
             file = getFile(dir + File.separator + appId + File.separator + "appSite.properties");*/
 
             output = new FileOutputStream(file);
-            for(String key:idMap.keySet()){
+            for (String key : idMap.keySet()) {
                 String value = idMap.get(key);
                 properties.setProperty(key, value);
             }
@@ -95,10 +96,10 @@ public class FileUtil {
     }
 
 
-    public static File getFile(String dir,String filePath){
+    public static File getFile(String dir, String filePath) {
         File file = new File(filePath);
         File fileDir = new File(dir);
-        if(!file.exists()){
+        if (!file.exists()) {
             fileDir.mkdirs();
             try {
                 file.createNewFile();

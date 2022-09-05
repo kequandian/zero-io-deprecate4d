@@ -24,6 +24,7 @@ public class ImageUtil {
 
     /**
      * 高斯模糊
+     *
      * @param sourceFile
      * @return
      * @throws IOException
@@ -58,13 +59,12 @@ public class ImageUtil {
             int[] originalSize = getImgWidth(sourceFile);
             int originalWidth = originalSize[0];
             int originalHeight = originalSize[1];
-            double rate1 =  (double) originalWidth / (double) outputWidth;
+            double rate1 = (double) originalWidth / (double) outputWidth;
             double rate2 = (double) originalHeight / (double) outputHeight;
             double rate = rate1 < rate2 ? rate1 : rate2;
             width = (int) (originalWidth / rate);
             height = (int) (originalHeight / rate);
-        }
-        else {
+        } else {
             width = outputWidth;
             height = outputHeight;
         }
@@ -86,7 +86,7 @@ public class ImageUtil {
         reducedG.drawImage(src.getScaledInstance(width, height, Image.SCALE_SMOOTH), 0, 0, null);
         reducedG.dispose();
         //注释下行代码 后 会同时生成2个图片 分别为 压缩前 压缩后
-        name=sourceFile.getName();
+        name = sourceFile.getName();
 
         File targetFile = new File(sourceFile.getParent(), name);
         ImageIO.write(tag, format, targetFile);
@@ -95,6 +95,7 @@ public class ImageUtil {
 
     /**
      * 得到图片宽度和高度
+     *
      * @param file
      * @return
      */

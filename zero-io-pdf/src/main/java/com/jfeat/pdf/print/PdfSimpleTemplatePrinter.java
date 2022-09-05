@@ -32,7 +32,9 @@ public class PdfSimpleTemplatePrinter {
 
     protected final static Logger logger = LoggerFactory.getLogger(PdfSimpleTemplatePrinter.class);
 
-    /** 用于匹配自定义字符数据的正则 */
+    /**
+     * 用于匹配自定义字符数据的正则
+     */
     private static final String CONVERT_REGEX = "\\$\\{.*\\}";
 
 
@@ -57,9 +59,10 @@ public class PdfSimpleTemplatePrinter {
     }
 
     /**
-     *  模版打印pdf
+     * 模版打印pdf
+     *
      * @param template json格式模版
-     * @param request 自定义参数
+     * @param request  自定义参数
      * @return 字节流
      */
     public static ByteArrayOutputStream print(JSONObject template, JSONObject request) {
@@ -71,6 +74,7 @@ public class PdfSimpleTemplatePrinter {
 
     /**
      * 最终打印方法
+     *
      * @param output 输出
      * @param data
      */
@@ -117,7 +121,9 @@ public class PdfSimpleTemplatePrinter {
         JSONArray flowsJson = template.getJSONArray("flows");
         for (int i = 0; i < flowsJson.size(); i++) {
             JSONObject flowJson = flowsJson.getJSONObject(i);
-            if (flowJson == null) { continue; }
+            if (flowJson == null) {
+                continue;
+            }
             String name = flowJson.getString("name");
             if (PdfFlowRequest.Flow.LINEAR_FLOW.equals(name)) {
                 flows.add(processLinearFlow(flowJson, data, request));
@@ -262,7 +268,9 @@ public class PdfSimpleTemplatePrinter {
         List<Float> columnWidths = flow.getJSONArray("columnWidths").toJavaList(Float.class);
         int size = columnWidths.size();
         float[] layout = new float[size];
-        for (int i = 0; i < size; i++) { layout[i] = columnWidths.get(i); }
+        for (int i = 0; i < size; i++) {
+            layout[i] = columnWidths.get(i);
+        }
 
         PdfFlowRequest.LinearFlowData wrapper = new PdfFlowRequest.LinearFlowData(layout);
 
@@ -270,7 +278,9 @@ public class PdfSimpleTemplatePrinter {
         JSONArray elements = flow.getJSONArray("elements");
         for (int i = 0; i < elements.size(); i++) {
             JSONObject element = elements.getJSONObject(i);
-            if (element == null) { continue; }
+            if (element == null) {
+                continue;
+            }
             String name = element.getString("name");
             if (PdfFlowRequest.Flow.LINEAR_FLOW.equals(name)) {
                 if (element.getJSONArray("columnWidths").size() == 1) {
@@ -343,7 +353,9 @@ public class PdfSimpleTemplatePrinter {
         List<Float> columnWidths = flow.getJSONArray("columnWidths").toJavaList(Float.class);
         int size = columnWidths.size();
         float[] layout = new float[size];
-        for (int i = 0; i < size; i++) { layout[i] = columnWidths.get(i); }
+        for (int i = 0; i < size; i++) {
+            layout[i] = columnWidths.get(i);
+        }
         // height
         float height = flow.getFloat("height");
         // 垂直对齐
@@ -420,7 +432,9 @@ public class PdfSimpleTemplatePrinter {
         JSONArray columnKeyBindings = flow.getJSONArray("columnKeyBindings");
         for (int i = 0; i < columnKeyBindings.size(); i++) {
             Boolean visible = columnKeyBindings.getJSONObject(i).getBoolean("visible");
-            if (visible != null && !visible) { continue; }
+            if (visible != null && !visible) {
+                continue;
+            }
             header.add(columnKeyBindings.getJSONObject(i).getString("column"));
             keys.add(columnKeyBindings.getJSONObject(i).getString("key"));
             // width
@@ -467,7 +481,9 @@ public class PdfSimpleTemplatePrinter {
 //        }
         int size = columnWidths.size();
         float[] layout = new float[size];
-        for (int i = 0; i < size; i++) { layout[i] = columnWidths.get(i); }
+        for (int i = 0; i < size; i++) {
+            layout[i] = columnWidths.get(i);
+        }
 
         // font format
         String rowsFormatName = "table-row";
@@ -506,7 +522,7 @@ public class PdfSimpleTemplatePrinter {
             for (int i = 0; i < size; i++) {
                 Object o = rows.get(i);
                 // process key binding
-                if (o instanceof  JSONObject) {
+                if (o instanceof JSONObject) {
                     JSONObject row = rows.getJSONObject(i);
                     for (String key : keys) {
                         // process convert
@@ -528,16 +544,20 @@ public class PdfSimpleTemplatePrinter {
 
     public static String MULTIPLE = "{multiplication}";
 
-    private static String processConverts(String key, String value,  JSONObject converts) {
+    private static String processConverts(String key, String value, JSONObject converts) {
         if (converts != null) {
             JSONObject convertsJSONObject = converts.getJSONObject(key);
             logger.info("convert key = {}, converts value = {}", key, value);
-            if (convertsJSONObject == null) { return value; }
+            if (convertsJSONObject == null) {
+                return value;
+            }
 
             // 处理 null 空值
             String nullFormat = convertsJSONObject.getString(NULL);
             logger.info("nullFormat = {}", nullFormat);
-            if (value == null && nullFormat != null) { return nullFormat; }
+            if (value == null && nullFormat != null) {
+                return nullFormat;
+            }
 
             // Float 乘法
             String multiple = convertsJSONObject.getString(MULTIPLE);
@@ -550,11 +570,15 @@ public class PdfSimpleTemplatePrinter {
 
             String convertString = convertsJSONObject.getString(value);
             logger.info("convertString =  {}", convertString);
-            if (convertString != null) { return convertString; }
+            if (convertString != null) {
+                return convertString;
+            }
 
             String convertFormat = convertsJSONObject.getString(CONVERT_FORMAT);
             logger.info("convertFormat =  {}", convertFormat);
-            if (convertFormat != null)  { return String.format(convertFormat.replace(CONVERT_FORMAT, "%s"), value); }
+            if (convertFormat != null) {
+                return String.format(convertFormat.replace(CONVERT_FORMAT, "%s"), value);
+            }
         }
         return value;
     }

@@ -5,5 +5,5 @@ import com.jfeat.am.module.cinema.services.gen.crud.service.CRUDAdvertiserOperat
 /**
  * Created by vincent on 2017/10/19.
  */
-public interface AdvertiserOperateLogService extends CRUDAdvertiserOperateLogService{
-    }
+public interface AdvertiserOperateLogService extends CRUDAdvertiserOperateLogService {
+}

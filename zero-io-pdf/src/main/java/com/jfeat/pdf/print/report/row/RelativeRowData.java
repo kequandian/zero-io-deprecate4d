@@ -69,6 +69,7 @@ public class RelativeRowData extends PaddingRowBase {
         this.subtitle = subtitle;
         this.fontSubtitle = font;
     }
+
     public void setSubtitle(String subtitle) {
         this.subtitle = subtitle;
     }
@@ -81,6 +82,7 @@ public class RelativeRowData extends PaddingRowBase {
         this.value = value;
         this.fontValue = font;
     }
+
     public void setValue(String value) {
         this.value = value;
     }
@@ -89,6 +91,7 @@ public class RelativeRowData extends PaddingRowBase {
         this.hint = hint;
         this.fontHint = font;
     }
+
     public void setHint(String hint) {
         this.hint = hint;
     }

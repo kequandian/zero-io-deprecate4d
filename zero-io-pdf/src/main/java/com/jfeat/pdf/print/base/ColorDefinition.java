@@ -12,31 +12,31 @@ public class ColorDefinition {
     public static final String CN_GREEN = "GREEN";
     public static final String CN_BLUE = "BLUE";
 
-    public static ColorDefinition BLACK = new ColorDefinition(0,0,0);
-    public static ColorDefinition WHITE = new ColorDefinition(255,255,255);
-    public static ColorDefinition RED = new ColorDefinition(255,0,0);
-    public static ColorDefinition BLUE = new ColorDefinition(0,0,255);
-    public static ColorDefinition GREEN = new ColorDefinition(0,255,0);
+    public static ColorDefinition BLACK = new ColorDefinition(0, 0, 0);
+    public static ColorDefinition WHITE = new ColorDefinition(255, 255, 255);
+    public static ColorDefinition RED = new ColorDefinition(255, 0, 0);
+    public static ColorDefinition BLUE = new ColorDefinition(0, 0, 255);
+    public static ColorDefinition GREEN = new ColorDefinition(0, 255, 0);
 
-    public static BaseColor getBaseColor(ColorDefinition color){
-        if(color!=null) {
+    public static BaseColor getBaseColor(ColorDefinition color) {
+        if (color != null) {
             return new BaseColor(color.getRed(), color.getGreen(), color.getBlue());
         }
         return null;
     }
 
     public static ColorDefinition getColor(String colorname) {
-        if(CN_BLACK.equals(colorname)){
+        if (CN_BLACK.equals(colorname)) {
             return ColorDefinition.BLACK;
-        }else if(CN_WHITE.equals(colorname)){
+        } else if (CN_WHITE.equals(colorname)) {
             return ColorDefinition.WHITE;
-        }else if(CN_RED.equals(colorname)) {
+        } else if (CN_RED.equals(colorname)) {
             return ColorDefinition.RED;
-        }else if(CN_GREEN.equals(colorname)) {
+        } else if (CN_GREEN.equals(colorname)) {
             return ColorDefinition.GREEN;
-        }else if(CN_BLUE.equals(colorname)){
+        } else if (CN_BLUE.equals(colorname)) {
             return ColorDefinition.BLUE;
-        }else{
+        } else {
             throw new RuntimeException("provide the color name is more color is required.");
         }
     }
@@ -49,9 +49,10 @@ public class ColorDefinition {
     private int g;
     private int b;
 
-    public ColorDefinition(){}
+    public ColorDefinition() {
+    }
 
-    public ColorDefinition(int r, int g, int b){
+    public ColorDefinition(int r, int g, int b) {
         this.r = r;
         this.g = g;
         this.b = b;

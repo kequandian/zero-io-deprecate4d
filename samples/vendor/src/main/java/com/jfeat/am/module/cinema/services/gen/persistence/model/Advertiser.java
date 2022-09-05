@@ -6,13 +6,16 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+
 import java.util.Date;
+
 import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Code generator
@@ -21,89 +24,89 @@ import java.io.Serializable;
 @TableName("ca_advertiser")
 public class Advertiser extends Model<Advertiser> {
 
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
-      @TableId(value = "id", type = IdType.AUTO)
-      private Long id;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
-      /**
+    /**
      * 公司名
      */
-      private String companyName;
+    private String companyName;
 
-      /**
+    /**
      * 联系人名字
      */
-      private String contactName;
+    private String contactName;
 
-      /**
+    /**
      * 联系人电话
      */
-      private String contactPhone;
+    private String contactPhone;
 
-      /**
+    /**
      * 联系人id  有id的话按id的信息来 为空按照上面的字段为主
      */
-      private Long contactId;
+    private Long contactId;
 
-      /**
+    /**
      * 金额
      */
-      private BigDecimal balance;
+    private BigDecimal balance;
 
-      /**
+    /**
      * 来源 0-系统创建 1-用户注册
      */
-      private Integer comeFrom;
+    private Integer comeFrom;
 
-      /**
+    /**
      * 状态   PASS-已审核 PENDING_APPROVAL-待审核 REFUSE-已拒绝
      */
-      private String status;
+    private String status;
 
-      /**
+    /**
      * 地址
      */
-      private String address;
+    private String address;
 
-      /**
+    /**
      * 店小二id
      */
-      private Long assistantId;
+    private Long assistantId;
 
     private Long orgId;
 
-      /**
+    /**
      * 最近登录时间
      */
-      private Date loginTime;
+    private Date loginTime;
 
     private Date createTime;
 
     private Date updateTime;
 
-      /**
+    /**
      * 备注
      */
-      private String note;
+    private String note;
 
 
-    private  String province;
-    private String   city;
-    private String   district;
-    private String   idCard;
-    private String  idCardUrl;
-    private String  idCardBackUrl;
-    private String   businessLicenseProve;
-    private String  businessLicensePhone;
-    private String  industry;
+    private String province;
+    private String city;
+    private String district;
+    private String idCard;
+    private String idCardUrl;
+    private String idCardBackUrl;
+    private String businessLicenseProve;
+    private String businessLicensePhone;
+    private String industry;
 
     @TableField("x_industry")
-    private String  xIndustry;
+    private String xIndustry;
     @TableField("l_industry")
-    private String  lIndustry;
+    private String lIndustry;
     @TableField("m_industry")
-    private String  mIndustry;
+    private String mIndustry;
 
     private String avatar;
 
@@ -215,82 +218,82 @@ public class Advertiser extends Model<Advertiser> {
         return id;
     }
 
-      public Advertiser setId(Long id) {
-          this.id = id;
-          return this;
-      }
-    
+    public Advertiser setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
     public String getCompanyName() {
         return companyName;
     }
 
-      public Advertiser setCompanyName(String companyName) {
-          this.companyName = companyName;
-          return this;
-      }
-    
+    public Advertiser setCompanyName(String companyName) {
+        this.companyName = companyName;
+        return this;
+    }
+
     public String getContactName() {
         return contactName;
     }
 
-      public Advertiser setContactName(String contactName) {
-          this.contactName = contactName;
-          return this;
-      }
-    
+    public Advertiser setContactName(String contactName) {
+        this.contactName = contactName;
+        return this;
+    }
+
     public String getContactPhone() {
         return contactPhone;
     }
 
-      public Advertiser setContactPhone(String contactPhone) {
-          this.contactPhone = contactPhone;
-          return this;
-      }
-    
+    public Advertiser setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+        return this;
+    }
+
     public Long getContactId() {
         return contactId;
     }
 
-      public Advertiser setContactId(Long contactId) {
-          this.contactId = contactId;
-          return this;
-      }
-    
+    public Advertiser setContactId(Long contactId) {
+        this.contactId = contactId;
+        return this;
+    }
+
     public BigDecimal getBalance() {
         return balance;
     }
 
-      public Advertiser setBalance(BigDecimal balance) {
-          this.balance = balance;
-          return this;
-      }
-    
+    public Advertiser setBalance(BigDecimal balance) {
+        this.balance = balance;
+        return this;
+    }
+
     public Integer getComeFrom() {
         return comeFrom;
     }
 
-      public Advertiser setComeFrom(Integer comeFrom) {
-          this.comeFrom = comeFrom;
-          return this;
-      }
-    
+    public Advertiser setComeFrom(Integer comeFrom) {
+        this.comeFrom = comeFrom;
+        return this;
+    }
+
     public String getStatus() {
         return status;
     }
 
-      public Advertiser setStatus(String status) {
-          this.status = status;
-          return this;
-      }
-    
+    public Advertiser setStatus(String status) {
+        this.status = status;
+        return this;
+    }
+
     public String getAddress() {
         return address;
     }
 
-      public Advertiser setAddress(String address) {
-          this.address = address;
-          return this;
-      }
+    public Advertiser setAddress(String address) {
+        this.address = address;
+        return this;
+    }
 
     public Long getAssistantId() {
         return assistantId;
@@ -304,100 +307,100 @@ public class Advertiser extends Model<Advertiser> {
         return orgId;
     }
 
-      public Advertiser setOrgId(Long orgId) {
-          this.orgId = orgId;
-          return this;
-      }
-    
+    public Advertiser setOrgId(Long orgId) {
+        this.orgId = orgId;
+        return this;
+    }
+
     public Date getLoginTime() {
         return loginTime;
     }
 
-      public Advertiser setLoginTime(Date loginTime) {
-          this.loginTime = loginTime;
-          return this;
-      }
-    
+    public Advertiser setLoginTime(Date loginTime) {
+        this.loginTime = loginTime;
+        return this;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
 
-      public Advertiser setCreateTime(Date createTime) {
-          this.createTime = createTime;
-          return this;
-      }
-    
+    public Advertiser setCreateTime(Date createTime) {
+        this.createTime = createTime;
+        return this;
+    }
+
     public Date getUpdateTime() {
         return updateTime;
     }
 
-      public Advertiser setUpdateTime(Date updateTime) {
-          this.updateTime = updateTime;
-          return this;
-      }
-    
+    public Advertiser setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+        return this;
+    }
+
     public String getNote() {
         return note;
     }
 
-      public Advertiser setNote(String note) {
-          this.note = note;
-          return this;
-      }
+    public Advertiser setNote(String note) {
+        this.note = note;
+        return this;
+    }
 
-      public static final String ID = "id";
+    public static final String ID = "id";
 
-      public static final String COMPANY_NAME = "company_name";
+    public static final String COMPANY_NAME = "company_name";
 
-      public static final String CONTACT_NAME = "contact_name";
+    public static final String CONTACT_NAME = "contact_name";
 
-      public static final String CONTACT_PHONE = "contact_phone";
+    public static final String CONTACT_PHONE = "contact_phone";
 
-      public static final String CONTACT_ID = "contact_id";
+    public static final String CONTACT_ID = "contact_id";
 
-      public static final String BALANCE = "balance";
+    public static final String BALANCE = "balance";
 
-      public static final String COME_FROM = "come_from";
+    public static final String COME_FROM = "come_from";
 
-      public static final String STATUS = "status";
+    public static final String STATUS = "status";
 
-      public static final String ADDRESS = "address";
+    public static final String ADDRESS = "address";
 
-      public static final String ASSISTANT_ID = "assistant_id";
+    public static final String ASSISTANT_ID = "assistant_id";
 
-      public static final String ORG_ID = "org_id";
+    public static final String ORG_ID = "org_id";
 
-      public static final String LOGIN_TIME = "login_time";
+    public static final String LOGIN_TIME = "login_time";
 
-      public static final String CREATED_TIME = "create_time";
+    public static final String CREATED_TIME = "create_time";
 
-      public static final String UPDATE_TIME = "update_time";
+    public static final String UPDATE_TIME = "update_time";
 
-      public static final String NOTE = "note";
+    public static final String NOTE = "note";
 
-      @Override
+    @Override
     protected Serializable pkVal() {
-          return this.id;
-      }
+        return this.id;
+    }
 
     @Override
     public String toString() {
         return "Advertiser{" +
-              "id=" + id +
-                  ", companyName=" + companyName +
-                  ", contactName=" + contactName +
-                  ", contactPhone=" + contactPhone +
-                  ", contactId=" + contactId +
-                  ", balance=" + balance +
-                  ", comeFrom=" + comeFrom +
-                  ", status=" + status +
-                  ", address=" + address +
-                  ", assistantId=" + assistantId +
-                  ", orgId=" + orgId +
-                  ", loginTime=" + loginTime +
-                  ", createTime=" + createTime +
-                  ", updateTime=" + updateTime +
-                  ", note=" + note +
-              "}";
+                "id=" + id +
+                ", companyName=" + companyName +
+                ", contactName=" + contactName +
+                ", contactPhone=" + contactPhone +
+                ", contactId=" + contactId +
+                ", balance=" + balance +
+                ", comeFrom=" + comeFrom +
+                ", status=" + status +
+                ", address=" + address +
+                ", assistantId=" + assistantId +
+                ", orgId=" + orgId +
+                ", loginTime=" + loginTime +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", note=" + note +
+                "}";
     }
 }

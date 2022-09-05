@@ -12,11 +12,6 @@ public class AmApplication {
 
     public static void main(String[] args) {
 
-        
-        
-        
-        
-
 
         SpringApplication.run(AmApplication.class, args);
         logger.info("Application run success!");

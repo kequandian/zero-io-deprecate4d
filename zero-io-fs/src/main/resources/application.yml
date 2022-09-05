@@ -12,5 +12,5 @@ spring:
 io:
   file-upload-path: "attachments"
   file-host: "attachments"
-  bucket-app-id:  "32791238237612378123"
+  bucket-app-id: "32791238237612378123"
   bucket-app-secret: "EF8WnIPlnDFYPEIt"

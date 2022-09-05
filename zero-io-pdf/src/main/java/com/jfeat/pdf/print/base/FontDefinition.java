@@ -20,27 +20,27 @@ public class FontDefinition {
     public static final String STRIKETHRU = "STRIKETHRU";
     public static final String BOLDITALIC = "BOLDITALIC";
 
-    public static int getStyle(String style){
-        if(style.equals(BOLD)){
+    public static int getStyle(String style) {
+        if (style.equals(BOLD)) {
             return com.itextpdf.text.Font.BOLD;
         }
-        if(style.equals(ITALIC)){
+        if (style.equals(ITALIC)) {
             return com.itextpdf.text.Font.ITALIC;
         }
-        if(style.equals(UNDERLINE)){
+        if (style.equals(UNDERLINE)) {
             return com.itextpdf.text.Font.UNDERLINE;
         }
-        if(style.equals(STRIKETHRU)){
+        if (style.equals(STRIKETHRU)) {
             return com.itextpdf.text.Font.STRIKETHRU;
         }
-        if(style.equals(BOLDITALIC)){
+        if (style.equals(BOLDITALIC)) {
             return com.itextpdf.text.Font.BOLDITALIC;
         }
 
         return com.itextpdf.text.Font.NORMAL;
     }
 
-    public static com.itextpdf.text.Font getFont(FontDefinition font){
+    public static com.itextpdf.text.Font getFont(FontDefinition font) {
         return new ChineseFont(font.getFamilyname(),
                 font.getSize(),
                 getStyle(font.getStyle()),
@@ -57,16 +57,18 @@ public class FontDefinition {
     private String colorname;
     private ColorDefinition color;  //##00ff00
 
-    public FontDefinition(){}
+    public FontDefinition() {
+    }
 
-    public FontDefinition(String familyname, float size, String style, ColorDefinition color){
+    public FontDefinition(String familyname, float size, String style, ColorDefinition color) {
         this.familyname = familyname;
         this.style = style;
         this.size = size;
         /// convert #ff000000 into BaseColor r,g,b
         this.color = color;
     }
-    public FontDefinition(String familyname, float size, String style, String colorname){
+
+    public FontDefinition(String familyname, float size, String style, String colorname) {
         this.familyname = familyname;
         this.style = style;
         this.size = size;
@@ -101,6 +103,7 @@ public class FontDefinition {
     public String getColorname() {
         return colorname;
     }
+
     public void setColorname(String colorname) {
         this.colorname = colorname;
         this.color = ColorDefinition.getColor(colorname);

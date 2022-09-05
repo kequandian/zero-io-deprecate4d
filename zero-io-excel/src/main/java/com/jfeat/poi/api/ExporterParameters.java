@@ -12,60 +12,61 @@ import java.util.Map;
 public class ExporterParameters {
     static ExporterParameters inst = new ExporterParameters();
 
-    public static ExporterParameters me(){
+    public static ExporterParameters me() {
         return inst;
     }
 
     /**
      * 从 SQL 查询语名中查找 表名
+     *
      * @param query
      * @return
      */
-    public static String[] findTablesFromSql(String query){
+    public static String[] findTablesFromSql(String query) {
         String[] tables = new String[0];
         query = query.toLowerCase();
-        query = query.replace("\n"," ").replace("\t"," ");
+        query = query.replace("\n", " ").replace("\t", " ");
         // trim where
         int index = query.indexOf(" where ");
-        if(index>0){
+        if (index > 0) {
             query = query.substring(0, index);
         }
 
-        boolean noJoinFound = query.indexOf(" join ")==-1;
-        if(noJoinFound){
+        boolean noJoinFound = query.indexOf(" join ") == -1;
+        if (noJoinFound) {
             // trim select
             index = query.indexOf(" from ");
-            query = query.substring(index+" from ".length(), query.length());
+            query = query.substring(index + " from ".length(), query.length());
             query = query.trim();
 
             // check single table or more
-            if(query.indexOf(",")>=0){
+            if (query.indexOf(",") >= 0) {
                 tables = query.split(", ");
-            }else if(query.length()>0){
+            } else if (query.length() > 0) {
                 /// only one table
                 tables = new String[]{query.split(" ")[0]};
             }
 
-            for(int i=0; i<tables.length; i++){
+            for (int i = 0; i < tables.length; i++) {
                 String tab = tables[i];
-                if(tab.matches("\\w+")){
+                if (tab.matches("\\w+")) {
                     /// ok
-                }else{
-                    tables[i] = tab.substring(0, tab.indexOf(" ")>=0?tab.indexOf(" "):tab.length());
+                } else {
+                    tables[i] = tab.substring(0, tab.indexOf(" ") >= 0 ? tab.indexOf(" ") : tab.length());
                 }
             }
 
 
-        }else{
+        } else {
             // trim select
             index = query.indexOf(" from ");
-            query = query.substring(index+" from ".length(), query.length());
+            query = query.substring(index + " from ".length(), query.length());
             query = query.trim();
 
             String[] lines = query.split(" join ");
-            for(int i=0; i<lines.length; i++){
+            for (int i = 0; i < lines.length; i++) {
                 String line = lines[i];
-                if(line.indexOf(" on ")>=0) {
+                if (line.indexOf(" on ") >= 0) {
                     lines[i] = line.substring(0, line.indexOf(" on "));
                 }
             }
@@ -73,11 +74,11 @@ public class ExporterParameters {
             /// split each line
             List<String> list = new ArrayList<>();
 
-            for(String line : lines) {
+            for (String line : lines) {
                 // check single table or more
                 if (line.indexOf(",") >= 0) {
                     tables = query.split(", ");
-                }else{
+                } else {
                     tables = new String[]{line};
                 }
 
@@ -90,7 +91,7 @@ public class ExporterParameters {
                     }
                 }
 
-                for(String t : tables){
+                for (String t : tables) {
                     list.add(t);
                 }
             }
@@ -108,18 +109,18 @@ public class ExporterParameters {
      */
 
     /// permission
-    private Map<String,String> tables = new HashMap<>();
+    private Map<String, String> tables = new HashMap<>();
 
-    public ExporterParameters(){
+    public ExporterParameters() {
 
     }
 
-    public ExporterParameters permitTable(String table){
+    public ExporterParameters permitTable(String table) {
         tables.put(table, table);
         return this;
     }
 
-    public boolean canTableExported(String table){
+    public boolean canTableExported(String table) {
         return table.contains(table);
     }
 }

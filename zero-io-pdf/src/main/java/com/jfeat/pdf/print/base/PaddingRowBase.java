@@ -10,14 +10,14 @@ public abstract class PaddingRowBase implements ListRowBase {
     protected float paddingTop;
     protected float paddingBottom;
 
-    public void setPadding(float left, float right, float top, float bottom){
+    public void setPadding(float left, float right, float top, float bottom) {
         this.paddingLeft = left;
         this.paddingRight = right;
         this.paddingTop = top;
         this.paddingBottom = bottom;
     }
 
-    public void setPadding(float padding){
+    public void setPadding(float padding) {
         this.paddingLeft = padding;
         this.paddingRight = padding;
         this.paddingTop = padding;

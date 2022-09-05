@@ -21,17 +21,17 @@ public class ExcelWriter {
      **/
     public static void main(String[] args) {
         List<List<String>> data = new ArrayList<>();
-        data.add(Arrays.asList(new String[] {"name", "", "sex"}));
-        data.add(Arrays.asList(new String[] {"zy", "", "man"}));
+        data.add(Arrays.asList(new String[]{"name", "", "sex"}));
+        data.add(Arrays.asList(new String[]{"zy", "", "man"}));
 
-        try(OutputStream matrixOut = new FileOutputStream(new File("excel-write-matrix-test.xlsx"));
-            OutputStream bookOut = new FileOutputStream(new File("excel-write-book-test.xlsx"));) {
+        try (OutputStream matrixOut = new FileOutputStream(new File("excel-write-matrix-test.xlsx"));
+             OutputStream bookOut = new FileOutputStream(new File("excel-write-book-test.xlsx"));) {
             Workbook matrix = new ExcelWriter().writeMatrix(data);
             matrix.write(matrixOut);
 
             Workbook book = new ExcelWriter().header(data.get(0).toArray(new String[0])).column(data.get(1).toArray(new String[0])).writeMatrix(data);
             book.write(bookOut);
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -58,10 +58,10 @@ public class ExcelWriter {
     private String[][] headers;
     private String[][] columns;
 
-    public ExcelWriter(){
+    public ExcelWriter() {
     }
 
-    public ExcelWriter version(String version){
+    public ExcelWriter version(String version) {
         this.version = version;
         return this;
     }
@@ -107,7 +107,6 @@ public class ExcelWriter {
     }
 
     /**
-     *
      * @param data
      * @return
      **/
@@ -116,18 +115,18 @@ public class ExcelWriter {
         Sheet sheet = wb.createSheet(sheetNames[0]);
         Cell cell;
         Row row;
-        if(data == null || data.isEmpty()) {
+        if (data == null || data.isEmpty()) {
             return wb;
         }
-        for (int i = 0 ; i < data.size(); i++) {
+        for (int i = 0; i < data.size(); i++) {
             row = sheet.createRow(i);
-            if(data.get(i) == null || data.get(i).isEmpty()) {
+            if (data.get(i) == null || data.get(i).isEmpty()) {
                 continue;
             }
             if (cellWidth > 0) {
                 sheet.setColumnWidth(i, cellWidth);
             }
-            for(int j = 0; j < data.get(i).size(); j++) {
+            for (int j = 0; j < data.get(i).size(); j++) {
                 cell = row.createCell(j);
                 cell.setCellValue(data.get(i).get(j));
             }
@@ -205,7 +204,7 @@ public class ExcelWriter {
                 }
                 if (obj instanceof Map) {
                     Map<String, Object> map = (Map<String, Object>) obj;
-                    processRowWithColumns(row, columns[i]!=null?columns[i]:null, map);
+                    processRowWithColumns(row, columns[i] != null ? columns[i] : null, map);
                 } else {
                     throw new RuntimeException("Not support type[" + obj.getClass() + "]");
                 }
@@ -215,17 +214,17 @@ public class ExcelWriter {
     }
 
 
-
     /**
      * process single row with specific columns
+     *
      * @param row
-     * @param columns  specify columns to write
+     * @param columns specify columns to write
      * @param map     row data map with column name
      */
     private void processRowWithColumns(Row row, String[] columns, Map<String, Object> map) {
         Cell cell;
 
-        if (columns==null || columns.length == 0) { // show all if column not specified
+        if (columns == null || columns.length == 0) { // show all if column not specified
             Set<String> keys = map.keySet();
             int columnIndex = 0;
             for (String key : keys) {

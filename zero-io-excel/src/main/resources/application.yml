@@ -9,15 +9,18 @@ spring:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://192.168.3.239:3306/cinema_test?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
-    #url: jdbc:mysql://127.0.0.1:3306/test?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+    url: jdbc:mysql://sh-cdb-q5vnc0iy.sql.tencentcdb.com:59449/smallsaas?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+    #    url: jdbc:mysql://localhost:3306/test?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+    #url: jdbc:mysql://localhost:3307/uaas-saas?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC
     username: root
-    password: root
+    #    password: root
+    password: zb2014@888
+    driver-class-name: com.mysql.jdbc.Driver
     filters: log4j,wall,mergeStat
     sql-script-encoding: UTF-8
-    schema: classpath*:sql/*-schema.sql
-    data: classpath*:sql/*-data.sql
-    initialize: false
+    schema: classpath*:sql/**/*-schema.sql
+    data: classpath*:sql/**/*-data.sql
+    initialize: true
 
 io:
   excel-template-dir: "excel-templates"

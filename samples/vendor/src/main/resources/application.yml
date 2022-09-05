@@ -82,14 +82,14 @@ logging:
 spring:
   profiles: dev
   datasource:
-      url: jdbc:mysql://192.168.3.239:3306/cinema_test?characterEncoding=utf8&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=GMT%2B8
-      username: root
-      password: root
-      filters: log4j,wall,mergeStat
-      sql-script-encoding: UTF-8
-      schema: classpath*:sql/**/*-schema.sql
-      data: classpath*:sql/**/*-cinema-data.sql
-      initialize: false
+    url: jdbc:mysql://192.168.3.239:3306/cinema_test?characterEncoding=utf8&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: root
+    filters: log4j,wall,mergeStat
+    sql-script-encoding: UTF-8
+    schema: classpath*:sql/**/*-schema.sql
+    data: classpath*:sql/**/*-cinema-data.sql
+    initialize: false
 
 logging:
   level: debug

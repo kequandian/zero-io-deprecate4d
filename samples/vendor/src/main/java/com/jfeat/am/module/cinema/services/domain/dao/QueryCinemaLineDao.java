@@ -15,12 +15,12 @@ import java.util.List;
  * Created by Code generator on 2020-09-10
  */
 public interface QueryCinemaLineDao extends QueryMasterDao<CinemaLine> {
-   /*
-    * Query entity list by page
-    */
+    /*
+     * Query entity list by page
+     */
     List<CinemaLineRecord> findCinemaLinePage(Page<CinemaLineRecord> page, @Param("record") CinemaLineRecord record,
-                                            @Param("search") String search, @Param("orderBy") String orderBy,
-                                            @Param("startTime") Date startTime, @Param("endTime") Date endTime);
+                                              @Param("search") String search, @Param("orderBy") String orderBy,
+                                              @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
     /*
      * Query entity model for details

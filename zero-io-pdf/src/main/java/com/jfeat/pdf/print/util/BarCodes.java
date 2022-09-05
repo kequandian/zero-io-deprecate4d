@@ -8,7 +8,7 @@ import com.itextpdf.text.pdf.*;
  * Created by vincent on 2018/9/28.
  */
 public class BarCodes {
-    public static Image createBarCodeEAN(PdfContentByte canvas, String code){
+    public static Image createBarCodeEAN(PdfContentByte canvas, String code) {
         BarcodeEAN barcodeEAN = new BarcodeEAN();
         //barcodeEAN.setCode("3210123456789");
         barcodeEAN.setCode(code);
@@ -17,12 +17,12 @@ public class BarCodes {
         return codeEANImage;
     }
 
-    public static Image createBarCode39(PdfContentByte canvas, String code, boolean ignoreCode){
+    public static Image createBarCode39(PdfContentByte canvas, String code, boolean ignoreCode) {
         Barcode39 barcode39 = new Barcode39();
         //barcode39.setCode("123456789");
         barcode39.setCode(code);
 
-        if(ignoreCode) {
+        if (ignoreCode) {
             barcode39.setFont(null);
         }
 
@@ -30,7 +30,7 @@ public class BarCodes {
         return code39Image;
     }
 
-    public static Image createBarCode128(PdfContentByte canvas, String code){
+    public static Image createBarCode128(PdfContentByte canvas, String code) {
         Barcode128 barcode128 = new Barcode128();
         //barcode128.setCode("memorynotfound.com");
         barcode128.setCode(code);
@@ -41,7 +41,7 @@ public class BarCodes {
         return code128Image;
     }
 
-    public static Image createQrCode(PdfContentByte canvas, String content){
+    public static Image createQrCode(PdfContentByte canvas, String content) {
         try {
             BarcodeQRCode barcodeQRCode = new BarcodeQRCode(content, 1000, 1000, null);
             Image codeQrImage = null;

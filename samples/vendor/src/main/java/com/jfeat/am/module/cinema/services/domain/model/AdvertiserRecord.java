@@ -5,7 +5,7 @@ import com.jfeat.am.module.cinema.services.gen.persistence.model.Advertiser;
 /**
  * Created by Code generator on 2020-09-10
  */
-public class AdvertiserRecord extends Advertiser{
+public class AdvertiserRecord extends Advertiser {
 
     String assistantName;
 

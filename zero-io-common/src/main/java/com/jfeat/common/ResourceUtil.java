@@ -6,11 +6,13 @@ import org.springframework.util.ResourceUtils;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+
 import org.apache.commons.io.IOUtils;
 
 public class ResourceUtil {
     /**
      * 获取资源文件内容
+     *
      * @param resourcePath
      * @return
      * @throws IOException
@@ -20,11 +22,11 @@ public class ResourceUtil {
 
         // 优先本地配置文件
         File localFile = new File(resourcePath);
-        if(localFile.exists()){
+        if (localFile.exists()) {
             // 从本地配置文件获取
             content = new String(Files.readAllBytes(localFile.toPath()));
 
-        }else {
+        } else {
             // 从资源文件获取
             try {
                 String resourceClassPath = ResourceUtils.CLASSPATH_URL_PREFIX + resourcePath;
@@ -33,7 +35,7 @@ public class ResourceUtil {
                 content = new String(Files.readAllBytes(file.toPath()));
                 return content;
 
-            }catch (FileNotFoundException e){
+            } catch (FileNotFoundException e) {
             }
 
             // fix deployed  *-standalone.jar
@@ -41,7 +43,7 @@ public class ResourceUtil {
                 ClassPathResource resource = new ClassPathResource(resourcePath);
                 InputStream inputStream = resource.getInputStream();
                 content = IOUtils.toString(inputStream, Charset.forName("UTF-8"));
-            }catch (IOException e){
+            } catch (IOException e) {
 
             }
         }
@@ -52,11 +54,11 @@ public class ResourceUtil {
     public static InputStream getDefaultResourceFileAsStream(String resourcePath) throws IOException {
         // 优先本地配置文件
         File localFile = new File(resourcePath);
-        if(localFile.exists()){
+        if (localFile.exists()) {
             // 从本地配置文件获取
             return new FileInputStream(localFile);
 
-        }else {
+        } else {
             // 从资源文件获取
             try {
                 String resourceClassPath = ResourceUtils.CLASSPATH_URL_PREFIX + resourcePath;
@@ -64,7 +66,7 @@ public class ResourceUtil {
                 File file = ResourceUtils.getFile(resourceClassPath);
                 return new FileInputStream(file);
 
-            }catch (FileNotFoundException e){
+            } catch (FileNotFoundException e) {
             }
 
             // fix deployed  *-standalone.jar

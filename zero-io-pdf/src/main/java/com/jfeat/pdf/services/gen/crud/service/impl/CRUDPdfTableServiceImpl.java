@@ -11,32 +11,25 @@ import javax.annotation.Resource;
 
 /**
  * <p>
- *  implementation
+ * implementation
  * </p>
- *CRUDPdfTableService
+ * CRUDPdfTableService
+ *
  * @author Code Generator
  * @since 2020-03-13
  */
 
 @Service
-public class CRUDPdfTableServiceImpl  extends CRUDServiceOnlyImpl<PdfTable> implements CRUDPdfTableService {
+public class CRUDPdfTableServiceImpl extends CRUDServiceOnlyImpl<PdfTable> implements CRUDPdfTableService {
 
 
+    @Resource
+    protected PdfTableMapper pdfTableMapper;
 
-
-
-        @Resource
-        protected PdfTableMapper pdfTableMapper;
-
-        @Override
-        protected BaseMapper<PdfTable> getMasterMapper() {
-                return pdfTableMapper;
-        }
-
-
-
-
-
+    @Override
+    protected BaseMapper<PdfTable> getMasterMapper() {
+        return pdfTableMapper;
+    }
 
 
 }

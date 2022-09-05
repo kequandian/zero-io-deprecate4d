@@ -10,9 +10,11 @@ import com.itextpdf.text.pdf.PdfContentByte;
  */
 public interface ListRow extends ListRowBase {
     void draw(PdfContentByte canvas, Rectangle position);
+
     void drawCell(PdfContentByte[] canvases, Rectangle position);
 
     /// cell id
     void setCellId(AccessibleElementId cellId);
+
     AccessibleElementId getCellId();
 }

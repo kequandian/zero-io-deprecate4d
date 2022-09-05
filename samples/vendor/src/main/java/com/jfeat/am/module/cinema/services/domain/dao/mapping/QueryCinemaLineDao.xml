@@ -2,24 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jfeat.am.module.cinema.services.domain.dao.QueryCinemaLineDao">
     <sql id="Base_Column_List">
-       ca_cinema_line.id, ca_cinema_line.name, ca_cinema_line.org_id AS orgId
-       , ca_cinema_line.create_time AS createTime, ca_cinema_line.update_time AS updateTime
-       , ca_cinema_line.note
+        ca_cinema_line.id, ca_cinema_line.name, ca_cinema_line.org_id AS orgId
+        , ca_cinema_line.create_time AS createTime, ca_cinema_line.update_time AS updateTime
+        , ca_cinema_line.note
     </sql>
 
 
-
     <select id="queryMasterModel" resultType="CinemaLineModel">
-       SELECT ca_cinema_line.*
-       FROM ca_cinema_line
-       WHERE ca_cinema_line.id=#{id}
-       GROUP BY ca_cinema_line.id
+        SELECT ca_cinema_line.*
+        FROM ca_cinema_line
+        WHERE ca_cinema_line.id=#{id}
+        GROUP BY ca_cinema_line.id
     </select>
 
 
-
     <select id="findCinemaLinePage" resultType="CinemaLineRecord" parameterType="CinemaLineRecord">
-        SELECT <include refid="Base_Column_List"/>
+        SELECT
+        <include refid="Base_Column_List"/>
 
         FROM ca_cinema_line
 
@@ -47,9 +46,9 @@
         <if test="endTime != null">
             <![CDATA[AND ca_cinema_line.end_time <= DATE(#{endTime}]]>
         </if>
-    <if test="search != null and search != ''">
-        And ca_cinema_line.name LIKE CONCAT('%',#{search},'%')
-    </if>
+        <if test="search != null and search != ''">
+            And ca_cinema_line.name LIKE CONCAT('%',#{search},'%')
+        </if>
         ORDER BY create_time DESC
     </select>
 </mapper>

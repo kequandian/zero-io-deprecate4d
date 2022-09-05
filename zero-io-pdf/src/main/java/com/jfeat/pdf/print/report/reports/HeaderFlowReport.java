@@ -31,21 +31,21 @@ public class HeaderFlowReport extends DataFlowReport {
             TextBox box = new TextBox();
 
             TextBoxData info = (TextBoxData) data;
-            if(info.getBackgroundColor()!=null) {
+            if (info.getBackgroundColor() != null) {
                 box.setBackgroundColor(ColorDefinition.getBaseColor(info.getBackgroundColor()));
             }
             // title
             if (info.getText() != null) {
                 box.setContent(info.getText());
             }
-            if(info.getTextFormat()!=null){
-                if(info.getTextFormat().getFont()!=null) {
+            if (info.getTextFormat() != null) {
+                if (info.getTextFormat().getFont() != null) {
                     box.setFont(FontDefinition.getFont(info.getTextFormat().getFont()));
                 }
             }
             return box;
 
-        }else if(rowId.equals(ImageBox.ID)) {
+        } else if (rowId.equals(ImageBox.ID)) {
             ImageBox box = new ImageBox();
 
             ImageBoxData info = (ImageBoxData) data;
@@ -58,11 +58,11 @@ public class HeaderFlowReport extends DataFlowReport {
             }
             return box;
 
-        }else if(rowId.equals(ImageTextBox.ID)){
+        } else if (rowId.equals(ImageTextBox.ID)) {
             ImageTextBox box = new ImageTextBox();
 
             ImageTextBoxData info = (ImageTextBoxData) data;
-            if(info.getBackgroundColor()!=null) {
+            if (info.getBackgroundColor() != null) {
                 box.setBackgroundColor(ColorDefinition.getBaseColor(info.getBackgroundColor()));
             }
             // image
@@ -73,9 +73,9 @@ public class HeaderFlowReport extends DataFlowReport {
             if (info.getTitle() != null) {
                 box.setContent(info.getTitle());
             }
-            if(info.getTitleFormat()!=null){
+            if (info.getTitleFormat() != null) {
                 RowFormatRequest request = info.getTitleFormat();
-                if(request.getFont()!=null) {
+                if (request.getFont() != null) {
                     box.setFont(FontDefinition.getFont(request.getFont()));
                 }
                 box.setIndent(request.getIndent());
@@ -86,7 +86,7 @@ public class HeaderFlowReport extends DataFlowReport {
 
             return box;
 
-        }else if(rowId.equals(RelativeRow.ID)) {
+        } else if (rowId.equals(RelativeRow.ID)) {
 
             RelativeRow row = new RelativeRow();
 

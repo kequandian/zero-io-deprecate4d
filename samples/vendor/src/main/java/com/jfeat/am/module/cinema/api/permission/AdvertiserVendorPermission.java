@@ -1,4 +1,5 @@
 package com.jfeat.am.module.cinema.api.permission;
+
 /**
  * Created by Code generator on 2020-09-10
  */

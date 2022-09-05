@@ -10,52 +10,57 @@ import com.itextpdf.text.pdf.PdfPTable;
  */
 public class FlowLayout extends PdfPTable {
 
-    public FlowLayout(float[] columnWidths){
+    public FlowLayout(float[] columnWidths) {
         super(columnWidths);
         setWidthPercentage(100);
         setSpacingAfter(2);
         setSpacingBefore(2);
     }
 
-    public FlowLayout(int numColumns){
+    public FlowLayout(int numColumns) {
         super(numColumns);
         setWidthPercentage(100);
         setSpacingAfter(2);
         setSpacingBefore(2);
     }
 
-    public FlowLayout add(PdfPTable element, int alignment){
+    public FlowLayout add(PdfPTable element, int alignment) {
         PdfPCell cell = new PdfPCell(element);
         this.addCell(cell, alignment);
         return this;
     }
-    public FlowLayout add(PdfPTable element){
-        PdfPCell cell = new PdfPCell(element);
-        this.addCell(cell, ALIGN_LEFT);
-        return this;
-    }
-    public FlowLayout add(Phrase element, int alignment){
-        PdfPCell cell = new PdfPCell(element);
-        this.addCell(cell, alignment);
-        return this;
-    }
-    public FlowLayout add(Phrase element){
-        PdfPCell cell = new PdfPCell(element);
-        this.addCell(cell, ALIGN_LEFT);
-        return this;
-    }
-    public FlowLayout add(Image element, int alignment){
-        PdfPCell cell = new PdfPCell(element);
-        this.addCell(cell, alignment);
-        return this;
-    }
-    public FlowLayout add(Image element){
+
+    public FlowLayout add(PdfPTable element) {
         PdfPCell cell = new PdfPCell(element);
         this.addCell(cell, ALIGN_LEFT);
         return this;
     }
 
-    private void addCell(PdfPCell cell, int alignment){
+    public FlowLayout add(Phrase element, int alignment) {
+        PdfPCell cell = new PdfPCell(element);
+        this.addCell(cell, alignment);
+        return this;
+    }
+
+    public FlowLayout add(Phrase element) {
+        PdfPCell cell = new PdfPCell(element);
+        this.addCell(cell, ALIGN_LEFT);
+        return this;
+    }
+
+    public FlowLayout add(Image element, int alignment) {
+        PdfPCell cell = new PdfPCell(element);
+        this.addCell(cell, alignment);
+        return this;
+    }
+
+    public FlowLayout add(Image element) {
+        PdfPCell cell = new PdfPCell(element);
+        this.addCell(cell, ALIGN_LEFT);
+        return this;
+    }
+
+    private void addCell(PdfPCell cell, int alignment) {
         cell.setPaddingLeft(getSpacingBefore());
         cell.setPaddingRight(getSpacingAfter());
 

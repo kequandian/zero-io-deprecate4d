@@ -14,5 +14,7 @@ public interface MockService {
     Map<String, String> getNameMap(String dir);
 
     //获取所有mock的目录配置信息
-    Map<String,String> getDirIdMap();
+    Map<String, String> getDirIdMap();
+
+
 }

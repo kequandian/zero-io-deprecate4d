@@ -5,6 +5,6 @@ import com.jfeat.am.module.cinema.services.gen.persistence.model.AdvertiserOpera
 /**
  * Created by Code generator on 2020-10-08
  */
-public class AdvertiserOperateLogRecord extends AdvertiserOperateLog{
-    
+public class AdvertiserOperateLogRecord extends AdvertiserOperateLog {
+
 }

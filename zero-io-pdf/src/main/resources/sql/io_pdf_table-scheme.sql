@@ -21,18 +21,19 @@
 
 
 DROP TABLE IF EXISTS `io_pdf_table`;
-CREATE TABLE `io_pdf_table` (
-  `id` bigint(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) DEFAULT NULL COMMENT '列表名',
-  `editable` tinyint(1) DEFAULT NULL COMMENT '可编辑',
-  `type` varchar(50) DEFAULT NULL COMMENT '类别(api 或 statistics)',
-  `api` varchar(255) DEFAULT NULL COMMENT '绑定api',
-  `api_field` varchar(255) DEFAULT NULL COMMENT 'api 中字段',
-  `api_list` varchar(255) DEFAULT NULL COMMENT 'api 中的列表字段',
-  `header_field` varchar(255) DEFAULT NULL COMMENT 'api返回数据的键值',
-  `field` varchar(50) DEFAULT NULL COMMENT '自动报表的field',
-  `template_content` text COMMENT '模版内容',
-  `origin_config` text COMMENT '前端模版内容',
-  PRIMARY KEY (`id`)
+CREATE TABLE `io_pdf_table`
+(
+    `id`               bigint(11) unsigned NOT NULL AUTO_INCREMENT,
+    `name`             varchar(50)  DEFAULT NULL COMMENT '列表名',
+    `editable`         tinyint(1) DEFAULT NULL COMMENT '可编辑',
+    `type`             varchar(50)  DEFAULT NULL COMMENT '类别(api 或 statistics)',
+    `api`              varchar(255) DEFAULT NULL COMMENT '绑定api',
+    `api_field`        varchar(255) DEFAULT NULL COMMENT 'api 中字段',
+    `api_list`         varchar(255) DEFAULT NULL COMMENT 'api 中的列表字段',
+    `header_field`     varchar(255) DEFAULT NULL COMMENT 'api返回数据的键值',
+    `field`            varchar(50)  DEFAULT NULL COMMENT '自动报表的field',
+    `template_content` text COMMENT '模版内容',
+    `origin_config`    text COMMENT '前端模版内容',
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 

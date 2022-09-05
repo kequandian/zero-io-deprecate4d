@@ -14,6 +14,7 @@
     <artifactId>zero-io-excel</artifactId>
     <version>1.2.0</version>
 
+
     <!--  upgrade history
     1.2.0: when 2021-11-02
            remove zero-io-core
@@ -28,6 +29,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.jfeat</groupId>
+            <artifactId>house</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>

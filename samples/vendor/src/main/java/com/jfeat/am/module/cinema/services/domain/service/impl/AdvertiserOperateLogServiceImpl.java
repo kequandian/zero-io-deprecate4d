@@ -1,11 +1,12 @@
 package com.jfeat.am.module.cinema.services.domain.service.impl;
+
 import com.jfeat.am.module.cinema.services.domain.service.AdvertiserOperateLogService;
 import com.jfeat.am.module.cinema.services.gen.crud.service.impl.CRUDAdvertiserOperateLogServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author admin
@@ -16,5 +17,4 @@ import org.springframework.stereotype.Service;
 public class AdvertiserOperateLogServiceImpl extends CRUDAdvertiserOperateLogServiceImpl implements AdvertiserOperateLogService {
 
 
-
-                            }
+}

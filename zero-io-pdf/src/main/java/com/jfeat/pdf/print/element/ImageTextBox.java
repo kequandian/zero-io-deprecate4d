@@ -14,6 +14,7 @@ import org.springframework.util.Assert;
 public class ImageTextBox extends TextBox implements ListRow {
 
     public static String ID = "ImageTextRow";
+
     @Override
     public String rowId() {
         return ID;
@@ -33,14 +34,14 @@ public class ImageTextBox extends TextBox implements ListRow {
         this.image = image;
     }
 
-    public void setImage(Image image, int alignment){
+    public void setImage(Image image, int alignment) {
         this.image = image;
         this.image.setAlignment(alignment);
     }
 
     @Override
     public void drawCell(PdfContentByte[] canvases, Rectangle position) {
-        Assert.isTrue(image!=null, "image is not set !");
+        Assert.isTrue(image != null, "image is not set !");
 
         PdfContentByte bgcanvas = canvases[PdfPTable.BACKGROUNDCANVAS];
 
@@ -72,7 +73,7 @@ public class ImageTextBox extends TextBox implements ListRow {
             }
 
             ElementDrawUtil.drawLines(canvas, linesPosition, new Phrase[]{new Phrase(content)},
-                    paddingLeft, paddingTop,paddingTop, paddingBottom,
+                    paddingLeft, paddingTop, paddingTop, paddingBottom,
                     alignment, indent, spacing);
         }
 

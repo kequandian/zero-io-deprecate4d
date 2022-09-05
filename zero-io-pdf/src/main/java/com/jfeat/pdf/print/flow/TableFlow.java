@@ -46,57 +46,59 @@ public class TableFlow extends PositionFlowElement {
     protected BaseColor firstRowColor;
     protected BaseColor rowColor;
 
-    public TableFlow(){}
+    public TableFlow() {
+    }
 
-    public TableFlow(int numColumns){
+    public TableFlow(int numColumns) {
         this.numColumns = numColumns;
     }
-    public TableFlow(float[] columnWidths){
+
+    public TableFlow(float[] columnWidths) {
         this.columnWidths = columnWidths;
     }
 
-    public void draw(PdfContentByte canvas){
-        if(rowHeight<=0){
+    public void draw(PdfContentByte canvas) {
+        if (rowHeight <= 0) {
             throw new RuntimeException("rowHeight must great then zero!");
         }
-        int numCols = columnWidths==null?numColumns : columnWidths.length;
-        if((rows.size() % numCols)>0){
+        int numCols = columnWidths == null ? numColumns : columnWidths.length;
+        if ((rows.size() % numCols) > 0) {
             throw new RuntimeException("rows size must align up with num of columns");
         }
 
-        PdfPTable table = columnWidths!=null? new PdfPTable(columnWidths) : new PdfPTable(numColumns);
+        PdfPTable table = columnWidths != null ? new PdfPTable(columnWidths) : new PdfPTable(numColumns);
 
-        if(totalWidth>0) {
+        if (totalWidth > 0) {
             table.setTotalWidth(totalWidth);
-        }else {
+        } else {
             table.setWidthPercentage(widthPercentage);
         }
 
         // default
         table.getDefaultCell().setBorder(borderStyle);
-        if(borderWidth>0) {
+        if (borderWidth > 0) {
             table.getDefaultCell().setBorderWidth(borderWidth);
         }
-        if(borderColor!=null) {
+        if (borderColor != null) {
             table.getDefaultCell().setBorderColor(borderColor);
         }
         table.getDefaultCell().setFixedHeight(rowHeight);
 
         /// 表头，占满一行
-        if(header!=null) {
+        if (header != null) {
 
             PdfPCell headerCell = new PdfPCell();
 
-            if(headerColor != null) {
+            if (headerColor != null) {
                 headerCell.setBackgroundColor(headerColor);
             }
 
-            headerCell.setColspan(columnWidths!=null?columnWidths.length:numColumns);
-            if(borderWidth>0) {
+            headerCell.setColspan(columnWidths != null ? columnWidths.length : numColumns);
+            if (borderWidth > 0) {
                 headerCell.setBorderWidth(borderWidth);
             }
             headerCell.setBorder(borderStyle);
-            if(borderColor!=null) {
+            if (borderColor != null) {
                 headerCell.setBorderColor(borderColor);
             }
 
@@ -120,15 +122,15 @@ public class TableFlow extends PositionFlowElement {
          *  handle row cell
          */
         int rowIndex = 0;
-        for(ListRow row : rows) {
+        for (ListRow row : rows) {
 
             PdfPCell cell = new PdfPCell();
             cell.setFixedHeight(rowHeight);
             cell.setBorder(borderStyle);
-            if(borderWidth>0) {
+            if (borderWidth > 0) {
                 cell.setBorderWidth(borderWidth);
             }
-            if(borderColor!=null) {
+            if (borderColor != null) {
                 cell.setBorderColor(borderColor);
             }
 
@@ -136,9 +138,9 @@ public class TableFlow extends PositionFlowElement {
             AccessibleElementId cellId = cell.getId();
             row.setCellId(cell.getId());
 
-            int len = columnWidths!=null? columnWidths.length : numColumns;
-            if(firstRowHeight>0) {
-                if(rowIndex < len ){
+            int len = columnWidths != null ? columnWidths.length : numColumns;
+            if (firstRowHeight > 0) {
+                if (rowIndex < len) {
                     cell.setFixedHeight(firstRowHeight);
                     cell.setBackgroundColor(firstRowColor);
                 }
@@ -152,7 +154,7 @@ public class TableFlow extends PositionFlowElement {
                     AccessibleElementId cellId = cell.getId();
                     ListRow row = getRowByCellId(cellId);
 
-                    if(row !=null){
+                    if (row != null) {
                         //position.setBorder(Rectangle.BOX);
                         //position.setBorderWidth(1);
                         //position.setBorderColor(BaseColor.BLUE);
@@ -164,7 +166,7 @@ public class TableFlow extends PositionFlowElement {
             cell.setBackgroundColor(cellColor);
             table.addCell(cell);
 
-            rowIndex ++;
+            rowIndex++;
         }
 
         //table.setHeaderRows(columnWidths.length);
@@ -185,23 +187,25 @@ public class TableFlow extends PositionFlowElement {
     }
 
     public void setRows(List<ListRow> rows) {
-        int numCols = columnWidths==null?numColumns : columnWidths.length;
-        if((rows.size() % numCols)>0){
+        int numCols = columnWidths == null ? numColumns : columnWidths.length;
+        if ((rows.size() % numCols) > 0) {
             throw new RuntimeException("rows size must align up with num of columns");
         }
         this.rows = rows;
     }
+
     public void addRow(ListRow row) {
-        if(this.rows==null){
+        if (this.rows == null) {
             this.rows = new ArrayList<>();
         }
         this.rows.add(row);
     }
+
     public void addRow(ListRow row, int repeat) {
-        if(this.rows==null){
+        if (this.rows == null) {
             this.rows = new ArrayList<>();
         }
-        for(int i=0; i<repeat; i++) {
+        for (int i = 0; i < repeat; i++) {
             this.rows.add(row);
         }
     }
@@ -211,15 +215,15 @@ public class TableFlow extends PositionFlowElement {
         return header;
     }
 
-    public void setHeader(ListRow header){
+    public void setHeader(ListRow header) {
         this.header = header;
     }
 
-    public ListRow getRowByCellId(AccessibleElementId cellId){
-        if(rows != null){
+    public ListRow getRowByCellId(AccessibleElementId cellId) {
+        if (rows != null) {
 
-            for(ListRow row : rows){
-                if(row.getCellId().compareTo(cellId)==0){
+            for (ListRow row : rows) {
+                if (row.getCellId().compareTo(cellId) == 0) {
                     return row;
                 }
             }
@@ -281,20 +285,21 @@ public class TableFlow extends PositionFlowElement {
 
     /**
      * 移到单元测试中测试, 本地测试无效
+     *
      * @param args
      * @throws DocumentException
      * @throws FileNotFoundException
      */
-    public static void main(String[] args) throws DocumentException, FileNotFoundException{
+    public static void main(String[] args) throws DocumentException, FileNotFoundException {
         TableFlow tableFlow = new TableFlow();
         tableFlow.setHeaderHeight(24);
         tableFlow.setRowHeight(26);
         tableFlow.setFirstRowHeight(24);
-        tableFlow.setColumnWidths(new float[]{2f, 8, 5,  10, 4, 4, 2f});
+        tableFlow.setColumnWidths(new float[]{2f, 8, 5, 10, 4, 4, 2f});
         tableFlow.setTotalWidth(500);
 
-        Font headerFont = new ChineseFont("宋体", 14, NORMAL, new BaseColor(30,30,37));
-        Font firstRowFont = new ChineseFont("宋体", 12, NORMAL, new BaseColor(30,30,37));
+        Font headerFont = new ChineseFont("宋体", 14, NORMAL, new BaseColor(30, 30, 37));
+        Font firstRowFont = new ChineseFont("宋体", 12, NORMAL, new BaseColor(30, 30, 37));
 
         TextBox header = new TextBox("商品清单", headerFont);
 
@@ -322,7 +327,7 @@ public class TableFlow extends PositionFlowElement {
         PdfExporter exporter = new PdfExporter();
 
         PdfContentByte canvas = exporter.export("table.pdf", PageSize.A4, 20).canvas();
-        Rectangle pageSize=  exporter.getPageSize();
+        Rectangle pageSize = exporter.getPageSize();
 
         tableFlow.draw(canvas);
 

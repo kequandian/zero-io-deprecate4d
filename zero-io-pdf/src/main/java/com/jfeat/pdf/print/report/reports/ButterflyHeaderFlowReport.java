@@ -6,7 +6,7 @@ package com.jfeat.pdf.print.report.reports;
  */
 public class ButterflyHeaderFlowReport extends HeaderFlowReport {
 
-    public ButterflyHeaderFlowReport(){
+    public ButterflyHeaderFlowReport() {
         super(2);
         super.flowDirection = FLOW_UTD;
     }

@@ -13,32 +13,33 @@ public class ExcelContentRowsUtil {
 
     /**
      * 合并重复的项
+     *
      * @param contents
      * @param fields
      * @param unique
      * @return
      */
     public static List<List<String>> mergeDuplicateContentRows(List<List<String>> contents, List<String> fields, List<String> unique) {
-        if(unique==null || unique.size()==0){
+        if (unique == null || unique.size() == 0) {
             return contents;
         }
 
         List<Integer> contentIndex = new ArrayList<>();
 
-        for(String uniq:unique){
-            if(fields.contains(uniq))
+        for (String uniq : unique) {
+            if (fields.contains(uniq))
                 contentIndex.add(fields.indexOf(uniq));
         }
 
-        Map<List<String>,List<String>> map = new HashMap<>();
-        for(List<String> content:contents){
+        Map<List<String>, List<String>> map = new HashMap<>();
+        for (List<String> content : contents) {
             List<String> keys = new ArrayList<>();
-            for(Integer index:contentIndex){
+            for (Integer index : contentIndex) {
                 keys.add(content.get(index));
             }
-            if(!map.containsKey(keys)) {
+            if (!map.containsKey(keys)) {
                 map.put(keys, content);
-            }else{
+            } else {
                 logger.info("Duplicate rows：" + map.get(keys).toString());
                 logger.info("Duplicate rows：" + content.toString());
                 mergeRow(map.get(keys), content);
@@ -52,13 +53,13 @@ public class ExcelContentRowsUtil {
         return temps;
     }
 
-    private static void mergeRow(List<String> row, List<String> mergeRow){
-        for(int i=0; i<row.size(); i++){
+    private static void mergeRow(List<String> row, List<String> mergeRow) {
+        for (int i = 0; i < row.size(); i++) {
             String value = row.get(i);
             String mergeValue = mergeRow.get(i);
 
-            if(value==null || value.length()==0){
-                if(mergeValue !=null && mergeValue.length()>0){
+            if (value == null || value.length() == 0) {
+                if (mergeValue != null && mergeValue.length() > 0) {
                     row.set(i, mergeValue);
                 }
             }
@@ -68,21 +69,22 @@ public class ExcelContentRowsUtil {
 
     /**
      * 移走完全相同的项 生成新的不包含 相同项的行
+     *
      * @param originContents
      * @return
      */
-    public static  List<List<String>> mergeDuplicateContentRows(List<List<String>> originContents){
-        if(originContents==null || originContents.size()==1){
+    public static List<List<String>> mergeDuplicateContentRows(List<List<String>> originContents) {
+        if (originContents == null || originContents.size() == 1) {
             return originContents;
         }
 
         List<List<String>> contents = new ArrayList<>();
         List<Integer> hashCode = new ArrayList<>();
         Iterator<List<String>> listIterator = originContents.iterator();
-        while (listIterator.hasNext()){
+        while (listIterator.hasNext()) {
             List<String> stringList = listIterator.next();
             int code = stringList.hashCode();
-            if(!hashCode.contains(code)){
+            if (!hashCode.contains(code)) {
                 contents.add(stringList);
                 hashCode.add(code);
             }
@@ -93,8 +95,9 @@ public class ExcelContentRowsUtil {
 
     /**
      * 从左边的行 移走 右边的行 生成新的不包括右边 rows 的行数
-     * @param contents  原行数
-     * @param rows  从原行数中被排除的行数
+     *
+     * @param contents 原行数
+     * @param rows     从原行数中被排除的行数
      * @return
      */
     public static List<List<String>> subContentRows(List<List<String>> contents, List<List<String>> rows) {
@@ -118,7 +121,8 @@ public class ExcelContentRowsUtil {
 
 
     /**
-     *  从读取自 excel contents 中 找查 与 findRow 具有相同值的 行
+     * 从读取自 excel contents 中 找查 与 findRow 具有相同值的 行
+     *
      * @param contents 被查询的行数
      * @param fields   对应域列
      * @param findRow  要查找的项 （不包括空字段）
@@ -146,10 +150,11 @@ public class ExcelContentRowsUtil {
 
     /**
      * 从 excel contents 中查找与 包括 指定 "键/值" 与  keyField/keyValue 相同的行
-     * @param contents   被查找原行数
-     * @param fields     被查找原域名
-     * @param keyField   域名
-     * @param keyValue   域值
+     *
+     * @param contents 被查找原行数
+     * @param fields   被查找原域名
+     * @param keyField 域名
+     * @param keyValue 域值
      * @return
      */
     public static List<String> findContentRow(List<List<String>> contents, List<String> fields, String keyField, String keyValue) {
@@ -165,10 +170,10 @@ public class ExcelContentRowsUtil {
                 if (value.compareTo(keyValue) == 0) {
                     return row;
                 }
-            }else {
+            } else {
 
                 // if both is null, consider to be equal
-                if(value==keyValue){
+                if (value == keyValue) {
                     return row;
                 }
             }
@@ -179,8 +184,9 @@ public class ExcelContentRowsUtil {
 
     /**
      * 从 excel contents 中查找与 包括 指定 "键/值" 与  keyField/keyValue 相同的行
-     * @param contents   被查找原行数
-     * @param fields     被查找原域名
+     *
+     * @param contents 被查找原行数
+     * @param fields   被查找原域名
      * @return
      */
     public static List<String> findContentRow(List<List<String>> contents, List<String> fields, List<String> keys, List<String> values) {
@@ -189,11 +195,11 @@ public class ExcelContentRowsUtil {
 
             int ok = 0;
             int n = 0;
-            for(String keyField:keys) {
+            for (String keyField : keys) {
 
                 String keyValue = values.get(n);
 
-                if(keyField!=null) {
+                if (keyField != null) {
 
                     if (!rowHash.containsKey(keyField)) {
                         throw new RuntimeException("row do not contains duplicate field " + keyField);
@@ -202,14 +208,14 @@ public class ExcelContentRowsUtil {
                     String value = rowHash.get(keyField);
                     if (value != null) {
                         if (value.compareTo(keyValue) == 0) {
-                            ok ++;
+                            ok++;
                         }
                     }
                 }
                 n++;
             }
 
-            if(ok==keys.size()){
+            if (ok == keys.size()) {
                 return row;
             }
         }
@@ -220,14 +226,15 @@ public class ExcelContentRowsUtil {
 
     /**
      * 从 excel contents 中查找与 重复行 所指定的 唯一字段 相同的 行
-     * @param contents  excel 行导入内容
-     * @param fields    指字的对应的数据域字段
-     * @param rows  从数据库中查出的重复项，大不与 unique 一致
-     * @param unique  所指定的唯一属性
+     *
+     * @param contents excel 行导入内容
+     * @param fields   指字的对应的数据域字段
+     * @param rows     从数据库中查出的重复项，大不与 unique 一致
+     * @param unique   所指定的唯一属性
      * @return
      */
     public static List<List<String>> findDuplicateRows(List<List<String>> contents, List<String> fields,
-                                                   List<List<String>> rows, List<String> unique) {
+                                                       List<List<String>> rows, List<String> unique) {
         if (rows == null || rows.size() == 0) {
             return null;
         }
@@ -238,14 +245,14 @@ public class ExcelContentRowsUtil {
 
         List<List<String>> findOnes = new ArrayList<>();
 
-        if (unique != null && unique.size()>0) {
+        if (unique != null && unique.size() > 0) {
 
             for (int i = 0; i < rows.size(); i++) {
                 List<String> row = rows.get(i);
 
                 List<String> findOne = findContentRow(contents, fields, unique, row);
 
-                if(findOne!=null){
+                if (findOne != null) {
                     findOnes.add(findOne);
                 }
 
@@ -284,8 +291,9 @@ public class ExcelContentRowsUtil {
 
     /**
      * 创建 行字典， 通过域作为键, 获取其键值
-     * @param row  行各域值
-     * @param fields  行域名
+     *
+     * @param row    行各域值
+     * @param fields 行域名
      * @return
      */
     public static Map<String, String> buildRowHash(List<String> row, List<String> fields) {
@@ -306,8 +314,9 @@ public class ExcelContentRowsUtil {
 
     /**
      * 判断两行是否值相同
-     * @param row1  第一行
-     * @param row2  第二行
+     *
+     * @param row1 第一行
+     * @param row2 第二行
      * @return
      */
     public static boolean isRowEquals(List<String> row1, List<String> row2) {
@@ -330,7 +339,7 @@ public class ExcelContentRowsUtil {
 //                return false;
 //            }
 //        }
-        if(row1.hashCode()==row2.hashCode())
+        if (row1.hashCode() == row2.hashCode())
             return true;
         else
             return false;

@@ -14,15 +14,15 @@ import java.util.regex.Pattern;
  */
 public class ImageUtil {
 
-    public static float getImageRatio(String url) throws IOException{
+    public static float getImageRatio(String url) throws IOException {
         Image img = getImage(url);
-        return img.getHeight()/img.getWidth();
+        return img.getHeight() / img.getWidth();
     }
 
-    public static Image getImage(String url){
-        Image image=null;
+    public static Image getImage(String url) {
+        Image image = null;
 
-        if(isImageUrl(url)) {
+        if (isImageUrl(url)) {
             java.awt.Image img = null;
             try {
                 img = getAwtImage(url);
@@ -31,7 +31,7 @@ public class ImageUtil {
             }
             if (img != null) {
                 try {
-                    image = Image.getInstance(img,  java.awt.Color.BLACK);
+                    image = Image.getInstance(img, java.awt.Color.BLACK);
                 } catch (BadElementException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -76,13 +76,13 @@ public class ImageUtil {
         throw new IllegalArgumentException("无法判断，未知资源");
     }
 
-    private static boolean isImageUrl(String url){
-        if(url==null) {
+    private static boolean isImageUrl(String url) {
+        if (url == null) {
             url = "";
         }
-        String[] suffixes = new String[] {".jpg", "png", ".jpeg"};
-        for(String fix : suffixes){
-            if(url.endsWith(fix)){
+        String[] suffixes = new String[]{".jpg", "png", ".jpeg"};
+        for (String fix : suffixes) {
+            if (url.endsWith(fix)) {
                 return true;
             }
         }

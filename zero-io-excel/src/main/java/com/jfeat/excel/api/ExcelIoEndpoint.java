@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,8 +39,9 @@ public class ExcelIoEndpoint {
 
     /**
      * 自动报表专用
-     * @param field  从表 st_field_config_meta 获取的字域
-     * @param filename  由前端指定下载文件名
+     *
+     * @param field    从表 st_field_config_meta 获取的字域
+     * @param filename 由前端指定下载文件名
      */
     @GetMapping(value = "/{field}")
     public void exportExcelFile(@PathVariable String field, @RequestParam(value = "filename", required = false) String filename, HttpServletRequest request, HttpServletResponse response) throws IOException, IOException {
@@ -47,7 +49,7 @@ public class ExcelIoEndpoint {
         logger.info("parameterMap --> {}", toPrintMap(parameterMap));
 
         response.setContentType("application/octet-stream");
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s.xlsx", StringUtils.isEmpty(filename)?field:filename));
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s.xlsx", StringUtils.isEmpty(filename) ? field : filename));
         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
 
         response.getOutputStream().write(excelExportService.autoExport(field).readAllBytes());
@@ -57,12 +59,12 @@ public class ExcelIoEndpoint {
     // modelName 用于权限控制
     @UrlPermission
     @PostMapping("/export/{exportName}")
-    public void exportExcel(@PathVariable String exportName, @RequestParam(value = "filename", required = false) String filename,  HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void exportExcel(@PathVariable String exportName, @RequestParam(value = "filename", required = false) String filename, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, String[]> parameterMap = request.getParameterMap();
         logger.info("parameterMap --> {}", toPrintMap(parameterMap));
 
         response.setContentType("application/octet-stream");
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s.xlsx", StringUtils.isEmpty(filename)?exportName:filename));
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s.xlsx", StringUtils.isEmpty(filename) ? exportName : filename));
         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
         response.getOutputStream().write(excelExportService.export(exportName).readAllBytes());
     }

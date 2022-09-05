@@ -1,4 +1,5 @@
 # zero-io-pdf
+
 > 通过数据库存储的pdf模版以及获取API中数据进行 pdf的导出。
 
 > 生成PDF库比较 [pdf-vs-pdfmake-vs-phantomjs-vs-react-pdf](https://www.npmtrends.com/pdf-vs-pdfmake-vs-phantomjs-vs-react-pdf)
@@ -25,8 +26,8 @@ CREATE TABLE `io_pdf_table` (
 
 数据库中存储对应的PDF打印模版，以及对应的API，打印类型。
 
-
 ## 列表导出
+
 GET `/api/io/pdf/export/{tableName}`
 
 **tableName**对应数据库中`name`字段, 通过`name`在数据库中获取到打印的模版，从而打印PDF。模版格式参考[zero-io-core](../zero-io-core)，根据导出数据的来源有API和报表两种打印方式。
@@ -48,6 +49,7 @@ GET `/api/io/pdf/export/multiple/{tableName}`
 因为是详情页导出原因，还需要传入`id`参数
 
 #### 多API情况
+
 详情页数据来自多个API，所以需要获取多个API中的数据。数据库中`sub_api`字段对应多个API的json数组信息。
 
 sub_api例子：

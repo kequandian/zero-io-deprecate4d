@@ -23,19 +23,19 @@ public class RowLayoutRequest {
     private ColorDefinition backgroundColor;
 
 
-    public RowLayoutRequest(){
+    public RowLayoutRequest() {
         borderLeft = -1;
         borderRight = -1;
         borderTop = -1;
         borderBottom = -1;
     }
 
-    public RowLayoutRequest(float height){
+    public RowLayoutRequest(float height) {
         this();
         this.height = height;
     }
 
-    public RowLayoutRequest(float height, float padding){
+    public RowLayoutRequest(float height, float padding) {
         this(height);
         this.paddingLeft = padding;
         this.paddingRight = padding;
@@ -46,7 +46,7 @@ public class RowLayoutRequest {
     /**
      * padding
      */
-    public RowLayoutRequest setPadding(float left, float right, float top, float bottom){
+    public RowLayoutRequest setPadding(float left, float right, float top, float bottom) {
         this.paddingLeft = left;
         this.paddingRight = right;
         this.paddingTop = top;
@@ -54,23 +54,23 @@ public class RowLayoutRequest {
         return this;
     }
 
-    public void setPadding(float padding){
+    public void setPadding(float padding) {
         this.paddingLeft = this.paddingRight = this.paddingTop = this.paddingBottom = padding;
     }
 
-    public void setPadding(String padding){
+    public void setPadding(String padding) {
         if (padding != null && padding.length() > 0) {
             try {
                 if (padding.contains(",")) {
                     String[] values = padding.split(",");
-                    if(values.length==4){
+                    if (values.length == 4) {
                         this.paddingLeft = Float.parseFloat(values[0]);
-                        this.paddingRight= Float.parseFloat(values[1]);
+                        this.paddingRight = Float.parseFloat(values[1]);
                         this.paddingTop = Float.parseFloat(values[2]);
                         this.paddingBottom = Float.parseFloat(values[3]);
                     }
 
-                }else {
+                } else {
 
                     float paddingF = Float.parseFloat(padding);
                     this.paddingLeft = paddingF;
@@ -84,44 +84,46 @@ public class RowLayoutRequest {
         }
     }
 
-    public String getPadding(){
-        float ave = (paddingLeft + paddingRight + paddingTop + paddingBottom)/4.0f;
-        if(ave==paddingLeft && ave== paddingRight && ave==paddingTop && ave==paddingBottom){
+    public String getPadding() {
+        float ave = (paddingLeft + paddingRight + paddingTop + paddingBottom) / 4.0f;
+        if (ave == paddingLeft && ave == paddingRight && ave == paddingTop && ave == paddingBottom) {
             return String.valueOf(ave);
         }
-        return String.format("%f,%f,%f,%f", paddingLeft,paddingTop, paddingRight, paddingBottom);
+        return String.format("%f,%f,%f,%f", paddingLeft, paddingTop, paddingRight, paddingBottom);
     }
 
     /**
      * border
      */
-    public RowLayoutRequest setBorderWidth(float left, float right, float top, float bottom){
+    public RowLayoutRequest setBorderWidth(float left, float right, float top, float bottom) {
         this.borderLeft = left;
         this.borderRight = right;
         this.borderTop = top;
         this.borderBottom = bottom;
         return this;
     }
-    public RowLayoutRequest setBorderWidth(float width){
+
+    public RowLayoutRequest setBorderWidth(float width) {
         this.borderLeft = width;
         this.borderRight = width;
         this.borderTop = width;
         this.borderBottom = width;
         return this;
     }
-    public RowLayoutRequest setBorderWidth(String width){
+
+    public RowLayoutRequest setBorderWidth(String width) {
         if (width != null && width.length() > 0) {
             try {
                 if (width.contains(",")) {
                     String[] values = width.split(",");
-                    if(values.length==4){
+                    if (values.length == 4) {
                         this.borderLeft = Float.parseFloat(values[0]);
-                        this.borderRight= Float.parseFloat(values[1]);
+                        this.borderRight = Float.parseFloat(values[1]);
                         this.borderTop = Float.parseFloat(values[2]);
                         this.borderBottom = Float.parseFloat(values[3]);
                     }
 
-                }else {
+                } else {
 
                     float paddingF = Float.parseFloat(width);
                     this.borderLeft = paddingF;
@@ -136,30 +138,30 @@ public class RowLayoutRequest {
         return this;
     }
 
-    public String getBorderWidth(){
-        float ave = (borderLeft + borderRight + borderTop + borderBottom)/4.0f;
-        if(ave==borderLeft && ave== borderRight && ave==borderTop && ave==borderBottom){
+    public String getBorderWidth() {
+        float ave = (borderLeft + borderRight + borderTop + borderBottom) / 4.0f;
+        if (ave == borderLeft && ave == borderRight && ave == borderTop && ave == borderBottom) {
             return String.valueOf(ave);
         }
         return String.format("%f,%f,%f,%f", borderLeft, borderTop, borderRight, borderBottom);
     }
 
-    public RowLayoutRequest setBorderColor(int red, int green, int blue){
+    public RowLayoutRequest setBorderColor(int red, int green, int blue) {
         this.borderColor = new ColorDefinition(red, green, blue);
         return this;
     }
 
-    public RowLayoutRequest setBorderColor(ColorDefinition color){
+    public RowLayoutRequest setBorderColor(ColorDefinition color) {
         this.borderColor = color;
         return this;
     }
 
-    public RowLayoutRequest setBorderColor(String colorString){
+    public RowLayoutRequest setBorderColor(String colorString) {
         if (colorString != null && colorString.length() > 0) {
             try {
                 if (colorString.contains(",")) {
                     String[] values = colorString.split(",");
-                    if(values.length==3){
+                    if (values.length == 3) {
                         int red = Integer.parseInt(values[0]);
                         int green = Integer.parseInt(values[1]);
                         int blue = Integer.parseInt(values[2]);
@@ -173,12 +175,12 @@ public class RowLayoutRequest {
         return this;
     }
 
-    public String getBorderColor(String colorString){
-        if(borderColor==null){
+    public String getBorderColor(String colorString) {
+        if (borderColor == null) {
             return "0,0,0";
         }
         int total = (this.borderColor.getRed() + this.borderColor.getGreen() + this.borderColor.getBlue());
-        if(total%3==0) {
+        if (total % 3 == 0) {
             int ave = total / 3;
             if (ave == this.borderColor.getRed() && ave == this.borderColor.getGreen() && ave == this.borderColor.getBlue()) {
                 return String.valueOf(ave);
@@ -187,12 +189,13 @@ public class RowLayoutRequest {
         return borderColor.toString();
     }
 
-    public ColorDefinition getBorderColor(){
+    public ColorDefinition getBorderColor() {
         return this.borderColor;
     }
 
     /**
      * getter & setter
+     *
      * @return
      */
 

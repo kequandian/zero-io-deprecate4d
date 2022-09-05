@@ -5,5 +5,6 @@ package com.jfeat.fs.service;
  */
 public interface LoadFileCodeService {
     public String genAndGetCode(String name);
+
     public boolean checkCode(String code);
 }

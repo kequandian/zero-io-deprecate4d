@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 /**
  * Created by Code generator on 2020-09-10
  */
-public class AdvertiserDTO extends Advertiser{
+public class AdvertiserDTO extends Advertiser {
 
     @NotEmpty
     String password;

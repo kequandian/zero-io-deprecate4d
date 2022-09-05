@@ -8,14 +8,14 @@ import java.util.List;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author Code generator
  * @since 2020-09-10
  */
 public interface CinemaMapper extends BaseMapper<Cinema> {
-   List<Cinema> getImportCinema();
+    List<Cinema> getImportCinema();
 
-   Integer  setCinemaLineIdByLineName(@Param("cinemaIds")List<Long> cinemaIds);
+    Integer setCinemaLineIdByLineName(@Param("cinemaIds") List<Long> cinemaIds);
 }

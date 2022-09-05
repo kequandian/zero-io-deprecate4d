@@ -12,10 +12,10 @@ public class PoiAgentImporterRequest {
 
     /**
      * 导入需要处理如下问题：
-     *   1. 重复导入不能新增相同条目，需要定义唯一字段 （但作为导入工具不能任意修改数据库字段的业务属性，如增加 UNIQUE ）
-     *   2. 若没有指定唯一字段，需要指定是否允许所有导入字段重复属性。 {"duplicate":0} 默认是 0-不允许
-     *   3. 导入有可能涉及多表字段，需指定所属不同数据表
-     *   4. 导入有可能涉及多表字段，并表多表间有依赖关系，如"一对一"，"一对多"，"多对多" 关系
+     * 1. 重复导入不能新增相同条目，需要定义唯一字段 （但作为导入工具不能任意修改数据库字段的业务属性，如增加 UNIQUE ）
+     * 2. 若没有指定唯一字段，需要指定是否允许所有导入字段重复属性。 {"duplicate":0} 默认是 0-不允许
+     * 3. 导入有可能涉及多表字段，需指定所属不同数据表
+     * 4. 导入有可能涉及多表字段，并表多表间有依赖关系，如"一对一"，"一对多"，"多对多" 关系
      */
 
     private int level = 2;              /// import level, from single to complex, 默认支持 2
@@ -36,25 +36,25 @@ public class PoiAgentImporterRequest {
         return convert;
     }
 
-    public  void setConvert(List<TableConvert> convert) {
+    public void setConvert(List<TableConvert> convert) {
         this.convert = convert;
     }
 
-    public PoiAgentImporterRequest convert(List<TableConvert> tableConverts){
+    public PoiAgentImporterRequest convert(List<TableConvert> tableConverts) {
         this.convert = tableConverts;
         return this;
     }
 
-    public PoiAgentImporterRequest convert(TableConvert converter){
-        if(convert ==null) {
+    public PoiAgentImporterRequest convert(TableConvert converter) {
+        if (convert == null) {
             convert = new ArrayList<>();
         }
         this.convert.add(converter);
         return this;
     }
 
-    public PoiAgentImporterRequest convert(String table, String field, String oldValue, String newValue){
-        if(convert ==null) {
+    public PoiAgentImporterRequest convert(String table, String field, String oldValue, String newValue) {
+        if (convert == null) {
             convert = new ArrayList<>();
         }
         TableConvert info = new TableConvert();
@@ -66,131 +66,143 @@ public class PoiAgentImporterRequest {
         return this;
     }
 
-    public PoiAgentImporterRequest target(List<TableTarget> target){
+    public PoiAgentImporterRequest target(List<TableTarget> target) {
         this.target = target;
         return this;
     }
-    public PoiAgentImporterRequest target(String table, List<String> fields){
-        if(target==null) {
+
+    public PoiAgentImporterRequest target(String table, List<String> fields) {
+        if (target == null) {
             target = new ArrayList<>();
         }
-        if(!TableTarget.containsTable(target, table)) {
+        if (!TableTarget.containsTable(target, table)) {
             target.add(new TableTarget(table, fields));
-        }else{
+        } else {
             /// update fields
             TableTarget t = TableTarget.getTarget(target, table);
             t.setFields(fields);
         }
         return this;
     }
-    public PoiAgentImporterRequest target(String table, String field){
-        if(target==null) {
+
+    public PoiAgentImporterRequest target(String table, String field) {
+        if (target == null) {
             target = new ArrayList<>();
         }
-        if(!TableTarget.containsTable(target, table)) {
+        if (!TableTarget.containsTable(target, table)) {
             target.add(new TableTarget(table).addField(field));
-        }else{
+        } else {
             /// update fields
             TableTarget t = TableTarget.getTarget(target, table);
             t.addField(field);
         }
         return this;
     }
+
     public List<TableTarget> getTarget() {
         return target;
     }
+
     public void setTarget(List<TableTarget> target) {
         this.target = target;
     }
 
-    public PoiAgentImporterRequest unique(List<TableTarget> unique){
+    public PoiAgentImporterRequest unique(List<TableTarget> unique) {
         this.unique = unique;
         return this;
     }
-    public PoiAgentImporterRequest notnull(List<TableTarget> notnull){
+
+    public PoiAgentImporterRequest notnull(List<TableTarget> notnull) {
         this.notnull = notnull;
         return this;
     }
-    public PoiAgentImporterRequest relation(List<TableRelation> relation){
+
+    public PoiAgentImporterRequest relation(List<TableRelation> relation) {
         this.relation = relation;
         return this;
     }
-    public PoiAgentImporterRequest relation(TableRelation relation){
-        if(this.relation==null){
+
+    public PoiAgentImporterRequest relation(TableRelation relation) {
+        if (this.relation == null) {
             this.relation = new ArrayList<>();
         }
         this.relation.add(relation);
         return this;
     }
-    public PoiAgentImporterRequest relationMany(String table, String keyField, String relativeTable, String relativeKeyField){
-        if(this.relation==null){
+
+    public PoiAgentImporterRequest relationMany(String table, String keyField, String relativeTable, String relativeKeyField) {
+        if (this.relation == null) {
             this.relation = new ArrayList<>();
         }
         this.relation.add(new TableRelation(TableRelation.R_MANY_SLAVE, table, keyField, relativeTable, relativeKeyField));
         return this;
     }
-    public PoiAgentImporterRequest relationOne(String table, String keyField, String relativeTable, String relativeKeyField){
-        if(this.relation==null){
+
+    public PoiAgentImporterRequest relationOne(String table, String keyField, String relativeTable, String relativeKeyField) {
+        if (this.relation == null) {
             this.relation = new ArrayList<>();
         }
         this.relation.add(new TableRelation(TableRelation.R_ONE_CHILD, table, keyField, relativeTable, relativeKeyField));
         return this;
     }
 
-    public PoiAgentImporterRequest unique(String table, List<String> fields){
-        if(unique==null) {
+    public PoiAgentImporterRequest unique(String table, List<String> fields) {
+        if (unique == null) {
             unique = new ArrayList<>();
         }
-        if(!TableTarget.containsTable(unique, table)) {
+        if (!TableTarget.containsTable(unique, table)) {
             unique.add(new TableTarget(table, fields));
-        }else{
+        } else {
             /// update fields
             TableTarget t = TableTarget.getTarget(unique, table);
             t.setFields(fields);
         }
         return this;
     }
-    public PoiAgentImporterRequest unique(String table, String... fields){
+
+    public PoiAgentImporterRequest unique(String table, String... fields) {
         List<String> fieldList = new ArrayList<>();
-        for(String field : fields){
+        for (String field : fields) {
             fieldList.add(field);
         }
 
-        if(unique==null) {
+        if (unique == null) {
             unique = new ArrayList<>();
         }
-        if(!TableTarget.containsTable(unique, table)) {
+        if (!TableTarget.containsTable(unique, table)) {
             unique.add(new TableTarget(table, fieldList));
-        }else{
+        } else {
             /// update fields
             TableTarget t = TableTarget.getTarget(unique, table);
             t.setFields(fieldList);
         }
         return this;
     }
-    public PoiAgentImporterRequest unique(String table, String field){
-        if(unique==null) {
+
+    public PoiAgentImporterRequest unique(String table, String field) {
+        if (unique == null) {
             unique = new ArrayList<>();
         }
-        if(!TableTarget.containsTable(unique, table)) {
+        if (!TableTarget.containsTable(unique, table)) {
             unique.add(new TableTarget(table).addField(field));
-        }else{
+        } else {
             /// update fields
             TableTarget t = TableTarget.getTarget(unique, table);
             t.addField(field);
         }
         return this;
     }
-    public PoiAgentImporterRequest notnull(String table, String field, Object value){
-        if(notnull==null) {
+
+    public PoiAgentImporterRequest notnull(String table, String field, Object value) {
+        if (notnull == null) {
             notnull = new ArrayList<>();
         }
-        if(!TableTarget.containsTable(notnull, table)) {
+        if (!TableTarget.containsTable(notnull, table)) {
             notnull.add(new TableTarget(table).addField(field, value));
-        }else{
+        } else {
             /// update fields
             TableTarget t = TableTarget.getTarget(notnull, table);
-            t.addField(field,value);
+            t.addField(field, value);
         }
         return this;
     }

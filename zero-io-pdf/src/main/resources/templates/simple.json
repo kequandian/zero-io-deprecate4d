@@ -46,23 +46,35 @@
           },
           "rowHeight": 50,
           "headerHeight": 40,
-
           "headerFormat": {
-            "size":"9"
+            "size": "9"
           }
         }
       ]
     },
     {
       "name": "content",
-      "columnWidths": ["1", "2"],
-      "title": [ "姓名:","地址："],
-      "data": ["某某","黄埔区"],
+      "columnWidths": [
+        "1",
+        "2"
+      ],
+      "title": [
+        "姓名:",
+        "地址："
+      ],
+      "data": [
+        "某某",
+        "黄埔区"
+      ],
       "height": "25"
     },
     {
       "name": "linear",
-      "columnWidths": [1, 1, 1],
+      "columnWidths": [
+        1,
+        1,
+        1
+      ],
       "elements": [
         {
           "name": "image",
@@ -95,8 +107,7 @@
       "data": "00000000000"
     }
   ],
-
-  "page":  {
+  "page": {
     "pageName": "A4",
     "rotate": true,
     "margin": "40",

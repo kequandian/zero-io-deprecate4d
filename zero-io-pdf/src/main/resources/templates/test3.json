@@ -16,7 +16,6 @@
             "name": "content",
             "element": {
               "layout": {
-
                 "numColumns": 0
               },
               "data": [
@@ -35,7 +34,6 @@
             "name": "content",
             "element": {
               "layout": {
-
                 "numColumns": 0
               },
               "data": [
@@ -54,7 +52,6 @@
             "name": "content",
             "element": {
               "layout": {
-
                 "numColumns": 0
               },
               "data": [
@@ -76,9 +73,33 @@
       "name": "table",
       "element": {
         "layout": {
-          "columnWidths": [1,1,2,1,1,1,1,1,1,1,1]
+          "columnWidths": [
+            1,
+            1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
         },
-        "header": ["报销人", "出工名", "项目", "工作时长", "出工费用", "里程数/km", "路费", "其他费用", "共计", "时间", "备注"],
+        "header": [
+          "报销人",
+          "出工名",
+          "项目",
+          "工作时长",
+          "出工费用",
+          "里程数/km",
+          "路费",
+          "其他费用",
+          "共计",
+          "时间",
+          "备注"
+        ],
         "rows": "${rows}",
         "format": {
           "rowFormat": {
@@ -92,7 +113,19 @@
         }
       },
       "convert": {
-        "convert_columns": ["", "", "", "work", "money", "", "money", "money", "money", "", ""],
+        "convert_columns": [
+          "",
+          "",
+          "",
+          "work",
+          "money",
+          "",
+          "money",
+          "money",
+          "money",
+          "",
+          ""
+        ],
         "convert_formats": {
           "work": {
             "0.5000": "上午",
@@ -106,7 +139,6 @@
       }
     }
   ],
-
   "page": {
     "marginRight": 20.0,
     "pageSize": {

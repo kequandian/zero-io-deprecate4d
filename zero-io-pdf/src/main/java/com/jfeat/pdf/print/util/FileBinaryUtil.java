@@ -8,11 +8,12 @@ import java.io.*;
 public class FileBinaryUtil {
 
     /**
-     *  获取文件字节流
+     * 获取文件字节流
+     *
      * @param filePath
      * @return
      **/
-    public static byte[] getBytes(String filePath){
+    public static byte[] getBytes(String filePath) {
         byte[] buffer = null;
         try (FileInputStream fis = new FileInputStream(filePath);
              ByteArrayOutputStream bos = new ByteArrayOutputStream(1000)) {

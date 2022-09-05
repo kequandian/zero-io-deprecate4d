@@ -3,13 +3,18 @@ package com.jfeat.am.module.ioJson.services.domain.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.jfeat.am.module.ioJson.services.domain.service.MockJsonService;
 import com.jfeat.am.module.ioJson.services.domain.util.FileUtil;
 import com.jfeat.crud.base.exception.BusinessCode;
 import com.jfeat.crud.base.exception.BusinessException;
+import com.jfeat.module.frontPage.services.gen.persistence.dao.FrontPageMapper;
+import com.jfeat.module.frontPage.services.gen.persistence.model.FrontPage;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.io.*;
 import java.util.*;
 
@@ -29,7 +34,7 @@ public class MockJsonServiceImpl implements MockJsonService {
      * 返回所有基于 appid 的配置列表
      * app.map [  {"appid": "", "appkey": ""}  ]
      * 提供API 设置当前 appid,  api由  appkey授权,  一个 app 一个保存目录, 每个目录一个 site.map，  {"id": "2323", "filename":"个人中心.json"}
-     * */
+     */
 
 
     private static String dir = "jsonMock";
@@ -49,24 +54,27 @@ public class MockJsonServiceImpl implements MockJsonService {
 
     private static String appDir = dir + File.separator + appId;*/
 
+    @Resource
+    FrontPageMapper frontPageMapper;
+
 
     @Override
-    public JSONObject readJsonFile(Long id){
+    public JSONObject readJsonFile(Long id) {
         checkAppMap();
 
         JSONObject json = new JSONObject();
 
         Map<String, String> idMap = getIdMap();
         String fileName = idMap.get(id.toString());
-        if(fileName == null || fileName.equals("")){
-            throw new BusinessException(BusinessCode.BadRequest,"该id对应的数据不存在");
-        }else{
+        if (fileName == null || fileName.equals("")) {
+            throw new BusinessException(BusinessCode.BadRequest, "该id对应的数据不存在");
+        } else {
 
-            File jsonFile = new File(dir + File.separator+ appId+File.separator +fileName);
+            File jsonFile = new File(dir + File.separator + appId + File.separator + fileName);
             FileReader fileReader = null;
             try {
                 fileReader = new FileReader(jsonFile);
-                Reader reader = new InputStreamReader(new FileInputStream(jsonFile),"utf-8");
+                Reader reader = new InputStreamReader(new FileInputStream(jsonFile), "utf-8");
                 int ch = 0;
                 StringBuffer sb = new StringBuffer();
                 while ((ch = reader.read()) != -1) {
@@ -75,7 +83,7 @@ public class MockJsonServiceImpl implements MockJsonService {
                 fileReader.close();
                 reader.close();
 
-                json =  (JSONObject) JSONObject.parse(sb.toString());
+                json = (JSONObject) JSONObject.parse(sb.toString());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (UnsupportedEncodingException e) {
@@ -91,7 +99,7 @@ public class MockJsonServiceImpl implements MockJsonService {
 
 
     @Override
-    public Integer saveJsonToFile(JSONObject json, Long id){
+    public Integer saveJsonToFile(JSONObject json, Long id) {
 
         checkAppMap();
 
@@ -99,10 +107,10 @@ public class MockJsonServiceImpl implements MockJsonService {
         Map<String, String> idMap = getIdMap();
         //已有id处理
         String savefileName = idMap.get(id.toString());
-        String fileName ;
-        if(savefileName!=null && !"".equals(savefileName)){
+        String fileName;
+        if (savefileName != null && !"".equals(savefileName)) {
             fileName = savefileName;
-        }else{
+        } else {
             fileName = IdWorker.getIdStr() + ".json";
         }
 
@@ -112,7 +120,7 @@ public class MockJsonServiceImpl implements MockJsonService {
 
         File file = new File(dir + File.separator + appId + File.separator + fileName);
         try {
-            if(file.exists()){
+            if (file.exists()) {
                 file.delete();
             }
             Writer write = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
@@ -121,8 +129,8 @@ public class MockJsonServiceImpl implements MockJsonService {
             write.close();
 
             i++;
-            FileUtil.writeProperties(id.toString(),fileName,FileUtil.getFile(dir + File.separator + appId
-                    ,dir + File.separator + appId + File.separator + "appSite.properties"));
+            FileUtil.writeProperties(id.toString(), fileName, FileUtil.getFile(dir + File.separator + appId
+                    , dir + File.separator + appId + File.separator + "appSite.properties"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
@@ -135,18 +143,13 @@ public class MockJsonServiceImpl implements MockJsonService {
     }
 
 
-
-
-
     //检查appId是否已记录进配置文件
-   void  checkAppMap(){
+    void checkAppMap() {
         Map<String, String> appIdMap = getAppIdMap();
-        if(appIdMap.get(appId) == null){
-            FileUtil.writeProperties(appId,appId,FileUtil.getFile(dir, dir + File.separator + "appMap.properties"));
+        if (appIdMap.get(appId) == null) {
+            FileUtil.writeProperties(appId, appId, FileUtil.getFile(dir, dir + File.separator + "appMap.properties"));
         }
     }
-
-
 
 
     //获取Appid配置文件
@@ -160,10 +163,9 @@ public class MockJsonServiceImpl implements MockJsonService {
     }*/
 
 
-
     @Override
-    public String getAppId(){
-        if(appId == null){
+    public String getAppId() {
+        if (appId == null) {
             appId = DEFAULT_APP_ID;
         }
         return appId;
@@ -176,21 +178,54 @@ public class MockJsonServiceImpl implements MockJsonService {
      * @return
      */
     @Override
-    public  Map<String, String> getIdMap() {
-        return FileUtil.readProperties(dir + File.separator + appId ,dir + File.separator + appId + File.separator + "appSite.properties");
+    public Map<String, String> getIdMap() {
+        return FileUtil.readProperties(dir + File.separator + appId, dir + File.separator + appId + File.separator + "appSite.properties");
     }
 
     //获取AppId 的 配置列表
     @Override
-    public Map<String,String> getAppIdMap(){
-       return FileUtil.readProperties(dir, dir + File.separator + "appMap.properties");
+    public Map<String, String> getAppIdMap() {
+        return FileUtil.readProperties(dir, dir + File.separator + "appMap.properties");
     }
 
 
+    @Override
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
 
     @Override
-    public void setAppId(String appId){
-        this.appId = appId;
+    @Transactional
+    public int saveJsonFileToDataBase() {
+        Map<String, String> idMap = getIdMap();
+        Iterator<Map.Entry<String, String>> iterator = idMap.entrySet().iterator();
+
+        Integer affect = 0;
+
+        while (iterator.hasNext()){
+            Map.Entry<String,String> entry = iterator.next();
+            JSONObject jsonObject =  readJsonFile(Long.parseLong(entry.getKey()));
+
+            FrontPage frontPage = new FrontPage();
+            frontPage.setCount(entry.getKey());
+            if (jsonObject!=null && jsonObject.get("title")!=null){
+                frontPage.setTitle((String) jsonObject.get("title"));
+            }
+            frontPage.setContent(jsonObject.toJSONString());
+
+//            判断是否已经存在相同数据
+            QueryWrapper<FrontPage> pageQueryWrapper = new QueryWrapper<>();
+            pageQueryWrapper.eq(FrontPage.COUNT,entry.getKey());
+            FrontPage dataBasePage = frontPageMapper.selectOne(pageQueryWrapper);
+            if (dataBasePage!=null){
+                frontPage.setId(dataBasePage.getId());
+                affect += frontPageMapper.updateById(frontPage);
+            }else {
+                affect+=frontPageMapper.insert(frontPage);
+            }
+
+        }
+        return affect;
     }
 
 

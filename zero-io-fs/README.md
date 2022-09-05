@@ -9,7 +9,9 @@ io:
 ```
 
 #### `docker-compose.yml` 配置文件
+
 > 相对路径`./images`映射为容器内的绝对路径 `/images`, 即与`file-upload-path:` 配置一致
+
 ```yaml
 version: "3.4"
 services:
@@ -31,7 +33,6 @@ services:
 	    java -jar app.jar --spring.profiles.active=dev --server.port=8080
 ```
 
-
 ## 文件上传可能触发的 **跨域问题** 解决方案
 
 > /api的配置文件里面限制了上传大小为80M，然后上传出错时返回的错误页面被ngnix认为是跨域了，这可能就是文件大小和跨域的问题
@@ -45,8 +46,7 @@ spring:
        max-request-size: 80MB
 ```
 
-
-### 'vscode' 测试说明 
+### 'vscode' 测试说明
 
 ```http
 @endpoint=http://localhost:8080

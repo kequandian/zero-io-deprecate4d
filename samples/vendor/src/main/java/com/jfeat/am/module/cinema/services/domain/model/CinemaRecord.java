@@ -5,7 +5,7 @@ import com.jfeat.am.module.cinema.services.gen.persistence.model.Cinema;
 /**
  * Created by Code generator on 2020-09-10
  */
-public class CinemaRecord extends Cinema{
+public class CinemaRecord extends Cinema {
     String phone;
 
     String OrgCode;

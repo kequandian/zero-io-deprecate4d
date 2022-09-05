@@ -3,15 +3,15 @@ package com.jfeat.poi.agent.im.request;
 public enum PostfixType {
 
     //数字
-    Number("NUM","\\{\\d\\.\\.\\.\\}","\\d"),
+    Number("NUM", "\\{\\d\\.\\.\\.\\}", "\\d"),
     //大小写字母
-    LETTER("LETTER","","");
+    LETTER("LETTER", "", "");
 
     private String typeName;
     private String regex;
     private String incrementRegex;
 
-    PostfixType(String typeName,String regex,String incrementRegex){
+    PostfixType(String typeName, String regex, String incrementRegex) {
         this.typeName = typeName;
         this.regex = regex;
         this.incrementRegex = incrementRegex;

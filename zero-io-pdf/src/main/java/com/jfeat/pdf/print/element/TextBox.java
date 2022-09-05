@@ -54,12 +54,12 @@ public class TextBox extends TableCellElement implements ListRow {
     /**
      * 左右间距
      */
-    public TextBox(){
-        super(0,0,0,0);
+    public TextBox() {
+        super(0, 0, 0, 0);
     }
 
-    public TextBox(int horizontalAlignment){
-        super(0,0,0,0);
+    public TextBox(int horizontalAlignment) {
+        super(0, 0, 0, 0);
         this.alignment = horizontalAlignment;
     }
 
@@ -69,21 +69,21 @@ public class TextBox extends TableCellElement implements ListRow {
         this.verticalAlignment = verticalAlignment;
     }
 
-    public TextBox(String content, Font font){
-        super(0,0,0,0);
+    public TextBox(String content, Font font) {
+        super(0, 0, 0, 0);
         this.content = content;
         this.font = font;
     }
 
-    public TextBox(String content, Font font, int horizontalAlignment, int verticalAlignment){
-        super(0,0,0,0);
+    public TextBox(String content, Font font, int horizontalAlignment, int verticalAlignment) {
+        super(0, 0, 0, 0);
         this.content = content;
         this.font = font;
         this.alignment = horizontalAlignment;
         this.verticalAlignment = verticalAlignment;
     }
 
-    public TextBox(Rectangle position, String content, Font font){
+    public TextBox(Rectangle position, String content, Font font) {
         super(position);
         this.content = content;
         this.font = font;
@@ -93,13 +93,13 @@ public class TextBox extends TableCellElement implements ListRow {
         this.content = content;
     }
 
-    public void setContent(String content, Font font){
+    public void setContent(String content, Font font) {
         this.content = content;
         this.font = font;
     }
 
-    public void drawCell(PdfContentByte[] canvases, Rectangle position){
-        if(content==null || content.length()==0){
+    public void drawCell(PdfContentByte[] canvases, Rectangle position) {
+        if (content == null || content.length() == 0) {
             return;
         }
 
@@ -113,7 +113,7 @@ public class TextBox extends TableCellElement implements ListRow {
         bgcanvas.saveState();
         Rectangle solid = new Rectangle(this);
         float borderWidth = solid.getBorderWidth();
-        if(borderWidth>0) {
+        if (borderWidth > 0) {
             solid.setLeft(solid.getLeft() + borderWidth);
             solid.setRight(solid.getRight() - borderWidth);
             solid.setTop(solid.getTop() - borderWidth);
@@ -217,13 +217,14 @@ public class TextBox extends TableCellElement implements ListRow {
 
     /**
      * 单行在限定框内转换为多行
+     *
      * @param content
-     * @param position  矩形位置
+     * @param position 矩形位置
      * @return
      */
-    public static List<String> alignUpPosition(PdfFontMetrics metrics, String content, Rectangle position, float paddingLeft, float paddingRight){
+    public static List<String> alignUpPosition(PdfFontMetrics metrics, String content, Rectangle position, float paddingLeft, float paddingRight) {
 
-        float totalWidth = position.getWidth() - paddingLeft +  paddingRight;
+        float totalWidth = position.getWidth() - paddingLeft + paddingRight;
         float totalHeight = position.getHeight();
         logger.info("totalWidth : {}, totalHeight : {}", totalWidth, totalHeight);
         // 垂直间距
@@ -285,6 +286,7 @@ public class TextBox extends TableCellElement implements ListRow {
 
     /**
      * implement in FontSizeMetrics
+     *
      * @param canvas
      * @return
      */

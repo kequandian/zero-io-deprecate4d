@@ -24,15 +24,15 @@ public abstract class RelativeListRow extends TableCellElement {
         PdfPTable table = new PdfPTable(1);
 
         float totalHeight = 0;
-        for(Phrase p : lines) {
+        for (Phrase p : lines) {
             /*java.util.List<Chunk> chunks = p.getChunks();
             if(chunks!=null){
             }*/
-            if(p==null){
+            if (p == null) {
                 logger.error("drawLines(): phrase is null");
             }
 
-            if(p.getContent().length()>0) {
+            if (p.getContent().length() > 0) {
 
                 Float fontSize = p.getFont().getSize();
                 Float capHeight = fontSize;
@@ -59,31 +59,31 @@ public abstract class RelativeListRow extends TableCellElement {
 
                 totalHeight += PdfFontMetrics.getFontHeight(baseFont, fontSize);
 
-            }else{
+            } else {
 
                 logger.warn("no content for phrase " + p.toString());
             }
         }
 
         /// draw table
-        try{
+        try {
 
             float ux = 0, uy = 0;
 
-            if(alignment==Element.ALIGN_BASELINE) {
+            if (alignment == Element.ALIGN_BASELINE) {
                 Point pos = getDockPosition(position, Element.ALIGN_BASELINE);
                 ux = (float) pos.getX();
                 uy = (float) pos.getY();
 
-            }else if(alignment==Element.ALIGN_LEFT){
+            } else if (alignment == Element.ALIGN_LEFT) {
                 Point pos = getDockPosition(position, Element.ALIGN_LEFT);
                 ux = (float) pos.getX();
                 uy = (float) pos.getY();
 
                 float offset = totalHeight * 0.5f;
                 uy += offset;
-             }else{
-                throw new RuntimeException("Not support for Alignment: "+ alignment);
+            } else {
+                throw new RuntimeException("Not support for Alignment: " + alignment);
             }
 
             table.setTotalWidth(getInternalWidth(position));
@@ -94,13 +94,13 @@ public abstract class RelativeListRow extends TableCellElement {
             //float h1 = table.getRowHeight(0);
             //float h2 = table.getRowHeight(1);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     protected void drawText(PdfContentByte canvas, Rectangle position, String text, Font font, int alignment) {
-        if(text!=null) {
+        if (text != null) {
             this.drawText(canvas, position,
                     font == null ? new Phrase(text) : new Phrase(text, font),
                     alignment);
@@ -109,20 +109,20 @@ public abstract class RelativeListRow extends TableCellElement {
 
     protected void drawText(PdfContentByte canvas, Rectangle position, Phrase text, int alignment) {
 
-        if(text!=null) {
+        if (text != null) {
 
             Point pos = getDockPosition(position, alignment);
             float ux = (float) pos.getX();
             float uy = (float) pos.getY();
 
             //todo, RelativeRow::drawText: PdfFontMetrics
-            if(true){
+            if (true) {
                 PdfFontMetrics metrics = new PdfFontMetrics(canvas, text.getFont());
                 float height = metrics.getStringHeight();
 
                 uy += height * 0.5;
 
-            }else {
+            } else {
                 // fix text height
                 float height = text.getFont().getSize();
                 if (height == 10.0f) {
@@ -156,8 +156,8 @@ public abstract class RelativeListRow extends TableCellElement {
             try {
                 int alignment = icon.getAlignment();
 
-                float ax=0, ay=0;
-                if(alignment==Element.ALIGN_LEFT || alignment==Element.ALIGN_RIGHT) {
+                float ax = 0, ay = 0;
+                if (alignment == Element.ALIGN_LEFT || alignment == Element.ALIGN_RIGHT) {
 
                     /// convert scaled width/height from -1 to extend
                     float scaledHeight = icon.getScaledHeight();
@@ -194,7 +194,7 @@ public abstract class RelativeListRow extends TableCellElement {
 
                     canvas.addImage(icon);
 
-                }else if(alignment==Element.ALIGN_TOP){
+                } else if (alignment == Element.ALIGN_TOP) {
                     /// convert scaled width/height from -1 to extend
                     float scaledWidth = icon.getScaledWidth();
                     if (scaledWidth < 0) {
@@ -225,7 +225,7 @@ public abstract class RelativeListRow extends TableCellElement {
 
                     canvas.addImage(icon);
 
-                }else {
+                } else {
                     throw new RuntimeException("fatal: Invalid icon alignment:" + alignment);
                 }
 
@@ -239,6 +239,7 @@ public abstract class RelativeListRow extends TableCellElement {
 
     /**
      * get position
+     *
      * @param position
      * @param alignment
      * @return
@@ -291,6 +292,7 @@ public abstract class RelativeListRow extends TableCellElement {
     private float getVerticalCenter(Rectangle position) {
         return (position.getTop() + paddingTop + position.getBottom() - paddingBottom) * 0.5f;
     }
+
     private float getHorizontalCenter(Rectangle position) {
         return (position.getLeft() + paddingLeft + position.getRight() - paddingRight) * 0.5f;
     }
@@ -298,9 +300,11 @@ public abstract class RelativeListRow extends TableCellElement {
     private float getRowTop(Rectangle position) {
         return position.getTop() - paddingTop;
     }
+
     private float getRowBottom(Rectangle position) {
         return position.getBottom() + paddingBottom;
     }
+
     private float getRowStart(Rectangle position) {
         return position.getLeft() + paddingLeft;
     }
@@ -309,10 +313,11 @@ public abstract class RelativeListRow extends TableCellElement {
         return position.getRight() - paddingRight;
     }
 
-    private float getInternalWidth(Rectangle position){
+    private float getInternalWidth(Rectangle position) {
         return position.getWidth() - paddingLeft - paddingRight;
     }
-    private float getInternalHeight(Rectangle position){
+
+    private float getInternalHeight(Rectangle position) {
         return position.getHeight() - paddingTop - paddingBottom;
     }
 }

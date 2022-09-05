@@ -13,16 +13,16 @@ public class ValueConverterImpl implements ValueConverter {
     @Override
     public Object convert(List<TableConvert> tableConverts, List<TableTarget> target, List<List<String>> contents) {
 
-        if(target==null||target.size()==0)
-            throw new  IllegalArgumentException("tableTarget is null");
+        if (target == null || target.size() == 0)
+            throw new IllegalArgumentException("tableTarget is null");
 
-        for(TableConvert tableConvert : tableConverts){
+        for (TableConvert tableConvert : tableConverts) {
 
             int indexOfContentColumn = getIndexOfContentColumn(tableConvert, target);
 
-            for(List<String> content:contents){
+            for (List<String> content : contents) {
                 String temp = content.get(indexOfContentColumn);
-                if(temp.trim().toLowerCase().compareTo(tableConvert.getOldValue().toLowerCase())==0){
+                if (temp.trim().toLowerCase().compareTo(tableConvert.getOldValue().toLowerCase()) == 0) {
                     content.set(indexOfContentColumn, tableConvert.getNewValue());
                 }
             }
@@ -37,20 +37,20 @@ public class ValueConverterImpl implements ValueConverter {
         return null;
     }
 
-    private int getIndexOfContentColumn(TableConvert tableConvert, List<TableTarget> target){
+    private int getIndexOfContentColumn(TableConvert tableConvert, List<TableTarget> target) {
         int size = 0;
 
-        for(TableTarget tableTaget : target){
-            if(tableTaget.getTable().toLowerCase().trim().compareTo(tableConvert.getTable().trim().toLowerCase())==0){
+        for (TableTarget tableTaget : target) {
+            if (tableTaget.getTable().toLowerCase().trim().compareTo(tableConvert.getTable().trim().toLowerCase()) == 0) {
                 List<String> fields = tableTaget.getFields();
-                if(fields.contains(tableConvert.getField())){
+                if (fields.contains(tableConvert.getField())) {
                     int i = fields.indexOf(tableConvert.getField());
                     size += i;
                     break;
-                }else{
-                    throw  new IllegalArgumentException("当你看到这条信息的时候，你应该怀疑List<ValueConverterInfo> 中table "+tableTaget.getTable()+"是不是配错了");
+                } else {
+                    throw new IllegalArgumentException("当你看到这条信息的时候，你应该怀疑List<ValueConverterInfo> 中table " + tableTaget.getTable() + "是不是配错了");
                 }
-            }else{
+            } else {
                 size += tableTaget.getFields().size();
             }
         }

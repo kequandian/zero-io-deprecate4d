@@ -39,24 +39,24 @@ public abstract class FlowReport implements FlowElement {
     // rows margin
     protected float rowsPaddingLeft, rowsPaddingRight, rowsPaddingTop, rowsPaddingBottom;
 
-    public FlowReport(int columns){
+    public FlowReport(int columns) {
         this.columns = columns;
     }
 
 
-    public void draw(PdfContentByte canvas){
+    public void draw(PdfContentByte canvas) {
 
         PdfPTable table = new PdfPTable(columns);
         table.setWidthPercentage(100);
 
-        if(rowHeight>0) {
+        if (rowHeight > 0) {
             table.getDefaultCell().setFixedHeight(rowHeight);
         }
         /// draw border
         // table.getDefaultCell().setBorder(Rectangle.BOX);
         // table.getDefaultCell().setBorderWidth(1);
 
-        if(this.header!=null) {
+        if (this.header != null) {
             /// 表头，占满一行
             PdfPCell headerCell = new PdfPCell();
             headerCell.setColspan(columns);
@@ -93,7 +93,7 @@ public abstract class FlowReport implements FlowElement {
         /**
          *  handle row cell
          */
-        for(ListRow row : rows) {
+        for (ListRow row : rows) {
 
             PdfPCell cell = new PdfPCell();
             AccessibleElementId cellId = cell.getId();
@@ -108,7 +108,7 @@ public abstract class FlowReport implements FlowElement {
 //            System.out.println(String.format("cell rowsMarginLeft: %d", rowsPaddingLeft));
 
 
-            if(rowHeight>0) {
+            if (rowHeight > 0) {
                 cell.setFixedHeight(rowHeight);
             }
 
@@ -120,7 +120,7 @@ public abstract class FlowReport implements FlowElement {
                     AccessibleElementId cellId = cell.getId();
                     ListRow row = getRowByCellId(cellId);
 
-                    if(row !=null){
+                    if (row != null) {
                         //for debug
                         //position.setBorder(Rectangle.BOX);
                         //position.setBorderWidth(1);
@@ -132,9 +132,9 @@ public abstract class FlowReport implements FlowElement {
             });
 
             /// set border
-            if(checkNoBorder() || row== EmptyListRow.EMPTY) {
+            if (checkNoBorder() || row == EmptyListRow.EMPTY) {
                 cell.setBorder(Rectangle.NO_BORDER);
-            }else{
+            } else {
                 cell.setBorder(Rectangle.BOX);
                 cell.setBorderWidthLeft(rowBorderWidthLeft);
                 cell.setBorderWidthRight(rowBorderWidthRight);
@@ -151,17 +151,17 @@ public abstract class FlowReport implements FlowElement {
             Document document = canvas.getPdfDocument();
             document.add(table);
 
-        }catch (DocumentException e){
+        } catch (DocumentException e) {
             throw new RuntimeException(e);
         }
     }
 
-    protected boolean checkHeaderNoBorder(){
+    protected boolean checkHeaderNoBorder() {
         return (headerBorderWidthLeft + headerBorderWidthRight + headerBorderWidthTop + headerBorderWidthBottom) < 0.001;
     }
 
-    protected boolean checkNoBorder(){
-         return (rowBorderWidthLeft + rowBorderWidthRight + rowBorderWidthTop + rowBorderWidthBottom) < 0.001;
+    protected boolean checkNoBorder() {
+        return (rowBorderWidthLeft + rowBorderWidthRight + rowBorderWidthTop + rowBorderWidthBottom) < 0.001;
     }
 
     public int getFlowDirection() {
@@ -224,15 +224,15 @@ public abstract class FlowReport implements FlowElement {
         return header;
     }
 
-    public void setHeader(ListRow header){
+    public void setHeader(ListRow header) {
         this.header = header;
     }
 
-    public ListRow getRowByCellId(AccessibleElementId cellId){
-        if(rows != null){
+    public ListRow getRowByCellId(AccessibleElementId cellId) {
+        if (rows != null) {
 
-            for(ListRow row : rows){
-                if(row.getCellId().compareTo(cellId)==0){
+            for (ListRow row : rows) {
+                if (row.getCellId().compareTo(cellId) == 0) {
                     return row;
                 }
             }
@@ -243,10 +243,11 @@ public abstract class FlowReport implements FlowElement {
 
     /**
      * 画对角线
+     *
      * @param canvases
      * @param position
      */
-    private void drawCorner(PdfContentByte[] canvases, Rectangle position){
+    private void drawCorner(PdfContentByte[] canvases, Rectangle position) {
         PdfContentByte lineCanvas = canvases[PdfPTable.LINECANVAS];
         lineCanvas.moveTo(position.getLeft(), position.getTop());
         lineCanvas.lineTo(position.getRight(), position.getBottom());
@@ -256,12 +257,15 @@ public abstract class FlowReport implements FlowElement {
     public float getHeaderBorderWidthLeft() {
         return headerBorderWidthLeft;
     }
+
     public float getHeaderBorderWidthRight() {
         return headerBorderWidthRight;
     }
+
     public float getHeaderBorderWidthTop() {
         return headerBorderWidthTop;
     }
+
     public float getHeaderBorderWidthBottom() {
         return headerBorderWidthBottom;
     }
@@ -269,20 +273,23 @@ public abstract class FlowReport implements FlowElement {
     public float getRowBorderWidthLeft() {
         return rowBorderWidthLeft;
     }
+
     public float getRowBorderWidthRight() {
         return rowBorderWidthRight;
     }
+
     public float getRowBorderWidthTop() {
         return rowBorderWidthTop;
     }
+
     public float getRowBorderWidthBottom() {
         return rowBorderWidthBottom;
     }
 
     public void setHeaderBorderWidth(float borderWidth) {
-        if(borderWidth<0){
+        if (borderWidth < 0) {
             // do nothing
-        }else {
+        } else {
             this.headerBorderWidthLeft = borderWidth;
             this.headerBorderWidthTop = borderWidth;
             this.headerBorderWidthRight = borderWidth;
@@ -291,9 +298,9 @@ public abstract class FlowReport implements FlowElement {
     }
 
     public void setHeaderBorderWidth(float left, float top, float right, float bottom) {
-        if(left<0 || top<0 || right<0 || bottom<0){
+        if (left < 0 || top < 0 || right < 0 || bottom < 0) {
             // do nothing
-        }else {
+        } else {
             this.headerBorderWidthLeft = left;
             this.headerBorderWidthTop = top;
             this.headerBorderWidthRight = right;
@@ -310,9 +317,9 @@ public abstract class FlowReport implements FlowElement {
     }
 
     public void setRowBorderWidth(float borderWidth) {
-        if(borderWidth<0){
+        if (borderWidth < 0) {
             // do nothing
-        }else {
+        } else {
             this.rowBorderWidthLeft = borderWidth;
             this.rowBorderWidthTop = borderWidth;
             this.rowBorderWidthRight = borderWidth;
@@ -321,9 +328,9 @@ public abstract class FlowReport implements FlowElement {
     }
 
     public void setRowBorderWidth(float left, float right, float top, float bottom) {
-        if(left<0 || top<0 || right<0 || bottom<0){
+        if (left < 0 || top < 0 || right < 0 || bottom < 0) {
             // do nothing
-        }else {
+        } else {
             this.rowBorderWidthLeft = left;
             this.rowBorderWidthRight = right;
             this.rowBorderWidthTop = top;
@@ -340,9 +347,9 @@ public abstract class FlowReport implements FlowElement {
     }
 
     public void setRowsPadding(float margin) {
-        if(margin<0){
+        if (margin < 0) {
             // do nothing
-        }else {
+        } else {
             this.rowsPaddingLeft = margin;
             this.rowsPaddingTop = margin;
             this.rowsPaddingRight = margin;
@@ -351,9 +358,9 @@ public abstract class FlowReport implements FlowElement {
     }
 
     public void setRowsPadding(float left, float top, float right, float bottom) {
-        if(left<0 || top<0 || right<0 || bottom<0){
+        if (left < 0 || top < 0 || right < 0 || bottom < 0) {
             // do nothing
-        }else {
+        } else {
             this.rowsPaddingLeft = left;
             this.rowsPaddingTop = top;
             this.rowsPaddingRight = right;

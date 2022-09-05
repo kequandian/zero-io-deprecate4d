@@ -1,6 +1,6 @@
 export default (api, data = {}, options = {}) => {
 
-    const { method = 'get', fileName } = options;
+    const {method = 'get', fileName} = options;
 
     let fapi = api;
     let payload = {};
@@ -52,7 +52,7 @@ export default (api, data = {}, options = {}) => {
 
             // https://stackoverflow.com/questions/48413050/missing-headers-in-fetch-response/48432628
             for (let entry of res.headers.entries()) {
-                if (entry[0] === 'content-disposition' || entry[0] === 'filename'){
+                if (entry[0] === 'content-disposition' || entry[0] === 'filename') {
                     fileName = getFileName(entry[1]);
                 }
             }
@@ -78,9 +78,9 @@ export default (api, data = {}, options = {}) => {
 
         const matchRst = disposition.match(/filename=["]{0,1}([\w.@%-]+)["]{0,1}/i);
         let fileName = '';
-        if(matchRst){
+        if (matchRst) {
             fileName = matchRst && decodeURI(matchRst[1]) || defaultName;
-        }else{
+        } else {
             fileName = decodeURI(disposition) || defaultName
         }
 

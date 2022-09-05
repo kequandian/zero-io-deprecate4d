@@ -29,59 +29,59 @@ public class ContentFlowBuilder {
     private float contentHeight;
     private Font contentFormat;
     private Font numberFormat;
-    private String [] titles;
+    private String[] titles;
     private float[] columnWidths;
     private String[] lines;
     private int verticalAlign = Element.ALIGN_MIDDLE;
     private int horizontalAlign = Element.ALIGN_LEFT;
 
-    public ContentFlowBuilder(){
+    public ContentFlowBuilder() {
     }
 
-    public ContentFlowBuilder columnWidths(float[] columnWidths){
-        if(!title){
+    public ContentFlowBuilder columnWidths(float[] columnWidths) {
+        if (!title) {
             throw new RuntimeException("title must be set for columnWidths!");
         }
         this.columnWidths = columnWidths;
         return this;
     }
 
-    public ContentFlowBuilder contentFormat(Font contentFormat){
+    public ContentFlowBuilder contentFormat(Font contentFormat) {
         this.contentFormat = contentFormat;
         return this;
     }
 
-    public ContentFlowBuilder numberFormat(Font numberFormat){
+    public ContentFlowBuilder numberFormat(Font numberFormat) {
         this.numberFormat = numberFormat;
         return this;
     }
 
-    public ContentFlowBuilder contentHeight(float contentHeight){
+    public ContentFlowBuilder contentHeight(float contentHeight) {
         this.contentHeight = contentHeight;
         return this;
     }
 
-    public ContentFlowBuilder title(){
-        if(columnWidths!=null){
+    public ContentFlowBuilder title() {
+        if (columnWidths != null) {
             throw new RuntimeException("title must be set before columnWidths!");
         }
         this.title = true;
         return this;
     }
 
-    public ContentFlowBuilder titles(String[] titles){
-        if(!title){
+    public ContentFlowBuilder titles(String[] titles) {
+        if (!title) {
             throw new RuntimeException("title must be set previously!");
         }
-        if(this.lines!=null && this.lines.length != titles.length){
+        if (this.lines != null && this.lines.length != titles.length) {
             throw new RuntimeException("titles and lines length must be equal!");
         }
         this.titles = titles;
         return this;
     }
 
-    public ContentFlowBuilder lines(String[] lines){
-        if(this.titles!=null && this.titles.length != lines.length){
+    public ContentFlowBuilder lines(String[] lines) {
+        if (this.titles != null && this.titles.length != lines.length) {
             throw new RuntimeException("titles and lines length must be equal!");
         }
         this.lines = lines;
@@ -98,8 +98,8 @@ public class ContentFlowBuilder {
         return this;
     }
 
-    public TableFlow build(){
-        if(contentHeight<=0){
+    public TableFlow build() {
+        if (contentHeight <= 0) {
             throw new RuntimeException("contentHeight must be set!");
         }
 
@@ -116,24 +116,24 @@ public class ContentFlowBuilder {
         List<ListRow> listRows = new ArrayList<>();
         // 标题字体样式 加粗
         ChineseFont titleFormat = new ChineseFont(contentFormat.getFamilyname(), contentFormat.getSize(), Font.BOLD, BaseColor.BLACK);
-        for (int i = 0; i< lines.length; i++){
+        for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
             // 标题右对齐则需要增加水平间隔
             int horizontalPadding = (Element.ALIGN_RIGHT == horizontalAlign) ? 20 : 0;
             // 内容始终左对齐
             TextBox lineRow = new TextBox();
-            if(numberFormat != null && line.matches("^\\d+$")) {
+            if (numberFormat != null && line.matches("^\\d+$")) {
                 lineRow.setContent(line, numberFormat);
-            }else{
+            } else {
                 lineRow.setContent(line, contentFormat);
             }
 
-            if(titles!=null){
+            if (titles != null) {
                 String title = titles[i];
                 TextBox titleRow = new TextBox(horizontalAlign, verticalAlign);
-                if(numberFormat != null && title.matches("^\\d+$")) {
+                if (numberFormat != null && title.matches("^\\d+$")) {
                     titleRow.setContent(title, numberFormat);
-                }else{
+                } else {
                     titleRow.setContent(title, titleFormat);
                 }
 

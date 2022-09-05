@@ -11,11 +11,11 @@ public class MM {
 
     private float dimen;
 
-    public MM(float dimenInMM){
+    public MM(float dimenInMM) {
         this.dimen = dimenInMM;
     }
 
-    public float px(){
+    public float px() {
         return (float) (this.dimen * POINT_PER_MM);
     }
 }

@@ -29,12 +29,12 @@ public class HeaderContentFlowReport extends HeaderFlowReport {
 
         PdfPTable table = new PdfPTable(columns);
         table.setWidthPercentage(100);
-        if(rowHeight>0) {
+        if (rowHeight > 0) {
             table.getDefaultCell().setFixedHeight(rowHeight);
         }
 
 
-        if(header!=null && headerHeight > 0) {
+        if (header != null && headerHeight > 0) {
             /// 表头，占满一行
             PdfPCell headerCell = new PdfPCell();
             headerCell.setColspan(columns);
@@ -72,18 +72,17 @@ public class HeaderContentFlowReport extends HeaderFlowReport {
         }
 
 
-
         /**
          *  handle row cell
          */
-        for(ListRow row : rows) {
+        for (ListRow row : rows) {
 
             PdfPCell cell = new PdfPCell();
             AccessibleElementId cellId = cell.getId();
             /// remember cell id
             row.setCellId(cellId);
 
-            if(rowHeight>0) {
+            if (rowHeight > 0) {
                 cell.setFixedHeight(rowHeight);
             }
 
@@ -99,7 +98,7 @@ public class HeaderContentFlowReport extends HeaderFlowReport {
                     //canvases[0].setFontAndSize(BASE_FONT, 12);
                     //canvases[0].showTextAligned(Element.ALIGN_LEFT, "Column 1", position.getLeft(), position.getTop(), 0);
 
-                    if(row !=null){
+                    if (row != null) {
                         row.drawCell(canvases, position);
                     }
                 }
@@ -107,9 +106,9 @@ public class HeaderContentFlowReport extends HeaderFlowReport {
 
             BaseColor defaultColor = cell.getBorderColor();
             /// set border
-            if(checkNoBorder() || row== EmptyListRow.EMPTY) {
+            if (checkNoBorder() || row == EmptyListRow.EMPTY) {
                 cell.setBorder(Rectangle.NO_BORDER);
-            }else{
+            } else {
                 cell.setBorder(Rectangle.BOX);
                 cell.setBorderWidthLeft(rowBorderWidthLeft);
                 cell.setBorderWidthRight(rowBorderWidthRight);
@@ -122,7 +121,7 @@ public class HeaderContentFlowReport extends HeaderFlowReport {
         }
         table.setComplete(true);
 
-        if(header!=null && headerHeight > 0) {
+        if (header != null && headerHeight > 0) {
             // add rows table
             PdfPCell rowsCell = new PdfPCell();
             rowsCell.setBorder(Rectangle.NO_BORDER);
@@ -138,9 +137,9 @@ public class HeaderContentFlowReport extends HeaderFlowReport {
         /// document
         try {
             Document document = canvas.getPdfDocument();
-            document.add( (header!=null && headerHeight > 0) ? rootTable : table);
+            document.add((header != null && headerHeight > 0) ? rootTable : table);
 
-        }catch (DocumentException e){
+        } catch (DocumentException e) {
             throw new RuntimeException(e);
         }
     }

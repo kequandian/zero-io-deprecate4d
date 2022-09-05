@@ -19,6 +19,7 @@ public abstract class DataFlowReport extends FlowReport {
 
     /**
      * 转换数据至 ListRow 实体
+     *
      * @param data
      * @return
      */
@@ -33,11 +34,11 @@ public abstract class DataFlowReport extends FlowReport {
     public void setRowData(List<? extends ListRowBase> rowDataList) {
         List<ListRow> listRows = new ArrayList<>();
 
-        if(rowDataList==null || rowDataList.size()==0){
+        if (rowDataList == null || rowDataList.size() == 0) {
             super.setRows(listRows);
             return;
         }
-        if(flowDirection == FlowReport.FLOW_LTR) {
+        if (flowDirection == FlowReport.FLOW_LTR) {
 
             for (ListRowBase item : rowDataList) {
                 ListRow r = convertRowData(item);
@@ -55,20 +56,20 @@ public abstract class DataFlowReport extends FlowReport {
             }
 
             /// fill empty line
-            if(rowDataList.size()%columns>0){
-                int empties = columns - rowDataList.size()%columns;
-                for(int i=0; i<empties; i++) {
+            if (rowDataList.size() % columns > 0) {
+                int empties = columns - rowDataList.size() % columns;
+                for (int i = 0; i < empties; i++) {
                     listRows.add(EmptyListRow.EMPTY);
                 }
             }
 
-        }else if(flowDirection == FlowReport.FLOW_UTD){
+        } else if (flowDirection == FlowReport.FLOW_UTD) {
 
-            if(maxRowsPerColumn <=0 ){
+            if (maxRowsPerColumn <= 0) {
                 throw new RuntimeException("flow height is not set for UTD flow on rows arrangement");
             }
 
-            if(rowHeight < 0.000001){
+            if (rowHeight < 0.000001) {
                 throw new RuntimeException("row height must be set before setRowData for UTD flow");
             }
 
@@ -97,10 +98,10 @@ public abstract class DataFlowReport extends FlowReport {
                 int index = maxRowsPerColumn * currentCol + currentRow;
 
                 /// check within range
-                if(index<list.size()) {
+                if (index < list.size()) {
                     listRows.add(list.get(index));
 
-                }else{
+                } else {
 
                     // empty list row, place holder
                     listRows.add(EmptyListRow.EMPTY);

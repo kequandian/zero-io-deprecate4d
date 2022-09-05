@@ -16,10 +16,10 @@ public class AdvertiserOperateLogFilter implements CRUDFilter<AdvertiserOperateL
     public void filter(AdvertiserOperateLog entity, boolean insertOrUpdate) {
 
         //if insertOrUpdate is true,means for insert, do this
-        if (insertOrUpdate){
+        if (insertOrUpdate) {
 
             //then insertOrUpdate is false,means for update,do this
-        }else {
+        } else {
 
         }
 
@@ -28,10 +28,10 @@ public class AdvertiserOperateLogFilter implements CRUDFilter<AdvertiserOperateL
     @Override
     public String[] ignore(boolean retrieveOrUpdate) {
         //if retrieveOrUpdate is true,means for retrieve ,do this
-        if (retrieveOrUpdate){
+        if (retrieveOrUpdate) {
             return ignoreFields;
             //then retrieveOrUpdate  if false ,means for update,do this
-        }else {
+        } else {
             return updateIgnoreFields;
         }
     }

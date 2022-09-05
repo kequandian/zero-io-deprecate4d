@@ -12,22 +12,22 @@ import static com.jfeat.pdf.print.base.RelativeBoxBounding.getInternalWidth;
 public class ElementDrawUtil {
     private static final Logger logger = LoggerFactory.getLogger(ElementDrawUtil.class);
 
-    public static  void drawLines(PdfContentByte canvas, Rectangle position, Phrase[] lines,
-                             float paddingLeft, float paddingTop, float paddingRight, float paddingBottom,
-                             int alignment,
-                             float indent, float lineSpacing) {
+    public static void drawLines(PdfContentByte canvas, Rectangle position, Phrase[] lines,
+                                 float paddingLeft, float paddingTop, float paddingRight, float paddingBottom,
+                                 int alignment,
+                                 float indent, float lineSpacing) {
         PdfPTable table = new PdfPTable(1);
 
         float totalHeight = 0;
-        for(Phrase p : lines) {
+        for (Phrase p : lines) {
             /*java.util.List<Chunk> chunks = p.getChunks();
             if(chunks!=null){
             }*/
-            if(p==null){
+            if (p == null) {
                 logger.error("drawLines(): phrase is null");
             }
 
-            if(p.getContent().length()>0) {
+            if (p.getContent().length() > 0) {
 
                 Float fontSize = p.getFont().getSize();
                 Float capHeight = fontSize;
@@ -54,31 +54,31 @@ public class ElementDrawUtil {
 
                 totalHeight += PdfFontMetrics.getFontHeight(baseFont, fontSize);
 
-            }else{
+            } else {
 
                 logger.warn("no content for phrase " + p.toString());
             }
         }
 
         /// draw table
-        try{
+        try {
 
             float ux = 0, uy = 0;
 
-            if(alignment==Element.ALIGN_BASELINE) {
+            if (alignment == Element.ALIGN_BASELINE) {
                 Point pos = getDockPosition(position, paddingLeft, paddingTop, paddingRight, paddingBottom, Element.ALIGN_BASELINE);
                 ux = (float) pos.getX();
                 uy = (float) pos.getY();
 
-            }else if(alignment==Element.ALIGN_LEFT){
+            } else if (alignment == Element.ALIGN_LEFT) {
                 Point pos = getDockPosition(position, paddingLeft, paddingTop, paddingRight, paddingBottom, Element.ALIGN_LEFT);
                 ux = (float) pos.getX();
                 uy = (float) pos.getY();
 
                 float offset = totalHeight * 0.5f;
                 uy += offset;
-            }else{
-                throw new RuntimeException("Not support for Alignment: "+ alignment);
+            } else {
+                throw new RuntimeException("Not support for Alignment: " + alignment);
             }
 
             table.setTotalWidth(getInternalWidth(position, paddingLeft, paddingRight));
@@ -89,53 +89,53 @@ public class ElementDrawUtil {
             //float h1 = table.getRowHeight(0);
             //float h2 = table.getRowHeight(1);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static  void drawText(PdfContentByte canvas, String text) {
-        if(text!=null) {
-            drawText(canvas, new Rectangle(0,0,0,0), new Phrase(text),
+    public static void drawText(PdfContentByte canvas, String text) {
+        if (text != null) {
+            drawText(canvas, new Rectangle(0, 0, 0, 0), new Phrase(text),
                     20, 20, 20, 20, Rectangle.ALIGN_BASELINE);
         }
     }
 
-    public static  void drawText(PdfContentByte canvas, Rectangle position, String text) {
-        if(text!=null) {
+    public static void drawText(PdfContentByte canvas, Rectangle position, String text) {
+        if (text != null) {
             drawText(canvas, position, new Phrase(text),
                     0, 0, 0, 0, 0);
         }
     }
 
-    public static  void drawText(PdfContentByte canvas, Rectangle position, String text, Font font,
-                            float paddingLeft, float paddingTop, float paddingRight, float paddingBottom,
-                            int alignment) {
-        if(text!=null) {
+    public static void drawText(PdfContentByte canvas, Rectangle position, String text, Font font,
+                                float paddingLeft, float paddingTop, float paddingRight, float paddingBottom,
+                                int alignment) {
+        if (text != null) {
             drawText(canvas, position,
                     font == null ? new Phrase(text) : new Phrase(text, font),
                     paddingLeft, paddingTop, paddingRight, paddingBottom, alignment);
         }
     }
 
-    public static  void drawText(PdfContentByte canvas, Rectangle position, Phrase text,
-                            float paddingLeft, float paddingTop, float paddingRight, float paddingBottom,
-                            int alignment) {
+    public static void drawText(PdfContentByte canvas, Rectangle position, Phrase text,
+                                float paddingLeft, float paddingTop, float paddingRight, float paddingBottom,
+                                int alignment) {
 
-        if(text!=null) {
+        if (text != null) {
 
             Point pos = getDockPosition(position, paddingLeft, paddingTop, paddingRight, paddingBottom, alignment);
             float ux = (float) pos.getX();
             float uy = (float) pos.getY();
 
             //todo, RelativeRow::drawText: PdfFontMetrics
-            if(true){
+            if (true) {
                 PdfFontMetrics metrics = new PdfFontMetrics(canvas, text.getFont());
                 float height = metrics.getStringHeight();
 
                 uy += height * 0.5;
 
-            }else {
+            } else {
                 // fix text height
                 float height = text.getFont().getSize();
                 if (height == 10.0f) {
@@ -165,13 +165,13 @@ public class ElementDrawUtil {
     }
 
     public static void drawImage(PdfContentByte canvas, String imageUrl, Rectangle position, int alignment,
-                                 float paddingLeft, float paddingTop, float paddingRight, float paddingBottom){
+                                 float paddingLeft, float paddingTop, float paddingRight, float paddingBottom) {
         Image image = Image.getInstance(ImageUtil.getImage(imageUrl));
         image.setAlignment(alignment);
         image.scaleToFit(-1, -1);
 
         drawImage(canvas, image, position, paddingLeft, paddingTop, paddingRight, paddingBottom);
-    }   
+    }
 
     public static void drawImage(PdfContentByte canvas, Image image, Rectangle position,
                                  float paddingLeft, float paddingTop, float paddingRight, float paddingBottom) {
@@ -179,8 +179,8 @@ public class ElementDrawUtil {
             try {
                 int alignment = image.getAlignment();
 
-                double ax=0, ay=0;
-                if(alignment==Element.ALIGN_LEFT || alignment==Element.ALIGN_RIGHT) {
+                double ax = 0, ay = 0;
+                if (alignment == Element.ALIGN_LEFT || alignment == Element.ALIGN_RIGHT) {
 
                     /// convert scaled width/height from -1 to extend
                     float scaledHeight = image.getScaledHeight();
@@ -200,8 +200,8 @@ public class ElementDrawUtil {
                         image.scaleToFit(newWidth, newHeight);
 //                        image.scaleAbsolute(newWidth, newHeight);
 
-                    }else if(image.getScaledWidth() > position.getWidth() ||
-                             image.getScaledHeight() > position.getHeight()){
+                    } else if (image.getScaledWidth() > position.getWidth() ||
+                            image.getScaledHeight() > position.getHeight()) {
                         image.scaleToFit(position.getWidth() - paddingLeft - paddingRight,
                                 position.getHeight() - paddingTop - paddingBottom);
                     }
@@ -217,16 +217,16 @@ public class ElementDrawUtil {
                     if (alignment == Element.ALIGN_RIGHT) {
                         ax -= image.getScaledWidth();
                     }
-                    
+
 //                    // correct padding
 //                    ax += paddingLeft;
 //                    ay -= paddingBottom;
 
-                    image.setAbsolutePosition((float)ax, (float)ay);
+                    image.setAbsolutePosition((float) ax, (float) ay);
 
                     canvas.addImage(image);
 
-                }else if(alignment==Element.ALIGN_TOP) {
+                } else if (alignment == Element.ALIGN_TOP) {
                     /// convert scaled width/height from -1 to extend
                     float scaledWidth = image.getScaledWidth();
                     if (scaledWidth < 0) {
@@ -256,18 +256,18 @@ public class ElementDrawUtil {
 
                     // fix horizontal position
                     ax = (pos.getX() - (image.getScaledWidth() * 0.5f));
-                    ay =  pos.getY() - image.getScaledHeight();
+                    ay = pos.getY() - image.getScaledHeight();
 
 //                    // correct padding
 //                    ax += paddingLeft;
 //                    ay -= paddingBottom;
 
-                    image.setAbsolutePosition((float)ax, (float)ay);
+                    image.setAbsolutePosition((float) ax, (float) ay);
 
                     canvas.addImage(image);
 
-                }else if(alignment == Element.ALIGN_CENTER || alignment == Element.ALIGN_MIDDLE) {
-                    
+                } else if (alignment == Element.ALIGN_CENTER || alignment == Element.ALIGN_MIDDLE) {
+
                     float scaledWidth = image.getScaledWidth();
                     if (scaledWidth < 0) {
                         // get row height
@@ -289,19 +289,19 @@ public class ElementDrawUtil {
                             image.getScaledHeight() > position.getHeight()) {
                         // scale to fix
                         image.scaleToFit(position.getWidth() - paddingLeft - paddingRight,
-                                        position.getHeight() - paddingTop - paddingBottom);
+                                position.getHeight() - paddingTop - paddingBottom);
                     }
 
                     /// draw image
 //                    Point pos = getDockPosition(position, paddingLeft, paddingTop, paddingRight, paddingBottom, Element.ALIGN_CENTER);
-                    Point pos = new Point(position.getLeft() + paddingLeft , position.getBottom() - paddingBottom);
+                    Point pos = new Point(position.getLeft() + paddingLeft, position.getBottom() - paddingBottom);
                     ax = pos.getX();
                     ay = pos.getY();
 
-                    image.setAbsolutePosition((float)ax, (float)ay);
+                    image.setAbsolutePosition((float) ax, (float) ay);
 
                     canvas.addImage(image);
-                }else {
+                } else {
                     throw new RuntimeException("fatal: Invalid icon alignment:" + alignment);
                 }
 
