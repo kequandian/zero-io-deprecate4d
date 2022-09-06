@@ -5,13 +5,18 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jfeat.am.common.annotation.Permission;
+import com.jfeat.am.module.ioJson.services.domain.util.FileUtil;
 import com.jfeat.crud.base.exception.BusinessCode;
 import com.jfeat.crud.base.exception.BusinessException;
+import com.jfeat.module.frontPage.api.permission.FrontPagePermission;
 import com.jfeat.module.frontPage.services.domain.dao.QueryFrontPageDao;
 import com.jfeat.module.frontPage.services.domain.model.FrontPageRecord;
 import com.jfeat.module.frontPage.services.gen.persistence.dao.FrontPageMapper;
 import com.jfeat.module.frontPage.services.gen.persistence.model.FrontPage;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,6 +27,7 @@ import com.jfeat.crud.base.tips.Tip;
 import com.jfeat.am.module.ioJson.services.domain.service.*;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -46,8 +52,9 @@ public class MockJsonFormEndpoint {
     @Resource
     QueryFrontPageDao queryFrontPageDao;
 
+
     @Resource
-    FrontPageMapper frontPageMapper;
+    MockDataBaseService mockDataBaseService;
 
 
     @GetMapping("")
@@ -90,38 +97,45 @@ public class MockJsonFormEndpoint {
         return SuccessTip.create(mockJsonService.getAppId());
     }
 
-//    将json文件保存到数据库中
-    @PostMapping("/saveJsonFileToDataBase")
-    public Tip saveJsonFileToDataBase(){
-        return SuccessTip.create(mockJsonService.saveJsonFileToDataBase());
+
+
+
+    @PostMapping("/synchronizationToDataBase")
+    public Tip synchronizationToDataBase(){
+        return SuccessTip.create(mockDataBaseService.synchronizationToDataBase());
     }
+
 
     @GetMapping("/allPages")
     public Tip getAllPages(Page<FrontPageRecord> page,
-                           @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
-                           @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
-                           // for tag feature query
-                           @RequestParam(name = "tag", required = false) String tag,
-                           // end tag
-                           @RequestParam(name = "search", required = false) String search,
+                                  @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+                                  @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
+                                  // for tag feature query
+                                  @RequestParam(name = "tag", required = false) String tag,
+                                  // end tag
+                                  @RequestParam(name = "search", required = false) String search,
 
-                           @RequestParam(name = "count", required = false) String count,
+                                  @RequestParam(name = "count", required = false) String count,
 
-                           @RequestParam(name = "title", required = false) String title,
+                                  @RequestParam(name = "title", required = false) String title,
 
-                           @RequestParam(name = "pageDescrip", required = false) String pageDescrip,
+                                  @RequestParam(name = "pageDescrip", required = false) String pageDescrip,
 
-                           @RequestParam(name = "content", required = false) String content,
+                                  @RequestParam(name = "content", required = false) String content,
 
-                           @RequestParam(name = "appid", required = false) String appid,
+                                  @RequestParam(name = "appid", required = false) String appid,
 
-                           @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                           @RequestParam(name = "createTime", required = false) Date createTime,
+                                  @RequestParam(name = "jsonName", required = false) String jsonName,
 
-                           @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                           @RequestParam(name = "updateTime", required = false) Date updateTime,
-                           @RequestParam(name = "orderBy", required = false) String orderBy,
-                           @RequestParam(name = "sort", required = false) String sort) {
+                                  @RequestParam(name = "jsonPath", required = false) String jsonPath,
+
+                                  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                  @RequestParam(name = "createTime", required = false) Date createTime,
+
+                                  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                  @RequestParam(name = "updateTime", required = false) Date updateTime,
+                                  @RequestParam(name = "orderBy", required = false) String orderBy,
+                                  @RequestParam(name = "sort", required = false) String sort) {
 
         if (orderBy != null && orderBy.length() > 0) {
             if (sort != null && sort.length() > 0) {
@@ -143,6 +157,8 @@ public class MockJsonFormEndpoint {
         record.setPageDescrip(pageDescrip);
         record.setContent(content);
         record.setAppid(appid);
+        record.setJsonName(jsonName);
+        record.setJsonPath(jsonPath);
         record.setCreateTime(createTime);
         record.setUpdateTime(updateTime);
 
@@ -155,40 +171,7 @@ public class MockJsonFormEndpoint {
         return SuccessTip.create(page);
     }
 
-    @GetMapping("/page")
-    public Tip getPage(@RequestParam("id") String id){
-        QueryWrapper<FrontPage> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(FrontPage.COUNT,id);
-        FrontPage frontPage = frontPageMapper.selectOne(queryWrapper);
-        JSON json = null;
-        if (frontPage!=null && frontPage.getContent()!=null){
-            json = (JSON) JSON.parse(frontPage.getContent());
-        }
-        return SuccessTip.create(json);
-    }
 
-    @PostMapping("/page/{id}")
-    public Tip addJsonToDataBase(@PathVariable Long id, @RequestBody JSONObject json){
-        QueryWrapper<FrontPage> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(FrontPage.COUNT,id);
-        FrontPage frontPage = frontPageMapper.selectOne(queryWrapper);
-
-        String title = "";
-        if (json!=null && json.get("title")!=null){
-            title = (String) json.get("title");
-        }
-        if (frontPage!=null){
-            frontPage.setTitle(title);
-            frontPage.setContent(json.toJSONString());
-            return SuccessTip.create(frontPageMapper.updateById(frontPage));
-        }else {
-            FrontPage record = new FrontPage();
-            record.setCount(String.valueOf(id));
-            record.setTitle(title);
-            record.setContent(json.toJSONString());
-            return SuccessTip.create(frontPageMapper.insert(record));
-        }
-    }
 
 
 }

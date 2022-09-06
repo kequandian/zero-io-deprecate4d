@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.jfeat.am.module.ioJson.services.domain.service.MockDataBaseService;
 import com.jfeat.am.module.ioJson.services.domain.service.MockJsonService;
 import com.jfeat.am.module.ioJson.services.domain.util.FileUtil;
 import com.jfeat.crud.base.exception.BusinessCode;
@@ -56,6 +57,9 @@ public class MockJsonServiceImpl implements MockJsonService {
 
     @Resource
     FrontPageMapper frontPageMapper;
+
+    @Resource
+    MockDataBaseService mockDataBaseService;
 
 
     @Override
@@ -139,6 +143,8 @@ public class MockJsonServiceImpl implements MockJsonService {
             e.printStackTrace();
         }
 
+        mockDataBaseService.saveJsonToDataBase(json,id);
+        i++;
         return i;
     }
 
@@ -194,39 +200,7 @@ public class MockJsonServiceImpl implements MockJsonService {
         this.appId = appId;
     }
 
-    @Override
-    @Transactional
-    public int saveJsonFileToDataBase() {
-        Map<String, String> idMap = getIdMap();
-        Iterator<Map.Entry<String, String>> iterator = idMap.entrySet().iterator();
 
-        Integer affect = 0;
-
-        while (iterator.hasNext()){
-            Map.Entry<String,String> entry = iterator.next();
-            JSONObject jsonObject =  readJsonFile(Long.parseLong(entry.getKey()));
-
-            FrontPage frontPage = new FrontPage();
-            frontPage.setCount(entry.getKey());
-            if (jsonObject!=null && jsonObject.get("title")!=null){
-                frontPage.setTitle((String) jsonObject.get("title"));
-            }
-            frontPage.setContent(jsonObject.toJSONString());
-
-//            判断是否已经存在相同数据
-            QueryWrapper<FrontPage> pageQueryWrapper = new QueryWrapper<>();
-            pageQueryWrapper.eq(FrontPage.COUNT,entry.getKey());
-            FrontPage dataBasePage = frontPageMapper.selectOne(pageQueryWrapper);
-            if (dataBasePage!=null){
-                frontPage.setId(dataBasePage.getId());
-                affect += frontPageMapper.updateById(frontPage);
-            }else {
-                affect+=frontPageMapper.insert(frontPage);
-            }
-
-        }
-        return affect;
-    }
 
 
 }

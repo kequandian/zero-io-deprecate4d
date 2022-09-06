@@ -25,10 +25,6 @@ public interface MockJsonService {
 
     void setAppId(String appId);
 
-    /**
-     * 将josn文件保存到数据库中
-     * @return
-     */
-    int saveJsonFileToDataBase();
+
 
 }
