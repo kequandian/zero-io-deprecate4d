@@ -115,7 +115,7 @@ public class MockJsonFormEndpoint {
                                   // end tag
                                   @RequestParam(name = "search", required = false) String search,
 
-                                  @RequestParam(name = "count", required = false) String count,
+                                  @RequestParam(name = "count", required = false) String pageId,
 
                                   @RequestParam(name = "title", required = false) String title,
 
@@ -152,7 +152,7 @@ public class MockJsonFormEndpoint {
         page.setSize(pageSize);
 
         FrontPageRecord record = new FrontPageRecord();
-        record.setCount(count);
+        record.setPageId(pageId);
         record.setTitle(title);
         record.setPageDescrip(pageDescrip);
         record.setContent(content);

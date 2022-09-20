@@ -47,7 +47,7 @@ public class MockDataBaseServiceImpl implements MockDataBaseService {
         }
 
         FrontPage record = new FrontPage();
-        record.setCount(String.valueOf(id));
+        record.setPageId(String.valueOf(id));
         record.setTitle(title);
         record.setContent(json.toJSONString());
         record.setAppid(mockJsonService.getAppId());
@@ -99,7 +99,7 @@ public class MockDataBaseServiceImpl implements MockDataBaseService {
                 }
 
                 FrontPage record = new FrontPage();
-                record.setCount(idMapEntry.getKey());
+                record.setPageId(idMapEntry.getKey());
                 record.setTitle(title);
                 record.setContent(contentJson.toJSONString());
                 record.setAppid(currentAppid);
