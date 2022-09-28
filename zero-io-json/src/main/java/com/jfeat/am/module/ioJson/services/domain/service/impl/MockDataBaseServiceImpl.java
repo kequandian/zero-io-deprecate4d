@@ -30,7 +30,7 @@ public class MockDataBaseServiceImpl implements MockDataBaseService {
     private static String mockDirMapPath = "mock/dirMap.properties";
 
     @Override
-    public Integer saveJsonToDataBase(JSONObject json, Long id) {
+    public Integer saveJsonToDataBase(JSONObject json, Long id,String jsonFileName) {
 
         Integer affect = 0;
 //        if (isSaveFile){
@@ -39,7 +39,7 @@ public class MockDataBaseServiceImpl implements MockDataBaseService {
 
         Map<String, String> idMap = mockJsonService.getIdMap();
 
-        String jsonFileName = idMap.get(String.valueOf(id));
+//        String jsonFileName = idMap.get(String.valueOf(id));
         String jsonPath = "jsonMock"+File.separator+mockJsonService.getAppId()+File.separator+jsonFileName;
         String title = "";
         if (json!=null&&json.get("title")!=null){
@@ -53,6 +53,7 @@ public class MockDataBaseServiceImpl implements MockDataBaseService {
         record.setAppid(mockJsonService.getAppId());
         record.setJsonName(jsonFileName);
         record.setJsonPath(jsonPath);
+
 
         QueryWrapper<FrontPage> pageQueryWrapper = new QueryWrapper<>();
         pageQueryWrapper.eq(FrontPage.APPID,mockJsonService.getAppId()).eq(FrontPage.JSON_NAME,jsonFileName);
