@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 
 public interface MockDataBaseService {
 
-    Integer saveJsonToDataBase(JSONObject json, Long id);
+    Integer saveJsonToDataBase(JSONObject json, Long id,String tag);
 
     Integer synchronizationToDataBase();
 }

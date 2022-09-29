@@ -62,9 +62,28 @@ public class MockJsonServiceImpl implements MockJsonService {
     MockDataBaseService mockDataBaseService;
 
 
+
+
     @Override
-    public JSONObject readJsonFile(Long id) {
+    public JSONObject readJsonFile(Long id){
+
+       return readJsonFile(id,null);
+
+    }
+
+    @Override
+    public JSONObject readJsonFile(Long id,String tag) {
         checkAppMap();
+
+        //如果有tag，则用tag查出来的id作为
+        if(tag != null && !tag.equals("")){
+            QueryWrapper<FrontPage> qw = new QueryWrapper<>();
+            qw.eq("tag",tag);
+            FrontPage frontPage = frontPageMapper.selectOne(qw);
+            if(frontPage == null){throw new BusinessException(BusinessCode.BadRequest,"tag："+tag+" 对应的页面配置不存在");}
+            id  =  frontPage.getId();
+        }
+
 
         JSONObject json = new JSONObject();
 
@@ -101,9 +120,14 @@ public class MockJsonServiceImpl implements MockJsonService {
         return json;
     }
 
-
     @Override
     public Integer saveJsonToFile(JSONObject json, Long id) {
+       return saveJsonToFile(json,id,null);
+    }
+
+
+    @Override
+    public Integer saveJsonToFile(JSONObject json, Long id, String tag) {
 
         checkAppMap();
 
@@ -143,7 +167,7 @@ public class MockJsonServiceImpl implements MockJsonService {
             e.printStackTrace();
         }
 
-        mockDataBaseService.saveJsonToDataBase(json,id);
+        mockDataBaseService.saveJsonToDataBase(json,id,tag);
         i++;
         return i;
     }
