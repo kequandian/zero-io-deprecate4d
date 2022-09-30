@@ -142,6 +142,10 @@ public class MockJsonServiceImpl implements MockJsonService {
             fileName = IdWorker.getIdStr() + ".json";
         }
 
+//        写入数据库
+        mockDataBaseService.saveJsonToDataBase(json,id,fileName);
+        i++;
+
         String content = JSON.toJSONString(json, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
                 SerializerFeature.WriteDateUseDateFormat);
 
@@ -167,8 +171,7 @@ public class MockJsonServiceImpl implements MockJsonService {
             e.printStackTrace();
         }
 
-        mockDataBaseService.saveJsonToDataBase(json,id,tag);
-        i++;
+
         return i;
     }
 
