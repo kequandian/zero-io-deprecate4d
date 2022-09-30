@@ -143,7 +143,7 @@ public class MockJsonServiceImpl implements MockJsonService {
         }
 
 //        写入数据库
-        mockDataBaseService.saveJsonToDataBase(json,id,fileName);
+        mockDataBaseService.saveJsonToDataBase(json,id,fileName,tag);
         i++;
 
         String content = JSON.toJSONString(json, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
