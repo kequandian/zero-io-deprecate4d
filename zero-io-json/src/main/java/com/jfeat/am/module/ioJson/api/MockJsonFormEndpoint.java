@@ -66,9 +66,9 @@ public class MockJsonFormEndpoint {
 //        return SuccessTip.create(mockJsonService.readJsonFile(id));
     }
 
-    @GetMapping("")
+    @GetMapping("/byTag/{tag}")
     @ApiOperation(value = "查看 Json")
-    public Tip getJson(@Param(value = "tag") String tag) {
+    public Tip getJson(@PathVariable(value = "tag") String tag) {
         return SuccessTip.create(mockJsonService.readJsonFile(null,tag));
     }
 
