@@ -56,7 +56,7 @@ public class MockDataBaseServiceImpl implements MockDataBaseService {
 
 
         QueryWrapper<FrontPage> pageQueryWrapper = new QueryWrapper<>();
-        pageQueryWrapper.eq(FrontPage.APPID,mockJsonService.getAppId()).eq(FrontPage.JSON_NAME,jsonFileName);
+        pageQueryWrapper.eq(FrontPage.PAGE_ID,id);
         FrontPage frontPage = frontPageMapper.selectOne(pageQueryWrapper);
         if (frontPage==null){
             affect+=frontPageMapper.insert(record);
