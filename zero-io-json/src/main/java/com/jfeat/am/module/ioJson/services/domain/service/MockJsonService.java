@@ -13,10 +13,14 @@ import java.util.Map;
 public interface MockJsonService {
     JSONObject readJsonFile(Long id);
 
+    JSONObject readJsonFile(Long id, String tag);
+
     Integer saveJsonToFile(JSONObject json, Long id);
 
     Map<String, String> getIdMap();
 
+
+    Integer saveJsonToFile(JSONObject json, Long id, String tag);
 
     String getAppId();
 

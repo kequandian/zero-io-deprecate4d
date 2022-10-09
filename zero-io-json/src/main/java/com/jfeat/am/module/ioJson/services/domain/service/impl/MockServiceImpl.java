@@ -18,8 +18,12 @@ public class MockServiceImpl implements MockService {
 
     public static final String dir = "mock";
 
+    public static final String default_dir = "DEFAULT-MOCK-DIR";
+
     @Override
     public JSONObject readJsonFile(String name, String customDir) {
+
+        if(customDir == null){customDir = default_dir;}
         checkDirMap(customDir);
         JSONObject json = new JSONObject();
 
@@ -58,6 +62,7 @@ public class MockServiceImpl implements MockService {
 
     @Override
     public Integer saveJsonToFile(JSONObject json, String name, String customDir) {
+        if(customDir == null){customDir = default_dir;}
         checkDirMap(customDir);
 
         Integer i = 0;
