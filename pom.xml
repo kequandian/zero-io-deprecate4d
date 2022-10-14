@@ -34,6 +34,7 @@
         <module>zero-io-all</module>
         <module>zero-io-aliyun</module>
         <module>zero-io-json</module>
+        <module>zero-io-json-plus</module>
     </modules>
 
 </project>

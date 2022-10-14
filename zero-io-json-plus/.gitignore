@@ -1,0 +1,40 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.DS_Store
+/*.pdf
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea/
+.gradle/
+*.iws
+*.iml
+*.ipr
+*.log
+*.src
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+logs/
+
+
+
+###
+fonts/
+node_modules/
+config/
+attachments/
+
+###
+jsonMock/

@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jfeat.am.module.ioJson.services.domain.service.MockDataBaseService;
 import com.jfeat.am.module.ioJson.services.domain.service.MockJsonService;
 import com.jfeat.am.module.ioJson.services.domain.util.FileUtil;
+import com.jfeat.module.frontPage.services.domain.service.FrontPageModuleInfoService;
+import com.jfeat.module.frontPage.services.gen.crud.model.FrontPageModuleInfoModel;
 import com.jfeat.module.frontPage.services.gen.persistence.dao.FrontPageMapper;
 import com.jfeat.module.frontPage.services.gen.persistence.model.FrontPage;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import javax.annotation.Resource;
 import java.io.File;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 @Service("mockDataBaseService")
@@ -24,6 +27,9 @@ public class MockDataBaseServiceImpl implements MockDataBaseService {
 
     @Resource
     FrontPageMapper frontPageMapper;
+
+    @Resource
+    FrontPageModuleInfoService frontPageModuleInfoService;
 
 
     private static String jsonMockDirMapPath = "jsonMock/appMap.properties";
@@ -55,6 +61,8 @@ public class MockDataBaseServiceImpl implements MockDataBaseService {
         record.setJsonPath(jsonPath);
         record.setTag(tag);
 
+        //更新type和moduleName
+        frontPageModuleInfoService.setTypeAndModuleName(record,json);
 
         QueryWrapper<FrontPage> pageQueryWrapper = new QueryWrapper<>();
         pageQueryWrapper.eq(FrontPage.PAGE_ID,id);
@@ -68,6 +76,11 @@ public class MockDataBaseServiceImpl implements MockDataBaseService {
 
         return affect;
     }
+
+
+
+
+
 
     @Override
     @Transactional

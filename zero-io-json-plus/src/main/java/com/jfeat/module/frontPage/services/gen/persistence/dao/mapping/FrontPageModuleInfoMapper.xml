@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfeat.module.frontPage.services.gen.persistence.dao.FrontPageModuleInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfeat.module.frontPage.services.gen.persistence.model.FrontPageModuleInfo">
+        <id column="id" property="id" />
+        <result column="page_id" property="pageId" />
+        <result column="item_module_name" property="itemModuleName" />
+        <result column="module_json" property="moduleJson" />
+        <result column="front_page_id" property="frontPageId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, page_id, module_name, module_json, front_page_id
+    </sql>
+
+    <select id="getPageModules" resultType="FrontPageModuleInfoModel">
+        SELECT
+            JSON_EXTRACT(content,'$.modules') as moduleJson,
+            JSON_EXTRACT(content,'$.moduleData') as itemModuleNameJson,
+            t_front_page.page_id as pageId,
+            t_front_page.id as frontPageId,
+            t_front_page.title as title
+        FROM
+            t_front_page
+
+        <if test="type != null and type != ''">
+            where 	JSON_CONTAINS(JSON_EXTRACT(content,'$.modules'), JSON_OBJECT('type',#{type}))
+        </if>
+
+
+    </select>
+
+    <insert id="batchInsert">
+        INSERT INTO `t_front_page_module_info`( `page_id`, `item_module_name`, `module_json`, `front_page_id`,`title`,`module_type`) VALUES
+            <foreach collection="items" separator="," item="item">
+                ( #{item.pageId}, #{item.itemModuleName}, #{item.moduleJson}, #{item.frontPageId}, #{item.title}, #{item.moduleType})
+            </foreach>
+    </insert>
+
+    <delete id="cleanModule">
+        delete from
+        t_front_page_module_info
+        <if test="type != null and type != ''">
+            where 	module_type = #{type}
+        </if>
+    </delete>
+
+</mapper>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfeat.module.frontPage.services.domain.dao.QueryFrontPageDao">
+    <sql id="Base_Column_List">
+        t_front_page.id,
+        t_front_page.page_id AS pageId,
+        t_front_page.title,
+        t_front_page.page_descrip AS pageDescrip,
+        t_front_page.content, t_front_page.appid,
+        t_front_page.json_name AS jsonName,
+        t_front_page.json_path AS jsonPath,
+        t_front_page.template_status AS templateStatus,
+        t_front_page.create_time AS createTime,
+        t_front_page.update_time AS updateTime,
+        t_front_page.tag as tag,
+        t_front_page.module_name as moduleName,
+        t_front_page.type as 'type'
+    </sql>
+
+
+    <select id="queryMasterModel" resultType="FrontPageModel">
+        SELECT t_front_page.*
+        FROM t_front_page
+        WHERE t_front_page.id = #{id}
+        GROUP BY t_front_page.id
+    </select>
+
+
+    <select id="findFrontPagePage" resultType="FrontPageRecord" parameterType="FrontPageRecord">
+        SELECT
+        <include refid="Base_Column_List"/>
+
+
+        FROM t_front_page
+
+
+        WHERE 1=1
+        <if test="record.type != null and record.type!='' ">
+            AND t_front_page.type LIKE CONCAT('%',#{record.type},'%')
+        </if>
+
+        <if test="record.moduleName != null and record.moduleName!='' ">
+            AND t_front_page.module_name LIKE CONCAT('%',#{record.moduleName},'%')
+        </if>
+
+        <if test="record.id != null and record.id>0 ">
+            AND t_front_page.id LIKE CONCAT('%',#{record.id},'%')
+        </if>
+        <if test="record.pageId != null and record.pageId!= ''">
+            AND t_front_page.page_id LIKE CONCAT('%',#{record.pageId},'%')
+        </if>
+        <if test="record.title != null and record.title!= ''">
+            AND t_front_page.title LIKE CONCAT('%',#{record.title},'%')
+        </if>
+
+
+        <if test="record.pageDescrip != null and record.pageDescrip!= ''">
+            AND t_front_page.page_descrip LIKE CONCAT('%',#{record.pageDescrip},'%')
+        </if>
+        <if test="record.content != null and record.content!= ''">
+            AND t_front_page.content LIKE CONCAT('%',#{record.content},'%')
+        </if>
+        <if test="record.appid != null and record.appid!= ''">
+            AND t_front_page.appid LIKE CONCAT('%',#{record.appid},'%')
+        </if>
+
+
+        <if test="record.jsonName != null and record.jsonName!= ''">
+            AND t_front_page.json_name LIKE CONCAT('%',#{record.jsonName},'%')
+        </if>
+
+
+        <if test="record.jsonPath != null and record.jsonPath!= ''">
+            AND t_front_page.json_path LIKE CONCAT('%',#{record.jsonPath},'%')
+        </if>
+
+
+        <if test="record.createTime != null and record.createTime>0 ">
+            AND t_front_page.create_time LIKE CONCAT('%',#{record.createTime},'%')
+        </if>
+
+
+        <if test="record.updateTime != null and record.updateTime>0 ">
+            AND t_front_page.update_time LIKE CONCAT('%',#{record.updateTime},'%')
+        </if>
+
+        <if test="startTime != null">
+            <![CDATA[AND t_front_page.start_time >= DATE(#{startTime})]]>
+        </if>
+        <if test="endTime != null">
+            <![CDATA[AND t_front_page.end_time <= DATE(#{endTime}]]>
+        </if>
+        <!--
+    <if test="search != null and search != ''">
+        OR t_front_page.name LIKE CONCAT('%',#{search},'%')
+    </if>
+    -->
+        ORDER BY t_front_page.update_time DESC
+        , t_front_page.create_time DESC
+    </select>
+
+
+    <select id="findFrontPagePageByType" >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_front_page
+        where json_contains(t_front_page.content,CONCAT('"',#{type},'"'))
+        ORDER BY t_front_page.update_time DESC
+        , t_front_page.create_time DESC
+    </select>
+</mapper>

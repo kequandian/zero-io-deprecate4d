@@ -19,6 +19,10 @@ spring:
 #  jackson:
 #    date-format: yyyy-MM-dd HH:mm:ss
 
+
+crud-plus:
+  features:
+
 mybatis-plus:
   mapper-locations: classpath*:com/jfeat/**/mapping/*.xml
   typeAliasesPackage: com.jfeat.**.model
@@ -38,6 +42,10 @@ mybatis-plus:
 
 ---
 
+
+##########################################################
+###################  开发环境的profile  ###################
+##########################################################
 spring:
   profiles: dev
   datasource:

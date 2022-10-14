@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfeat.module.frontPage.services.domain.dao.QueryFrontPageModuleInfoDao">
+    <sql id="Base_Column_List">
+        t_front_page_module_info
+        .
+        id
+        ,t_front_page_module_info.title
+        ,t_front_page_module_info.module_type
+        , t_front_page_module_info.page_id AS pageId, t_front_page_module_info.item_module_name AS itemModuleName, t_front_page_module_info.module_json AS moduleJson, t_front_page_module_info.front_page_id AS frontPageId
+    </sql>
+
+
+    <select id="queryMasterModel" resultType="FrontPageModuleInfoModel">
+        SELECT t_front_page_module_info.*
+        FROM t_front_page_module_info
+        WHERE t_front_page_module_info.id = #{id}
+        GROUP BY t_front_page_module_info.id
+    </select>
+
+
+    <select id="findFrontPageModuleInfoPage" resultType="FrontPageModuleInfoRecord"
+            parameterType="FrontPageModuleInfoRecord">
+        SELECT
+        <include refid="Base_Column_List"/>
+
+
+        FROM t_front_page_module_info
+
+
+        WHERE 1=1
+
+
+        <if test="record.id != null and record.id>0 ">
+            AND t_front_page_module_info.id LIKE CONCAT('%',#{record.id},'%')
+        </if>
+
+
+        <if test="record.pageId != null and record.pageId>0 ">
+            AND t_front_page_module_info.page_id LIKE CONCAT('%',#{record.pageId},'%')
+        </if>
+
+
+        <if test="record.itemModuleName != null and record.itemModuleName!= ''">
+            AND t_front_page_module_info.item_module_name LIKE CONCAT('%',#{record.itemModuleName},'%')
+        </if>
+
+
+
+
+
+        <if test="record.frontPageId != null and record.frontPageId>0 ">
+            AND t_front_page_module_info.front_page_id LIKE CONCAT('%',#{record.frontPageId},'%')
+        </if>
+
+        <if test="startTime != null">
+            <![CDATA[AND t_front_page_module_info.start_time >= DATE(#{startTime})]]>
+        </if>
+        <if test="endTime != null">
+            <![CDATA[AND t_front_page_module_info.end_time <= DATE(#{endTime}]]>
+        </if>
+        <if test="record.title != null and record.title !=''">
+            AND t_front_page_module_info.title LIKE CONCAT('%',#{record.title},'%')
+        </if>
+        <if test="record.moduleType != null and record.moduleType !=''">
+            AND t_front_page_module_info.module_type LIKE CONCAT('%',#{record.moduleType},'%')
+        </if>
+        <!--
+    <if test="search != null and search != ''">
+        OR t_front_page_module_info.name LIKE CONCAT('%',#{search},'%')
+    </if>
+    -->
+    </select>
+</mapper>
