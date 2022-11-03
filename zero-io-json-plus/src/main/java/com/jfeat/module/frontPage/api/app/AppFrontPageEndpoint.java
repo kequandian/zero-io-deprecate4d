@@ -47,7 +47,6 @@ public class AppFrontPageEndpoint {
 
 
     @BusinessLog(name = "FrontPage", value = "create FrontPage")
-    @Permission(FrontPagePermission.FRONTPAGE_NEW)
     @PostMapping
     @ApiOperation(value = "新建 FrontPage", response = FrontPage.class)
     public Tip createFrontPage(@RequestBody FrontPage entity) {
@@ -61,7 +60,6 @@ public class AppFrontPageEndpoint {
         return SuccessTip.create(affected);
     }
 
-    @Permission(FrontPagePermission.FRONTPAGE_VIEW)
     @GetMapping("/{id}")
     @ApiOperation(value = "查看 FrontPage", response = FrontPage.class)
     public Tip getFrontPage(@PathVariable Long id) {
@@ -69,7 +67,6 @@ public class AppFrontPageEndpoint {
     }
 
     @BusinessLog(name = "FrontPage", value = "update FrontPage")
-    @Permission(FrontPagePermission.FRONTPAGE_EDIT)
     @PutMapping("/{id}")
     @ApiOperation(value = "修改 FrontPage", response = FrontPage.class)
     public Tip updateFrontPage(@PathVariable Long id, @RequestBody FrontPage entity) {
@@ -78,14 +75,12 @@ public class AppFrontPageEndpoint {
     }
 
     @BusinessLog(name = "FrontPage", value = "delete FrontPage")
-    @Permission(FrontPagePermission.FRONTPAGE_DELETE)
     @DeleteMapping("/{id}")
     @ApiOperation("删除 FrontPage")
     public Tip deleteFrontPage(@PathVariable Long id) {
         return SuccessTip.create(frontPageService.deleteMaster(id));
     }
 
-    @Permission(FrontPagePermission.FRONTPAGE_VIEW)
     @ApiOperation(value = "FrontPage 列表信息", response = FrontPageRecord.class)
     @GetMapping
     @ApiImplicitParams({
