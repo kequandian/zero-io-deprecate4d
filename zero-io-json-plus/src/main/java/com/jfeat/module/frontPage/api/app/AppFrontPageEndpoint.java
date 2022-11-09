@@ -23,6 +23,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.net.URLDecoder;
 import java.util.Date;
 import java.util.List;
 
@@ -105,6 +106,7 @@ public class AppFrontPageEndpoint {
                                   @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize,
                                   // for tag feature query
                                   @RequestParam(name = "tag", required = false) String tag,
+                                  @RequestParam(name = "tagName", required = false) String tagName,
                                   // end tag
                                   @RequestParam(name = "search", required = false) String search,
 
@@ -143,6 +145,8 @@ public class AppFrontPageEndpoint {
             }
             orderBy = "`" + orderBy + "`" + " " + sort;
         }
+
+
         page.setCurrent(pageNum);
         page.setSize(pageSize);
 
