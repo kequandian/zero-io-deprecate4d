@@ -55,6 +55,7 @@
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.jfeat</groupId>
             <artifactId>user-kafka</artifactId>

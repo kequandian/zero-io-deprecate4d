@@ -21,9 +21,6 @@ public class KafkaSendEmailEndpoint {
 
     @PostMapping("/text")
     public Tip sendEmail(@RequestBody KafkaMailSenderProperties mailSenderInfo){
-        List<String> copyTo = new ArrayList<>();
-        copyTo.add("1152808759@qq.com");
-        mailSenderInfo.setCopyTo(copyTo);
         boolean b = kafkaSendEmailServices.sendTextEmail(mailSenderInfo);
         return SuccessTip.create(b);
     }

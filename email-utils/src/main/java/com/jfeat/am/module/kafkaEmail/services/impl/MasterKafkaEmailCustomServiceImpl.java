@@ -32,6 +32,7 @@ public class MasterKafkaEmailCustomServiceImpl implements MasterKafkaEmailCustom
             KafkaMailSenderProperties kafkaMailSenderProperties = new KafkaMailSenderProperties();
             JSONObject jsonObject = JSON.parseObject(msg.toString());
             kafkaMailSenderProperties.setToAddress(jsonObject.getString("toAddress"));
+            kafkaMailSenderProperties.setTos(jsonObject.getJSONArray("toAddressList").toJavaList(String.class));
             kafkaMailSenderProperties.setSubject(jsonObject.getString("subject"));
             kafkaMailSenderProperties.setContent(jsonObject.getString("content"));
             System.out.println(JSONObject.toJSON(msg).toString());
@@ -48,6 +49,7 @@ public class MasterKafkaEmailCustomServiceImpl implements MasterKafkaEmailCustom
             KafkaMailSenderProperties kafkaMailSenderProperties = new KafkaMailSenderProperties();
             JSONObject jsonObject = JSON.parseObject(msg.toString());
             kafkaMailSenderProperties.setToAddress(jsonObject.getString("toAddress"));
+            kafkaMailSenderProperties.setTos(jsonObject.getJSONArray("toAddressList").toJavaList(String.class));
             kafkaMailSenderProperties.setSubject(jsonObject.getString("subject"));
             kafkaMailSenderProperties.setContent(jsonObject.getString("content"));
             System.out.println(JSONObject.toJSON(msg).toString());
