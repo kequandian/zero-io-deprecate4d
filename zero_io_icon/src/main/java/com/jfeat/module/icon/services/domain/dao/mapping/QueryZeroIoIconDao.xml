@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfeat.module.icon.services.domain.dao.QueryZeroIoIconDao">
+    <sql id="Base_Column_List">
+        t_zero_io_icon
+        .
+        id
+        , t_zero_io_icon.name, t_zero_io_icon.title, t_zero_io_icon.note, t_zero_io_icon.path, t_zero_io_icon.check_sum AS checkSum, t_zero_io_icon.flag, t_zero_io_icon.create_time AS createTime, t_zero_io_icon.update_time AS updateTime
+    </sql>
+
+
+    <select id="queryMasterModel" resultType="ZeroIoIconModel">
+        SELECT t_zero_io_icon.*
+        FROM t_zero_io_icon
+        WHERE t_zero_io_icon.id = #{id}
+        GROUP BY t_zero_io_icon.id
+    </select>
+
+
+    <select id="findZeroIoIconPage" resultType="ZeroIoIconRecord" parameterType="ZeroIoIconRecord">
+        SELECT
+        <include refid="Base_Column_List"/>
+
+
+        FROM t_zero_io_icon
+
+
+        WHERE 1=1
+
+
+        <if test="record.id != null and record.id>0 ">
+            AND t_zero_io_icon.id LIKE CONCAT('%',#{record.id},'%')
+        </if>
+        <if test="record.name != null and record.name!= ''">
+            AND t_zero_io_icon.name LIKE CONCAT('%',#{record.name},'%')
+        </if>
+        <if test="record.title != null and record.title!= ''">
+            AND t_zero_io_icon.title LIKE CONCAT('%',#{record.title},'%')
+        </if>
+        <if test="record.note != null and record.note!= ''">
+            AND t_zero_io_icon.note LIKE CONCAT('%',#{record.note},'%')
+        </if>
+        <if test="record.path != null and record.path!= ''">
+            AND t_zero_io_icon.path LIKE CONCAT('%',#{record.path},'%')
+        </if>
+
+
+        <if test="record.checkSum != null and record.checkSum!= ''">
+            AND t_zero_io_icon.check_sum LIKE CONCAT('%',#{record.checkSum},'%')
+        </if>
+        <if test="record.flag != null and record.flag>0 ">
+            AND t_zero_io_icon.flag LIKE CONCAT('%',#{record.flag},'%')
+        </if>
+
+
+        <if test="record.createTime != null and record.createTime>0 ">
+            AND t_zero_io_icon.create_time LIKE CONCAT('%',#{record.createTime},'%')
+        </if>
+
+
+        <if test="record.updateTime != null and record.updateTime>0 ">
+            AND t_zero_io_icon.update_time LIKE CONCAT('%',#{record.updateTime},'%')
+        </if>
+
+        <if test="startTime != null">
+            <![CDATA[AND t_zero_io_icon.start_time >= DATE(#{startTime})]]>
+        </if>
+        <if test="endTime != null">
+            <![CDATA[AND t_zero_io_icon.end_time <= DATE(#{endTime}]]>
+        </if>
+        <if test="search != null and search != ''">
+            AND(
+            t_zero_io_icon.name LIKE CONCAT('%',#{search},'%')
+            OR t_zero_io_icon.title LIKE CONCAT('%',#{search},'%')
+            OR t_zero_io_icon.path LIKE CONCAT('%',#{search},'%')
+            )
+        </if>
+        ORDER BY t_zero_io_icon.update_time DESC
+        , t_zero_io_icon.create_time DESC
+    </select>
+
+
+    <insert id="batchInsert">
+        insert into t_zero_io_icon (id, `name`,title,note,path,check_sum,flag,create_time,update_time)
+        values
+        <foreach collection="ioIcons" item="item" separator=",">
+            (#{item.id}, #{item.name}, #{item.title}, #{item.note}, #{item.path}, #{item.checkSum}, #{item.flag},
+            #{item.createTime}, #{item.updateTime})
+        </foreach>
+    </insert>
+
+
+</mapper>
