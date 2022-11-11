@@ -175,7 +175,7 @@ public class ZeroIoIconServiceImpl extends CRUDZeroIoIconServiceImpl implements 
         if (zeroIoIcon==null||zeroIoIcon.getPath()==null){
             return affect;
         }
-        File file = new File(zeroIoIcon.getPath());
+        File file = new File(".".concat(File.separator).concat(zeroIoIcon.getPath()));
         if (file.exists()&&file.isFile()){
             file.delete();
             affect +=zeroIoIconMapper.deleteById(id);
