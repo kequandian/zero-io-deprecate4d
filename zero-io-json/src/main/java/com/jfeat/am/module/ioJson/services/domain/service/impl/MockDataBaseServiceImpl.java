@@ -61,8 +61,8 @@ public class MockDataBaseServiceImpl implements MockDataBaseService {
         record.setJsonPath(jsonPath);
         record.setTag(tag);
 
-        //更新type和moduleName
-//        frontPageModuleInfoService.setTypeAndModuleName(record,json);
+//        更新type和moduleName
+        frontPageModuleInfoService.setTypeAndModuleName(record,json);
 
         QueryWrapper<FrontPage> pageQueryWrapper = new QueryWrapper<>();
         pageQueryWrapper.eq(FrontPage.PAGE_ID,id);
