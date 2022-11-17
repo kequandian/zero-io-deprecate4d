@@ -70,7 +70,12 @@ public class FileInfo {
         this.originalFileName = originalFileName;
         this.extensionName = extensionName;
         this.size = size;
-        this.url = String.join(File.separator, host, bucket, name);
+        if (bucket==null || bucket.equals("")){
+            this.url = String.join(File.separator, host, name);
+        }else {
+            this.url = String.join(File.separator, host, bucket, name);
+        }
+
         this.path = path;
     }
 
