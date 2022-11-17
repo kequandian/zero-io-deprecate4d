@@ -11,5 +11,5 @@ public interface LoadFileCodeService {
 
     public boolean checkCode(String code);
 
-    FileInfo uploadFile(MultipartFile file,String bucket);
+    FileInfo uploadFile(MultipartFile file, String fileHost,String fileSavePath, String bucket);
 }

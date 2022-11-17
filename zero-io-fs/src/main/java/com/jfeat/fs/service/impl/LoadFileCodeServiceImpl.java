@@ -33,8 +33,7 @@ public class LoadFileCodeServiceImpl implements LoadFileCodeService {
 
     protected final static Logger logger = LoggerFactory.getLogger(LoadFileCodeService.class);
 
-    @Autowired
-    com.jfeat.fs.properties.FSProperties FSProperties;
+
 
     private static Cache<String, String> cache = CacheBuilder
             .newBuilder()
@@ -68,7 +67,7 @@ public class LoadFileCodeServiceImpl implements LoadFileCodeService {
 
 //    上传接口
     @Override
-    public FileInfo uploadFile(MultipartFile file, String bucket) {
+    public FileInfo uploadFile(MultipartFile file, String fileHost,String fileSavePath, String bucket) {
         if (file.isEmpty()) {
             throw new BusinessException(BusinessCode.BadRequest, "file is empty");
         }
@@ -81,12 +80,10 @@ public class LoadFileCodeServiceImpl implements LoadFileCodeService {
                 throw new BusinessException(BusinessCode.BadRequest, "文件类型有误 不能为：" + extensionName + "类型的文件");
             }
         }
-        String fileHost = FSProperties.getFileHost();
         Long fileSize = file.getSize();
         String fileName = UUID.randomUUID() + "." + extensionName;
 
         try {
-            String fileSavePath = FSProperties.getFileUploadPath();
             {
                 File fileSaveFile = new File(fileSavePath);
                 if (!fileSaveFile.exists()) {
