@@ -293,7 +293,6 @@ public class FileServiceEndpoint {
         if (loadFileCodeService.checkCode(code) == false) {
             throw new BusinessException(BusinessCode.BadRequest);
         }
-
         //获得rootPath
         String rootPath = FSProperties.getFileUploadPath();
         {
