@@ -97,6 +97,8 @@
             t_front_page.type LIKE CONCAT('%',#{search},'%')OR
             t_front_page.module_name LIKE CONCAT('%',#{search},'%'))
         </if>
+        ORDER BY t_front_page.update_time DESC
+        , t_front_page.create_time DESC
 
     </select>
 
