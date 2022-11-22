@@ -54,6 +54,7 @@ public class AppZeroIconEndpoint {
     private Logger logger = LoggerFactory.getLogger(AppZeroIconEndpoint.class);
 
     @PostMapping("/synIconInfo")
+    @ApiOperation("同步icon信息到数据数据库")
     public Tip synIconInfo() {
         return SuccessTip.create(zeroIoIconService.synFileInfoTODatabase());
     }

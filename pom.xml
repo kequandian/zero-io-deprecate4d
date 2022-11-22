@@ -35,6 +35,8 @@
         <module>zero-io-aliyun</module>
         <module>zero-io-json</module>
         <module>zero-io-json-plus</module>
+        <module>zero_io_icon</module>
+        <module>zero-io-json-plus</module>
     </modules>
 
 </project>
