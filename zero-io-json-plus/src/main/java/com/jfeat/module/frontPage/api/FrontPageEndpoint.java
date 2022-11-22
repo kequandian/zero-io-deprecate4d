@@ -178,6 +178,7 @@ public class FrontPageEndpoint {
 
         page.setRecords(frontPagePage);
 
+
         return SuccessTip.create(page);
     }
 }

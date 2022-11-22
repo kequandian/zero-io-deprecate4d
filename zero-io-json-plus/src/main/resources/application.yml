@@ -49,13 +49,13 @@ mybatis-plus:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://localhost:3306/test?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
-#    url: jdbc:mysql://sh-cdb-q5vnc0iy.sql.tencentcdb.com:59449/smallsaas?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+#    url: jdbc:mysql://localhost:3306/test?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://sh-cdb-q5vnc0iy.sql.tencentcdb.com:59449/smallsaas?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
     #url: jdbc:mysql://sh-cdb-q5vnc0iy.sql.tencentcdb.com:59449/unicom?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
     #url: jdbc:mysql://localhost:3307/uaas-saas?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
     username: root
-     password: root
-#    password: zb2014@888
+#    password: root
+    password: zb2014@888
     #driver-class-name: com.mysql.cj.jdbc.Driver
     filters: log4j,wall,mergeStat
     sql-script-encoding: UTF-8
