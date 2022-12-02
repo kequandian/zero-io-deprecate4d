@@ -32,6 +32,8 @@ public class FrontPage extends Model<FrontPage> {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
+    @ApiModelProperty(value = "pageName ")
+    private String pageName;
     @ApiModelProperty(value = "前端传的唯一数值")
     private String pageId;
 
@@ -226,6 +228,8 @@ public class FrontPage extends Model<FrontPage> {
     }
 
     public static final String ID = "id";
+
+    public static final String PAGE_NAME="page_name";
 
     public static final String PAGE_ID = "page_id";
 

@@ -1,6 +1,7 @@
 package com.jfeat.am.module.ioJson.api;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -58,8 +59,8 @@ public class MockJsonFormEndpoint {
     public Tip getJson(@Param(value = "id") Long id) {
 
         QueryWrapper<FrontPage> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(FrontPage.PAGE_ID,id);
-        FrontPage frontPage =  frontPageMapper.selectOne(queryWrapper);
+        queryWrapper.eq(FrontPage.PAGE_ID, id);
+        FrontPage frontPage = frontPageMapper.selectOne(queryWrapper);
         String content = frontPage.getContent();
         JSONObject json = JSONObject.parseObject(content);
         return SuccessTip.create(json);
@@ -69,7 +70,7 @@ public class MockJsonFormEndpoint {
     @GetMapping("/byTag/{tag}")
     @ApiOperation(value = "查看 Json")
     public Tip getJson(@PathVariable(value = "tag") String tag) {
-        return SuccessTip.create(mockJsonService.readJsonFile(null,tag));
+        return SuccessTip.create(mockJsonService.readJsonFile(null, tag));
     }
 
     @PostMapping("/{id}")
@@ -86,8 +87,8 @@ public class MockJsonFormEndpoint {
 
     @PostMapping("/{id}/{tag}")
     @ApiOperation(value = "增加Json 带tag")
-    public Tip addJsonTag(@PathVariable String tag,@PathVariable Long id, @RequestBody JSONObject json) {
-        Integer integer = mockJsonService.saveJsonToFile(json, id,tag);
+    public Tip addJsonTag(@PathVariable String tag, @PathVariable Long id, @RequestBody JSONObject json) {
+        Integer integer = mockJsonService.saveJsonToFile(json, id, tag);
         return SuccessTip.create(integer);
     }
 
@@ -188,6 +189,88 @@ public class MockJsonFormEndpoint {
         page.setRecords(frontPagePage);
 
         return SuccessTip.create(page);
+    }
+
+
+    //    查看列表详情
+    @GetMapping("/jsonArray/{id}/{key}/{index}")
+    public Tip getListDetails(@PathVariable("id") Long id, @PathVariable("key") String key, @PathVariable("index") Integer index) {
+        QueryWrapper<FrontPage> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(FrontPage.PAGE_ID, id);
+        FrontPage frontPage = frontPageMapper.selectOne(queryWrapper);
+        String content = frontPage.getContent();
+        JSONObject json = JSONObject.parseObject(content);
+        if (json != null && json.containsKey(key)) {
+            if (json.get(key) instanceof JSONArray) {
+                JSONArray jsonArray = json.getJSONArray(key);
+                return SuccessTip.create(jsonArray.get(index));
+            }
+        }
+        return SuccessTip.create();
+    }
+
+    //    向列表添加详情
+    @PostMapping("/jsonArray/{id}/{key}")
+    public Tip addJsonData(@PathVariable("id") Long id, @PathVariable("key") String key, @RequestParam(value = "index",required = false) Integer index,@RequestBody JSONObject entity) {
+        QueryWrapper<FrontPage> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(FrontPage.PAGE_ID, id);
+        FrontPage frontPage = frontPageMapper.selectOne(queryWrapper);
+        String content = frontPage.getContent();
+        JSONObject json = JSONObject.parseObject(content);
+        if (json != null) {
+            if (json.containsKey(key)&&json.get(key) instanceof JSONArray) {
+                JSONArray jsonArray = json.getJSONArray(key);
+                if (index!=null){
+                    jsonArray.add(index.intValue(),entity);
+                }else {
+                    jsonArray.add(entity);
+                }
+            }else {
+                JSONArray jsonArray = new JSONArray();
+               jsonArray.add(entity);
+               json.put(key,jsonArray);
+            }
+            mockJsonService.saveJsonToFile(json,id);
+            return SuccessTip.create(1);
+        }
+        return SuccessTip.create();
+    }
+    //    修改详情
+    @PutMapping("/jsonArray/{id}/{key}/{index}")
+    public Tip updateJsonData(@PathVariable("id") Long id, @PathVariable("key") String key, @PathVariable("index") Integer index,@RequestBody JSONObject entity) {
+        QueryWrapper<FrontPage> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(FrontPage.PAGE_ID, id);
+        FrontPage frontPage = frontPageMapper.selectOne(queryWrapper);
+        String content = frontPage.getContent();
+        JSONObject json = JSONObject.parseObject(content);
+        if (json != null && json.containsKey(key)) {
+            if (json.get(key) instanceof JSONArray) {
+                JSONArray jsonArray = json.getJSONArray(key);
+                jsonArray.set(index.intValue(),entity);
+                mockJsonService.saveJsonToFile(json,id);
+                return SuccessTip.create(1);
+            }
+        }
+        return SuccessTip.create();
+    }
+
+    //    删除详情
+    @DeleteMapping("/jsonArray/{id}/{key}/{index}")
+    public Tip deleteJsonData(@PathVariable("id") Long id, @PathVariable("key") String key, @PathVariable("index") Integer index) {
+        QueryWrapper<FrontPage> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(FrontPage.PAGE_ID, id);
+        FrontPage frontPage = frontPageMapper.selectOne(queryWrapper);
+        String content = frontPage.getContent();
+        JSONObject json = JSONObject.parseObject(content);
+        if (json != null && json.containsKey(key)) {
+            if (json.get(key) instanceof JSONArray) {
+                JSONArray jsonArray = json.getJSONArray(key);
+                jsonArray.remove(index.intValue());
+                mockJsonService.saveJsonToFile(json,id);
+                return SuccessTip.create(1);
+            }
+        }
+        return SuccessTip.create();
     }
 
 

@@ -3,6 +3,7 @@
 <mapper namespace="com.jfeat.module.frontPage.services.domain.dao.QueryFrontPageDao">
     <sql id="Base_Column_List">
         t_front_page.id,
+        t_front_page.page_name AS pageName,
         t_front_page.page_id AS pageId,
         t_front_page.title,
         t_front_page.page_descrip AS pageDescrip,
@@ -46,6 +47,10 @@
         <if test="record.id != null and record.id>0 ">
             AND t_front_page.id LIKE CONCAT('%',#{record.id},'%')
         </if>
+        <if test="record.pageName != null and record.pageName!='' ">
+            AND t_front_page.page_name LIKE CONCAT('%',#{record.pageName},'%')
+        </if>
+
         <if test="record.pageId != null and record.pageId!= ''">
             AND t_front_page.page_id LIKE CONCAT('%',#{record.pageId},'%')
         </if>
