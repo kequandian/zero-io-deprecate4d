@@ -17,6 +17,8 @@ public interface MockJsonService {
 
     Integer saveJsonToFile(JSONObject json, Long id);
 
+    Integer saveJsonToFile(JSONObject json,String appid, Long id);
+
     Map<String, String> getIdMap();
 
 

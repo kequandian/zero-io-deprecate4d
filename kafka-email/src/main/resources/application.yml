@@ -49,12 +49,12 @@ spring:
   profiles:
     active: dev
   datasource:
-    url: jdbc:mysql://sh-cdb-q5vnc0iy.sql.tencentcdb.com:59449/smallsaas?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
-    #    url: jdbc:mysql://localhost:3306/test?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+#    url: jdbc:mysql://sh-cdb-q5vnc0iy.sql.tencentcdb.com:59449/smallsaas?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://localhost:3306/test?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
     #    url: jdbc:mysql://localhost:3306/smallsaas?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
     username: root
-    #    password: root
-    password: zb2014@888
+    password: root
+#    password: zb2014@888
     driver-class-name: com.mysql.jdbc.Driver
     filters: log4j,wall,mergeStat
     sql-script-encoding: UTF-8

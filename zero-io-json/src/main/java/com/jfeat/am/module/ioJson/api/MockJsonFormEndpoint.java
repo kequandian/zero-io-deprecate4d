@@ -85,6 +85,19 @@ public class MockJsonFormEndpoint {
         return SuccessTip.create(integer);
     }
 
+
+    @PostMapping("/app/{appid}/{id}")
+    @ApiOperation(value = "增加Json")
+    public Tip addSAppJson(@PathVariable("appid")String appid,@PathVariable Long id, @RequestBody JSONObject json) {
+        String originAppid = mockJsonService.getAppId();
+        if (appid != null) {
+            mockJsonService.setAppId(appid);
+        }
+        Integer integer = mockJsonService.saveJsonToFile(json, id);
+        mockJsonService.setAppId(originAppid);
+        return SuccessTip.create(integer);
+    }
+
     @PostMapping("/{id}/{tag}")
     @ApiOperation(value = "增加Json 带tag")
     public Tip addJsonTag(@PathVariable String tag, @PathVariable Long id, @RequestBody JSONObject json) {

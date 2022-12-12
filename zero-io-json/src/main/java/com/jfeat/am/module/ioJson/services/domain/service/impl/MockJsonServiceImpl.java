@@ -125,6 +125,15 @@ public class MockJsonServiceImpl implements MockJsonService {
        return saveJsonToFile(json,id,null);
     }
 
+    @Override
+    public Integer saveJsonToFile(JSONObject json, String appid, Long id) {
+        String originApp = getAppId();
+        setAppId(appid);
+        Integer affect  = saveJsonToFile(json,id,null);
+        setAppId(originApp);
+        return affect;
+    }
+
 
     @Override
     public Integer saveJsonToFile(JSONObject json, Long id, String tag) {
