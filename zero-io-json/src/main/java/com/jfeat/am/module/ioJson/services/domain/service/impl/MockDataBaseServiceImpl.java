@@ -56,7 +56,7 @@ public class MockDataBaseServiceImpl implements MockDataBaseService {
         record.setPageId(String.valueOf(id));
         record.setTitle(title);
         record.setContent(json.toJSONString());
-        record.setAppid(mockJsonService.getAppId());
+
         record.setJsonName(jsonFileName);
         record.setJsonPath(jsonPath);
         record.setTag(tag);
@@ -68,6 +68,7 @@ public class MockDataBaseServiceImpl implements MockDataBaseService {
         pageQueryWrapper.eq(FrontPage.PAGE_ID,id);
         FrontPage frontPage = frontPageMapper.selectOne(pageQueryWrapper);
         if (frontPage==null){
+            record.setAppid(mockJsonService.getAppId());
             affect+=frontPageMapper.insert(record);
         }else {
             record.setId(frontPage.getId());
