@@ -5,21 +5,23 @@ import com.google.common.cache.CacheBuilder;
 import com.jfeat.crud.base.exception.BusinessCode;
 import com.jfeat.crud.base.exception.BusinessException;
 import com.jfeat.crud.base.tips.SuccessTip;
-import com.jfeat.fs.api.FileServiceEndpoint;
-import com.jfeat.fs.properties.FSProperties;
 import com.jfeat.fs.service.LoadFileCodeService;
-import com.jfeat.fs.util.FileInfo;
+import com.jfeat.fs.model.FileInfo;
+import com.jfeat.fs.util.ImageUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.Base64Utils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -32,7 +34,6 @@ public class LoadFileCodeServiceImpl implements LoadFileCodeService {
 
 
     protected final static Logger logger = LoggerFactory.getLogger(LoadFileCodeService.class);
-
 
 
     private static Cache<String, String> cache = CacheBuilder
@@ -65,59 +66,111 @@ public class LoadFileCodeServiceImpl implements LoadFileCodeService {
         }
     }
 
-//    上传接口
     @Override
-    public FileInfo uploadFile(MultipartFile file, String fileHost,String fileSavePath, String bucket) {
-        if (file.isEmpty()) {
-            throw new BusinessException(BusinessCode.BadRequest, "file is empty");
-        }
-        if (bucket == null) bucket = "";
-        logger.info("============== upload start ===============");
+    public FileInfo uploadFile(MultipartFile file, String fileSavePath, String bucket, String appid, String fileHost) throws IOException {
         String originalFileName = file.getOriginalFilename();
         String extensionName = FilenameUtils.getExtension(originalFileName);
-        if (extensionName != null) {
-            if (extensionName.equals("html") || extensionName.equals("js") || extensionName.equals("htm")) {
-                throw new BusinessException(BusinessCode.BadRequest, "文件类型有误 不能为：" + extensionName + "类型的文件");
+
+        if(extensionName != null){
+            if(extensionName.equals("exe")||extensionName.equals("java")||extensionName.equals("jsp")||extensionName.equals("php")||extensionName.equals("asp")){
+                throw new BusinessException(BusinessCode.BadRequest,  "文件类型有误 不能为：" + extensionName +"类型的文件");
             }
         }
         Long fileSize = file.getSize();
         String fileName = UUID.randomUUID() + "." + extensionName;
-
-        try {
-            {
-                File fileSaveFile = new File(fileSavePath);
-                if (!fileSaveFile.exists()) {
-                    fileSaveFile.mkdirs();
-                }
+        // just ensure fileSavePath exists
+        {
+            File fileSaveFile = new File(fileSavePath);
+            if (!fileSaveFile.exists()) {
+                fileSaveFile.mkdirs();
             }
+        }
 
-            // check bucket exists
-            if (!StringUtils.isEmpty(bucket)) {
-                File bucketFile = new File(String.join(File.separator, fileSavePath, bucket));
-                Assert.isTrue(bucketFile.exists(), "bucket (X-FS-BUCKET) not exists: " + bucketFile.getPath());
+        // check bucket exists, cos's required authorized.
+        if ((!StringUtils.isEmpty(bucket)) || (!StringUtils.isEmpty(appid))) {
+            String targetPath = String.join(File.separator, fileSavePath, bucket);
+            File bucketFile = new File(targetPath);
+            Assert.isTrue(bucketFile.exists(), "path from (X-FS-BUCKET) not exists: " + bucketFile.getPath());
+        }
+
+        // get current year
+        String currentYear = new SimpleDateFormat("yyyy").format(new Date());
+        // just ensure targetFilePath exists
+        {
+            String targetFilePath = String.join(File.separator, fileSavePath, bucket, appid, currentYear);
+            File tmpFileSaveFile = new File(targetFilePath);
+            if (!tmpFileSaveFile.exists()) {
+                tmpFileSaveFile.mkdirs();
             }
+        }
+        File targetFile = new File(String.join(File.separator, fileSavePath, bucket, appid, currentYear, fileName));
 
-            File targetFile = new File(String.join(File.separator, fileSavePath, bucket, fileName));
-
-            //boolean readable = target.setReadable(true);
-            //if(readable){
-            logger.info("file uploading to: {}", targetFile.getAbsolutePath());
-            FileUtils.copyInputStreamToFile(file.getInputStream(), targetFile);
-            logger.info("file uploaded to: {}", targetFile.getAbsolutePath());
+        //boolean readable = target.setReadable(true);
+        //if(readable){
+        logger.info("file uploading to: {}", targetFile.getAbsolutePath());
+        FileUtils.copyInputStreamToFile(file.getInputStream(), targetFile);
+        logger.info("file uploaded to: {}", targetFile.getAbsolutePath());
             /*}else{
                 throw new BusinessException(BusinessCode.UploadFileError, "file is not readable");
             }*/
 
-            // get relative path
-            String relativePath = targetFile.getAbsolutePath().substring(new File("./").getAbsolutePath().length() - 1);
-            return FileInfo.create(fileHost, bucket, fileName, extensionName, originalFileName, fileSize, relativePath);
+        // get relative path
+        String relativePath = targetFile.getAbsolutePath().substring(new File("./").getAbsolutePath().length() - 1);
+        return FileInfo.create(fileHost, bucket, fileName, extensionName, originalFileName, fileSize, relativePath);
+    }
 
-        } catch (Exception e) {
-            logger.info("============== exception {} ===============");
-            logger.info(e.getMessage());
-            logger.info(e.getLocalizedMessage());
-            logger.info(e.toString());
+    @Override
+    public FileInfo upload64(String base64Data, Boolean blur, String fileSavePath, String bucket, String appid, String fileHost) throws IOException{
+        String dataPrix = "";
+        String data = "";
+        String[] d = base64Data.split("base64,");
+        if (d != null && d.length == 2) {
+            dataPrix = d[0];
+            data = d[1];
+        } else {
             throw new BusinessException(BusinessCode.UploadFileError);
         }
+
+        String suffix = "";
+        if ("data:image/jpeg;".equalsIgnoreCase(dataPrix)) {
+            suffix = ".jpg";
+        } else if ("data:image/x-icon;".equalsIgnoreCase(dataPrix)) {
+            suffix = ".ico";
+        } else if ("data:image/gif;".equalsIgnoreCase(dataPrix)) {
+            suffix = ".gif";
+        } else if ("data:image/png;".equalsIgnoreCase(dataPrix)) {
+            suffix = ".png";
+        } else {
+            throw new BusinessException(BusinessCode.UploadFileError);
+        }
+
+        byte[] dataBytes = Base64Utils.decodeFromString(data);
+
+        String pictureName = UUID.randomUUID().toString() + suffix;
+        String blurryName = "";
+
+        String targetPath = String.join(File.separator, fileSavePath, bucket, appid, pictureName);
+        File target = new File(targetPath);
+
+        target.setReadable(true);
+        FileUtils.writeByteArrayToFile(target, dataBytes);
+        logger.info("file uploaded to: {}", target.getAbsolutePath());
+        File reducedFile = ImageUtil.reduce(target);
+        logger.info("file reduced to: {}", reducedFile.getAbsolutePath());
+        pictureName = reducedFile.getName();
+
+        File thumbFile = ImageUtil.thumb(reducedFile);
+        logger.info("file thumb to: {}", thumbFile.getAbsoluteFile());
+
+        if (blur) {
+            File blurryFile = ImageUtil.reduce(ImageUtil.gaos(reducedFile));
+            blurryFile.setReadable(true);
+            blurryName = blurryFile.getName();
+
+            File blurryThumbFile = ImageUtil.thumb(blurryFile);
+            logger.info("blurry file thumb to: {}", blurryThumbFile.getAbsoluteFile());
+        }
+
+        return FileInfo.create(fileHost, pictureName, blurryName);
     }
 }

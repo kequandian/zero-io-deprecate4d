@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class Bucket {
+
     /**
      * 存储桶名称
      */

@@ -1,4 +1,4 @@
-package com.jfeat.fs.util;
+package com.jfeat.fs.model;
 
 
 import com.jfeat.crud.base.util.StrKit;

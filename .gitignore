@@ -35,6 +35,8 @@ fonts/
 node_modules/
 config/
 attachments/
+upload/
+
 
 ###
 jsonMock/

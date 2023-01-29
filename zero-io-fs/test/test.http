@@ -1,20 +1,8 @@
 @endpoint=http://localhost:8080
-@endpoint=http://api.dev.smallsaas.cn:8084
+# @endpoint=http://api.dev.smallsaas.cn:8084
 
 ### 用户登录
 @admin = Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJvcmdJZCI6IjEiLCJ1c2VySWQiOiIxIiwidGVuYW50T3JnSWQiOjEsImFjY291bnQiOiJhZG1pbiIsInVzZXJUeXBlIjoxMDAsImRldlVzZXJUeXBlIjowLCJiVXNlclR5cGUiOiJTWVNURU0iLCJpYXQiOjE2NDE1NjE1OTcsImp0aSI6IjEiLCJzdWIiOiJhZG1pbiIsImV4cCI6MTY0MTgyMDc5N30.9uuaREKIQdAoEnfwpS-7h0vMZCox5-sLTBcMBRJCNh3o7v2LB_4i7AZE4mxCo4E0CTvqtr6cOxu9loQJNPR_xQ
-
-
-### 测试文件上传api.dev.smallsaas.c4
-POST {{endpoint}}/api/fs/uploadfile
-Content-Type: multipart/form-data; boundary=WebKitFormBoundaryAFRaG58f2nIb0mPB
-
---WebKitFormBoundaryAFRaG58f2nIb0mPB
-Content-Disposition: form-data; name="file"; filename="logo_128x128.png"
-Content-Type: image/png
-
-< ./logo_128x128.png
---WebKitFormBoundaryAFRaG58f2nIb0mPB--
 
 
 ### 创建仓库
@@ -22,17 +10,15 @@ POST {{endpoint}}/api/fs/buckets
 Content-Type: application/json
 
 {
-   "bucket": "bucket",
+   "bucket": "images",
    "appId": "32791238237612378123",
    "appSecret": "EF8WnIPlnDFYPEIt"
 }
 
 
-
-### 测试文件上传至仓库
+### 测试文件上传
 POST {{endpoint}}/api/fs/uploadfile
 Content-Type: multipart/form-data; boundary=WebKitFormBoundaryAFRaG58f2nIb0mPB
-# X-FS-BUCKET: bucket
 
 --WebKitFormBoundaryAFRaG58f2nIb0mPB
 Content-Disposition: form-data; name="file"; filename="logo_128x128.png"
@@ -40,4 +26,45 @@ Content-Type: image/png
 
 < ./logo_128x128.png
 --WebKitFormBoundaryAFRaG58f2nIb0mPB--
+
+
+
+### 测试文件上传至仓库
+POST {{endpoint}}/api/fs/uploadfile
+Content-Type: multipart/form-data; boundary=WebKitFormBoundaryAFRaG58f2nIb0mPB
+X-FS-BUCKET: images
+
+--WebKitFormBoundaryAFRaG58f2nIb0mPB
+Content-Disposition: form-data; name="file"; filename="logo_128x128.png"
+Content-Type: image/png
+
+< ./logo_128x128.png
+--WebKitFormBoundaryAFRaG58f2nIb0mPB--
+
+
+### 测试文件上传至仓库以及APP目录
+POST {{endpoint}}/api/fs/uploadfile
+Content-Type: multipart/form-data; boundary=WebKitFormBoundaryAFRaG58f2nIb0mPB
+X-FS-BUCKET: attachments
+X-FS-APPID: house
+
+--WebKitFormBoundaryAFRaG58f2nIb0mPB
+Content-Disposition: form-data; name="file"; filename="logo_128x128.png"
+Content-Type: image/png
+
+< ./logo_128x128.png
+--WebKitFormBoundaryAFRaG58f2nIb0mPB--
+
+
+
+
+### 获取下载码
+GET {{endpoint}}/api/fs/dlcode
+?name=27e36469-998e-4b74-bfa5-47f7fbf8daa4.png
+
+
+### 下载文件 (先获取下载码)
+GET {{endpoint}}/api/pub/fs/loadfile
+?name=27e36469-998e-4b74-bfa5-47f7fbf8daa4.png
+&code=fa768d89-d1ff-44ea-9dad-8ab2d095b64d
 
