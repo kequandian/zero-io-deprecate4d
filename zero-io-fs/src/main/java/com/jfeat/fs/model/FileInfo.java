@@ -65,6 +65,9 @@ public class FileInfo {
     }
 
     public FileInfo(String host, String bucket, String name, String extensionName, String originalFileName, Long size, String path) {
+        if(name.startsWith(File.separator)){
+            name = name.substring(1);
+        }
         this.name = name;
         this.host = host;
         this.originalFileName = originalFileName;
@@ -78,6 +81,8 @@ public class FileInfo {
 
         this.path = path;
     }
+
+
 
 
     /**

@@ -1,6 +1,12 @@
 server:
   port: 8080
 
+io:
+  file-upload-path: "upload"
+  file-host: ""
+  bucket-app-id: "32791238237612378123"
+  bucket-app-secret: "EF8WnIPlnDFYPEIt"
+
 spring:
   profiles:
     active: dev
@@ -9,8 +15,3 @@ spring:
 spring:
   profiles: dev
 
-io:
-  file-upload-path: "upload"
-  file-host: ""
-  bucket-app-id: "32791238237612378123"
-  bucket-app-secret: "EF8WnIPlnDFYPEIt"

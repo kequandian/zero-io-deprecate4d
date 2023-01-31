@@ -2,6 +2,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 .DS_Store
 /*.pdf
+.vscode/
 
 ### STS ###
 .apt_generated

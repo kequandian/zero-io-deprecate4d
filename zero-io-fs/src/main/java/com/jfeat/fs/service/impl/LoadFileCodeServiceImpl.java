@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 /**
  * Created by jackyhuang on 2018/1/3.
@@ -66,16 +67,37 @@ public class LoadFileCodeServiceImpl implements LoadFileCodeService {
         }
     }
 
+    // public static void main(String[] args){
+    //     String[] imageExt = new String[] {"jpg", "jpeg", "png"};
+    //     String[] zipExt = new String[] {"zip", "gzip", "bz2", "tar", "7z", "rar"};
+    //     String[] docExt = new String[] {"doc", "docx", "ppt", "xlsx", "xls"};
+
+    //     System.out.println(String.join(",", String.join(",", imageExt), String.join(",", zipExt), String.join(",", docExt)));
+    // }
+
+
     @Override
     public FileInfo uploadFile(MultipartFile file, String fileSavePath, String bucket, String appid, String fileHost) throws IOException {
         String originalFileName = file.getOriginalFilename();
         String extensionName = FilenameUtils.getExtension(originalFileName);
 
+        // if(extensionName != null){
+        //     if(extensionName.equals("exe")||extensionName.equals("java")||extensionName.equals("jsp")||extensionName.equals("php")||extensionName.equals("asp")){
+        //         throw new BusinessException(BusinessCode.BadRequest,  "文件类型有误! 不能为：" + extensionName +"类型的文件");
+        //     }
+        // }
         if(extensionName != null){
-            if(extensionName.equals("exe")||extensionName.equals("java")||extensionName.equals("jsp")||extensionName.equals("php")||extensionName.equals("asp")){
-                throw new BusinessException(BusinessCode.BadRequest,  "文件类型有误 不能为：" + extensionName +"类型的文件");
+            String[] imageExt = new String[] {"jpg", "jpeg", "png"};
+            String[] zipExt = new String[] {"zip", "gzip", "bz2", "tar", "7z", "rar"};
+            String[] docExt = new String[] {"doc", "docx", "ppt", "xlsx", "xls"};
+
+            if(Stream.of(imageExt).anyMatch(ext->ext.equals(extensionName)) || Stream.of(zipExt).anyMatch(ext->ext.equals(extensionName)) || Stream.of(docExt).anyMatch(ext->ext.equals(extensionName))){
+                // pass
+            }else{
+                throw new BusinessException(BusinessCode.BadRequest,  "仅支持有限的文件类型：" + String.join(",", String.join(",", imageExt), String.join(",", zipExt), String.join(",", docExt)));
             }
         }
+
         Long fileSize = file.getSize();
         String fileName = UUID.randomUUID() + "." + extensionName;
         // just ensure fileSavePath exists
@@ -116,7 +138,8 @@ public class LoadFileCodeServiceImpl implements LoadFileCodeService {
 
         // get relative path
         String relativePath = targetFile.getAbsolutePath().substring(new File("./").getAbsolutePath().length() - 1);
-        return FileInfo.create(fileHost, bucket, fileName, extensionName, originalFileName, fileSize, relativePath);
+        String pathFileName = String.join(File.separator, appid, currentYear, fileName);
+        return FileInfo.create(fileHost, bucket, pathFileName, extensionName, originalFileName, fileSize, relativePath);
     }
 
     @Override
