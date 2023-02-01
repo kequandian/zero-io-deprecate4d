@@ -36,6 +36,10 @@ public class LoadFileCodeServiceImpl implements LoadFileCodeService {
 
     protected final static Logger logger = LoggerFactory.getLogger(LoadFileCodeService.class);
 
+    final static String DEFAULT_BUCKET_IMAGES = "images";
+    final static String DEFAULT_BUCKET_ATTACHMENTS = "attachments";
+    final static String DEFAULT_BUCKET_DOCS = "docs";
+
 
     private static Cache<String, String> cache = CacheBuilder
             .newBuilder()
@@ -80,21 +84,34 @@ public class LoadFileCodeServiceImpl implements LoadFileCodeService {
     public FileInfo uploadFile(MultipartFile file, String fileSavePath, String bucket, String appid, String fileHost) throws IOException {
         String originalFileName = file.getOriginalFilename();
         String extensionName = FilenameUtils.getExtension(originalFileName);
+        if(StringUtils.isEmpty(extensionName)){
+            throw new BusinessException(BusinessCode.BadRequest,  "上传文件需要带后缀文件类型！");
+        }
 
         // if(extensionName != null){
         //     if(extensionName.equals("exe")||extensionName.equals("java")||extensionName.equals("jsp")||extensionName.equals("php")||extensionName.equals("asp")){
         //         throw new BusinessException(BusinessCode.BadRequest,  "文件类型有误! 不能为：" + extensionName +"类型的文件");
         //     }
         // }
-        if(extensionName != null){
+        {
             String[] imageExt = new String[] {"jpg", "jpeg", "png"};
             String[] zipExt = new String[] {"zip", "gzip", "bz2", "tar", "7z", "rar"};
-            String[] docExt = new String[] {"doc", "docx", "ppt", "xlsx", "xls"};
+            String[] docExt = new String[] {"doc", "docx", "xls", "xlsx", "ppt","pptx"};
 
             if(Stream.of(imageExt).anyMatch(ext->ext.equals(extensionName)) || Stream.of(zipExt).anyMatch(ext->ext.equals(extensionName)) || Stream.of(docExt).anyMatch(ext->ext.equals(extensionName))){
                 // pass
             }else{
                 throw new BusinessException(BusinessCode.BadRequest,  "仅支持有限的文件类型：" + String.join(",", String.join(",", imageExt), String.join(",", zipExt), String.join(",", docExt)));
+            }
+
+            if(StringUtils.isEmpty(bucket)) {
+                if (Stream.of(imageExt).anyMatch(ext -> ext.equals(extensionName))) {
+                    bucket = DEFAULT_BUCKET_IMAGES;
+                } else if (Stream.of(zipExt).anyMatch(ext -> ext.equals(extensionName))) {
+                    bucket = DEFAULT_BUCKET_ATTACHMENTS;
+                } else if (Stream.of(docExt).anyMatch(ext -> ext.equals(extensionName))) {
+                    bucket = DEFAULT_BUCKET_DOCS;
+                }
             }
         }
 
