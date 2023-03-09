@@ -1,5 +1,6 @@
 @endpoint=http://localhost:8080
 # @endpoint=http://api.dev.smallsaas.cn:8084
+# @endpoint=https://house.cloud.smallsaas.cn
 
 ### 用户登录
 @admin = Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJvcmdJZCI6IjEiLCJ1c2VySWQiOiIxIiwidGVuYW50T3JnSWQiOjEsImFjY291bnQiOiJhZG1pbiIsInVzZXJUeXBlIjoxMDAsImRldlVzZXJUeXBlIjowLCJiVXNlclR5cGUiOiJTWVNURU0iLCJpYXQiOjE2NDE1NjE1OTcsImp0aSI6IjEiLCJzdWIiOiJhZG1pbiIsImV4cCI6MTY0MTgyMDc5N30.9uuaREKIQdAoEnfwpS-7h0vMZCox5-sLTBcMBRJCNh3o7v2LB_4i7AZE4mxCo4E0CTvqtr6cOxu9loQJNPR_xQ
@@ -45,7 +46,7 @@ Content-Type: image/png
 ### 测试文件上传至仓库以及APP目录
 POST {{endpoint}}/api/fs/uploadfile
 Content-Type: multipart/form-data; boundary=WebKitFormBoundaryAFRaG58f2nIb0mPB
-X-FS-BUCKET: attachments
+X-FS-BUCKET: images
 X-FS-APPID: house
 
 --WebKitFormBoundaryAFRaG58f2nIb0mPB
