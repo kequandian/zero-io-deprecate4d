@@ -120,10 +120,10 @@ spring:
   profiles: dev
   datasource:
     #    url: jdbc:mysql://sh-cdb-q5vnc0iy.sql.tencentcdb.com:59449/smallsaas?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
-    url: jdbc:mysql://localhost:3306/test?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://db.webtools.io:3306/coop?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
     #url: jdbc:mysql://localhost:3307/uaas-saas?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC
     username: root
-    password: root
+    password: Nhy6%tgb
     #    password: zb2014@888
     driver-class-name: com.mysql.jdbc.Driver
     filters: log4j,wall,mergeStat
@@ -153,9 +153,11 @@ pdf:
 spring:
   profiles: produce
   datasource:
-    url: jdbc:mysql://mysql57:3306/power?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://db.webtools.io:3306/coop?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
     username: root
-    password: my-secret-pw
+    password: Nhy6%tgb
+    driver-class-name: com.mysql.jdbc.Driver
+    river-class-name: com.mysql.jdbc.Driver
     filters: log4j,wall,mergeStat
     schema: classpath*:sql/**/*-schema.sql
     data: classpath*:sql/**/*-data.sql
