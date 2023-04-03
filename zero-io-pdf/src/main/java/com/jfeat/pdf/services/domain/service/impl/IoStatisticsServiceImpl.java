@@ -209,7 +209,7 @@ public class IoStatisticsServiceImpl implements IoStatisticsService {
      * @return 更新后字段名数组
      */
     private String[] removeTotalColumn(String[] columnNames) {
-        return ArrayUtil.filter(columnNames, (Editor<String>) s -> "total".equals(s) ? null : s);
+        return ArrayUtil.filter(columnNames, s -> "total".equals(s));
     }
 
     /**
