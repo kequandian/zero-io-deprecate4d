@@ -24,7 +24,7 @@
     <properties>
         <skipStandalone>true</skipStandalone>
         <lombok.version>1.18.12</lombok.version>
-        <poi-ooxml.version>4.1.0</poi-ooxml.version>
+        <poi-ooxml.version>4.1.1</poi-ooxml.version>
         <zero-io-common.version>1.0.0</zero-io-common.version>
     </properties>
 
