@@ -68,9 +68,16 @@
             <version>${zero-io-common.version}</version>
         </dependency>
 
+        <!-- poi-ooxml 和 poi 需要使用相同的版本，否则会出现问题 -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
+             <version>${poi-ooxml.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
             <version>${poi-ooxml.version}</version>
         </dependency>
 
