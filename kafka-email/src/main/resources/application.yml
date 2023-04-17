@@ -62,7 +62,8 @@ spring:
     data: classpath*:sql/**/*-data.sql
     initialize: false
   kafka:
-    bootstrap-servers: localhost:9092
+#    bootstrap-servers: localhost:9092
+    bootstrap-servers: kuncts35.jzymcs.cn:9092
     producer: # producer 生产者
       retries: 0 # 重试次数
       acks: 1 # 应答级别:多少个分区副本备份完成时向生产者发送ack确认(可选0、1、all/-1)
