@@ -192,7 +192,7 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <excludes>
-                    <exclude>**/excel-templates/*</exclude>
+<!--                    <exclude>**/excel-templates/*</exclude>-->
                     <exclude>**/h2/*</exclude>
                     <exclude>**/meta/*</exclude>
                 </excludes>
