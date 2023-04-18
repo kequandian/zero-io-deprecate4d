@@ -3,21 +3,21 @@ server:
 
 spring:
   profiles:
-    active: test
+    active: dev
 
 ---
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://sh-cynosdbmysql-grp-mlyunquo.sql.tencentcdb.com:25133/smallsaas_dev?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://mysql57.webtools.io:3307/coop?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
     username: root
-    password: zb2014@8888
+    password: Nhy6%tgb
     driver-class-name: com.mysql.jdbc.Driver
     filters: log4j,wall,mergeStat
     sql-script-encoding: UTF-8
     schema: classpath*:sql/**/*-schema.sql
     data: classpath*:sql/**/*-data.sql
-    initialize: true
+    initialize: false
 
 io:
   excel-template-dir: "excel-templates"

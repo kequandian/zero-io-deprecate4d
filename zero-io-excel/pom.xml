@@ -29,11 +29,12 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.jfeat</groupId>
-            <artifactId>house</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+<!--        用在科海项目的时候，科海的token无法通过house的token验证，所以暂时去除house依赖-->
+<!--        <dependency>-->
+<!--            <groupId>com.jfeat</groupId>-->
+<!--            <artifactId>house</artifactId>-->
+<!--            <version>1.0.0</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -101,6 +102,12 @@
             <groupId>cn.afterturn</groupId>
             <artifactId>easypoi-annotation</artifactId>
             <version>4.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector-java.version}</version>
         </dependency>
 
         <!--引用报表模块-->
