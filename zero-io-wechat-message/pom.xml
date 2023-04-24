@@ -67,7 +67,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.52</version>
+            <version>1.2.83</version>
         </dependency>
         <!-- 可圈点工具jar，主要使用内部的统一异常类 -->
         <dependency>
