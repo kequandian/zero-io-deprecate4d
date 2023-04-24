@@ -56,6 +56,30 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+        <!-- Apache HttpClient5 -->
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <version>5.2.1</version>
+        </dependency>
+        <!-- 阿里巴巴fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.52</version>
+        </dependency>
+        <!-- 可圈点工具jar，主要使用内部的统一异常类 -->
+        <dependency>
+            <groupId>com.jfeat</groupId>
+            <artifactId>crud-base</artifactId>
+            <version>${crud-base.version}</version>
+        </dependency>
+        <!-- apache commons lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.9</version>
+        </dependency>
         <!-- 日志门面 slf4j -->
 <!--        <dependency>-->
 <!--            <groupId>org.slf4j</groupId>-->
@@ -92,11 +116,13 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-<!--                <configuration>-->
-<!--                    <skip>${skipStandalone}</skip>-->
-<!--                </configuration>-->
+                <configuration>
+                    <skip>${skipStandalone}</skip>
+                </configuration>
                 <executions>
                     <execution>
+                        <!-- Repackages existing JAR and WAR archives so that they can be executed from the command line using  java -jar -->
+                        <!-- 使用了 spring-boot-starter-parent 无需定义这个，因为parent已经定义,如果没有使用spring-boot-parent请将该标签加上 -->
 <!--                        <goals>-->
 <!--                            <goal>repackage</goal>-->
 <!--                        </goals>-->
