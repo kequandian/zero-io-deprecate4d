@@ -1,8 +1,10 @@
 # 微信小程序发送订阅消息工具<br>zero-io-wechat-message
 
 ---
-> 该工具使用微信官方api，官方修改了api后可能会失效  
-> 在 src/main/resource 下存放着微信官方发送订阅消息的api路径
+> 注意！  
+> 该工具使用微信官方api，官方修改了api后可能会失效。  
+> 在 src/main/resource/application.properties 下存放着微信官方发送订阅消息的api路径。  
+> 别的项目引用该工具后会以别的项目中的application.properties为优先，所以请复制本工具中的properties中的内容添加到您的项目properties中即可
 
 [微信官方说明文档](https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/subscribe-message.html#%E8%AE%A2%E9%98%85%E6%B6%88%E6%81%AF%E8%AF%AD%E9%9F%B3%E6%8F%90%E9%86%92)
 
