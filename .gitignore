@@ -41,3 +41,7 @@ upload/
 
 ###
 jsonMock/
+
+zero-io-pdf/META-INF/
+zero-io-pdf/out/
+zero-io-pdf/src/main/java/META-INF/

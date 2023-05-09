@@ -3,6 +3,7 @@ package com.jfeat.excel.services.impl;
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -257,7 +258,8 @@ public class ExcelExportServiceImpl implements ExcelExportService {
                                                       Map<String, Map<String, String>> dict) {
         recordMap.forEach((key, value) -> {
             Map<String, String> convertMap = dict.get(key);
-            if (!CollectionUtil.isEmpty(convertMap)) {
+            // 原代码：!CollectionUtil.isEmpty(convertMap)
+            if (!MapUtil.isEmpty(convertMap)) {
                 String convertValue = convertMap.getOrDefault(String.valueOf(value), String.valueOf(value));
                 recordMap.put(key, convertValue);
             }
