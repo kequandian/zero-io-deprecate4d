@@ -68,6 +68,7 @@ public class ExcelIoEndpoint {
 
         response.setContentType("application/octet-stream");
         // 完整格式：attachment; filename="filename.xlsx",所以请不要省略\"
+        exportName = new String(exportName.getBytes("UTF-8"), "ISO8859-1");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=\"%s.xlsx\"", StringUtils.isEmpty(filename) ? exportName : filename));
         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
         response.getOutputStream().write(excelExportService.export(exportName).readAllBytes());
