@@ -8,18 +8,30 @@
 
 - [easypoi](https://gitee.com/lemur/easypoi)
 
+
 ## 导出
 
-> 支持API和SQL两种形式的Excel导出
+1. 如果，type的类型是 `SQL`，那么该`api`需要的参数是导出报表字段名（注意：在`excel-templates`文件夹下需要有一份 `.sql` 语句，该sql语句是获取导出的数据的）
+2. 如果type的类型为 `API` 方式导出，那么api需要的参数是导出报表的字段名（注意：在`excel-templates`文件夹下 下需要有一份对应的字典json和导出的excel模板才可以）
 
-POST `/api/io/excel/export/{exportName}`
-
-application.yml配置：
+#### 首先在`application.yml`中配置资源路径
 
 ```yaml
 io:
   excel-template-dir: "excel-templates"
 ```
+
+
+##### 参数列表：
+
+| **参数** |    **描述**    |
+| :------: | :------------: |
+|  exportName   | 导出报表字段名，获取在配置目录上的文件名 |
+
+
+POST `/api/io/excel/export/{exportName}`
+
+
 
 ### API方式
 
@@ -38,7 +50,7 @@ io:
 ```json
 {
     "type": "API",
-    "api": "/api/equipment/equipments",
+    "api": "/api/adm/equipment/equipments",
     "search": {
         "categoryId": "",
         "activeKey": "list",
@@ -47,9 +59,15 @@ io:
 }
 ```
 
+
 **字段转换字典配置:**
 
 > 为了转换API中的返回的字段值，需要额外在模版目录`excel-template-dir`中放入文件名为 `exportName.json` 的转换文件。
+
+##### 字典json文件配置：
+
+> 提示：如有`status`等字段，需要中英文转换，则需要配置字典
+
 
 配置文件`exportName.json`例子:
 
@@ -126,11 +144,14 @@ WHERE 1=1
 
 ```
 
+
+
 ## 导入
 
 > 通过传入导入的名称和excel文件，对数据库进行**批量更新**。
 
 POST  `/api/io/excel/import/{importName}`
+
 
 参数列表：
 
@@ -147,7 +168,7 @@ io:
 
 模版文件 importName.json：
 
-```
+```json
 {
   "convert": [	// 字段转换
     {
@@ -233,3 +254,69 @@ io:
   ```
 
   
+##### 导入excel文件的配置可参考
+
+> 提示：在导入excel文件的字段下添加需要导入的内容 大致的流程：
+> api需要的参数是
+> importName：导入表单的名字，
+> multipartFile：excel文件，需要在excel里面 添加对应的字段内容，该表单需要在数据库里面存在，要不然就会报错，程序启动的时候会扫描resources 下面的excel-templates文件夹里面对应的json文件和excel文件，如果存在即可以把数据导入到数据库
+
+
+### 另一个配置例子
+``` json
+{
+    "duplicate": 0,      
+    "header": 1,         
+    "level": 1,          
+    "overwrite": 1,      
+    "relationOnly": 0,   
+    "target": [         
+      {
+        "fields": [		 
+          "projectCode",
+          "projectName",
+          "code",
+          "batchNumber",
+          "name",
+          "categoryName",
+          "installationSite",
+          "warehouseName",
+          "status",
+          "changeStatus",
+          "stockStatus",
+          "factory",
+          "system",
+          "spec",
+          "material",
+          "machineCode",
+          "brand",
+          "supplier",
+          "supplier",
+          "startTime",
+          "produceTime",
+          "serviceLife",
+          "note "
+        ],
+        "table": "equipment",
+        "valueConverterMap": {
+          "status": {
+            "IN_USE": "在用",
+            "STAND_BY": "已下发",
+            "LOST": "丢失"
+          },
+          "change_status": {
+            "SCRAPPED": "报废",
+            "SEALED": "封存",
+            "DISABLED": "停用"
+          },
+          "stock_status": {
+            "TO_STOCKTAKE": "待盘点",
+            "TO_STOCK_ADJUST": "待调整"
+          }
+        },
+        "values": []
+      }
+    ]
+  }
+}
+```
