@@ -16,6 +16,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -49,7 +51,8 @@ public class ExcelIoEndpoint {
         logger.info("parameterMap --> {}", toPrintMap(parameterMap));
 
         response.setContentType("application/octet-stream");
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s.xlsx", StringUtils.isEmpty(filename) ? field : filename));
+        // 完整格式：attachment; filename="filename.xlsx",所以请不要省略\"
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=\"%s.xlsx\"", StringUtils.isEmpty(filename) ? field : filename));
         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
 
         response.getOutputStream().write(excelExportService.autoExport(field).readAllBytes());
@@ -64,7 +67,8 @@ public class ExcelIoEndpoint {
         logger.info("parameterMap --> {}", toPrintMap(parameterMap));
 
         response.setContentType("application/octet-stream");
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s.xlsx", StringUtils.isEmpty(filename) ? exportName : filename));
+        // 完整格式：attachment; filename="filename.xlsx",所以请不要省略\"
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=\"%s.xlsx\"", StringUtils.isEmpty(filename) ? URLEncoder.encode(exportName, StandardCharsets.UTF_8) : URLEncoder.encode(filename, StandardCharsets.UTF_8)));
         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
         response.getOutputStream().write(excelExportService.export(exportName).readAllBytes());
     }
