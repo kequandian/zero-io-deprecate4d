@@ -159,12 +159,10 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         // 模版文件
         String templateFileName = exportName + ExcelConstant.EXPORT_TEMPLATE_SUFFIX;
         String templateFilePath = templateDirectory + File.separator + templateFileName;
-        System.out.println(templateFileName);
-        System.out.println(templateFilePath);
         log.info("templateFilePath : {}", templateFilePath);
 
         // 使用 easy poi 方法导出
-        TemplateExportParams params = new TemplateExportParams(templateFilePath);
+        TemplateExportParams params = new TemplateExportParams(templateFilePath, true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Map<String, Object> map = new HashMap<>();
         map.put("list", rowsMapList);
