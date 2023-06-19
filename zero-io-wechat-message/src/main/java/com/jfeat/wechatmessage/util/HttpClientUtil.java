@@ -39,14 +39,15 @@ public class HttpClientUtil {
         // 创建http客户端
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             // http客户端执行get请求
-            CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
-            // 判断访问是否成功
-            if (httpResponse.getCode() == 200) {
-                // 在response中获取实体
-                HttpEntity responseEntity = httpResponse.getEntity();
-                result = EntityUtils.toString(responseEntity);
-            } else {
-                logger.error("api请求失败，method:GET，url:" + url);
+            try (CloseableHttpResponse httpResponse = httpClient.execute(httpGet);) {
+                // 判断访问是否成功
+                if (httpResponse.getCode() == 200) {
+                    // 在response中获取实体
+                    HttpEntity responseEntity = httpResponse.getEntity();
+                    result = EntityUtils.toString(responseEntity);
+                } else {
+                    logger.error("api请求失败，method:GET，url:" + url);
+                }
             }
         } catch (IOException e ) {
             throw new RuntimeException(e);
@@ -75,13 +76,14 @@ public class HttpClientUtil {
         // 创建http客户端
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             // http客户端执行post请求
-            CloseableHttpResponse httpResponse = httpClient.execute(httpPost);
-            if (httpResponse.getCode() == 200) {
-                // 获取返回结果
-                HttpEntity responseEntity = httpResponse.getEntity();
-                result = EntityUtils.toString(responseEntity);
-            } else {
-                logger.error("api请求失败，method:POST，url:" + url + "，请求body：" + jsonBody);
+            try (CloseableHttpResponse httpResponse = httpClient.execute(httpPost);) {
+                if (httpResponse.getCode() == 200) {
+                    // 获取返回结果
+                    HttpEntity responseEntity = httpResponse.getEntity();
+                    result = EntityUtils.toString(responseEntity);
+                } else {
+                    logger.error("api请求失败，method:POST，url:" + url + "，请求body：" + jsonBody);
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
