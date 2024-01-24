@@ -1,0 +1,47 @@
+### 开发环境spring配置
+
+spring:
+  profiles: dev
+  data:
+    redis:
+      # redis数据库索引，默认0
+      database: 0
+      # redis服务器地址，默认localhost
+      host: localhost
+      # redis端口，默认6379
+      port: 6379
+      # redis密码，默认为空
+      # password:
+      # redis连接超时时间（单位毫秒）
+      connect-timeout: 0
+      # redis连接池配置
+      jedis:
+        pool:
+          # 最大可用连接数（默认为8，负数表示无限）
+          max-active: 8
+          # 最大空闲连接数（默认为8，负数表示无限）
+          max-idle: 8
+          # 最小空闲连接数（默认为0，该值只有为正数才有用）
+          min-idle: 0
+          # 从连接池中获取连接最大等待时间（默认为-1，单位为毫秒，负数表示无限）使用默认参数
+          # max-wait:
+logging:
+  # 日志级别
+  level:
+    root: info
+  file: /logs/${spring.application.name}.log
+    # 以下格式为新版本格式，现在所用版本无法使用
+    # file:
+    # 日志文件名格式
+    # name: logs/${spring.application.name}.out.log
+    # 最大日志文件大小,默认为10mb，过时配置属性
+    # max-size:
+    # # 要保留的日志备份的总大小(默认为0B)，过时配置属性
+    # total-size-cap:
+    # 保存存档日志文件的最大天数(默认为7天)，过时配置属性
+    # max-history:
+    # pattern:
+    # 日志记录格式[组件名称] [时间戳] [日志级别] [类名.方法名] [消息文本],使用默认的
+    # file:
+    # 根据文件大小归档，超过?自动归档，次日启动服务时也会自动归档，过时配置属性
+  # rolling-file-name:
