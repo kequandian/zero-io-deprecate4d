@@ -10,6 +10,7 @@ import com.jfeat.pdf.services.domain.dao.QueryPdfTableDao;
 import com.jfeat.pdf.services.domain.service.PdfExportService;
 import com.jfeat.pdf.services.domain.service.PdfRequestService;
 import com.jfeat.pdf.services.gen.persistence.model.PdfTable;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -162,6 +163,19 @@ public class PdfExportServiceImpl implements PdfExportService {
         logger.info("process total api --> {}", api);
         api = urlDecodeURL(api);
         logger.info("urlEncodeURL api --> {}", api);
+        /*
+         * added in 2024-1-24
+         * 增加 search 参数，用来进行查询的过滤
+         * 为什么参数名为 “search[search]”，这个是因为前端携带过来的就是这个参数名，为了不需要修改前端所以这里也是使用 search[search]
+         */
+        String search = httpRequest.getParameter("search[search]");
+        if (StringUtils.isNotBlank(search)) {
+            if (api != null && api.contains("?")) {
+                api += "&search=" + search;
+            } else {
+                api += "?search=" + search;
+            }
+        }
         // api data
         JSONObject apiData = HttpUtil.getResponse(api, authorization).getJSONObject("data");
         logger.info("apiData --> {}", apiData);

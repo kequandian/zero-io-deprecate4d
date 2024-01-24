@@ -119,9 +119,9 @@ am:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://mysql57.webtools.io:3307/coop?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://81.71.15.238:23336/coop2?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
     username: root
-    password: Nhy6%tgb
+    password: root
     driver-class-name: com.mysql.jdbc.Driver
     filters: log4j,wall,mergeStat
     sql-script-encoding: UTF-8
