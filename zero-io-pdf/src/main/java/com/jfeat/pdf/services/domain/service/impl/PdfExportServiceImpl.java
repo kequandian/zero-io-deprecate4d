@@ -166,14 +166,32 @@ public class PdfExportServiceImpl implements PdfExportService {
         /*
          * added in 2024-1-24
          * 增加 search 参数，用来进行查询的过滤
-         * 为什么参数名为 “search[search]”，这个是因为前端携带过来的就是这个参数名，为了不需要修改前端所以这里也是使用 search[search]
+         * 为什么参数名为 “search[xxx]”，这个是因为前端携带过来的就是这个参数名，为了不需要修改前端所以这里也是使用 search[search]
          */
-        String search = httpRequest.getParameter("search[search]");
-        if (StringUtils.isNotBlank(search)) {
-            if (api != null && api.contains("?")) {
-                api += "&search=" + search;
-            } else {
-                api += "?search=" + search;
+        if (StringUtils.isNotBlank(api)) {
+            String search = httpRequest.getParameter("search[search]");
+            if (StringUtils.isNotBlank(search)) {
+                if (api.contains("?")) {
+                    api += "&search=" + search;
+                } else {
+                    api += "?search=" + search;
+                }
+            }
+            String agentName = httpRequest.getParameter("search[agentName]");
+            if (StringUtils.isNotBlank(agentName)) {
+                if (api.contains("?")) {
+                    api += "&agentName=" + agentName;
+                } else {
+                    api += "?agentName=" + agentName;
+                }
+            }
+            String orgName = httpRequest.getParameter("search[orgName]");
+            if (StringUtils.isNotBlank(orgName)) {
+                if (api.contains("?")) {
+                    api += "&orgName=" + orgName;
+                } else {
+                    api += "?orgName=" + orgName;
+                }
             }
         }
         // api data
