@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfeat.am.module.cinema.services.gen.persistence.dao.CinemaMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfeat.am.module.cinema.services.gen.persistence.model.Cinema">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="area" property="area"/>
+        <result column="line_id" property="lineId"/>
+        <result column="qualification_number" property="qualificationNumber"/>
+        <result column="room_number" property="roomNumber"/>
+        <result column="seat_number" property="seatNumber"/>
+        <result column="pcd_id" property="pcdId"/>
+        <result column="ticket" property="ticket"/>
+        <result column="district" property="district"/>
+        <result column="contact_name" property="contactName"/>
+        <result column="contact" property="contact"/>
+        <result column="business_area" property="businessArea"/>
+        <result column="city_level" property="cityLevel"/>
+        <result column="assistant_id" property="assistantId"/>
+        <result column="address" property="address"/>
+        <result column="org_id" property="orgId"/>
+        <result column="line_name" property="lineName"/>
+        <result column="note" property="note"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+
+        <result column="opening_time" property="openingTime"/>
+        <result column="average_ticket_price" property="averageTicketPrice"/>
+        <result column="business_license_prove" property="businessLicenseProve"/>
+        <result column="business_license_phone" property="businessLicensePhone"/>
+        <result column="import_note" property="importNote"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, province, city, area, line_id, qualification_number, room_number, seat_number, contact_name, contact,
+        business_area, address, org_id, note, create_time, update_time,line_name
+        ,pcd_id,city_level,district,ticket,business_license_prove,business_license_phone,import_note
+    </sql>
+
+    <select id="getImportCinema" resultType="cinema">
+        select * from ca_cinema where ca_cinema.org_id is null
+        and ca_cinema.contact is not null
+        and ca_cinema.contact_name is not null;
+    </select>
+
+    <update id="setCinemaLineIdByLineName">
+        update ca_cinema,ca_cinema_line set ca_cinema.line_id = ca_cinema_line.id
+        where ca_cinema.line_name = ca_cinema_line.`name`
+        and ca_cinema.id in
+        <foreach item="item" index="index" collection="cinemaIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+</mapper>

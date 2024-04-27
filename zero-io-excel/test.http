@@ -1,0 +1,14 @@
+// uncomment below for test
+//<excludes>
+//    <exclude>**/h2/*</exclude>
+//    <exclude>**/excel-templates/*</exclude>
+//</excludes>
+@endpoint=http://localhost:8080
+
+### Export SQL 
+POST {{endpoint}}/api/io/excel/export/exportTest
+
+
+### Auto Export Excel
+GET {{endpoint}}/api/io/excel/productReport
+

@@ -2,6 +2,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 .DS_Store
 /*.pdf
+.vscode/
 
 ### STS ###
 .apt_generated
@@ -18,7 +19,7 @@ target/
 *.iml
 *.ipr
 *.log
-
+*.src
 ### NetBeans ###
 nbproject/private/
 build/
@@ -26,8 +27,21 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+logs/
+
+
 
 ###
 fonts/
 node_modules/
+config/
+attachments/
+upload/
 
+
+###
+jsonMock/
+
+zero-io-pdf/META-INF/
+zero-io-pdf/out/
+zero-io-pdf/src/main/java/META-INF/

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfeat.pdf.services.domain.dao.QueryPdfTableDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, editable, type, api, header_field AS headerField, api_field AS apiField, api_list As apiList, field,
+        template_content AS templateContent,
+        origin_config As originConfig, sub_apis AS subApis, template_type AS templateType
+    </sql>
+
+    <sql id="QueryOwnedOrgIds">
+        SELECT children.id FROM t_sys_org, t_sys_org as children WHERE t_sys_org.left_num &lt;= children.left_num AND
+        t_sys_org.right_num >= children.left_num and t_sys_org.id=#{ownerOrgId} order by t_sys_org.node_level ASC
+    </sql>
+
+    <select id="findPdfTableByName" resultType="com.jfeat.pdf.services.gen.persistence.model.PdfTable"
+            parameterType="String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM io_pdf_table
+        WHERE io_pdf_table.name = #{name}
+    </select>
+
+
+    <select id="findPdfTablePage" resultType="PdfTableRecord" parameterType="PdfTableRecord">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM io_pdf_table
+        WHERE 1=1
+        <if test="record.id != null and record.id>0 ">
+            AND io_pdf_table.id LIKE CONCAT('%',#{record.id},'%')
+        </if>
+        <if test="record.name != null and record.name!= ''">
+            AND io_pdf_table.name LIKE CONCAT('%',#{record.name},'%')
+        </if>
+        <if test="record.editable != null and record.editable>0 ">
+            AND io_pdf_table.editable LIKE CONCAT('%',#{record.editable},'%')
+        </if>
+        <if test="record.type != null and record.type!= ''">
+            AND io_pdf_table.type LIKE CONCAT('%',#{record.type},'%')
+        </if>
+        <if test="record.api != null and record.api!= ''">
+            AND io_pdf_table.api LIKE CONCAT('%',#{record.api},'%')
+        </if>
+
+        <if test="record.headerField != null and record.headerField!= ''">
+            AND io_pdf_table.header_field LIKE CONCAT('%',#{record.headerField},'%')
+        </if>
+        <if test="record.field != null and record.field!= ''">
+            AND io_pdf_table.field LIKE CONCAT('%',#{record.field},'%')
+        </if>
+
+        <if test="record.templateContent != null and record.templateContent!= ''">
+            AND io_pdf_table.template_content LIKE CONCAT('%',#{record.templateContent},'%')
+        </if>
+        <if test="startTime != null">
+            <![CDATA[AND io_pdf_table.start_time >= DATE(#{startTime})]]>
+        </if>
+        <if test="endTime != null">
+            <![CDATA[AND io_pdf_table.end_time <= DATE(#{endTime)]]>
+        </if>
+        <!--
+    <if test="search != null and search != ''">
+        OR io_pdf_table.name LIKE CONCAT('%',#{search},'%')
+    </if>
+    -->
+    </select>
+
+    <select id="findPdfTableEditablePage" resultType="PdfTableRecord" parameterType="PdfTableRecord">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM io_pdf_table
+        WHERE 1=1
+        AND
+        io_pdf_table.editable=1
+        <if test="record.id != null and record.id>0 ">
+            AND io_pdf_table.id LIKE CONCAT('%',#{record.id},'%')
+        </if>
+        <if test="record.name != null and record.name!= ''">
+            AND io_pdf_table.name LIKE CONCAT('%',#{record.name},'%')
+        </if>
+        <if test="record.editable != null and record.editable>0 ">
+            AND io_pdf_table.editable LIKE CONCAT('%',#{record.editable},'%')
+        </if>
+        <if test="record.type != null and record.type!= ''">
+            AND io_pdf_table.type LIKE CONCAT('%',#{record.type},'%')
+        </if>
+        <if test="record.api != null and record.api!= ''">
+            AND io_pdf_table.api LIKE CONCAT('%',#{record.api},'%')
+        </if>
+
+        <if test="record.headerField != null and record.headerField!= ''">
+            AND io_pdf_table.header_field LIKE CONCAT('%',#{record.headerField},'%')
+        </if>
+        <if test="record.field != null and record.field!= ''">
+            AND io_pdf_table.field LIKE CONCAT('%',#{record.field},'%')
+        </if>
+
+        <if test="record.templateContent != null and record.templateContent!= ''">
+            AND io_pdf_table.template_content LIKE CONCAT('%',#{record.templateContent},'%')
+        </if>
+        <if test="startTime != null">
+            <![CDATA[AND io_pdf_table.start_time >= DATE(#{startTime})]]>
+        </if>
+        <if test="endTime != null">
+            <![CDATA[AND io_pdf_table.end_time <= DATE(#{endTime)]]>
+        </if>
+        <!--
+    <if test="search != null and search != ''">
+        OR io_pdf_table.name LIKE CONCAT('%',#{search},'%')
+    </if>
+    -->
+    </select>
+</mapper>

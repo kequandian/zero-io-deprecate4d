@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfeat.am.module.cinema.services.domain.dao.DefaultImage">
+
+
+    <select id="getDefaultUrl" resultType="String">
+        select value from t_config_field where field = #{urlField} and org_id = #{orgId}
+    </select>
+
+
+</mapper>

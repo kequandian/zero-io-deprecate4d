@@ -1,0 +1,44 @@
+## zero-io-excel 配置路径配置
+io:
+  excel-template-dir: "excel-templates"
+  excel-export-max-rows: 1000
+## END
+
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev
+
+---
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:mysql://mysql57.webtools.io:3307/coop?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: Nhy6%tgb
+    driver-class-name: com.mysql.jdbc.Driver
+    filters: log4j,wall,mergeStat
+    sql-script-encoding: UTF-8
+    schema: classpath*:sql/**/*-schema.sql
+    data: classpath*:sql/**/*-data.sql
+    initialize: false
+---
+
+spring:
+  profiles: test
+  datasource:
+    url: jdbc:h2:mem:power;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    filters: log4j,wall,mergeStat
+    schema: classpath*:h2/*-schema.sql
+    data: classpath*:h2/*-data.sql
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+        trace: false

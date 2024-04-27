@@ -1,0 +1,10 @@
+### 默认配置
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: wechat-message
+

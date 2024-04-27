@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  fs:
+    image: api:fs
+    container_name: fs
+    privileged: true
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+    working_dir: /webapps
+    volumes:
+      - ./api:/webapps
+      - ./upload:/webapps/upload:rw
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+    cpus: "0.5"
+    mem_reservation: "10M"
+    mem_limit: "250M"   
+    # networks: 
+    # - static-net

@@ -1,0 +1,7 @@
+[
+  {
+    "api": "http://39.108.14.206:8070/api/wf/histories?formId=1280037398046085122",
+    "fieldName": "test",
+    "mapName": "${histories}"
+  }
+]

@@ -1,0 +1,174 @@
+{
+  "flows": [
+    {
+      "name": "dottedLine"
+    },
+    {
+      "name": "detail",
+      "height": 20,
+      "left": {
+        "title": [
+          "出库单号",
+          "录入时间",
+          "出库时间",
+          "状态"
+        ],
+        "data": [
+          "${orderNumber}",
+          "${recordTime}",
+          "${executionTime}",
+          "${status}"
+        ]
+      },
+      "right": {
+        "title": [
+          "出库原因",
+          "物资类型",
+          "",
+          ""
+        ],
+        "data": [
+          "${cause}",
+          "${materialType}",
+          "",
+          ""
+        ]
+      },
+      "converts": {
+        "${status}": {
+          "VERIFYING": "审核中",
+          "DRAFT": "新建",
+          "VERIFIED": "已通过",
+          "CLOSED": "已关闭",
+          "EXECUTED": "已执行",
+          "FINISHED": ""
+        }
+      }
+    },
+    {
+      "name": "dottedLine"
+    },
+    {
+      "name": "text",
+      "data": "",
+      "height": 10
+    },
+    {
+      "name": "text",
+      "data": "设备列表",
+      "height": 5
+    },
+    {
+      "name": "table",
+      "columnKeyBindings": [
+        {
+          "column": "设备编码",
+          "key": "equipmentCode",
+          "columnWidth": 2,
+          "visible": true
+        },
+        {
+          "column": "设备名称",
+          "key": "equipmentName",
+          "columnWidth": 1,
+          "visible": true
+        },
+        {
+          "column": "单位",
+          "key": "equipmentUnit",
+          "columnWidth": 1,
+          "visible": true
+        },
+        {
+          "column": "规格",
+          "key": "equipmentSpec",
+          "columnWidth": 1,
+          "visible": true
+        },
+        {
+          "column": "供应商",
+          "key": "equipmentSupplier",
+          "columnWidth": 1,
+          "visible": true
+        }
+      ],
+      "header": [],
+      "data": "${items}",
+      "converts": {},
+      "rowHeight": 25,
+      "headerHeight": 40,
+      "headerFormat": {
+        "size": "9"
+      }
+    },
+    {
+      "name": "text",
+      "data": "",
+      "height": 10
+    },
+    {
+      "name": "text",
+      "data": "审批历史",
+      "height": 5
+    },
+    {
+      "name": "table",
+      "columnKeyBindings": [
+        {
+          "column": "步骤名称",
+          "key": "stepName",
+          "columnWidth": 1,
+          "visible": true
+        },
+        {
+          "column": "经办人",
+          "key": "userName",
+          "columnWidth": 1,
+          "visible": true
+        },
+        {
+          "column": "处理结果",
+          "key": "result",
+          "columnWidth": 1,
+          "visible": true
+        },
+        {
+          "column": "处理意见",
+          "key": "comment",
+          "columnWidth": 1,
+          "visible": true
+        },
+        {
+          "column": "处理时间",
+          "key": "handleTime",
+          "columnWidth": 1,
+          "visible": true
+        },
+        {
+          "column": "文件信息",
+          "key": "equipmentSupplier",
+          "columnWidth": 1,
+          "visible": true
+        }
+      ],
+      "header": [],
+      "data": "${histories}",
+      "converts": {
+        "result": {
+          "HANDLED_REJECTED": "审核不通过",
+          "INITED": "起草拟稿"
+        }
+      },
+      "rowHeight": 25,
+      "headerHeight": 40,
+      "headerFormat": {
+        "size": "9"
+      }
+    }
+  ],
+  "page": {
+    "pageName": "A4",
+    "rotate": false,
+    "margin": "40"
+  }
+}

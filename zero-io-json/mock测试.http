@@ -1,0 +1,70 @@
+@localHostEndpoint = http://localhost:8080
+@reEndpoint = https://house.cloud.smallsaas.cn
+@endpoint = {{localHostEndpoint}}
+
+### 文件夹名字 自定义
+@dir = pathto
+
+### mockjson文件名字 自定义
+@mockName = mockName
+
+### 获取已定义文件夹列表
+GET {{endpoint}}/mock
+
+### 获取自定义文件夹下 的 所有已定义的mock内容
+GET  {{endpoint}}/mock/{{dir}}
+
+### 获取{{dir}}文件夹下名字为：{{mockName}} 的 mock数据
+GET {{endpoint}}/mock/{{dir}}/{{mockName}}
+
+### 提交数据 自定义json格式
+POST {{endpoint}}/mock/{{dir}}/{{mockName}}
+Content-Type: application/json
+
+{  
+    "version": "1",
+    "name": "allOrder",
+    "title": "订单",
+    "pageStyle": {
+    },
+    "loadApi": "",
+    "response": {
+      "data":"data"
+    },
+    "request": {
+    },
+    "moduleContainer":{
+    },
+    "modules": [
+      {
+        "type": "autolist",
+        "name":"",
+        "key":"e59992z8-bb88-a788-9922-1623488775885",
+        "container":{
+            "height":"",
+            "background":"#050E17"
+        }
+      }
+    ],
+    "moduleData": {
+         "e59992z8-bb88-a788-9922-1623488775885": {
+            "loadApi":"/api/u/order",
+            "itemNavigation": "",
+            "response":{
+                "list":"records"
+            },
+            "request":{
+                "default":{
+                },
+                "ps":"pageSize",
+                "pn":"pageNum"
+            },
+            "itemModule":{
+                "name":"orderItem"
+            }
+        }
+    }
+}
+
+
+
